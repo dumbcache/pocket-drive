@@ -749,6 +749,7 @@ export function shortcutHandler(e) {
         case "s":
             if (!get(editMode)) {
                 mode.set("search");
+                globalSearch.set(false);
                 if (e.shiftKey) globalSearch.set(true);
             }
             break;

@@ -71,7 +71,6 @@ export async function searchHandler(token: string, search: string) {
         }
     }
     searchItems.set((await res.json()).files);
-    console.log(get(searchItems));
 }
 
 export const createRootDir = async (accessToken: string) => {
