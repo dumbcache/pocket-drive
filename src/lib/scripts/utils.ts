@@ -340,49 +340,6 @@ export const colorPalette = {
     ToyEggplant: "#a47ae2",
 };
 
-// export const handleGoogleSignIn = async (googleRes: GoogleSignInPayload) => {
-//     getOauthToken();
-//     const creds = googleRes?.credential;
-//     const res = await fetch(`${PUBLIC_KRAB_API}/login`, {
-//         method: "POST",
-//         headers: {
-//             "content-type": "application/json",
-//         },
-//         body: JSON.stringify({ id_token: creds, app: "WEB" }),
-//     });
-//     if (res.status !== 200) {
-//         console.warn(res.status, await res.text());
-//         return;
-//     }
-//     const { token, root } = await res.json();
-//     localStorage.setItem("secret", token);
-//     localStorage.setItem("root", root);
-//     await getToken();
-//     isLoggedin.set(true);
-//     goto("/r");
-// };
-
-// export const getToken = async () => {
-//     const secret = window.localStorage.getItem("secret");
-//     const res = await fetch(`${PUBLIC_KRAB_API}/auth`, {
-//         headers: {
-//             Authorization: `Bearer ${secret}`,
-//         },
-//     });
-//     if (res.status !== 200) {
-//         if (res.status === 401) {
-//             console.log("session timeout");
-//             signUserOut();
-//             return;
-//         }
-//         console.warn(res.status, await res.text());
-//         return;
-//     }
-//     const { token } = await res.json();
-//     localStorage.setItem("token", token);
-//     return true;
-// };
-
 export function checkLoginStatus() {
     if (browser) {
         return (
