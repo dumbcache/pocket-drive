@@ -6,37 +6,40 @@
 
 <article class="article-1 article">
     <img src={article1} class="img1" alt="article1" />
-    <img src={article12} class="img1 img12" alt="article12" />
-    <div>
-        <h1>Design</h1>
-        <ul>
-            <li>Clean looking and Simplified</li>
-            <li>Mobile friendly</li>
-        </ul>
+    <div class="section">
+        <img src={article12} class="img1 img12" alt="article12" />
+        <div>
+            <h1>Design</h1>
+            <ul>
+                <li>Clean l ooking and simplified</li>
+                <li>Mobile friendly</li>
+                <li>No Server logic</li>
+                <li>Uses Google oauth for login</li>
+                <li>Does not store or track user data</li>
+                <li>Everything runs in browser</li>
+            </ul>
+        </div>
     </div>
 </article>
 <article class="article-2 article">
-    <div>
-        <h1>Features</h1>
-        <ul>
-            <li>Add URL's to images for easy bookmarking</li>
-            <li>Favourite your images for easy filter</li>
-            <li>Edit mode to easily update, move and delete</li>
-            <li>Upload images by dropping</li>
-            <li>Easy folder searching</li>
-        </ul>
+    <div class="section2">
+        <div>
+            <h1>Features</h1>
+            <ul>
+                <li>Add URL's to images for easy bookmarking</li>
+                <li>Favourite your images for easy filter</li>
+                <li>Edit mode to easily update, move and delete</li>
+                <li>Upload images by dropping</li>
+                <li>Easy folder searching</li>
+            </ul>
+        </div>
+        <video class="img2" autoplay muted loop>
+            <source src={article2} type="video/webm" />
+        </video>
     </div>
-    <video class="img2" autoplay muted loop>
-        <source src={article2} type="video/webm" />
-    </video>
-</article>
-<article id="#help" class="article article3">
-    <ul>
-        <li>Google account is necessary</li>
-        <li>App stores data in google drive</li>
-        <li>Does not store or track user data</li>
-        <li>Use the application with click of a button</li>
-    </ul>
+    <div>
+        <a href="https://www.linkedin.com/in/yesu4658/">developer info</a>
+    </div>
 </article>
 
 <style>
@@ -51,24 +54,58 @@
         width: 100%;
         height: 100vh;
         scroll-snap-align: start;
+        justify-items: center;
     }
     .article {
         display: flex;
         align-items: center;
+        flex-flow: row wrap;
         justify-content: space-evenly;
     }
     .img1,
     .img2 {
         display: block;
-        width: 50%;
+        max-width: 50%;
         border: 1px solid var(--color-black-level-four);
     }
     .img12 {
         width: 30rem;
     }
     li {
-        font-size: 2rem;
+        /* font-size: 2rem; */
         /* list-style-type: none; */
         padding-bottom: 1rem;
+    }
+    .section,
+    .section2 {
+        display: flex;
+        flex-flow: row nowrap;
+        gap: 5rem;
+        align-items: center;
+        justify-content: space-evenly;
+    }
+
+    a {
+        color: var(--color-link);
+    }
+    @media (max-width: 600px) {
+        .img1,
+        .img2 {
+            max-width: 90%;
+        }
+        .img12 {
+            max-width: 40%;
+        }
+
+        h1 {
+            font-size: 3rem;
+        }
+        li {
+            font-size: 1.3rem;
+            /* list-style-type: none; */
+        }
+        .section2 {
+            flex-flow: column;
+        }
     }
 </style>

@@ -48,9 +48,10 @@
     .article {
         width: 100%;
         height: 100vh;
-        scroll-snap-align: start;
+        scroll-snap-align: end;
     }
     .home {
+        padding: 1rem;
         height: 100vh;
         overflow-y: scroll;
         scroll-snap-type: y mandatory;
@@ -85,6 +86,7 @@
     .title-wrapper {
         display: grid;
         place-content: center;
+        justify-items: center;
         height: calc(100vh - 7rem);
     }
     .sub {
@@ -97,6 +99,9 @@
         left: 50%;
         transform: translate(-50%, -50%);
     }
+    a {
+        color: var(--color-link);
+    }
     @media (max-width: 600px) {
         .header {
             gap: 2rem;
@@ -105,7 +110,11 @@
             width: var(--size-large);
         } */
         .home-title {
-            font-size: 5rem;
+            font-size: 4rem;
+            width: fit-content;
+        }
+        .sub {
+            font-size: 1.3rem;
         }
     }
 </style>

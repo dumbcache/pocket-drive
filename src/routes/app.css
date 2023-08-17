@@ -40,6 +40,7 @@
     --cover-border-color: #0003;
     --content-background-color: var(--color-black-level-six);
     --content-background-color-hover: var(--color-black-level-four);
+    --color-link: #00f;
 
     --font-size-default: 1.6rem;
     --line-size-default: 1.6rem;
@@ -67,6 +68,7 @@
     --cover-border-color: #fff3;
     --content-background-color: var(--color-black-level-three);
     --content-background-color-hover: var(--color-black-level-one);
+    --color-link: #f0f;
 }
 
 :root {
