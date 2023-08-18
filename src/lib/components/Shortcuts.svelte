@@ -96,12 +96,8 @@
     }
 
     @media (max-width: 600px) {
-        ul {
-            width: 90%;
-            margin: auto;
-        }
-        .l {
-            max-width: 6rem;
+        .shortcuts {
+            display: none;
         }
     }
 </style>

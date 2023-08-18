@@ -692,9 +692,6 @@ export function shortcutHandler(e) {
             editMode.set(!get(editMode));
             get(editMode) === true ? mode.set("select") : mode.set("");
             break;
-        case "h":
-            shortcuts.set(!get(shortcuts));
-            break;
         case "e":
             if (get(editMode)) {
                 get(editItems).length !== 0 && mode.set("edit");

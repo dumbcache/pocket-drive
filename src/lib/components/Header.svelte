@@ -77,5 +77,8 @@
         .nav {
             display: none;
         }
+        .help {
+            display: none;
+        }
     }
 </style>
