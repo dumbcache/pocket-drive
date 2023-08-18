@@ -30,6 +30,7 @@ export let refreshClicked = writable(false);
 export let dirCreateToggle = writable(false);
 export let autosave = writable(false);
 
+export let shortcuts = writable(false);
 export let previewItem: Writable<PreviewItem | undefined> = writable(undefined);
 export let blobLocations = writable({});
 export let dropMini = writable(false);

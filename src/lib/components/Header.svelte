@@ -2,7 +2,8 @@
     import { goto } from "$app/navigation";
     import ColorScheme from "$lib/components/actions/ColorScheme.svelte";
     import LogoutButton from "$lib/components/actions/LogoutButton.svelte";
-    import { previewItem } from "$lib/scripts/stores";
+    import helpButton from "$lib/assets/help.svg?raw";
+    import { previewItem, shortcuts } from "$lib/scripts/stores";
     import Nav from "./Nav.svelte";
 </script>
 
@@ -17,6 +18,13 @@
         <Nav />
     </div>
     <div class="wrapper">
+        <button
+            class="btn help"
+            title="shortcuts"
+            on:click={() => {
+                $shortcuts = !$shortcuts;
+            }}>{@html helpButton}</button
+        >
         <ColorScheme />
         <LogoutButton />
     </div>
@@ -47,6 +55,9 @@
     }
     .title {
         font-size: var(--title-size);
+    }
+    .help {
+        filter: invert(0.4);
     }
     @media (max-width: 600px) {
         .header {

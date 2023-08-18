@@ -33,6 +33,7 @@ import {
     dropFull,
     dropMini,
     autosave,
+    shortcuts,
 } from "$lib/scripts/stores";
 import {
     fetchFiles,
@@ -688,8 +689,11 @@ export function shortcutHandler(e) {
             }
             break;
         case "E":
-            editMode.set(true);
-            mode.set("select");
+            editMode.set(!get(editMode));
+            get(editMode) === true ? mode.set("select") : mode.set("");
+            break;
+        case "h":
+            shortcuts.set(!get(shortcuts));
             break;
         case "e":
             if (get(editMode)) {

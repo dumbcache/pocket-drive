@@ -25,6 +25,7 @@
         previewItem,
         refreshClicked,
         sessionTimeout,
+        shortcuts,
     } from "$lib/scripts/stores";
     import BackButton from "$lib/components/actions/BackButton.svelte";
     import { onMount } from "svelte";
@@ -33,6 +34,7 @@
     import { goto } from "$app/navigation";
     import Move from "$lib/components/actions/Move.svelte";
     import EditUrl from "$lib/components/actions/EditUrl.svelte";
+    import Shortcuts from "$lib/components/Shortcuts.svelte";
 
     let draggedOver = false;
     export function imgDropHandler(e: DragEvent) {
@@ -101,6 +103,9 @@
                 {/if}
                 {#if $mode === "edit"}
                     <EditUrl />
+                {/if}
+                {#if $shortcuts}
+                    <Shortcuts />
                 {/if}
                 <slot />
             </div>
