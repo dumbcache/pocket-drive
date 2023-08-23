@@ -20,7 +20,6 @@
         dropFull,
         dropMini,
         editMode,
-        isLoggedin,
         mode,
         previewItem,
         refreshClicked,
