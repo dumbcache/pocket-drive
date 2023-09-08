@@ -33,7 +33,7 @@
                 <li>Easy folder searching</li>
             </ul>
         </div>
-        <video class="img2" autoplay muted loop>
+        <video class="img2" autoplay muted loop playsinline>
             <source src={article2} type="video/webm" />
         </video>
     </div>
