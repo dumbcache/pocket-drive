@@ -75,7 +75,7 @@
     {:else}
         <main
             class="main {draggedOver === true ? 'dragover' : ''}"
-            on:dragstart|preventDefault
+            on:dragstart
             on:dragover|preventDefault
             on:dragenter={() => (draggedOver = true)}
             on:dragleave={() => (draggedOver = false)}
