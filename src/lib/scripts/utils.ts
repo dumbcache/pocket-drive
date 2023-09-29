@@ -384,7 +384,7 @@ export function handleTouchEnd(e: TouchEvent, targetId: string | undefined) {
 }
 export function handleTouchMove(e: TouchEvent) {
     if (e.touches.length >= 2) return;
-    e.preventDefault();
+    // e.preventDefault();
     // e.stopPropagation();
 }
 function checkDirection(targetId: string) {
