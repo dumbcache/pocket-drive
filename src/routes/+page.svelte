@@ -1,21 +1,11 @@
 <script>
-    import ColorScheme from "$lib/components/actions/ColorScheme.svelte";
+    import ColorScheme from "$lib/components/buttons/ColorScheme.svelte";
+    import LoginButton from "$lib/components/buttons/LoginButton.svelte";
     import { navigating } from "$app/stores";
     import LoadIndicator from "$lib/components/actions/LoadIndicator.svelte";
-    import { getOauthToken } from "$lib/scripts/utils";
-    import googleIcon from "$lib/assets/google.png";
     import { loadGSIScript } from "$lib/scripts/utils";
     import { onMount } from "svelte";
     import About from "$lib/components/About.svelte";
-
-    // console.log($isLoggedin);
-    onMount(() => {
-        try {
-            loadGSIScript();
-        } catch (error) {
-            console.warn(error);
-        }
-    });
 </script>
 
 {#if $navigating}
@@ -28,9 +18,7 @@
             <header class="header">
                 <a href="#info">Info</a>
                 <ColorScheme />
-                <button on:click={getOauthToken} class="signin"
-                    ><img src={googleIcon} alt="signin" /></button
-                >
+                <LoginButton />
             </header>
             <div class="title-wrapper">
                 <h1 class="home-title">Pocket Drive</h1>

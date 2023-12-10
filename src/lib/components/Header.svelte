@@ -1,6 +1,6 @@
 <script>
     import { goto } from "$app/navigation";
-    import ColorScheme from "$lib/components/actions/ColorScheme.svelte";
+    import ColorScheme from "$lib/components/buttons/ColorScheme.svelte";
     import LogoutButton from "$lib/components/actions/LogoutButton.svelte";
     import helpButton from "$lib/assets/help.svg?raw";
     import { previewItem, shortcuts } from "$lib/scripts/stores";

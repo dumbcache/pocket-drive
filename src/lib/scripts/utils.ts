@@ -162,52 +162,52 @@ export const updateRecents = (data?: { name: string; id: string }) => {
     window.localStorage.setItem("recents", JSON.stringify(old));
 };
 
-export const toggleColorMode = () => {
-    const root = document.documentElement;
-    let active = window.localStorage.getItem("krabColorScheme");
-    const schemeEle = document.querySelector(
-        ".color-scheme"
-    ) as HTMLButtonElement;
-    const lightEle = schemeEle.querySelector(".light-icon") as HTMLSpanElement;
-    const darkEle = schemeEle.querySelector(".dark-icon") as HTMLSpanElement;
-    active = active ?? "auto";
-    switch (active) {
-        case "light":
-            window.localStorage.setItem("krabColorScheme", "auto");
-            root.classList.toggle("dark");
-            lightEle.style.visibility = "hidden";
-            darkEle.style.visibility = "initial";
-            schemeEle.ariaChecked = "false";
-            return;
-        case "dark":
-            window.localStorage.setItem("krabColorScheme", "auto");
-            root.classList.toggle("dark");
-            darkEle.style.visibility = "hidden";
-            lightEle.style.visibility = "initial";
-            schemeEle.ariaChecked = "false";
-            return;
-        case "auto":
-            const current = window.matchMedia("(prefers-color-scheme: dark")
-                .matches
-                ? "dark"
-                : "light";
-            if (current === "dark") {
-                window.localStorage.setItem("krabColorScheme", "light");
-                root.classList.toggle("dark");
-                darkEle.style.visibility = "hidden";
-                lightEle.style.visibility = "initial";
-                schemeEle.ariaChecked = "true";
-                return;
-            } else {
-                window.localStorage.setItem("krabColorScheme", "dark");
-                root.classList.toggle("dark");
-                lightEle.style.visibility = "hidden";
-                darkEle.style.visibility = "initial";
-                schemeEle.ariaChecked = "true";
-                return;
-            }
-    }
-};
+// export const toggleColorMode = () => {
+//     const root = document.documentElement;
+//     let active = window.localStorage.getItem("krabColorScheme");
+//     const schemeEle = document.querySelector(
+//         ".color-scheme"
+//     ) as HTMLButtonElement;
+//     const lightEle = schemeEle.querySelector(".light-icon") as HTMLSpanElement;
+//     const darkEle = schemeEle.querySelector(".dark-icon") as HTMLSpanElement;
+//     active = active ?? "auto";
+//     switch (active) {
+//         case "light":
+//             window.localStorage.setItem("krabColorScheme", "auto");
+//             root.classList.toggle("dark");
+//             lightEle.style.visibility = "hidden";
+//             darkEle.style.visibility = "initial";
+//             schemeEle.ariaChecked = "false";
+//             return;
+//         case "dark":
+//             window.localStorage.setItem("krabColorScheme", "auto");
+//             root.classList.toggle("dark");
+//             darkEle.style.visibility = "hidden";
+//             lightEle.style.visibility = "initial";
+//             schemeEle.ariaChecked = "false";
+//             return;
+//         case "auto":
+//             const current = window.matchMedia("(prefers-color-scheme: dark")
+//                 .matches
+//                 ? "dark"
+//                 : "light";
+//             if (current === "dark") {
+//                 window.localStorage.setItem("krabColorScheme", "light");
+//                 root.classList.toggle("dark");
+//                 darkEle.style.visibility = "hidden";
+//                 lightEle.style.visibility = "initial";
+//                 schemeEle.ariaChecked = "true";
+//                 return;
+//             } else {
+//                 window.localStorage.setItem("krabColorScheme", "dark");
+//                 root.classList.toggle("dark");
+//                 lightEle.style.visibility = "hidden";
+//                 darkEle.style.visibility = "initial";
+//                 schemeEle.ariaChecked = "true";
+//                 return;
+//             }
+//     }
+// };
 
 export function checkSessionTimeout() {
     let time = Number(window.localStorage.getItem("expires")) - Date.now();
@@ -288,7 +288,7 @@ export function isTokenExpired() {
 
 export const loadGSIScript = () => {
     const src = "https://accounts.google.com/gsi/client";
-    const header = document.querySelector(".header") as HTMLDivElement;
+    const header = document.querySelector("head") as HTMLDivElement;
     const gsiIfExists = header.querySelector(`script[src='${src}']`);
     if (gsiIfExists) header.removeChild(gsiIfExists);
     const script = document.createElement("script");

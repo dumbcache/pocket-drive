@@ -4,10 +4,10 @@ import { checkLoginStatus, signUserOut } from "$lib/scripts/utils";
 import { isLoggedin } from "$lib/scripts/stores";
 import { browser } from "$app/environment";
 
-export const load = () => {
+export const load = ({ params }) => {
     if (browser) {
         if (!checkLoginStatus()) {
-            signUserOut();
+            params.id && signUserOut();
             return;
         }
         isLoggedin.set(true);
