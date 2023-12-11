@@ -38,17 +38,17 @@
     .color-theme {
         block-size: 3.6rem;
         inline-size: 3.6rem;
-        padding: 0.5rem;
+        padding: 0.6rem;
         border-radius: 50%;
-        border: 1px solid var(--theme-button-outline);
+        border: 1px solid var(--color-outline);
         filter: none;
-        cursor: pointer;
     }
     .color-theme:hover {
         border: none;
-        outline: 1px solid #f0f;
+        outline: 1px solid var(--color-focus);
+        box-shadow: 0 0 1px 1px var(--color-focus);
     }
     .color-theme:active {
-        padding: 0.8rem;
+        padding: 0.9rem;
     }
 </style>

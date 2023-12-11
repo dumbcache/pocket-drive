@@ -24,13 +24,12 @@
         inline-size: 3.6rem;
         padding: 0.2rem;
         border-radius: 50%;
-        border: 1px solid var(--theme-button-outline);
+        border: 1px solid var(--color-outline);
         filter: none;
-        cursor: pointer;
     }
     .login:hover {
         border: none;
-        outline: 1px solid #f0f;
+        outline: 1px solid var(--color-focus);
     }
     .login:active {
         padding: 0.5rem;

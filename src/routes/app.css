@@ -1,10 +1,34 @@
+@import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&family=Poppins:ital,wght@0,400;0,600;0,800;0,900;1,400;1,600;1,800;1,900&display=swap");
+
 :root {
-    --font-default: system-ui, Avenir, Helvetica, Arial, sans-serif;
+    --font-poppins: "Poppins", sans-serif;
+    --font-lato: "Lato", sans-serif;
+    --font-system: system-ui, Avenir, Helvetica, Arial, sans-serif;
+    --font-default: var(--font-lato);
     --size-system: 62.5%;
     --size-default: 1.6rem;
     --size-small: 2rem;
     --size-medium: 2.4rem;
     --size-large: 3rem;
+
+    --color-blue: #473aff;
+    --color-light-blue: #41d1ff;
+    --color-pink: #bd34fe;
+    --color-bluegrey: #145;
+    --color-lightgreen: #052;
+    --color-black: #000;
+    --color-black-one: #1b1b1f;
+    --color-black-two: #202127;
+    --color-white: #fff;
+    --color-white-one: #f6f6f7;
+    --color-white-two: #d0d1d7;
+
+    --color-link: var(--color-blue);
+    --color-focus: var(--color-blue);
+    --color-outline: #bbb;
+    --primary-bg-color: var(--color-white);
+    --primary-color: var(--color-black-one);
+    --primary-svg-fill: var(--color-black-two);
 
     --color-black: #000;
     --color-black-light: #0002;
@@ -22,13 +46,8 @@
     --color-white-level-five: #aaa;
     --color-white-level-six: #999;
     --color-blue-lightest: #cde;
-    --color-bluegrey: #145;
-    --color-lightgreen: #052;
 
-    --primary-bg-color: var(--color-white);
-    --primary-color: var(--color-black-level-two);
     --primary-backdrop-color: #111a;
-    --primary-svg-fill: var(--color-black-level-two);
     --theme-button-outline: var(--color-black-level-six);
     --input-background: var(--color-white-level-two);
     --theme-button-hover-outline: var(--color-white-level-three);
@@ -40,9 +59,7 @@
     --cover-border-color: #0003;
     --content-background-color: var(--color-black-level-six);
     --content-background-color-hover: var(--color-black-level-four);
-    --color-link: #00f;
 
-    --font-size-default: 1.6rem;
     --line-size-default: 1.6rem;
     --title-size: var(--size-medium);
     --primary-icon-size: var(--size-medium);
@@ -54,9 +71,6 @@
     --content-padding: 3rem;
 }
 .dark {
-    --primary-bg-color: var(--color-black-level-two);
-    --primary-color: var(--color-white-level-two);
-    --primary-svg-fill: var(--color-white-level-two);
     --input-background: var(--color-black-level-four);
     --theme-button-outline: var(--color-white-level-six);
     --theme-button-hover-outline: var(--color-black-level-five);
@@ -68,7 +82,13 @@
     --cover-border-color: #fff3;
     --content-background-color: var(--color-black-level-three);
     --content-background-color-hover: var(--color-black-level-one);
-    --color-link: #f0f;
+
+    --color-link: var(--color-pink);
+    --color-focus: var(--color-pink);
+    --color-outline: #666;
+    --primary-bg-color: var(--color-black-one);
+    --primary-color: var(--color-white-one);
+    --primary-svg-fill: var(--color-white-two);
 }
 
 :root {
@@ -103,7 +123,7 @@
 body,
 .app {
     height: 100%;
-    font-size: var(--font-size-default);
+    font-size: var(--size-default);
     overscroll-behavior-y: contain;
     background: inherit;
 }
@@ -128,8 +148,9 @@ select {
 
 button {
     color: inherit;
-    background: none;
+    background: inherit;
     border: none;
+    cursor: pointer;
 }
 .btn {
     display: inline-block;

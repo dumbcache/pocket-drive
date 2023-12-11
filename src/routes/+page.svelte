@@ -13,27 +13,28 @@
         <LoadIndicator />
     </div>
 {:else}
-    <div class="home">
-        <div class="article">
+    <main class="home">
+        <article class="article">
             <header class="header">
-                <a href="#info">Info</a>
+                <a href="/help" title="link to help regarding website">Help</a>
                 <ColorScheme />
                 <LoginButton />
             </header>
             <div class="title-wrapper">
+                <!-- <div class="bg"></div> -->
                 <h1 class="home-title">Pocket Drive</h1>
                 <p class="sub">
                     A google drive based image & bookmark application
                 </p>
             </div>
-        </div>
-        <div id="info" />
+        </article>
         <About />
-    </div>
+    </main>
 {/if}
 
 <style>
     .article {
+        position: relative;
         width: 100%;
         height: 100vh;
         scroll-snap-align: end;
@@ -47,39 +48,48 @@
     }
 
     .header {
+        position: absolute;
+        padding: 2rem;
+        top: 10rem;
+        right: 15rem;
         width: fit-content;
         margin-left: auto;
-        padding: 2rem;
         display: flex;
         align-items: center;
         gap: 3rem;
-    }
-    .signin {
-        width: var(--size-large);
-        background-color: white;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        cursor: pointer;
-        filter: none;
-        border: 1px solid #1115;
-    }
-    .signin:hover {
-        background-color: #fffc;
-    }
-    .home-title {
-        font-weight: 900;
-        font-size: 10rem;
     }
     .title-wrapper {
         display: grid;
         place-content: center;
         justify-items: center;
-        height: calc(100vh - 7rem);
+        height: 100vh;
+    }
+    .bg {
+        width: 100%;
+        height: 500px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-image: linear-gradient(30deg, #bd34fe 50%, #41d1ff 50%);
+        filter: blur(100px);
+    }
+
+    .home-title {
+        font-weight: 900;
+        font-size: 10rem;
+        background: linear-gradient(120deg, #bd34fe, #41d1ff, #473aff);
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
     }
     .sub {
         text-align: center;
         padding-top: 1rem;
+        font-size: var(--size-small);
+        /* color: #41d1ff; */
+        background: linear-gradient(-45deg, #bd34fe, #41d1ff);
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
     }
     .loading {
         position: absolute;
@@ -89,16 +99,24 @@
     }
     a {
         color: var(--color-link);
+        text-decoration: none;
+        position: relative;
     }
-    @media (max-width: 600px) {
+    a:hover {
+        font-size: 1.65rem;
+        text-decoration: underline;
+    }
+
+    @media (max-width: 900px) {
         .header {
+            right: 2rem;
             gap: 2rem;
         }
         /* .signin {
             width: var(--size-large);
         } */
         .home-title {
-            font-size: 4rem;
+            font-size: 10vw;
             width: fit-content;
         }
         .sub {
