@@ -152,20 +152,16 @@ button {
     border: none;
     cursor: pointer;
 }
+
 .btn {
     display: inline-block;
     width: var(--primary-icon-size);
     height: var(--primary-icon-size);
 }
+
 .btn svg,
 button svg {
     fill: var(--primary-svg-fill);
-    cursor: pointer;
-}
-
-button:hover,
-.btn:hover {
-    filter: invert(0.5);
 }
 
 p,

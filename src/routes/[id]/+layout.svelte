@@ -34,6 +34,7 @@
     import Move from "$lib/components/actions/Move.svelte";
     import EditUrl from "$lib/components/actions/EditUrl.svelte";
     import Shortcuts from "$lib/components/Shortcuts.svelte";
+    import View from "$lib/components/View.svelte";
 
     let draggedOver = false;
     export function imgDropHandler(e: DragEvent) {

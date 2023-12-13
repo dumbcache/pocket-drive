@@ -14,8 +14,12 @@
     });
 </script>
 
-<button on:click={getOauthToken} class="login"
-    ><img src={googleIcon} alt="signin" /></button
+<button
+    on:click={getOauthToken}
+    class="login"
+    title="Sign in with Google"
+    aria-label="Sign in with Google"
+    type="button"><img src={googleIcon} alt="google icon" /></button
 >
 
 <style>

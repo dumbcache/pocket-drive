@@ -1,7 +1,7 @@
 <script>
     import { goto } from "$app/navigation";
     import ColorScheme from "$lib/components/buttons/ColorScheme.svelte";
-    import LogoutButton from "$lib/components/actions/LogoutButton.svelte";
+    import LogoutButton from "$lib/components/buttons/LogoutButton.svelte";
     import helpButton from "$lib/assets/help.svg?raw";
     import { previewItem, shortcuts } from "$lib/scripts/stores";
     import Nav from "./Nav.svelte";
@@ -55,6 +55,9 @@
     }
     .title {
         font-size: var(--title-size);
+        background: linear-gradient(120deg, #bd34fe, #41d1ff, #473aff);
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
     }
     .help {
         filter: invert(0.4);

@@ -21,10 +21,10 @@
 <button
     type="button"
     class="color-theme"
-    aria-label="Dark mode"
+    title="Toggle dark mode"
     role="switch"
-    aria-checked="false"
-    title="toggle dark mode"
+    aria-label="Toggle dark mode"
+    aria-checked={theme === "" ? "false" : "true"}
     on:click={toggleTheme}
 >
     {#if theme === ""}
@@ -46,7 +46,6 @@
     .color-theme:hover {
         border: none;
         outline: 1px solid var(--color-focus);
-        box-shadow: 0 0 1px 1px var(--color-focus);
     }
     .color-theme:active {
         padding: 0.9rem;

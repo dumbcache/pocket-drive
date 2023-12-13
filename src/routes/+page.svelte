@@ -3,9 +3,8 @@
     import LoginButton from "$lib/components/buttons/LoginButton.svelte";
     import { navigating } from "$app/stores";
     import LoadIndicator from "$lib/components/actions/LoadIndicator.svelte";
-    import { loadGSIScript } from "$lib/scripts/utils";
-    import { onMount } from "svelte";
     import About from "$lib/components/About.svelte";
+    import helpIcon from "$lib/assets/help.svg?raw";
 </script>
 
 {#if $navigating}
@@ -16,17 +15,21 @@
     <main class="home">
         <article class="article">
             <header class="header">
-                <a href="/help" title="link to help regarding website">Help</a>
+                <a href="/help" class="help" title="Go to help"
+                    ><span>
+                        {@html helpIcon}
+                    </span>Help</a
+                >
                 <ColorScheme />
                 <LoginButton />
             </header>
-            <div class="title-wrapper">
+            <section class="title-wrapper">
                 <!-- <div class="bg"></div> -->
                 <h1 class="home-title">Pocket Drive</h1>
                 <p class="sub">
                     A google drive based image & bookmark application
                 </p>
-            </div>
+            </section>
         </article>
         <About />
     </main>
@@ -57,6 +60,18 @@
         display: flex;
         align-items: center;
         gap: 3rem;
+    }
+    .help {
+        display: flex;
+        flex-flow: row nowrap;
+        align-items: center;
+    }
+    .help span {
+        height: 1.6rem;
+        width: 1.6rem;
+    }
+    span :global(svg) {
+        fill: var(--color-link);
     }
     .title-wrapper {
         display: grid;
