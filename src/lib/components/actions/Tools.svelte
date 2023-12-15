@@ -3,7 +3,7 @@
     import goToDrive from "$lib/assets/drive.svg?raw";
     import folderCreate from "$lib/assets/folderCreate.svg?raw";
     import searchIcon from "$lib/assets/search.svg?raw";
-    import favoriteIcon from "$lib/assets/favorite.svg?raw";
+    import favoriteIcon from "$lib/assets/heart.svg?raw";
     import refresh from "$lib/assets/refresh.svg?raw";
     import swapIcon from "$lib/assets/swap.svg?raw";
     import {
@@ -80,17 +80,23 @@
     >
         {@html refresh}
     </button>
-    <label for="img-picker" class="button__create-img btn" title="add images">
-        {@html imgCreate}
-    </label>
-    <input
-        type="file"
-        name="img-picker"
-        id="img-picker"
-        accept="image/*"
-        multiple
-        on:change={imgPickerHandler}
-    />
+    <button class="btn img-picker">
+        <label
+            for="img-picker"
+            class="button__create-img btn"
+            title="add images"
+        >
+            {@html imgCreate}
+        </label>
+        <input
+            type="file"
+            name="img-picker"
+            id="img-picker"
+            accept="image/*"
+            multiple
+            on:change={imgPickerHandler}
+        />
+    </button>
     <button
         class="folder-button btn"
         title="create folder"
@@ -128,6 +134,9 @@
     }
     #img-picker {
         display: none;
+    }
+    .img-picker * {
+        cursor: pointer;
     }
     .clicked :global(svg) {
         fill: red;

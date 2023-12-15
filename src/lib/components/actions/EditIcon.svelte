@@ -1,5 +1,5 @@
 <script lang="ts">
-    import editIcon from "$lib/assets/edit.svg?raw";
+    import editIcon from "$lib/assets/editMode.svg?raw";
     import { editMode, mode } from "$lib/scripts/stores";
 </script>
 

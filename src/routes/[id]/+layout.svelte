@@ -111,6 +111,7 @@
             </div>
             <Preview />
             <Drop />
+            <View />
             {#if $sessionTimeout}
                 <Confirm
                     text={"Session timeout. You want to continue?"}

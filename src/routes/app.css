@@ -9,7 +9,7 @@
     --size-default: 1.6rem;
     --size-small: 2rem;
     --size-medium: 2.4rem;
-    --size-large: 3rem;
+    --size-large: 2.8rem;
 
     --color-blue: #473aff;
     --color-light-blue: #41d1ff;
@@ -24,7 +24,7 @@
     --color-white-two: #d0d1d7;
 
     --color-link: var(--color-blue);
-    --color-focus: var(--color-blue);
+    --color-focus: var(--color-light-blue);
     --color-outline: #bbb;
     --primary-bg-color: var(--color-white);
     --primary-color: var(--color-black-one);
@@ -62,7 +62,7 @@
 
     --line-size-default: 1.6rem;
     --title-size: var(--size-medium);
-    --primary-icon-size: var(--size-medium);
+    --primary-icon-size: var(--size-large);
     --secondary-icon-size: var(--size-small);
     --dir-width: 30rem;
     --img-width: 20rem;
@@ -111,13 +111,18 @@
     scroll-behavior: smooth;
 }
 
-*,
+*:not(dialog),
 *::before,
 *::after {
     margin: 0rem;
     padding: 0rem;
     box-sizing: inherit;
     scroll-behavior: inherit;
+}
+
+dialog {
+    /* margin: 0;
+    padding: 0; */
 }
 /* html, */
 body,
@@ -162,6 +167,10 @@ button {
 .btn svg,
 button svg {
     fill: var(--primary-svg-fill);
+}
+.btn svg:hover,
+button svg:hover {
+    fill: var(--color-focus);
 }
 
 p,

@@ -40,14 +40,19 @@
         inline-size: 3.6rem;
         padding: 0.6rem;
         border-radius: 50%;
-        border: 1px solid var(--color-outline);
+        /* border: 1px solid var(--color-outline); */
         filter: none;
     }
     .color-theme:hover {
         border: none;
-        outline: 1px solid var(--color-focus);
+        padding: 0.4rem;
+        /* outline: 1px solid var(--color-focus); */
     }
     .color-theme:active {
         padding: 0.9rem;
+    }
+
+    .color-theme:hover :global(svg) {
+        fill: var(--color-focus);
     }
 </style>

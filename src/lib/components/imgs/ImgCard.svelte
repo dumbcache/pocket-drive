@@ -10,6 +10,7 @@
         previewItem,
         selectAll,
         selectedCount,
+        view,
     } from "$lib/scripts/stores";
     import imgPlaceholder from "$lib/assets/imgPlaceholder.svg";
     import Favorite from "../actions/Favorite.svelte";
@@ -18,6 +19,7 @@
     let selected: Boolean;
     $: selected = $selectAll;
     function handleImgclick(e) {
+        // const view = document.getElementById("view")?.showModal();
         if ($mode !== "select") {
             $dropMini = true;
             if ($previewItem?.id !== img.id) {

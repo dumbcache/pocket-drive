@@ -6,8 +6,8 @@
 </script>
 
 <div class="imgs">
-    {#if $activeImgs}
-        {#each $activeImgs as img}
+    {#if imgs}
+        {#each imgs as img}
             <ImgCard {img} />
         {/each}
     {/if}

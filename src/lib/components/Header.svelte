@@ -60,7 +60,7 @@
         -webkit-text-fill-color: transparent;
     }
     .help {
-        filter: invert(0.4);
+        width: var(--size-small);
     }
     @media (max-width: 600px) {
         .header {

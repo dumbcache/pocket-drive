@@ -24,6 +24,7 @@
         reverseActive,
         selectAll,
         editProgress,
+        view,
     } from "$lib/scripts/stores";
     import Confirm from "$lib/components/actions/Confirm.svelte";
     import EditMode from "$lib/components/actions/EditMode.svelte";

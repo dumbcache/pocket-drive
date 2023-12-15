@@ -37,3 +37,5 @@ export let dropMini = writable(false);
 export let dropFull = writable(false);
 export let dropItems: Writable<DropItem[]> = writable([]);
 export let touchCoords: Writable<TouchCoords> = writable({});
+
+export let view = writable(false);

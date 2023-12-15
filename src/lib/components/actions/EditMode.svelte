@@ -1,8 +1,8 @@
 <script lang="ts">
-    import deleteIcon from "$lib/assets/delete.svg?raw";
+    import deleteIcon from "$lib/assets/deleteOutline.svg?raw";
     import closeIcon from "$lib/assets/close.svg?raw";
     import moveIcon from "$lib/assets/move.svg?raw";
-    import editIcon from "$lib/assets/edit.svg?raw";
+    import editIcon from "$lib/assets/editOutline.svg?raw";
     import selectallIcon from "$lib/assets/selectall.svg?raw";
     import {
         editItems,
@@ -49,7 +49,7 @@
         <button
             class="delelte-button btn"
             disabled={$selectedCount === 0}
-            title="delete"
+            title="delete forever"
             on:click={() => {
                 $mode = "delete";
                 $editConfirm = true;

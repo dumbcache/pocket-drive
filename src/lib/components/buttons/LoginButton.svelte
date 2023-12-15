@@ -28,13 +28,15 @@
         inline-size: 3.6rem;
         padding: 0.2rem;
         border-radius: 50%;
-        border: 1px solid var(--color-outline);
+        /* border: 1px solid var(--color-outline); */
         filter: none;
     }
     .login:hover {
         border: none;
-        outline: 1px solid var(--color-focus);
+        padding: 0rem;
+        /* outline: 1px solid var(--color-focus); */
     }
+
     .login:active {
         padding: 0.5rem;
     }
