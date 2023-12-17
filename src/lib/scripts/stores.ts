@@ -25,6 +25,8 @@ export let selectedCount = writable(0);
 export let isLoggedin = writable(false);
 export let activeTimeout = writable(0);
 export let sessionTimeout = writable(false);
+export let activeRefreshTimeout = writable(0);
+export let refreshTimeout = writable(false);
 export let dataCacheName = writable("");
 export let refreshClicked = writable(false);
 export let dirCreateToggle = writable(false);
@@ -39,3 +41,5 @@ export let dropItems: Writable<DropItem[]> = writable([]);
 export let touchCoords: Writable<TouchCoords> = writable({});
 
 export let view = writable(false);
+
+export let arr = writable([1, 3, 5]);

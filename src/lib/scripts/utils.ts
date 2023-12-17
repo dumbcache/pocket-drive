@@ -34,6 +34,8 @@ import {
     dropMini,
     autosave,
     shortcuts,
+    activeRefreshTimeout,
+    refreshTimeout,
 } from "$lib/scripts/stores";
 import {
     fetchFiles,
@@ -138,9 +140,12 @@ function refreshImgs() {
     );
 }
 
-export async function setCacheName() {
+export async function setCache(refresh: Boolean) {
     for (let key of await caches.keys()) {
-        if (key.startsWith("krabs_data")) dataCacheName.set(key);
+        if (key.startsWith("pd-data")) {
+            dataCacheName.set(key);
+            refresh && caches.delete(key);
+        }
     }
 }
 
@@ -209,17 +214,37 @@ export const updateRecents = (data?: { name: string; id: string }) => {
 //     }
 // };
 
+export function checkRefreshTimeout() {
+    let time = Number(window.localStorage.getItem("refreshTime")) - Date.now();
+    time > 0 &&
+        activeRefreshTimeout.set(
+            setTimeout(() => {
+                if (isRefreshNeeded()) {
+                    setCache(true);
+                } else {
+                    checkRefreshTimeout();
+                    setCache(false);
+                }
+            }, time)
+        );
+}
 export function checkSessionTimeout() {
-    let time = Number(window.localStorage.getItem("expires")) - Date.now();
+    let time = Number(window.localStorage.getItem("sessionTime")) - Date.now();
     time > 0 &&
         activeTimeout.set(
             setTimeout(() => {
                 if (isTokenExpired()) {
                     sessionTimeout.set(true);
-                } else checkSessionTimeout();
+                } else {
+                    checkSessionTimeout();
+                }
             }, time)
         );
 }
+
+function setSessionTimeout() {}
+
+function setRefreshTimeout() {}
 
 export function isValidUrl(url: string) {
     try {
@@ -245,7 +270,7 @@ async function handleGoogleSignIn(tokenResponse: TokenResponse) {
     accessToken = tokenResponse.access_token;
     window.localStorage.setItem("token", accessToken);
     window.localStorage.setItem(
-        "expires",
+        "sessionTime",
         String(Date.now() + tokenResponse.expires_in * 1000)
     );
     clearTimeout(get(activeTimeout));
@@ -282,8 +307,12 @@ export function getOauthToken() {
     client.requestAccessToken();
 }
 
+export function isRefreshNeeded() {
+    return Date.now() > Number(window.localStorage.getItem("refreshTime"));
+}
+
 export function isTokenExpired() {
-    return Date.now() > Number(window.localStorage.getItem("expires"));
+    return Date.now() > Number(window.localStorage.getItem("sessionTime"));
 }
 
 export const loadGSIScript = () => {
@@ -360,10 +389,10 @@ export async function signUserOut(e?: Event) {
 
 export async function clearFiles() {
     (await caches.keys()).forEach(
-        (key) => key.startsWith("krabs") && caches.delete(key)
+        (key) => key.startsWith("pd-") && caches.delete(key)
     );
     window.localStorage.removeItem("token");
-    window.localStorage.removeItem("expires");
+    window.localStorage.removeItem("sessionTime");
 }
 
 export function handleTouchStart(e: TouchEvent) {

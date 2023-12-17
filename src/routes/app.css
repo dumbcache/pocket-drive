@@ -120,11 +120,7 @@
     scroll-behavior: inherit;
 }
 
-dialog {
-    /* margin: 0;
-    padding: 0; */
-}
-/* html, */
+html,
 body,
 .app {
     height: 100%;
@@ -171,6 +167,14 @@ button svg {
 .btn svg:hover,
 button svg:hover {
     fill: var(--color-focus);
+}
+
+button:disabled svg,
+button:disabled svg:hover,
+.btn:disabled svg,
+.btn:disabled svg:hover {
+    fill: var(--primary-color);
+    filter: opacity(0.5);
 }
 
 p,

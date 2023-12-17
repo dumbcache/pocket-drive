@@ -81,11 +81,7 @@
         {@html refresh}
     </button>
     <button class="btn img-picker">
-        <label
-            for="img-picker"
-            class="button__create-img btn"
-            title="add images"
-        >
+        <label for="img-picker" class="button__create-img" title="add images">
             {@html imgCreate}
         </label>
         <input

@@ -7,9 +7,9 @@ import { build, files, version } from "$service-worker";
 
 const sw = self as unknown as ServiceWorkerGlobalScope;
 
-const CACHE_STATIC = `app-${version}`;
-const CACHE_APP = `krabs_app-${version}`;
-const CACHE_DATA = `krabs_data-${version}`;
+const CACHE_STATIC = `pd-static-${version}`;
+const CACHE_APP = `pd-app-${version}`;
+const CACHE_DATA = `pd-data-${version}`;
 
 /***************** SW Event Listners****************/
 sw.addEventListener("install", (e) => {

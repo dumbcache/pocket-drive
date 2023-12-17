@@ -3,7 +3,7 @@
     import LoginButton from "$lib/components/buttons/LoginButton.svelte";
     import { navigating } from "$app/stores";
     import LoadIndicator from "$lib/components/actions/LoadIndicator.svelte";
-    import About from "$lib/components/About.svelte";
+    //import About from "$lib/components/About.svelte";
     import helpIcon from "$lib/assets/help.svg?raw";
 </script>
 
@@ -31,7 +31,7 @@
                 </p>
             </section>
         </article>
-        <About />
+        <!-- <About /> -->
     </main>
 {/if}
 
@@ -39,12 +39,9 @@
     .article {
         position: relative;
         width: 100%;
-        height: 100vh;
         scroll-snap-align: end;
     }
     .home {
-        padding: 1rem;
-        height: 100vh;
         overflow-y: scroll;
         scroll-snap-type: y mandatory;
         scroll-behavior: smooth;
@@ -98,7 +95,6 @@
         -webkit-text-fill-color: transparent;
     }
     .sub {
-        text-align: center;
         padding-top: 1rem;
         font-size: var(--size-small);
         /* color: #41d1ff; */

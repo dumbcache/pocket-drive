@@ -8,9 +8,7 @@
     import {
         previewAndSetDropItems,
         updateRecents,
-        setCacheName,
         shortcutHandler,
-        loadGSIScript,
         signUserOut,
         getOauthToken,
         dropOkHandler,
@@ -47,11 +45,10 @@
         }
         if ($autosave) dropOkHandler();
     }
+
     onMount(() => {
         try {
-            setCacheName();
             updateRecents();
-            loadGSIScript();
             $refreshClicked = false;
         } catch (error) {
             console.warn(error);
@@ -61,7 +58,6 @@
 
 <svelte:window
     on:offline={() => {
-        console.log("offline");
         window.alert("You're offline");
     }}
     on:keydown={shortcutHandler}
@@ -111,7 +107,7 @@
             </div>
             <Preview />
             <Drop />
-            <View />
+            <!-- <View /> -->
             {#if $sessionTimeout}
                 <Confirm
                     text={"Session timeout. You want to continue?"}
