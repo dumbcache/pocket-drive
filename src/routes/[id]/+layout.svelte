@@ -9,10 +9,9 @@
         previewAndSetDropItems,
         updateRecents,
         shortcutHandler,
-        signUserOut,
-        getOauthToken,
         dropOkHandler,
     } from "$lib/scripts/utils";
+    import { signUserOut } from "$lib/scripts/shared/utils";
     import {
         autosave,
         dropFull,
@@ -33,7 +32,11 @@
     import EditUrl from "$lib/components/actions/EditUrl.svelte";
     import Shortcuts from "$lib/components/Shortcuts.svelte";
     import View from "$lib/components/View.svelte";
-
+    import {
+        checkRefreshTimeout,
+        checkSessionTimeout,
+    } from "$lib/scripts/shared/utils";
+    import { googleClient } from "$lib/scripts/login";
     let draggedOver = false;
     export function imgDropHandler(e: DragEvent) {
         e.preventDefault();
@@ -45,10 +48,11 @@
         }
         if ($autosave) dropOkHandler();
     }
-
     onMount(() => {
         try {
             updateRecents();
+            checkSessionTimeout();
+            checkRefreshTimeout();
             $refreshClicked = false;
         } catch (error) {
             console.warn(error);
@@ -117,7 +121,7 @@
                         goto("/");
                     }}
                     on:confirmCloseOK={() => {
-                        getOauthToken();
+                        googleClient.requestToken();
                     }}
                 />
             {/if}

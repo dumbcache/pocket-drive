@@ -1,13 +1,12 @@
 <script lang="ts">
-    import { loadGSIScript } from "$lib/scripts/utils";
+    import { googleClient } from "$lib/scripts/login";
     import { onMount } from "svelte";
-    import { getOauthToken } from "$lib/scripts/utils";
     import googleIcon from "$lib/assets/google.png";
 
     // console.log($isLoggedin);
     onMount(() => {
         try {
-            loadGSIScript();
+            googleClient.loadGSIScript();
         } catch (error) {
             console.warn(error);
         }
@@ -15,7 +14,7 @@
 </script>
 
 <button
-    on:click={getOauthToken}
+    on:click={googleClient.requestToken}
     class="login"
     title="Sign in with Google"
     aria-label="Sign in with Google"

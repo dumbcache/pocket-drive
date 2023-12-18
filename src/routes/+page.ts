@@ -1,6 +1,7 @@
 import { redirect } from "@sveltejs/kit";
 import { get } from "svelte/store";
-import { checkLoginStatus, signUserOut } from "$lib/scripts/utils";
+import { checkLoginStatus } from "$lib/scripts/shared/utils";
+import { signUserOut } from "$lib/scripts/shared/utils";
 import { isLoggedin } from "$lib/scripts/stores";
 import { browser } from "$app/environment";
 

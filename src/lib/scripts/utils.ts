@@ -1,5 +1,3 @@
-import { goto } from "$app/navigation";
-import { PUBLIC_KRAB_CLIENT_ID } from "$env/static/public";
 import { get } from "svelte/store";
 import { browser } from "$app/environment";
 import ChildWorker from "$lib/scripts/worker.ts?worker";
@@ -7,17 +5,14 @@ import {
     activeParentId,
     activeParentName,
     touchCoords,
-    isLoggedin,
     previewItem,
     dropItems,
     recents,
-    dataCacheName,
     editItems,
     selectedCount,
     mode,
     editConfirm,
     sessionTimeout,
-    activeTimeout,
     editMode,
     activeDirs,
     tempImgs,
@@ -33,19 +28,11 @@ import {
     dropFull,
     dropMini,
     autosave,
-    shortcuts,
-    activeRefreshTimeout,
-    refreshTimeout,
 } from "$lib/scripts/stores";
-import {
-    fetchFiles,
-    refreshMainContent,
-    createRootDir,
-    refreshCache,
-} from "./drive";
+import { fetchFiles, refreshMainContent, refreshCache } from "./drive";
+import { checkLoginStatus } from "./shared/utils";
 
 export let childWorker: Worker;
-export let client, accessToken: string;
 if (browser) {
     childWorker = new ChildWorker();
     childWorker.onerror = (e) => console.warn(e);
@@ -140,15 +127,6 @@ function refreshImgs() {
     );
 }
 
-export async function setCache(refresh: Boolean) {
-    for (let key of await caches.keys()) {
-        if (key.startsWith("pd-data")) {
-            dataCacheName.set(key);
-            refresh && caches.delete(key);
-        }
-    }
-}
-
 export const updateRecents = (data?: { name: string; id: string }) => {
     let old =
         (JSON.parse(window.localStorage.getItem("recents")!) as {
@@ -167,94 +145,6 @@ export const updateRecents = (data?: { name: string; id: string }) => {
     window.localStorage.setItem("recents", JSON.stringify(old));
 };
 
-// export const toggleColorMode = () => {
-//     const root = document.documentElement;
-//     let active = window.localStorage.getItem("krabColorScheme");
-//     const schemeEle = document.querySelector(
-//         ".color-scheme"
-//     ) as HTMLButtonElement;
-//     const lightEle = schemeEle.querySelector(".light-icon") as HTMLSpanElement;
-//     const darkEle = schemeEle.querySelector(".dark-icon") as HTMLSpanElement;
-//     active = active ?? "auto";
-//     switch (active) {
-//         case "light":
-//             window.localStorage.setItem("krabColorScheme", "auto");
-//             root.classList.toggle("dark");
-//             lightEle.style.visibility = "hidden";
-//             darkEle.style.visibility = "initial";
-//             schemeEle.ariaChecked = "false";
-//             return;
-//         case "dark":
-//             window.localStorage.setItem("krabColorScheme", "auto");
-//             root.classList.toggle("dark");
-//             darkEle.style.visibility = "hidden";
-//             lightEle.style.visibility = "initial";
-//             schemeEle.ariaChecked = "false";
-//             return;
-//         case "auto":
-//             const current = window.matchMedia("(prefers-color-scheme: dark")
-//                 .matches
-//                 ? "dark"
-//                 : "light";
-//             if (current === "dark") {
-//                 window.localStorage.setItem("krabColorScheme", "light");
-//                 root.classList.toggle("dark");
-//                 darkEle.style.visibility = "hidden";
-//                 lightEle.style.visibility = "initial";
-//                 schemeEle.ariaChecked = "true";
-//                 return;
-//             } else {
-//                 window.localStorage.setItem("krabColorScheme", "dark");
-//                 root.classList.toggle("dark");
-//                 lightEle.style.visibility = "hidden";
-//                 darkEle.style.visibility = "initial";
-//                 schemeEle.ariaChecked = "true";
-//                 return;
-//             }
-//     }
-// };
-
-export function checkRefreshTimeout() {
-    let time = Number(window.localStorage.getItem("refreshTime")) - Date.now();
-    time > 0 &&
-        activeRefreshTimeout.set(
-            setTimeout(() => {
-                if (isRefreshNeeded()) {
-                    setCache(true);
-                } else {
-                    checkRefreshTimeout();
-                    setCache(false);
-                }
-            }, time)
-        );
-}
-export function checkSessionTimeout() {
-    let time = Number(window.localStorage.getItem("sessionTime")) - Date.now();
-    time > 0 &&
-        activeTimeout.set(
-            setTimeout(() => {
-                if (isTokenExpired()) {
-                    sessionTimeout.set(true);
-                } else {
-                    checkSessionTimeout();
-                }
-            }, time)
-        );
-}
-
-function setSessionTimeout() {}
-
-function setRefreshTimeout() {}
-
-export function isValidUrl(url: string) {
-    try {
-        new URL(url);
-        return url;
-    } catch (err) {
-        return "";
-    }
-}
-
 export function handleFavorites() {
     if (get(mode) === "favorites") {
         activeImgs.set(get(tempImgs)?.filter((img) => img.starred === true));
@@ -263,136 +153,6 @@ export function handleFavorites() {
     }
     activeImgs.set(get(tempImgs));
     activeDirs.set(get(tempDirs));
-}
-
-async function handleGoogleSignIn(tokenResponse: TokenResponse) {
-    const name = encodeURIComponent("Pocket_#Drive");
-    accessToken = tokenResponse.access_token;
-    window.localStorage.setItem("token", accessToken);
-    window.localStorage.setItem(
-        "sessionTime",
-        String(Date.now() + tokenResponse.expires_in * 1000)
-    );
-    clearTimeout(get(activeTimeout));
-    checkSessionTimeout();
-    sessionTimeout.set(false);
-    if (!window.localStorage.getItem("root")) {
-        const res = await fetch(
-            `https://www.googleapis.com/drive/v3/files?&pageSize=1&fields=files(id,name)&orderBy=createdTime`,
-            {
-                headers: { authorization: `Bearer ${accessToken}` },
-            }
-        );
-        const { files } = await res.json();
-        if (files.length !== 0) {
-            window.localStorage.setItem("root", files[0].id);
-        } else {
-            const { id } = await createRootDir(accessToken);
-            window.localStorage.setItem("root", id);
-        }
-    }
-    if (get(isLoggedin)) return;
-    isLoggedin.set(true);
-    goto("/r");
-}
-
-function initClient() {
-    client = window.google.accounts.oauth2.initTokenClient({
-        client_id: PUBLIC_KRAB_CLIENT_ID,
-        scope: "https://www.googleapis.com/auth/drive.file",
-        callback: handleGoogleSignIn,
-    });
-}
-export function getOauthToken() {
-    client.requestAccessToken();
-}
-
-export function isRefreshNeeded() {
-    return Date.now() > Number(window.localStorage.getItem("refreshTime"));
-}
-
-export function isTokenExpired() {
-    return Date.now() > Number(window.localStorage.getItem("sessionTime"));
-}
-
-export const loadGSIScript = () => {
-    const src = "https://accounts.google.com/gsi/client";
-    const header = document.querySelector("head") as HTMLDivElement;
-    const gsiIfExists = header.querySelector(`script[src='${src}']`);
-    if (gsiIfExists) header.removeChild(gsiIfExists);
-    const script = document.createElement("script");
-    script.src = src;
-    script.onload = () => {
-        initClient();
-        // window.google.accounts.id.initialize({
-        //     client_id: PUBLIC_KRAB_CLIENT_ID,
-        //     nonce: PUBLIC_KRAB_NONCE_WEB,
-        //     auto_select: false,
-        //     callback: handleGoogleSignIn,
-        // });
-        // window.google.accounts.id.prompt();
-        // window.google.accounts.id.renderButton(
-        //     header.querySelector(".button__signin"),
-        //     {
-        //         type: "icon",
-        //         shape: "circle",
-        //         size: "medium",
-        //     }
-        // );
-    };
-    script.onerror = (e) => console.log(e);
-    header.append(script);
-};
-
-export const colorPalette = {
-    ChocolateIceCream: "#ac725e",
-    OldBrickRed: "#d06b64",
-    Cardinal: "#f83a22",
-    WildStraberries: "#fa573c",
-    MarsOrange: "#ff7537",
-    YellowCab: "#ffad46",
-    Spearmint: "#42d692",
-    VernFern: "#16a765",
-    Asparagus: "#7bd148",
-    SlimeGreen: "#b3dc6c",
-    DesertSand: "#fbe983",
-    Macaroni: "#fad165",
-    SeaFoam: "#92e1c0",
-    Pool: "#9fe1e7",
-    Denim: "#9fc6e7",
-    RainySky: "#4986e7",
-    BlueVelvet: "#9a9cff",
-    PurpleDino: "#b99aff",
-    Mouse: "#8f8f8f",
-    MountainGrey: "#cabdbf",
-    Earthworm: "#cca6ac",
-    BubbleGum: "#f691b2",
-    PurpleRain: "#cd74e6",
-    ToyEggplant: "#a47ae2",
-};
-
-export function checkLoginStatus() {
-    if (browser) {
-        return (
-            Boolean(window.localStorage.getItem("token")) && !isTokenExpired()
-        );
-    }
-}
-
-export async function signUserOut(e?: Event) {
-    e?.stopPropagation();
-    await clearFiles();
-    isLoggedin.set(false);
-    console.log("logging user out");
-    goto("/");
-}
-
-export async function clearFiles() {
-    (await caches.keys()).forEach(
-        (key) => key.startsWith("pd-") && caches.delete(key)
-    );
-    window.localStorage.removeItem("token");
-    window.localStorage.removeItem("sessionTime");
 }
 
 export function handleTouchStart(e: TouchEvent) {

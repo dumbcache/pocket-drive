@@ -29,6 +29,7 @@
     import Confirm from "$lib/components/actions/Confirm.svelte";
     import EditMode from "$lib/components/actions/EditMode.svelte";
     import LoadIndicator from "$lib/components/actions/LoadIndicator.svelte";
+    import { navigating } from "$app/stores";
 
     let type: "update" | "delete";
     let dirToggle = false;

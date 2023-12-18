@@ -1,6 +1,7 @@
 <script lang="ts">
     import logoutIcon from "$lib/assets/logout.svg?raw";
-    import { childWorker, signUserOut } from "$lib/scripts/utils";
+    import { childWorker } from "$lib/scripts/utils";
+    import { signUserOut } from "$lib/scripts/shared/utils";
 
     function signoutHandler() {
         childWorker.postMessage({ context: "CLEAR_IMAGE_CACHE" });

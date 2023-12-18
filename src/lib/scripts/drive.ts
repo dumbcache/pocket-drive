@@ -9,7 +9,7 @@ import {
     searchItems,
     sessionTimeout,
 } from "./stores";
-import { colorPalette, checkLoginStatus } from "./utils";
+import { checkLoginStatus,colorPalette } from "$lib/scripts/shared/utils";
 
 export const DIR_MIME_TYPE = "application/vnd.google-apps.folder";
 export const IMG_MIME_TYPE = "image/";

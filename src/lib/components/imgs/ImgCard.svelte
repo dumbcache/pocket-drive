@@ -1,6 +1,7 @@
 <script lang="ts">
     import linkIcon from "$lib/assets/link.svg?raw";
-    import { fetchImgPreview, isValidUrl } from "$lib/scripts/utils";
+    import { fetchImgPreview } from "$lib/scripts/utils";
+    import { isValidUrl } from "$lib/scripts/shared/utils";
     import {
         blobLocations,
         dropMini,
