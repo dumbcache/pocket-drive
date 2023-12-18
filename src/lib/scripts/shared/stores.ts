@@ -6,3 +6,5 @@ export let sessionTimeout = writable(false);
 export let activeRefreshTimeout = writable(0);
 export let refreshTimeout = writable(false);
 export let dataCacheName = writable("");
+
+export let searchItems = writable<GoogleFile[] | undefined>();

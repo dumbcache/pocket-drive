@@ -3,7 +3,11 @@
     import doneIcon from "$lib/assets/done.svg?raw";
     import progressIcon from "$lib/assets/progress.svg?raw";
     import { activeParentId } from "$lib/scripts/stores";
-    import { createDir, updateDir, deleteDir } from "$lib/scripts/drive";
+    import {
+        createDir,
+        updateDir,
+        deleteDir,
+    } from "$lib/scripts/gdrive/folder";
 
     const confirmText = "confirm";
     export let type: "create" | "update" | "delete";

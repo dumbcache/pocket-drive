@@ -23,7 +23,7 @@
         dirCreateToggle,
     } from "$lib/scripts/stores";
     import DirCreate from "$lib/components/actions/DirCreate.svelte";
-    import { refreshCache } from "$lib/scripts/drive";
+    import { refreshCache } from "$lib/scripts/gdrive/utils";
     import EditIcon from "$lib/components/actions/EditIcon.svelte";
     import History from "$lib/components/actions/History.svelte";
 

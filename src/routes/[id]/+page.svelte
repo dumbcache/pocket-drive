@@ -3,8 +3,9 @@
     import Imgs from "$lib/components/imgs/Imgs.svelte";
     import DirCreate from "$lib/components/actions/DirCreate.svelte";
     import { onDestroy, onMount } from "svelte";
-    import { getResource } from "$lib/scripts/drive";
+    import { getResource } from "$lib/scripts/gdrive/utils";
     import { childWorker } from "$lib/scripts/utils";
+    import { searchItems } from "$lib/scripts/shared/stores";
     import {
         activeParentId,
         activeParentName,
@@ -13,7 +14,6 @@
         activeImgs,
         previewItem,
         editConfirm,
-        searchItems,
         mode,
         isLoggedin,
         editMode,

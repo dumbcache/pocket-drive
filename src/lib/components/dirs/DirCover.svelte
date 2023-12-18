@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { fetchFiles } from "$lib/scripts/drive";
+    import { fetchFiles } from "$lib/scripts/gdrive/utils";
     import EditTool from "$lib/components/actions/EditTool.svelte";
     import { sessionTimeout } from "$lib/scripts/stores";
     import Favorite from "$lib/components/actions/Favorite.svelte";

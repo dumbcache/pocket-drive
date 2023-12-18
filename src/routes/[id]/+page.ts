@@ -1,7 +1,7 @@
 import { browser } from "$app/environment";
 import type { PageLoad } from "./$types";
 import { get } from "svelte/store";
-import { loadMainContent } from "$lib/scripts/drive";
+import { loadMainContent } from "$lib/scripts/gdrive/utils";
 import { checkLoginStatus } from "$lib/scripts/shared/utils";
 import {
     activeParentId,

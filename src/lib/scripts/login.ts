@@ -5,7 +5,7 @@ import {
     setSessionTimeout,
     setRefreshTimeout,
 } from "$lib/scripts/shared/utils";
-import { createRootDir } from "$lib/scripts/drive";
+import { createRootDir } from "$lib/scripts/gdrive/utils";
 import { goto } from "$app/navigation";
 
 export let googleClient = (() => {

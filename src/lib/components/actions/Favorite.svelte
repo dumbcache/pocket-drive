@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { updateResource } from "$lib/scripts/drive";
+    import { updateResource } from "$lib/scripts/gdrive/utils";
     import favoriteIcon from "$lib/assets/favorite.svg?raw";
     import { createEventDispatcher } from "svelte";
 

@@ -2,7 +2,8 @@
     import doneIcon from "$lib/assets/done.svg?raw";
     import beforeIcon from "$lib/assets/beforeNavigate.svg?raw";
     import progressIcon from "$lib/assets/progress.svg?raw";
-    import { fetchFiles, getResource } from "$lib/scripts/drive";
+    import { getResource } from "$lib/scripts/gdrive/utils";
+    import { fetchFiles } from "$lib/scripts/gdrive/utils";
     import {
         activeGrandParentId,
         activeParentId,

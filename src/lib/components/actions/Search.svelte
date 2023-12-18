@@ -1,11 +1,7 @@
 <script lang="ts">
-    import { searchHandler } from "$lib/scripts/drive";
-    import {
-        activeDirs,
-        globalSearch,
-        mode,
-        searchItems,
-    } from "$lib/scripts/stores";
+    import { searchHandler } from "$lib/scripts/gdrive/utils";
+    import { activeDirs, globalSearch, mode } from "$lib/scripts/stores";
+    import { searchItems } from "$lib/scripts/shared/stores";
     import { onMount, onDestroy } from "svelte";
 
     let search: string;

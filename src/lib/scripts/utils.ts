@@ -29,7 +29,8 @@ import {
     dropMini,
     autosave,
 } from "$lib/scripts/stores";
-import { fetchFiles, refreshMainContent, refreshCache } from "./drive";
+import { refreshMainContent, refreshCache } from "$lib/scripts/gdrive/utils";
+import { fetchFiles } from "$lib/scripts/gdrive/utils";
 import { checkLoginStatus } from "./shared/utils";
 
 export let childWorker: Worker;
