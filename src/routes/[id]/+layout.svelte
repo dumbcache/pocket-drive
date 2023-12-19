@@ -31,12 +31,15 @@
     import Move from "$lib/components/actions/Move.svelte";
     import EditUrl from "$lib/components/actions/EditUrl.svelte";
     import Shortcuts from "$lib/components/Shortcuts.svelte";
-    import View from "$lib/components/View.svelte";
     import {
         checkRefreshTimeout,
         checkSessionTimeout,
     } from "$lib/scripts/shared/utils";
     import { googleClient } from "$lib/scripts/login";
+    import Dialog from "$lib/components/Dialog.svelte";
+    import Main from "$lib/components/Main.svelte";
+
+    let dialog: Dialog;
     let draggedOver = false;
     export function imgDropHandler(e: DragEvent) {
         e.preventDefault();
@@ -109,9 +112,9 @@
                 {/if}
                 <slot />
             </div>
-            <Preview />
             <Drop />
-            <!-- <View /> -->
+            <Preview />
+            <Dialog bind:this={dialog}></Dialog>
             {#if $sessionTimeout}
                 <Confirm
                     text={"Session timeout. You want to continue?"}
@@ -128,6 +131,7 @@
         </main>
     {/if}
 </div>
+<Main />
 
 <style>
     .layout {

@@ -1,6 +1,10 @@
 import { writable } from "svelte/store";
 
+export let folderStore = writable<GoogleFileResponse | undefined>();
+export let fileStore = writable<GoogleFileResponse | undefined>();
+
 export let isLoggedin = writable(false);
+
 export let activeTimeout = writable(0);
 export let sessionTimeout = writable(false);
 export let activeRefreshTimeout = writable(0);

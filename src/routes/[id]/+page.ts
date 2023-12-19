@@ -9,8 +9,15 @@ import {
     isLoggedin,
 } from "$lib/scripts/stores";
 import { goto } from "$app/navigation";
+import { fileStore, folderStore } from "$lib/scripts/shared/stores";
 
-export const load = (({ params, fetch }) => {
+async function loadContent(parent: string) {
+    const [folders, files] = await loadMain(parent, getToken());
+    folderStore.set(folders);
+    fileStore.set(files);
+}
+
+export const load = (async ({ params, fetch }) => {
     if (browser) {
         if (!checkLoginStatus()) {
             goto("/");
@@ -21,7 +28,7 @@ export const load = (({ params, fetch }) => {
             params.id === "r" ? window.localStorage.getItem("root") : params.id;
         if (params.id === "r") activeParentName.set("root");
         activeParentId.set(parent!);
-        loadMain(parent, getToken());
+        loadContent(parent);
         return loadMainContent(parent!);
     }
 }) satisfies PageLoad;

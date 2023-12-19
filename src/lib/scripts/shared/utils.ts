@@ -46,7 +46,7 @@ export function isValidUrl(url: string) {
 }
 
 export function getToken() {
-    return window.localStorage.getItem("token");
+    return window.localStorage.getItem("token") as string;
 }
 
 export function isTokenExpired() {

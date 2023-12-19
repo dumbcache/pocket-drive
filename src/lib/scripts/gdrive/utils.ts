@@ -273,13 +273,13 @@ export async function fetchMultiple(
     params: ParamsObject,
     accessToken: string,
     updateCache: Boolean = false
-): Promise<void> {
+): Promise<GoogleFileResponse> {
     return new Promise(async (resolve, reject) => {
         const req = constructRequest(params, accessToken);
         if (updateCache)
             await (await caches.open(get(dataCacheName))).delete(req);
         const res = await makeFetch(req);
-        res?.status === 200 ? resolve(res?.json()) : resolve();
+        resolve(res?.json() as Promise<GoogleFileResponse>);
         return;
     });
 }
@@ -409,7 +409,7 @@ export const refreshDir = (
 export const loadMain = (
     parent: string,
     accessToken: string
-): Promise<void> => {
+): Promise<GoogleFileResponse[]> => {
     return new Promise(async (resolve, reject) => {
         const proms = [
             fetchMultiple({ parent, mimeType: FOLDER_MIME_TYPE }, accessToken),
@@ -417,8 +417,7 @@ export const loadMain = (
         ];
         Promise.all(proms)
             .then((data) => {
-                console.log(data);
-                resolve();
+                resolve(data);
             })
             .catch(async (e) => {
                 console.warn(e);

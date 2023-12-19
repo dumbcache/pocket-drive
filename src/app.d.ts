@@ -93,6 +93,30 @@ declare global {
     interface DropItems {
         [id: number]: DropItem;
     }
+
+    interface File {
+        id: string;
+        name: string;
+        description: string;
+        starred: Boolean;
+        thumbnailLink: string;
+        appProperties?: {
+            origin: string;
+        };
+        parents?: string[];
+    }
+    interface Folder {
+        id: string;
+        name: string;
+        parents: string[];
+        starred: Boolean;
+    }
+
+    type FileResponse = File[] | Folder[];
+    interface GoogleFileResponse {
+        files: FileResponse;
+        nextPageToken?: string;
+    }
 }
 
 export {};
