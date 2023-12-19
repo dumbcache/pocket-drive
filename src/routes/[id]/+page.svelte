@@ -3,7 +3,7 @@
     import Imgs from "$lib/components/imgs/Imgs.svelte";
     import DirCreate from "$lib/components/actions/DirCreate.svelte";
     import { onDestroy, onMount } from "svelte";
-    import { getResource } from "$lib/scripts/gdrive/utils";
+    import { getInfo } from "$lib/scripts/gdrive/utils";
     import { childWorker } from "$lib/scripts/utils";
     import { searchItems } from "$lib/scripts/shared/stores";
     import {
@@ -40,7 +40,7 @@
         $editMode === true || $mode === "search" ? "none" : "initial";
     onMount(() => {
         if ($isLoggedin) {
-            getResource($activeParentId).then(({ name, parents }) => {
+            getInfo($activeParentId).then(({ name, parents }) => {
                 $activeParentName = name;
                 $activeGrandParentId = parents![0];
             });

@@ -95,7 +95,7 @@ if (browser) {
                 fetchFiles(get(activeParentId), "covers", 3, true);
                 return;
 
-            case "MOVE_IMGS":
+            case "MOVE":
                 refreshImgs();
                 fetchFiles(data.parent, "imgs", 1000, true);
                 fetchFiles(data.parent, "covers", 3, true);

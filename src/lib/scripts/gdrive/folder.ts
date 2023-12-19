@@ -1,5 +1,5 @@
 import { get } from "svelte/store";
-import { updateResource } from "./utils";
+import { DEFAULT_PAGESIZE, updateResource } from "./utils";
 import { fetchFiles } from "$lib/scripts/gdrive/utils";
 import { sessionTimeout } from "../shared/stores";
 import { activeDirs } from "../stores";
@@ -90,7 +90,7 @@ export async function fetchDirs(
 ): Promise<void> {
     activeDirs.set(undefined);
     return new Promise((resolve, reject) => {
-        fetchFiles(parent!, "dirs", 1000, cache)
+        fetchFiles(parent!, "dirs", DEFAULT_PAGESIZE, cache)
             .then(async (dirs) => {
                 activeDirs.set(dirs?.files);
                 if (cache) {

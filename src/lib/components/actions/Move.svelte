@@ -2,7 +2,7 @@
     import doneIcon from "$lib/assets/done.svg?raw";
     import beforeIcon from "$lib/assets/beforeNavigate.svg?raw";
     import progressIcon from "$lib/assets/progress.svg?raw";
-    import { getResource } from "$lib/scripts/gdrive/utils";
+    import { getInfo } from "$lib/scripts/gdrive/utils";
     import { fetchFiles } from "$lib/scripts/gdrive/utils";
     import {
         activeGrandParentId,
@@ -24,7 +24,7 @@
     const token = window.localStorage.getItem("token");
 
     async function beforeFetchDirs(id: string) {
-        getResource(id).then(({ id, name, parents }) => {
+        getInfo(id).then(({ id, name, parents }) => {
             selectedIdParent = parents[0];
             selectedId = id;
             selectedName = name;
@@ -89,7 +89,7 @@
                             recentsClicked = false;
                             progress = true;
                             childWorker.postMessage({
-                                context: "MOVE_IMGS",
+                                context: "MOVE",
                                 parent: selectedId,
                                 imgs: $editItems,
                                 token,

@@ -1,8 +1,8 @@
+import { moveMulitple } from "$lib/scripts/gdrive/utils";
 import {
     downloadImage,
     createImgMetadata,
     uploadImg,
-    moveImgs,
     editImgs,
     deleteImgs,
 } from "$lib/scripts/gdrive/file";
@@ -129,8 +129,8 @@ onmessage = ({ data }) => {
         case "CLEAR_IMAGE_CACHE":
             clearImageCache();
             return;
-        case "MOVE_IMGS":
-            moveImgs(data.parent, data.imgs, data.token);
+        case "MOVE":
+            moveMulitple(data.parent, data.imgs, data.token);
             return;
         case "EDIT_IMGS":
             editImgs(data.url, data.imgs, data.token);

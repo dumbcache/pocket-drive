@@ -1,5 +1,5 @@
 import { activeImgs } from "../stores";
-import { FILE_API, fetchFiles, moveResource, updateResource } from "./utils";
+import { FILE_API, fetchFiles, updateResource } from "./utils";
 
 // export async function downloadImage(id: string, token: string): Promise<Blob> {
 //     return new Promise(async (resolve, reject) => {
@@ -134,15 +134,6 @@ export const deleteImgs = async (imgs: string[], token: string) => {
     });
 };
 
-export const moveImgs = (parent: string, imgs: string[], token: string) => {
-    let proms = [];
-    for (let id of imgs) {
-        proms.push(moveResource(id, parent, token));
-    }
-    Promise.allSettled(proms).then(() => {
-        postMessage({ context: "MOVE_IMGS", parent });
-    });
-};
 export const editImgs = (url: string, imgs: string[], token: string) => {
     let proms = [];
     for (let id of imgs) {

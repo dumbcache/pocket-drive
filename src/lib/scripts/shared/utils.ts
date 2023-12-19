@@ -45,6 +45,10 @@ export function isValidUrl(url: string) {
     }
 }
 
+export function getToken() {
+    return window.localStorage.getItem("token");
+}
+
 export function isTokenExpired() {
     return Date.now() > Number(window.localStorage.getItem("sessionTime"));
 }
