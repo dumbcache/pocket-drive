@@ -6,7 +6,7 @@
     import { activeParentId } from "$lib/scripts/stores";
     import { getToken } from "$lib/scripts/shared/utils";
 
-    let container: HTMLDivElement;
+    let container: HTMLElement;
     let wait = false;
     onMount(() => {
         setupIntersectionObserver();
@@ -15,30 +15,32 @@
     function setupIntersectionObserver() {
         const observer = new IntersectionObserver(
             (entries) => {
-                entries.forEach(async (entry) => {
+                entries.forEach((entry) => {
+                    console.log(entry);
                     if (entry.isIntersecting) {
                         if ($fileStore?.nextPageToken && wait === false) {
                             wait = true;
-                            const files = await fetchMultiple(
+                            fetchMultiple(
                                 {
                                     parent: $activeParentId,
                                     mimeType: IMG_MIME_TYPE,
                                     pageToken: $fileStore?.nextPageToken,
                                 },
                                 getToken()
-                            );
-                            fileStore.update((prev) => {
-                                return {
-                                    nextPageToken: files.nextPageToken,
-                                    files: [...prev?.files, ...files.files],
-                                };
+                            ).then((files) => {
+                                fileStore.update((prev) => {
+                                    return {
+                                        nextPageToken: files.nextPageToken,
+                                        files: [...prev?.files, ...files.files],
+                                    };
+                                });
+                                wait = false;
                             });
-                            wait = false;
                         }
                     }
                 });
             },
-            { threshold: 1 }
+            { threshold: 0 }
         );
         observer.observe(container);
         return () => {
@@ -58,6 +60,3 @@
         </ol>
     {/if}
 </section>
-
-<style>
-</style>

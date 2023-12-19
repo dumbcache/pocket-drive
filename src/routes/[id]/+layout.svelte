@@ -77,7 +77,7 @@
             <LoadIndicator />
         </div>
     {:else}
-        <main
+        <!-- <main
             class="main {draggedOver === true ? 'dragover' : ''}"
             on:dragstart
             on:dragover|preventDefault
@@ -128,9 +128,10 @@
                     }}
                 />
             {/if}
-        </main>
+        </main> -->
     {/if}
 </div>
+<!-- <slot /> -->
 <Main />
 
 <style>

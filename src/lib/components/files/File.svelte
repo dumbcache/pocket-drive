@@ -6,7 +6,6 @@
     import Favorite from "../actions/Favorite.svelte";
 
     export let file: File;
-    let visible = true;
     let selected = "";
     function handleImageError(e: ErrorEvent) {
         const imageElement = e.target as HTMLImageElement;
@@ -14,50 +13,48 @@
     }
 </script>
 
-{#if visible}
-    <li
-        class="img-card"
-        class:select={selected}
-        data-id={file.id}
-        data-url={$blobLocations[file.id] || ""}
-        class:edit-mode={$editMode}
-        on:click
-        on:keypress
-    >
-        <img
-            src={file.thumbnailLink}
-            alt="thumbnail to link"
-            class="img {$mode === 'delete' ? 'delete' : ''}"
-            loading="lazy"
-            height="200"
-            width="200"
-            on:error={handleImageError}
-        />
-        <button class="anchor">.</button>
-        {#if !$editMode}
-            {#if file.appProperties?.origin || file.description}
-                <a
-                    href={isValidUrl(file.appProperties?.origin) ||
-                        isValidUrl(file.description)}
-                    class="img-link"
-                    referrerpolicy="no-referrer"
-                    rel="external noopener noreferrer nofollow"
-                    on:click|stopPropagation
-                >
-                    {@html linkIcon}
-                </a>
-            {/if}
-
-            <span class="favorite">
-                <Favorite
-                    id={file.id}
-                    starred={file.starred}
-                    on:favStatus={() => (file.starred = !file.starred)}
-                />
-            </span>
+<li
+    class="img-card"
+    class:select={selected}
+    data-id={file.id}
+    data-url={$blobLocations[file.id] || ""}
+    class:edit-mode={$editMode}
+    on:click
+    on:keypress
+>
+    <img
+        src={file.thumbnailLink}
+        alt="thumbnail to link"
+        class="img {$mode === 'delete' ? 'delete' : ''}"
+        loading="lazy"
+        height="200"
+        width="200"
+        on:error={handleImageError}
+    />
+    <button class="anchor">.</button>
+    {#if !$editMode}
+        {#if file.appProperties?.origin || file.description}
+            <a
+                href={isValidUrl(file.appProperties?.origin) ||
+                    isValidUrl(file.description)}
+                class="img-link"
+                referrerpolicy="no-referrer"
+                rel="external noopener noreferrer nofollow"
+                on:click|stopPropagation
+            >
+                {@html linkIcon}
+            </a>
         {/if}
-    </li>
-{/if}
+
+        <span class="favorite">
+            <Favorite
+                id={file.id}
+                starred={file.starred}
+                on:favStatus={() => (file.starred = !file.starred)}
+            />
+        </span>
+    {/if}
+</li>
 
 <style>
     .img-card {

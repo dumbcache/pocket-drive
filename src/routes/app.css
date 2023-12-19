@@ -123,10 +123,11 @@
 html,
 body,
 .app {
-    height: 100%;
+    /* height: 100%; */
     font-size: var(--size-default);
     overscroll-behavior-y: contain;
     background: inherit;
+    overflow-y: scroll;
 }
 
 img,

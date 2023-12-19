@@ -1,8 +1,16 @@
 <script lang="ts">
+    import { goto } from "$app/navigation";
     import DirCover from "$lib/components/dirs/DirCover.svelte";
+    import { previewItem } from "$lib/scripts/stores";
+    import { updateRecents } from "$lib/scripts/utils";
 
     export let folder: Folder;
     let draggedOver = false;
+    function dirNavigate(e) {
+        $previewItem = undefined;
+        goto(`/${folder.id}`);
+        updateRecents({ name: folder.name, id: folder.id });
+    }
 </script>
 
 <li
@@ -14,7 +22,7 @@
     on:drop|stopPropagation
     data-id={folder.id}
 >
-    <button on:click>
+    <button on:click={dirNavigate}>
         <DirCover
             id={folder.id}
             name={folder.name}
