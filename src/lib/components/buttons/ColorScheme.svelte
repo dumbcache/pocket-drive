@@ -55,4 +55,18 @@
     .color-theme:hover :global(svg) {
         fill: var(--color-focus);
     }
+
+    @media (max-width: 600px) {
+        .color-theme {
+            padding: 0rem;
+            block-size: var(--primary-icon-size);
+            inline-size: var(--primary-icon-size);
+        }
+        .color-theme:hover {
+            padding: 0rem;
+        }
+        .color-theme:active {
+            padding: 0.2rem;
+        }
+    }
 </style>

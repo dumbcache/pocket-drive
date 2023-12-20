@@ -5,6 +5,7 @@
     import { getToken } from "$lib/scripts/shared/utils";
     import { activeParentId } from "$lib/scripts/stores";
     import File from "./File.svelte";
+    import FileLoading from "../FileLoading.svelte";
 
     export let view: string;
 
@@ -12,11 +13,13 @@
     let nextPageToken: string | undefined;
     let container: HTMLElement;
     let wait = false;
+    let placeholderStatus: string;
 
     let unsubscribe = fileStore.subscribe((data) => {
         if (data) {
             files = data?.files;
             nextPageToken = data?.nextPageToken;
+            placeholderStatus = nextPageToken ? "" : "completed";
         }
     });
 
@@ -37,6 +40,7 @@
                     if (entry.isIntersecting) {
                         if (nextPageToken && wait === false) {
                             wait = true;
+                            placeholderStatus = "loading";
                             fetchMultiple(
                                 {
                                     parent: $activeParentId,
@@ -52,15 +56,12 @@
                                     };
                                 });
                                 wait = false;
-                                container.style.display = "none";
-                                container.offsetHeight;
-                                container.style.display = "block";
                             });
                         }
                     }
                 });
             },
-            { threshold: [0.75, 1] }
+            { threshold: [0, 1] }
         );
         observer.observe(container);
         return () => {
@@ -81,7 +82,9 @@
                 {/key}
             {/each}
         </ol>
-        <div bind:this={container}></div>
+        <footer bind:this={container}>
+            <FileLoading status={placeholderStatus} />
+        </footer>
     {/if}
 </section>
 
@@ -96,6 +99,12 @@
         align-items: flex-start;
         justify-content: center;
         gap: var(--content-gap);
+    }
+    footer {
+        margin-top: 5rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 
     @media (max-width: 600px) {
