@@ -18,20 +18,13 @@
         $previewItem = undefined;
     }}
 >
-    {@html beforeNavigate} back
+    {@html beforeNavigate}
 </button>
 
 <style>
     .back-button {
         display: flex;
-        width: fit-content;
         align-items: center;
         font-size: 1.4rem;
-        cursor: pointer;
-        color: #f0f;
-    }
-    .back-button :global(svg) {
-        width: var(--secondary-icon-size);
-        height: var(--secondary-icon-size);
     }
 </style>

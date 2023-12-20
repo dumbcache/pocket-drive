@@ -30,6 +30,7 @@
     import EditMode from "$lib/components/actions/EditMode.svelte";
     import LoadIndicator from "$lib/components/actions/LoadIndicator.svelte";
     import { navigating } from "$app/stores";
+    import Main from "$lib/components/Main.svelte";
 
     let type: "update" | "delete";
     let dirToggle = false;
@@ -56,7 +57,7 @@
     });
 </script>
 
-{#if $activeDirs?.length !== 0 || $activeImgs?.length !== 0}
+<!-- {#if $activeDirs?.length !== 0 || $activeImgs?.length !== 0}
     {#if $editMode}
         <EditMode />
         {#if $activeImgs?.length !== 0}
@@ -131,7 +132,9 @@
     <div class="progress">
         <LoadIndicator />
     </div>
-{/if}
+{/if} -->
+
+<Main />
 
 <style>
     .count {

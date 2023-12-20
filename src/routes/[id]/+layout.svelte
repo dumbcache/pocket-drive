@@ -23,7 +23,7 @@
         sessionTimeout,
         shortcuts,
     } from "$lib/scripts/stores";
-    import BackButton from "$lib/components/actions/BackButton.svelte";
+    import BackButton from "$lib/components/buttons/BackButton.svelte";
     import { onMount } from "svelte";
     import Search from "$lib/components/actions/Search.svelte";
     import Confirm from "$lib/components/actions/Confirm.svelte";
@@ -78,7 +78,7 @@
         </div>
     {:else}
         <!-- <main
-            class="main {draggedOver === true ? 'dragover' : ''}"
+        class="main {draggedOver === true ? 'dragover' : ''}"
             on:dragstart
             on:dragover|preventDefault
             on:dragenter={() => (draggedOver = true)}
@@ -129,17 +129,15 @@
                 />
             {/if}
         </main> -->
+        <slot />
     {/if}
 </div>
-<!-- <slot /> -->
-<Main />
 
 <style>
     .layout {
         display: flex;
-        background-color: inherit;
     }
-    .main {
+    /* .main {
         background-color: inherit;
         display: flex;
         width: 100%;
@@ -163,21 +161,21 @@
     }
     .content-hidden {
         display: none;
-    }
+    } */
     .loading {
         position: absolute;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
     }
-    .dragover {
+    /* .dragover {
         background-color: #55f5;
     }
     .nav {
         background-color: inherit;
         display: none;
         z-index: 1;
-    }
+    } */
     @media (max-width: 800px) {
         .main :global(.preview),
         .main :global(.drop) {

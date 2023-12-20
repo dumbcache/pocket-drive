@@ -1,30 +1,43 @@
 <script lang="ts">
     import { fileStore } from "$lib/scripts/shared/stores";
-    import { onMount } from "svelte";
+    import { onDestroy, onMount } from "svelte";
     import File from "./File.svelte";
     import { IMG_MIME_TYPE, fetchMultiple } from "$lib/scripts/gdrive/utils";
     import { activeParentId } from "$lib/scripts/stores";
     import { getToken } from "$lib/scripts/shared/utils";
 
+    let files: FileResponse | undefined;
+    let nextPageToken: string | undefined;
     let container: HTMLElement;
     let wait = false;
+
+    let unsubscribe = fileStore.subscribe((data) => {
+        files = data?.files;
+        nextPageToken = data?.nextPageToken;
+    });
+
     onMount(() => {
-        setupIntersectionObserver();
+        if ($fileStore?.nextPageToken) {
+            setupIntersectionObserver();
+        }
+    });
+
+    onDestroy(() => {
+        unsubscribe();
     });
 
     function setupIntersectionObserver() {
         const observer = new IntersectionObserver(
             (entries) => {
                 entries.forEach((entry) => {
-                    console.log(entry);
                     if (entry.isIntersecting) {
-                        if ($fileStore?.nextPageToken && wait === false) {
+                        if (nextPageToken && wait === false) {
                             wait = true;
                             fetchMultiple(
                                 {
                                     parent: $activeParentId,
                                     mimeType: IMG_MIME_TYPE,
-                                    pageToken: $fileStore?.nextPageToken,
+                                    pageToken: nextPageToken,
                                 },
                                 getToken()
                             ).then((files) => {
@@ -40,7 +53,7 @@
                     }
                 });
             },
-            { threshold: 0 }
+            { threshold: 1 }
         );
         observer.observe(container);
         return () => {
@@ -49,14 +62,32 @@
     }
 </script>
 
-<section class="image-container" bind:this={container}>
-    {#if $fileStore}
-        <ol>
-            {#each $fileStore.files as file}
+{#if files && files.length > 0}
+    <section class="file-container" bind:this={container}>
+        <ol class="list">
+            {#each files as file}
                 {#key file.id}
                     <File {file} />
                 {/key}
             {/each}
         </ol>
-    {/if}
-</section>
+    </section>
+{/if}
+
+<style>
+    .file-container {
+        padding-top: 10rem;
+    }
+    .list {
+        display: flex;
+        flex-flow: row wrap;
+        align-items: flex-start;
+        justify-content: center;
+        gap: var(--content-gap);
+    }
+    @media (max-width: 600px) {
+        .file-container {
+            padding-top: 5rem;
+        }
+    }
+</style>

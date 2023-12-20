@@ -3,28 +3,41 @@
     import { folderStore } from "$lib/scripts/shared/stores";
     import { getToken } from "$lib/scripts/shared/utils";
     import { activeParentId } from "$lib/scripts/stores";
-    import { onMount } from "svelte";
+    import { onDestroy, onMount } from "svelte";
     import Folder from "./Folder.svelte";
 
+    let folders: FileResponse | undefined;
+    let nextPageToken: string | undefined;
     let container: HTMLElement;
     let wait = false;
+
+    let unsubscribe = folderStore.subscribe((data) => {
+        folders = data?.files;
+        nextPageToken = data?.nextPageToken;
+    });
+
     onMount(() => {
-        setupIntersectionObserver();
+        if ($folderStore?.nextPageToken) {
+            setupIntersectionObserver();
+        }
+    });
+
+    onDestroy(() => {
+        unsubscribe();
     });
 
     function setupIntersectionObserver() {
         const observer = new IntersectionObserver(
             (entries) => {
                 entries.forEach((entry) => {
-                    console.log(entry);
                     if (entry.isIntersecting) {
-                        if ($folderStore?.nextPageToken && wait === false) {
+                        if (nextPageToken && wait === false) {
                             wait = true;
                             fetchMultiple(
                                 {
                                     parent: $activeParentId,
                                     mimeType: FOLDER_MIME_TYPE,
-                                    pageToken: $folderStore?.nextPageToken,
+                                    pageToken: nextPageToken,
                                 },
                                 getToken()
                             ).then((folders) => {
@@ -43,7 +56,7 @@
                     }
                 });
             },
-            { threshold: [0.75, 1] }
+            { threshold: 1 }
         );
         observer.observe(container);
         return () => {
@@ -53,14 +66,33 @@
     }
 </script>
 
-<section class="folder-container" bind:this={container}>
-    {#if $folderStore}
-        <ol>
-            {#each $folderStore.files as folder (folder.id)}
+{#if folders && folders.length > 0}
+    <section class="folder-container" bind:this={container}>
+        <ol class="list">
+            {#each folders as folder}
                 {#key folder.id}
                     <Folder {folder} />
                 {/key}
             {/each}
         </ol>
-    {/if}
-</section>
+    </section>
+{/if}
+
+<style>
+    .folder-container {
+        padding-top: 10rem;
+    }
+    .list {
+        display: flex;
+        flex-flow: row wrap;
+        align-items: flex-start;
+        justify-content: center;
+        gap: var(--content-gap);
+    }
+
+    @media (max-width: 600px) {
+        .folder-container {
+            padding-top: 5rem;
+        }
+    }
+</style>

@@ -130,6 +130,11 @@ body,
     overflow-y: scroll;
 }
 
+/* .app {
+    display: flex;
+    flex-flow: row nowrap;
+} */
+
 img,
 picture,
 video,
@@ -188,6 +193,10 @@ h6 {
     overflow-wrap: break-word;
     font-weight: unset;
     font-size: unset;
+}
+
+li {
+    list-style: none;
 }
 
 a {
