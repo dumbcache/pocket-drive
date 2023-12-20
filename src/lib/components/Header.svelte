@@ -87,12 +87,13 @@
         background-clip: text;
         -webkit-text-fill-color: transparent;
     }
+
     .help {
         width: var(--size-small);
     }
 
     .title-long {
-        writing-mode: vertical-lr;
+        writing-mode: sideways-lr;
     }
     .menu {
         display: none;
@@ -106,7 +107,7 @@
             height: initial;
             width: initial;
             flex-flow: row nowrap;
-            padding: 0.5rem 1rem;
+            padding: 1rem 1rem;
             border-right: none;
             border-bottom: 1px solid var(--header-border-color);
             /* display: none; */

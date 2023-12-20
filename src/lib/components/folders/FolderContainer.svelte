@@ -1,25 +1,34 @@
 <script lang="ts">
+    import { afterUpdate, onDestroy, onMount } from "svelte";
     import { FOLDER_MIME_TYPE, fetchMultiple } from "$lib/scripts/gdrive/utils";
     import { folderStore } from "$lib/scripts/shared/stores";
     import { getToken } from "$lib/scripts/shared/utils";
     import { activeParentId } from "$lib/scripts/stores";
-    import { onDestroy, onMount } from "svelte";
     import Folder from "./Folder.svelte";
+
+    export let view: string;
 
     let folders: FileResponse | undefined;
     let nextPageToken: string | undefined;
     let container: HTMLElement;
     let wait = false;
+    let observer: IntersectionObserver;
 
     let unsubscribe = folderStore.subscribe((data) => {
-        folders = data?.files;
-        nextPageToken = data?.nextPageToken;
+        if (data) {
+            console.log(data);
+            folders = data?.files;
+            nextPageToken = data?.nextPageToken;
+        }
     });
 
     onMount(() => {
-        if ($folderStore?.nextPageToken) {
-            setupIntersectionObserver();
-        }
+        console.log(nextPageToken);
+        setTimeout(() => {
+            if (nextPageToken) {
+                setupIntersectionObserver();
+            }
+        }, 2000);
     });
 
     onDestroy(() => {
@@ -27,10 +36,15 @@
     });
 
     function setupIntersectionObserver() {
-        const observer = new IntersectionObserver(
+        observer = new IntersectionObserver(
             (entries) => {
                 entries.forEach((entry) => {
                     if (entry.isIntersecting) {
+                        console.log(
+                            "intersecting",
+                            entry.intersectionRatio,
+                            wait
+                        );
                         if (nextPageToken && wait === false) {
                             wait = true;
                             fetchMultiple(
@@ -40,34 +54,36 @@
                                     pageToken: nextPageToken,
                                 },
                                 getToken()
-                            ).then((folders) => {
+                            ).then((data) => {
                                 folderStore.update((prev) => {
                                     return {
-                                        nextPageToken: folders.nextPageToken,
-                                        files: [
-                                            ...prev?.files,
-                                            ...folders.files,
-                                        ],
+                                        nextPageToken: data.nextPageToken,
+                                        files: [...prev?.files, ...data.files],
                                     };
                                 });
                                 wait = false;
+                                container.style.display = "none";
+                                container.offsetHeight;
+                                container.style.display = "block";
                             });
                         }
                     }
                 });
             },
-            { threshold: 1 }
+            { threshold: 0 }
         );
         observer.observe(container);
         return () => {
-            console.log("remove");
             observer.disconnect();
         };
     }
 </script>
 
-{#if folders && folders.length > 0}
-    <section class="folder-container" bind:this={container}>
+<section
+    class="folder-container"
+    style:display={view === "folder" ? "initial" : "none"}
+>
+    {#if folders && folders.length > 0}
         <ol class="list">
             {#each folders as folder}
                 {#key folder.id}
@@ -75,13 +91,15 @@
                 {/key}
             {/each}
         </ol>
-    </section>
-{/if}
+        <div bind:this={container}></div>
+    {/if}
+</section>
 
 <style>
     .folder-container {
         padding-top: 10rem;
     }
+
     .list {
         display: flex;
         flex-flow: row wrap;

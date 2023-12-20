@@ -1,10 +1,12 @@
 <script lang="ts">
-    import { fileStore } from "$lib/scripts/shared/stores";
     import { onDestroy, onMount } from "svelte";
-    import File from "./File.svelte";
     import { IMG_MIME_TYPE, fetchMultiple } from "$lib/scripts/gdrive/utils";
-    import { activeParentId } from "$lib/scripts/stores";
+    import { fileStore } from "$lib/scripts/shared/stores";
     import { getToken } from "$lib/scripts/shared/utils";
+    import { activeParentId } from "$lib/scripts/stores";
+    import File from "./File.svelte";
+
+    export let view: string;
 
     let files: FileResponse | undefined;
     let nextPageToken: string | undefined;
@@ -12,12 +14,14 @@
     let wait = false;
 
     let unsubscribe = fileStore.subscribe((data) => {
-        files = data?.files;
-        nextPageToken = data?.nextPageToken;
+        if (data) {
+            files = data?.files;
+            nextPageToken = data?.nextPageToken;
+        }
     });
 
     onMount(() => {
-        if ($fileStore?.nextPageToken) {
+        if (nextPageToken) {
             setupIntersectionObserver();
         }
     });
@@ -40,20 +44,23 @@
                                     pageToken: nextPageToken,
                                 },
                                 getToken()
-                            ).then((files) => {
+                            ).then((data) => {
                                 fileStore.update((prev) => {
                                     return {
-                                        nextPageToken: files.nextPageToken,
-                                        files: [...prev?.files, ...files.files],
+                                        nextPageToken: data.nextPageToken,
+                                        files: [...prev?.files, ...data.files],
                                     };
                                 });
                                 wait = false;
+                                container.style.display = "none";
+                                container.offsetHeight;
+                                container.style.display = "block";
                             });
                         }
                     }
                 });
             },
-            { threshold: 1 }
+            { threshold: [0.75, 1] }
         );
         observer.observe(container);
         return () => {
@@ -62,8 +69,11 @@
     }
 </script>
 
-{#if files && files.length > 0}
-    <section class="file-container" bind:this={container}>
+<section
+    class="file-container"
+    style:display={view === "file" ? "initial" : "none"}
+>
+    {#if files && files.length > 0}
         <ol class="list">
             {#each files as file}
                 {#key file.id}
@@ -71,13 +81,15 @@
                 {/key}
             {/each}
         </ol>
-    </section>
-{/if}
+        <div bind:this={container}></div>
+    {/if}
+</section>
 
 <style>
     .file-container {
         padding-top: 10rem;
     }
+
     .list {
         display: flex;
         flex-flow: row wrap;
@@ -85,6 +97,7 @@
         justify-content: center;
         gap: var(--content-gap);
     }
+
     @media (max-width: 600px) {
         .file-container {
             padding-top: 5rem;
