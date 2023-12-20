@@ -2,8 +2,6 @@
     import Spinner from "./Spinner.svelte";
 
     export let status: string;
-    status = "loading";
-    $: console.log(status);
 </script>
 
 {#if status === "loading"}

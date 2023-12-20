@@ -21,8 +21,9 @@
     --color-black-two: #202127;
     --color-black-three: #303137;
     --color-white: #fff;
-    --color-white-one: #f6f6f7;
+    --color-white-one: #ebebef;
     --color-white-two: #d0d1d7;
+    --color-white-three: #c0c1c7;
 
     --color-link: var(--color-blue);
     --color-focus: var(--color-light-blue);
@@ -30,6 +31,12 @@
     --primary-bg-color: var(--color-white);
     --primary-color: var(--color-black-one);
     --primary-svg-fill: var(--color-black-two);
+    --bg-color-one: var(--color-white-one);
+    --bg-color-two: var(--color-white-two);
+    --bg-color-three: var(--color-white-three);
+    --color-one: var(--color-black-one);
+    --color-two: var(--color-black-two);
+    --color-three: var(--color-black-three);
 
     --color-black: #000;
     --color-black-light: #0002;
@@ -90,6 +97,12 @@
     --primary-bg-color: var(--color-black-one);
     --primary-color: var(--color-white-one);
     --primary-svg-fill: var(--color-white-two);
+    --bg-color-one: var(--color-black-one);
+    --bg-color-two: var(--color-black-two);
+    --bg-color-three: var(--color-black-three);
+    --color-one: var(--color-white-one);
+    --color-two: var(--color-white-two);
+    --color-three: var(--color-white-three);
 }
 
 :root {

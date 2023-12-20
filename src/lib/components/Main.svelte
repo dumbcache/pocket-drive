@@ -47,12 +47,12 @@
 
     button {
         padding: 0.5rem;
-        background-color: var(--color-black-one);
+        background-color: var(--bg-color-two);
         width: 5rem;
     }
 
     .active {
-        background-color: var(--color-black-three);
+        background-color: var(--bg-color-three);
         border-bottom: 1px solid var(--color-focus);
     }
     /* .active :global(svg) {
