@@ -149,7 +149,7 @@ body,
     font-size: var(--size-default);
     overscroll-behavior-y: contain;
     background: inherit;
-    overflow-y: scroll;
+    /* overflow-y: scroll; */
 }
 
 /* .app {

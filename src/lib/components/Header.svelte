@@ -10,7 +10,7 @@
 
     function goHome() {
         $previewItem = undefined;
-        goto("r");
+        goto("/r");
     }
 </script>
 
@@ -93,7 +93,7 @@
     }
 
     .title-long {
-        writing-mode: sideways-lr;
+        writing-mode: vertical-lr;
     }
     .menu {
         display: none;

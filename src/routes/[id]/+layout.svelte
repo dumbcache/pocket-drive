@@ -129,8 +129,8 @@
 <style>
     .layout {
         display: flex;
-        height: 100vh;
-        overflow-y: scroll;
+        /* height: 100vh;
+        overflow-y: scroll; */
     }
     /* .main {
         background-color: inherit;

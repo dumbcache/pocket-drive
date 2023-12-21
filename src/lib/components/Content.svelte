@@ -97,7 +97,7 @@
     .content {
     }
     footer {
-        padding-top: 5rem;
+        padding: 5rem 0rem;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -105,7 +105,7 @@
 
     @media (max-width: 600px) {
         footer {
-            padding-top: 2rem;
+            padding: 2rem 0rem;
         }
     }
 </style>
