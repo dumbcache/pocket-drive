@@ -35,6 +35,7 @@
     import Content from "$lib/components/Content.svelte";
     import folderIcon from "$lib/assets/folder.svg?raw";
     import fileIcon from "$lib/assets/file.svg?raw";
+    import { afterNavigate } from "$app/navigation";
 
     let view: "folder" | "file" = "folder";
 
@@ -54,7 +55,7 @@
             $tempImgs = $activeImgs;
             $tempDirs = $activeDirs;
         }
-        return navigating.subscribe((val) => val && (view = "folder"));
+        return navigating.subscribe((val) => val || (view = "folder"));
     });
     onDestroy(() => {
         $previewItem = undefined;
@@ -146,7 +147,7 @@
             <span>count:</span>
             <span
                 >{view === "folder"
-                    ? $folderStore.files.length
+                    ? $folderStore?.files.length
                     : $fileStore?.files.length}</span
             >
         </p>

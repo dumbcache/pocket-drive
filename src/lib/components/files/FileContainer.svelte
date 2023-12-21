@@ -26,7 +26,7 @@
     });
 
     let navUnsubscribe = navigating.subscribe((val) => {
-        if (val) {
+        if (!val) {
             inspectionLog = {};
         }
     });
