@@ -25,9 +25,11 @@
         }
     });
 
-    let navUnsubscribe = navigating.subscribe(
-        (val) => val && (inspectionLog = {})
-    );
+    let navUnsubscribe = navigating.subscribe((val) => {
+        if (val) {
+            inspectionLog = {};
+        }
+    });
 
     onDestroy(() => {
         unsubscribe();

@@ -9,7 +9,6 @@
     import Nav from "./Nav.svelte";
 
     function goHome() {
-        $previewItem = undefined;
         goto("/r");
     }
 </script>
