@@ -7,21 +7,49 @@
     export let observer: IntersectionObserver;
 
     let files: FileResponse | undefined;
+    let childObserver: IntersectionObserver;
     let inspectionLog = {};
 
     let foot: HTMLElement;
+    let container: HTMLElement;
 
     $: foot && observer?.observe(foot);
 
     let unsubscribe = fileStore.subscribe((data) => {
         if (data) {
             files = data?.files;
+            setTimeout(() => {
+                childInspection(files);
+            }, 1000);
         }
     });
 
     onDestroy(() => {
         unsubscribe();
+        childObserver?.disconnect();
     });
+
+    function childInspection(items: FileResponse | undefined) {
+        childObserver = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        let { id } = entry.target.dataset;
+                        inspectionLog[id] = true;
+                        childObserver.unobserve(entry.target);
+                    }
+                });
+            },
+            { threshold: 0 }
+        );
+        items?.forEach((item) => {
+            let id = item.id;
+            if (id && !inspectionLog[id]) {
+                let li = container?.querySelector(`[data-id="${id}"]`);
+                li && childObserver.observe(li);
+            }
+        });
+    }
 </script>
 
 <section
@@ -29,7 +57,7 @@
     style:display={view === "file" ? "initial" : "none"}
 >
     {#if files && files.length > 0}
-        <ol class="list">
+        <ol class="list" bind:this={container}>
             {#each files as file}
                 {#key file.id}
                     <li data-id={file.id}>

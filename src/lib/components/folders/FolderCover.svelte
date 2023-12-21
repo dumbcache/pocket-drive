@@ -2,7 +2,6 @@
     import { IMG_MIME_TYPE, fetchMultiple } from "$lib/scripts/gdrive/utils";
     import EditTool from "$lib/components/actions/EditTool.svelte";
     import Favorite from "$lib/components/actions/Favorite.svelte";
-    import { onMount } from "svelte";
     import { getToken } from "$lib/scripts/shared/utils";
 
     export let visible: Boolean;

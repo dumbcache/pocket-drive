@@ -2,16 +2,17 @@
     import linkIcon from "$lib/assets/link.svg?raw";
     import { isValidUrl } from "$lib/scripts/shared/utils";
     import { blobLocations, editMode, mode } from "$lib/scripts/stores";
-    import imgPlaceholder from "$lib/assets/imgPlaceholder.svg";
+    // import imgPlaceholder from "$lib/assets/imgPlaceholder.svg";
     import Favorite from "../actions/Favorite.svelte";
 
     export let visible: Boolean;
     export let file: File;
     let selected = "";
-    function handleImageError(e: ErrorEvent) {
-        console.log(e);
-        const imageElement = e.target as HTMLImageElement;
-        imageElement.src = imgPlaceholder;
+    function handleImageError() {
+        // console.log(e);
+        // const imageElement = e.target as HTMLImageElement;
+        // imageElement.src = imgPlaceholder;
+        visible = false;
     }
 </script>
 
@@ -27,11 +28,11 @@
     {#if visible}
         <img
             src={file.thumbnailLink}
-            alt="thumbnail to link"
             class="img {$mode === 'delete' ? 'delete' : ''}"
             loading="lazy"
             height="200"
             width="200"
+            referrerpolicy="no-referrer"
             on:error={handleImageError}
         />
         <button class="anchor">.</button>
@@ -65,13 +66,13 @@
 <style>
     .card {
         position: relative;
-        /* background-color: var(--content-background-color); */
         border-radius: 1rem;
         border: none;
         height: fit-content;
         max-height: 50rem;
         overflow: hidden;
         cursor: zoom-in;
+        background-color: var(--color-file-background);
     }
     .edit-mode {
         cursor: pointer;
@@ -114,13 +115,12 @@
         overflow: hidden;
         height: fit-content;
         max-width: var(--img-width);
-        border-radius: 1rem;
         border: none;
+        border: 1px solid var(--color-file-border);
     }
     .placeholder {
         width: 20rem;
         height: 20rem;
-        background-color: var(--color-file-background);
         border: 1px solid var(--color-file-border);
     }
     .delete:hover {
@@ -153,6 +153,12 @@
         .favorite {
             width: var(--size-default);
             height: var(--size-default);
+        }
+        .placeholder {
+            width: 30vw;
+            height: 10rem;
+            background-color: var(--color-file-background);
+            border: 1px solid var(--color-file-border);
         }
     }
 </style>

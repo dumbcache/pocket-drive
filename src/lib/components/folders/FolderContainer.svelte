@@ -1,9 +1,6 @@
 <script lang="ts">
-    import { onDestroy, onMount } from "svelte";
-    import { FOLDER_MIME_TYPE, fetchMultiple } from "$lib/scripts/gdrive/utils";
+    import { onDestroy } from "svelte";
     import { folderStore } from "$lib/scripts/shared/stores";
-    import { getToken } from "$lib/scripts/shared/utils";
-    import { activeParentId } from "$lib/scripts/stores";
     import Folder from "./Folder.svelte";
 
     export let view: string;
@@ -20,41 +17,39 @@
 
     let unsubscribe = folderStore.subscribe((data) => {
         if (data) {
-            let files = data?.files;
-            folders = files;
+            folders = data?.files;
             setTimeout(() => {
-                // childInspection(files);
+                childInspection(folders);
             }, 1000);
         }
     });
 
     onDestroy(() => {
         unsubscribe();
-        // childObserver?.disconnect();
+        childObserver?.disconnect();
     });
 
-    // function childInspection(items: FileResponse | undefined) {
-    //     childObserver = new IntersectionObserver(
-    //         (entries) => {
-    //             entries.forEach((entry) => {
-    //                 if (entry.isIntersecting) {
-    //                     let { id } = entry.target.dataset;
-    //                     console.log(id);
-    //                     inspectionLog[id] = true;
-    //                     childObserver.unobserve(entry.target);
-    //                 }
-    //             });
-    //         },
-    //         { threshold: 0 }
-    //     );
-    //     items?.forEach((item) => {
-    //         let id = item.id;
-    //         if (id && !inspectionLog[id]) {
-    //             let li = container?.querySelector(`[data-id="${id}"]`);
-    //             li && childObserver.observe(li);
-    //         }
-    //     });
-    // }
+    function childInspection(items: FileResponse | undefined) {
+        childObserver = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        let { id } = entry.target.dataset;
+                        inspectionLog[id] = true;
+                        childObserver.unobserve(entry.target);
+                    }
+                });
+            },
+            { threshold: 0 }
+        );
+        items?.forEach((item) => {
+            let id = item.id;
+            if (id && !inspectionLog[id]) {
+                let li = container?.querySelector(`[data-id="${id}"]`);
+                li && childObserver.observe(li);
+            }
+        });
+    }
 </script>
 
 <section
