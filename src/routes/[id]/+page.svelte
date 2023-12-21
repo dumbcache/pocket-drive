@@ -5,7 +5,12 @@
     import { onDestroy, onMount } from "svelte";
     import { getInfo } from "$lib/scripts/gdrive/utils";
     import { childWorker } from "$lib/scripts/utils";
-    import { isLoggedin, searchItems } from "$lib/scripts/shared/stores";
+    import {
+        fileStore,
+        folderStore,
+        isLoggedin,
+        searchItems,
+    } from "$lib/scripts/shared/stores";
     import {
         activeParentId,
         activeParentName,
@@ -49,6 +54,7 @@
             $tempImgs = $activeImgs;
             $tempDirs = $activeDirs;
         }
+        return navigating.subscribe((val) => val && (view = "folder"));
     });
     onDestroy(() => {
         $previewItem = undefined;
@@ -136,23 +142,33 @@
 {/if} -->
 <section class="wrapper">
     <nav class="nav">
-        <button
-            class=""
-            on:click={() => (view = "folder")}
-            class:active={view === "folder"}
-        >
-            <span class="btn">
-                {@html folderIcon}
-            </span>
-        </button>
-        <button
-            class=""
-            on:click={() => (view = "file")}
-            class:active={view === "file"}
-            ><span class="btn">
-                {@html fileIcon}
-            </span>
-        </button>
+        <p class="count">
+            <span>count:</span>
+            <span
+                >{view === "folder"
+                    ? $folderStore.files.length
+                    : $fileStore?.files.length}</span
+            >
+        </p>
+        <span>
+            <button
+                class=""
+                on:click={() => (view = "folder")}
+                class:active={view === "folder"}
+            >
+                <span class="btn">
+                    {@html folderIcon}
+                </span>
+            </button>
+            <button
+                class=""
+                on:click={() => (view = "file")}
+                class:active={view === "file"}
+                ><span class="btn">
+                    {@html fileIcon}
+                </span>
+            </button>
+        </span>
     </nav>
 
     <Content {view} />
@@ -193,8 +209,14 @@
         width: fit-content;
         margin-left: auto;
         margin-bottom: 5rem;
+        display: flex;
+        flex-flow: row nowrap;
+        align-items: center;
+        justify-content: center;
     }
-
+    .count {
+        font-size: 1.3rem;
+    }
     button {
         padding: 0.5rem;
         background-color: var(--bg-color-two);
