@@ -8,14 +8,15 @@
 
     export let view: string;
     export let observer: IntersectionObserver;
-    $: observer?.observe(foot);
 
     let folders: FileResponse | undefined;
     let childObserver: IntersectionObserver;
     let inspectionLog = {};
 
-    let container: HTMLElement;
     let foot: HTMLElement;
+    let container: HTMLElement;
+
+    $: foot && observer?.observe(foot);
 
     let unsubscribe = folderStore.subscribe((data) => {
         if (data) {

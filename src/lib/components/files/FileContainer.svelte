@@ -5,12 +5,13 @@
 
     export let view: string;
     export let observer: IntersectionObserver;
-    $: observer?.observe(foot);
 
     let files: FileResponse | undefined;
     let inspectionLog = {};
 
     let foot: HTMLElement;
+
+    $: foot && observer?.observe(foot);
 
     let unsubscribe = fileStore.subscribe((data) => {
         if (data) {
