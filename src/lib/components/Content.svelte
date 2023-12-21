@@ -36,8 +36,9 @@
             (entries) => {
                 entries.forEach((entry) => {
                     if (entry.isIntersecting && status === "") {
+                        let ele = entry.target.id;
                         status = "loading";
-                        if (view === "folder") {
+                        if (ele === "folder-foot") {
                             nextPageToken = $folderStore?.nextPageToken;
                             mimeType = FOLDER_MIME_TYPE;
                         } else {
@@ -53,7 +54,7 @@
                                 },
                                 getToken()
                             ).then((data) => {
-                                view === "folder"
+                                ele === "folder-foot"
                                     ? folderStore.update((prev) => {
                                           return {
                                               nextPageToken: data.nextPageToken,

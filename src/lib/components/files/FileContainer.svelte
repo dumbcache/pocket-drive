@@ -38,7 +38,7 @@
                 {/key}
             {/each}
         </ol>
-        <div bind:this={foot}></div>
+        <div id="file-foot" bind:this={foot}></div>
     {/if}
 </section>
 

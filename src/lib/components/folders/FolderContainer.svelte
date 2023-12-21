@@ -71,7 +71,7 @@
                 {/key}
             {/each}
         </ol>
-        <div bind:this={foot}></div>
+        <div id="folder-foot" bind:this={foot}></div>
     {/if}
 </section>
 
