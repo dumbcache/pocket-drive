@@ -26,7 +26,6 @@
             : $fileStore?.nextPageToken
               ? ""
               : "completed";
-    $: console.log(status, view);
 
     onMount(() => {
         setupIntersectionObserver();
@@ -37,7 +36,6 @@
             (entries) => {
                 entries.forEach((entry) => {
                     if (entry.isIntersecting && status === "") {
-                        console.log(entry.target.parentNode);
                         status = "loading";
                         if (view === "folder") {
                             nextPageToken = $folderStore?.nextPageToken;

@@ -5,9 +5,11 @@
     import imgPlaceholder from "$lib/assets/imgPlaceholder.svg";
     import Favorite from "../actions/Favorite.svelte";
 
+    export let visible: Boolean;
     export let file: File;
     let selected = "";
     function handleImageError(e: ErrorEvent) {
+        console.log(e);
         const imageElement = e.target as HTMLImageElement;
         imageElement.src = imgPlaceholder;
     }
@@ -22,44 +24,48 @@
     on:click
     on:keypress
 >
-    <img
-        src={file.thumbnailLink}
-        alt="thumbnail to link"
-        class="img {$mode === 'delete' ? 'delete' : ''}"
-        loading="lazy"
-        height="200"
-        width="200"
-        on:error={handleImageError}
-    />
-    <button class="anchor">.</button>
-    {#if !$editMode}
-        {#if file.appProperties?.origin || file.description}
-            <a
-                href={isValidUrl(file.appProperties?.origin) ||
-                    isValidUrl(file.description)}
-                class="img-link"
-                referrerpolicy="no-referrer"
-                rel="external noopener noreferrer nofollow"
-                on:click|stopPropagation
-            >
-                {@html linkIcon}
-            </a>
-        {/if}
+    {#if visible}
+        <img
+            src={file.thumbnailLink}
+            alt="thumbnail to link"
+            class="img {$mode === 'delete' ? 'delete' : ''}"
+            loading="lazy"
+            height="200"
+            width="200"
+            on:error={handleImageError}
+        />
+        <button class="anchor">.</button>
+        {#if !$editMode}
+            {#if file.appProperties?.origin || file.description}
+                <a
+                    href={isValidUrl(file.appProperties?.origin) ||
+                        isValidUrl(file.description)}
+                    class="img-link"
+                    referrerpolicy="no-referrer"
+                    rel="external noopener noreferrer nofollow"
+                    on:click|stopPropagation
+                >
+                    {@html linkIcon}
+                </a>
+            {/if}
 
-        <span class="favorite">
-            <Favorite
-                id={file.id}
-                starred={file.starred}
-                on:favStatus={() => (file.starred = !file.starred)}
-            />
-        </span>
+            <span class="favorite">
+                <Favorite
+                    id={file.id}
+                    starred={file.starred}
+                    on:favStatus={() => (file.starred = !file.starred)}
+                />
+            </span>
+        {/if}
+    {:else}
+        <div class="placeholder"></div>
     {/if}
 </div>
 
 <style>
     .card {
         position: relative;
-        background-color: var(--content-background-color);
+        /* background-color: var(--content-background-color); */
         border-radius: 1rem;
         border: none;
         height: fit-content;
@@ -111,7 +117,12 @@
         border-radius: 1rem;
         border: none;
     }
-
+    .placeholder {
+        width: 20rem;
+        height: 20rem;
+        background-color: var(--color-file-background);
+        border: 1px solid var(--color-file-border);
+    }
     .delete:hover {
         cursor: pointer;
     }

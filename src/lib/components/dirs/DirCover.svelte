@@ -43,8 +43,8 @@
 <style>
     .cover {
         position: relative;
-        border: 1px solid var(--cover-border-color);
-        background-color: var(--cover-background-color);
+        border: 1px solid var(--color-file-border);
+        background-color: var(--color-file-background);
         width: var(--dir-width);
         height: var(--cover-height);
         display: grid;
@@ -55,7 +55,6 @@
             "one three";
         border-radius: 1rem;
         overflow: hidden;
-        /* background-color: var(--content-background-color); */
         cursor: pointer;
     }
 

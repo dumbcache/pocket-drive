@@ -7,8 +7,10 @@
     export let observer: IntersectionObserver;
     $: observer?.observe(foot);
 
-    let foot: HTMLElement;
     let files: FileResponse | undefined;
+    let inspectionLog = {};
+
+    let foot: HTMLElement;
 
     let unsubscribe = fileStore.subscribe((data) => {
         if (data) {
@@ -30,7 +32,7 @@
             {#each files as file}
                 {#key file.id}
                     <li data-id={file.id}>
-                        <File {file} />
+                        <File {file} visible={inspectionLog[file.id]} />
                     </li>
                 {/key}
             {/each}

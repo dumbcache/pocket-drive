@@ -49,8 +49,8 @@
 <style>
     .cover {
         position: relative;
-        border: 1px solid var(--cover-border-color);
-        background-color: var(--cover-background-color);
+        border: 1px solid var(--color-file-border);
+        background-color: var(--color-file-background);
         width: var(--dir-width);
         height: var(--cover-height);
         display: grid;
@@ -61,7 +61,6 @@
             "one three";
         border-radius: 1rem;
         overflow: hidden;
-        /* background-color: var(--content-background-color); */
         cursor: pointer;
     }
 
@@ -69,8 +68,8 @@
         background-color: var(--content-background-color-hover);
     } */
     .cover:hover .pic-wrapper {
-        filter: brightness(0.5);
-        background-color: var(--cover-background-color);
+        /* filter: brightness(0.5); */
+        background-color: var(--color-file-hover);
     }
 
     .cover img {
@@ -84,11 +83,11 @@
 
     .cover .pic-wrapper:nth-child(1) {
         grid-area: one;
-        border-right: 1px solid var(--cover-border-color);
+        border-right: 1px solid var(--color-file-border);
     }
     .cover .pic-wrapper:nth-child(2) {
         grid-area: two;
-        border-bottom: 1px solid var(--cover-border-color);
+        border-bottom: 1px solid var(--color-file-border);
     }
     .cover .pic-wrapper:nth-child(3) {
         grid-area: three;
