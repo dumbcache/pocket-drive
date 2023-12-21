@@ -23,12 +23,15 @@
         reverseActive,
         selectAll,
         editProgress,
-        view,
     } from "$lib/scripts/stores";
     import Confirm from "$lib/components/actions/Confirm.svelte";
     import EditMode from "$lib/components/actions/EditMode.svelte";
     import { navigating } from "$app/stores";
-    import Main from "$lib/components/Main.svelte";
+    import Content from "$lib/components/Content.svelte";
+    import folderIcon from "$lib/assets/folder.svg?raw";
+    import fileIcon from "$lib/assets/file.svg?raw";
+
+    let view: "folder" | "file" = "folder";
 
     let type: "update" | "delete";
     let dirToggle = false;
@@ -131,8 +134,29 @@
         <LoadIndicator />
     </div>
 {/if} -->
+<section class="wrapper">
+    <nav class="nav">
+        <button
+            class=""
+            on:click={() => (view = "folder")}
+            class:active={view === "folder"}
+        >
+            <span class="btn">
+                {@html folderIcon}
+            </span>
+        </button>
+        <button
+            class=""
+            on:click={() => (view = "file")}
+            class:active={view === "file"}
+            ><span class="btn">
+                {@html fileIcon}
+            </span>
+        </button>
+    </nav>
 
-<Main />
+    <Content {view} />
+</section>
 
 <style>
     .count {
@@ -161,10 +185,36 @@
         -webkit-backdrop-filter: blur(1rem);
         z-index: 3;
     }
+    .wrapper {
+        width: 100%;
+        padding: 3rem 5rem;
+    }
+    .nav {
+        width: fit-content;
+        margin-left: auto;
+        margin-bottom: 5rem;
+    }
+
+    button {
+        padding: 0.5rem;
+        background-color: var(--bg-color-two);
+        width: 5rem;
+    }
+
+    .active {
+        background-color: var(--bg-color-three);
+        border-bottom: 1px solid var(--color-focus);
+    }
+    /* .active :global(svg) {
+        fill: var(--color-focus);
+    } */
+
     @media (max-width: 600px) {
-        .count {
-            margin-right: 1rem;
-            font-size: 1.3rem;
+        .wrapper {
+            padding: 1rem;
+        }
+        .nav {
+            margin-bottom: 2rem;
         }
     }
 </style>

@@ -32,7 +32,6 @@ export let googleClient = (() => {
                 window.localStorage.setItem("root", id);
             }
         }
-        console.log(get(isLoggedin));
         if (get(isLoggedin)) return;
         isLoggedin.set(true);
         goto("/r");

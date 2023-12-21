@@ -1,73 +1,24 @@
 <script lang="ts">
-    import { onDestroy, onMount } from "svelte";
-    import { IMG_MIME_TYPE, fetchMultiple } from "$lib/scripts/gdrive/utils";
+    import { onDestroy } from "svelte";
     import { fileStore } from "$lib/scripts/shared/stores";
-    import { getToken } from "$lib/scripts/shared/utils";
-    import { activeParentId } from "$lib/scripts/stores";
     import File from "./File.svelte";
-    import FileLoading from "../FileLoading.svelte";
 
     export let view: string;
+    export let observer: IntersectionObserver;
+    $: observer?.observe(foot);
 
+    let foot: HTMLElement;
     let files: FileResponse | undefined;
-    let nextPageToken: string | undefined;
-    let container: HTMLElement;
-    let wait = false;
-    let placeholderStatus: string;
 
     let unsubscribe = fileStore.subscribe((data) => {
         if (data) {
             files = data?.files;
-            nextPageToken = data?.nextPageToken;
-            placeholderStatus = nextPageToken ? "" : "completed";
-        }
-    });
-
-    onMount(() => {
-        if (nextPageToken) {
-            setupIntersectionObserver();
         }
     });
 
     onDestroy(() => {
         unsubscribe();
     });
-
-    function setupIntersectionObserver() {
-        const observer = new IntersectionObserver(
-            (entries) => {
-                entries.forEach((entry) => {
-                    if (entry.isIntersecting) {
-                        if (nextPageToken && wait === false) {
-                            wait = true;
-                            placeholderStatus = "loading";
-                            fetchMultiple(
-                                {
-                                    parent: $activeParentId,
-                                    mimeType: IMG_MIME_TYPE,
-                                    pageToken: nextPageToken,
-                                },
-                                getToken()
-                            ).then((data) => {
-                                fileStore.update((prev) => {
-                                    return {
-                                        nextPageToken: data.nextPageToken,
-                                        files: [...prev?.files, ...data.files],
-                                    };
-                                });
-                                wait = false;
-                            });
-                        }
-                    }
-                });
-            },
-            { threshold: [0, 1] }
-        );
-        observer.observe(container);
-        return () => {
-            observer.disconnect();
-        };
-    }
 </script>
 
 <section
@@ -78,13 +29,13 @@
         <ol class="list">
             {#each files as file}
                 {#key file.id}
-                    <File {file} />
+                    <li data-id={file.id}>
+                        <File {file} />
+                    </li>
                 {/key}
             {/each}
         </ol>
-        <footer bind:this={container}>
-            <FileLoading status={placeholderStatus} />
-        </footer>
+        <div bind:this={foot}></div>
     {/if}
 </section>
 
@@ -100,19 +51,10 @@
         justify-content: center;
         gap: var(--content-gap);
     }
-    footer {
-        padding-top: 5rem;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
 
     @media (max-width: 600px) {
         .file-container {
             padding-top: 5rem;
-        }
-        footer {
-            padding-top: 2rem;
         }
     }
 </style>

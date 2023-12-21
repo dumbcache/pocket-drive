@@ -13,8 +13,8 @@
     }
 </script>
 
-<li
-    class="img-card"
+<div
+    class="card"
     class:select={selected}
     data-id={file.id}
     data-url={$blobLocations[file.id] || ""}
@@ -54,10 +54,10 @@
             />
         </span>
     {/if}
-</li>
+</div>
 
 <style>
-    .img-card {
+    .card {
         position: relative;
         background-color: var(--content-background-color);
         border-radius: 1rem;
@@ -70,11 +70,11 @@
     .edit-mode {
         cursor: pointer;
     }
-    .img-card:hover .img {
+    .card:hover .img {
         filter: brightness(0.5);
     }
-    .img-card:hover .img-link,
-    .img-card:hover .favorite {
+    .card:hover .img-link,
+    .card:hover .favorite {
         opacity: 1;
     }
 

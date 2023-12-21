@@ -16,7 +16,7 @@ export const FIELDS_SINGLE = "id,name,parents";
 export const FIELDS_MULTIPLE =
     "files(id,name,description,appProperties(origin),thumbnailLink,starred)";
 export const DEFAULT_PAGESIZE = 1000;
-export const PAGESIZE = 10;
+export const PAGESIZE = 1;
 
 export const wait = (s: number) => new Promise((res) => setTimeout(res, s));
 
@@ -406,7 +406,7 @@ export const refreshDir = (
     });
 };
 
-export const loadMain = (
+export const loadAll = (
     parent: string,
     accessToken: string
 ): Promise<GoogleFileResponse[]> => {

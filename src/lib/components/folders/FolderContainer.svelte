@@ -1,76 +1,59 @@
 <script lang="ts">
-    import { afterUpdate, onDestroy, onMount } from "svelte";
+    import { onDestroy, onMount } from "svelte";
     import { FOLDER_MIME_TYPE, fetchMultiple } from "$lib/scripts/gdrive/utils";
     import { folderStore } from "$lib/scripts/shared/stores";
     import { getToken } from "$lib/scripts/shared/utils";
     import { activeParentId } from "$lib/scripts/stores";
     import Folder from "./Folder.svelte";
-    import FileLoading from "../FileLoading.svelte";
 
     export let view: string;
+    export let observer: IntersectionObserver;
+    $: observer?.observe(foot);
 
     let folders: FileResponse | undefined;
-    let nextPageToken: string | undefined;
+    let childObserver: IntersectionObserver;
+    let inspectionLog = {};
+
     let container: HTMLElement;
-    let wait = false;
-    let placeholderStatus: string;
-    let observer: IntersectionObserver;
+    let foot: HTMLElement;
 
     let unsubscribe = folderStore.subscribe((data) => {
         if (data) {
-            folders = data?.files;
-            nextPageToken = data?.nextPageToken;
-            placeholderStatus = nextPageToken ? "" : "completed";
+            let files = data?.files;
+            folders = files;
+            setTimeout(() => {
+                // childInspection(files);
+            }, 1000);
         }
-    });
-
-    onMount(() => {
-        setTimeout(() => {
-            if (nextPageToken) {
-                setupIntersectionObserver();
-            }
-        }, 2000);
     });
 
     onDestroy(() => {
         unsubscribe();
+        // childObserver?.disconnect();
     });
 
-    function setupIntersectionObserver() {
-        observer = new IntersectionObserver(
-            (entries) => {
-                entries.forEach((entry) => {
-                    if (entry.isIntersecting) {
-                        if (nextPageToken && wait === false) {
-                            wait = true;
-                            placeholderStatus = "loading";
-                            fetchMultiple(
-                                {
-                                    parent: $activeParentId,
-                                    mimeType: FOLDER_MIME_TYPE,
-                                    pageToken: nextPageToken,
-                                },
-                                getToken()
-                            ).then((data) => {
-                                folderStore.update((prev) => {
-                                    return {
-                                        nextPageToken: data.nextPageToken,
-                                        files: [...prev?.files, ...data.files],
-                                    };
-                                });
-                                wait = false;
-                            });
-                        }
-                    }
-                });
-            },
-            { threshold: 0 }
-        );
-        observer.observe(container);
-        return () => {
-            observer.disconnect();
-        };
-    }
+    // function childInspection(items: FileResponse | undefined) {
+    //     childObserver = new IntersectionObserver(
+    //         (entries) => {
+    //             entries.forEach((entry) => {
+    //                 if (entry.isIntersecting) {
+    //                     let { id } = entry.target.dataset;
+    //                     console.log(id);
+    //                     inspectionLog[id] = true;
+    //                     childObserver.unobserve(entry.target);
+    //                 }
+    //             });
+    //         },
+    //         { threshold: 0 }
+    //     );
+    //     items?.forEach((item) => {
+    //         let id = item.id;
+    //         if (id && !inspectionLog[id]) {
+    //             let li = container?.querySelector(`[data-id="${id}"]`);
+    //             li && childObserver.observe(li);
+    //         }
+    //     });
+    // }
 </script>
 
 <section
@@ -78,16 +61,16 @@
     style:display={view === "folder" ? "initial" : "none"}
 >
     {#if folders && folders.length > 0}
-        <ol class="list">
+        <ol class="list" bind:this={container}>
             {#each folders as folder}
                 {#key folder.id}
-                    <Folder {folder} />
+                    <li data-id={folder.id}>
+                        <Folder {folder} visible={inspectionLog[folder.id]} />
+                    </li>
                 {/key}
             {/each}
         </ol>
-        <footer bind:this={container}>
-            <FileLoading status={placeholderStatus} />
-        </footer>
+        <div bind:this={foot}></div>
     {/if}
 </section>
 
@@ -104,19 +87,9 @@
         gap: var(--content-gap);
     }
 
-    footer {
-        padding-top: 5rem;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-
     @media (max-width: 600px) {
         .folder-container {
             padding-top: 5rem;
-        }
-        footer {
-            padding-top: 2rem;
         }
     }
 </style>

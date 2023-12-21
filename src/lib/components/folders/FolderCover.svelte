@@ -1,18 +1,25 @@
 <script lang="ts">
-    import { fetchFiles } from "$lib/scripts/gdrive/utils";
+    import { IMG_MIME_TYPE, fetchMultiple } from "$lib/scripts/gdrive/utils";
     import EditTool from "$lib/components/actions/EditTool.svelte";
     import Favorite from "$lib/components/actions/Favorite.svelte";
+    import { onMount } from "svelte";
+    import { getToken } from "$lib/scripts/shared/utils";
 
+    export let visible: Boolean;
     export let id: string;
     export let name: string;
     export let starred: Boolean;
-    let pics: GoogleFile[] = [];
+    let pics: FileResponse = [];
 
-    $: (fetchFiles(id, "covers", 3) as Promise<GoogleFileRes>)
-        .then(({ files }) => {
-            pics = files;
-        })
-        .catch((e) => {});
+    $: visible &&
+        fetchMultiple(
+            { parent: id, mimeType: IMG_MIME_TYPE, pageSize: 3 },
+            getToken()
+        )
+            .then(({ files }) => {
+                pics = files;
+            })
+            .catch(console.warn);
 </script>
 
 <div class="cover">

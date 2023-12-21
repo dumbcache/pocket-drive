@@ -34,7 +34,7 @@
     } from "$lib/scripts/shared/utils";
     import { googleClient } from "$lib/scripts/login";
     import Dialog from "$lib/components/Dialog.svelte";
-    import Main from "$lib/components/Main.svelte";
+    import Main from "$lib/components/Content.svelte";
     import Spinner from "$lib/components/Spinner.svelte";
 
     let dialog: Dialog;
