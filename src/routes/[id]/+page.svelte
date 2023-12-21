@@ -5,7 +5,7 @@
     import { onDestroy, onMount } from "svelte";
     import { getInfo } from "$lib/scripts/gdrive/utils";
     import { childWorker } from "$lib/scripts/utils";
-    import { searchItems } from "$lib/scripts/shared/stores";
+    import { isLoggedin, searchItems } from "$lib/scripts/shared/stores";
     import {
         activeParentId,
         activeParentName,
@@ -15,7 +15,6 @@
         previewItem,
         editConfirm,
         mode,
-        isLoggedin,
         editMode,
         activeGrandParentId,
         tempImgs,
@@ -28,7 +27,6 @@
     } from "$lib/scripts/stores";
     import Confirm from "$lib/components/actions/Confirm.svelte";
     import EditMode from "$lib/components/actions/EditMode.svelte";
-    import LoadIndicator from "$lib/components/actions/LoadIndicator.svelte";
     import { navigating } from "$app/stores";
     import Main from "$lib/components/Main.svelte";
 

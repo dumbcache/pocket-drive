@@ -1,4 +1,4 @@
-import { activeTimeout, isLoggedin } from "$lib/scripts/stores";
+import { activeTimeout, isLoggedin } from "$lib/scripts/shared/stores";
 import { get } from "svelte/store";
 import { PUBLIC_KRAB_CLIENT_ID } from "$env/static/public";
 import {
@@ -32,6 +32,7 @@ export let googleClient = (() => {
                 window.localStorage.setItem("root", id);
             }
         }
+        console.log(get(isLoggedin));
         if (get(isLoggedin)) return;
         isLoggedin.set(true);
         goto("/r");

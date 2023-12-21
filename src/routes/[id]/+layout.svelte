@@ -1,8 +1,6 @@
 <script lang="ts">
     import Nav from "$lib/components/Nav.svelte";
     import Header from "$lib/components/Header.svelte";
-    import { navigating } from "$app/stores";
-    import LoadIndicator from "$lib/components/actions/LoadIndicator.svelte";
     import Preview from "$lib/components/Preview.svelte";
     import Drop from "$lib/components/Drop.svelte";
     import {
@@ -11,7 +9,6 @@
         shortcutHandler,
         dropOkHandler,
     } from "$lib/scripts/utils";
-    import { signUserOut } from "$lib/scripts/shared/utils";
     import {
         autosave,
         dropFull,
@@ -38,6 +35,7 @@
     import { googleClient } from "$lib/scripts/login";
     import Dialog from "$lib/components/Dialog.svelte";
     import Main from "$lib/components/Main.svelte";
+    import Spinner from "$lib/components/Spinner.svelte";
 
     let dialog: Dialog;
     let draggedOver = false;
@@ -51,6 +49,7 @@
         }
         if ($autosave) dropOkHandler();
     }
+
     onMount(() => {
         try {
             updateRecents();
@@ -72,12 +71,8 @@
 
 <div class="layout">
     <Header />
-    {#if $navigating}
-        <div class="loading">
-            <LoadIndicator />
-        </div>
-    {:else}
-        <!-- <main
+    <!-- <Dialog bind:this={dialog}></Dialog> -->
+    <!-- <main
         class="main {draggedOver === true ? 'dragover' : ''}"
             on:dragstart
             on:dragover|preventDefault
@@ -114,7 +109,6 @@
             </div>
             <Drop />
             <Preview />
-            <Dialog bind:this={dialog}></Dialog>
             {#if $sessionTimeout}
                 <Confirm
                     text={"Session timeout. You want to continue?"}
@@ -129,13 +123,14 @@
                 />
             {/if}
         </main> -->
-        <slot />
-    {/if}
+    <slot />
 </div>
 
 <style>
     .layout {
         display: flex;
+        height: 100vh;
+        overflow-y: scroll;
     }
     /* .main {
         background-color: inherit;
@@ -162,12 +157,7 @@
     .content-hidden {
         display: none;
     } */
-    .loading {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-    }
+
     /* .dragover {
         background-color: #55f5;
     }
@@ -189,6 +179,9 @@
         }
     }
     @media (max-width: 600px) {
+        .layout {
+            height: initial;
+        }
         .main {
             min-height: initial;
         }

@@ -12,6 +12,7 @@
 
 <style>
     .end {
+        font-size: 1rem;
         user-select: none;
         position: relative;
         padding: 5rem;
@@ -23,14 +24,20 @@
         top: 50%;
         /* left: 0%; */
         content: " ";
-        width: 10rem;
+        width: 5rem;
+        max-width: 10rem;
         padding: 0rem 1rem;
         border-bottom: 1px solid #555;
     }
     .end::after {
-        right: -6rem;
+        right: -1rem;
     }
     .end::before {
-        left: -6rem;
+        left: -1rem;
+    }
+    @media (max-width: 600px) {
+        .end {
+            padding: 1rem 5rem;
+        }
     }
 </style>

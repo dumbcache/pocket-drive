@@ -1,39 +1,28 @@
 <script>
     import ColorScheme from "$lib/components/buttons/ColorScheme.svelte";
     import LoginButton from "$lib/components/buttons/LoginButton.svelte";
-    import { navigating } from "$app/stores";
-    import LoadIndicator from "$lib/components/actions/LoadIndicator.svelte";
-    //import About from "$lib/components/About.svelte";
     import helpIcon from "$lib/assets/help.svg?raw";
 </script>
 
-{#if $navigating}
-    <div class="loading">
-        <LoadIndicator />
-    </div>
-{:else}
-    <main class="home">
-        <article class="article">
-            <header class="header">
-                <a href="/help" class="help" title="Go to help"
-                    ><span>
-                        {@html helpIcon}
-                    </span>Help</a
-                >
-                <ColorScheme />
-                <LoginButton />
-            </header>
-            <section class="title-wrapper">
-                <!-- <div class="bg"></div> -->
-                <h1 class="home-title">Pocket Drive</h1>
-                <p class="sub">
-                    A google drive based image & bookmark application
-                </p>
-            </section>
-        </article>
-        <!-- <About /> -->
-    </main>
-{/if}
+<main class="home">
+    <article class="article">
+        <header class="header">
+            <a href="/help" class="help" title="Go to help"
+                ><span>
+                    {@html helpIcon}
+                </span>Help</a
+            >
+            <ColorScheme />
+            <LoginButton />
+        </header>
+        <section class="title-wrapper">
+            <!-- <div class="bg"></div> -->
+            <h1 class="home-title">Pocket Drive</h1>
+            <p class="sub">A google drive based image & bookmark application</p>
+        </section>
+    </article>
+    <!-- <About /> -->
+</main>
 
 <style>
     .article {
@@ -50,7 +39,7 @@
     .header {
         position: absolute;
         padding: 2rem;
-        top: 10rem;
+        top: 10vh;
         right: 15rem;
         width: fit-content;
         margin-left: auto;

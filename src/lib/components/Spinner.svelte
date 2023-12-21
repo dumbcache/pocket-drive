@@ -7,10 +7,10 @@
         }
     }
     .spinner {
-        width: 50px;
-        height: 50px;
-        border: 5px solid #ccc;
-        border-top: 5px solid #3498db;
+        width: 5rem;
+        height: 5rem;
+        border: 5px solid var(--color-white-two);
+        border-top: 5px solid var(--color-light-blue);
         border-radius: 50%;
         animation: spin 1s linear infinite;
     }

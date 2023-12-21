@@ -101,7 +101,7 @@
         gap: var(--content-gap);
     }
     footer {
-        margin-top: 5rem;
+        padding-top: 5rem;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -110,6 +110,9 @@
     @media (max-width: 600px) {
         .file-container {
             padding-top: 5rem;
+        }
+        footer {
+            padding-top: 2rem;
         }
     }
 </style>

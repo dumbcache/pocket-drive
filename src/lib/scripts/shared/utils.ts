@@ -72,14 +72,6 @@ export async function clearFiles() {
     window.localStorage.clear();
 }
 
-export async function signUserOut(e?: Event) {
-    e?.stopPropagation();
-    await clearFiles();
-    isLoggedin.set(false);
-    console.log("logging user out");
-    goto("/");
-}
-
 export async function setCache(refresh: Boolean) {
     for (let key of await caches.keys()) {
         if (key.startsWith("pd-data")) {

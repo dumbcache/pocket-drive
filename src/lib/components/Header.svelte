@@ -10,7 +10,7 @@
 
     function goHome() {
         $previewItem = undefined;
-        goto("r", { noScroll: true });
+        goto("r");
     }
 </script>
 
