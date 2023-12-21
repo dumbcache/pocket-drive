@@ -1,7 +1,8 @@
 <script lang="ts">
-    import { onDestroy } from "svelte";
+    import { onDestroy, onMount } from "svelte";
     import { folderStore } from "$lib/scripts/shared/stores";
     import Folder from "./Folder.svelte";
+    import { navigating } from "$app/stores";
 
     export let view: string;
     export let observer: IntersectionObserver;
@@ -24,8 +25,13 @@
         }
     });
 
+    let navUnsubscribe = navigating.subscribe(
+        (val) => val && (inspectionLog = {})
+    );
+
     onDestroy(() => {
         unsubscribe();
+        navUnsubscribe();
         childObserver?.disconnect();
     });
 

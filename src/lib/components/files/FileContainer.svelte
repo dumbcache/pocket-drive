@@ -2,6 +2,7 @@
     import { onDestroy } from "svelte";
     import { fileStore } from "$lib/scripts/shared/stores";
     import File from "./File.svelte";
+    import { navigating } from "$app/stores";
 
     export let view: string;
     export let observer: IntersectionObserver;
@@ -24,8 +25,13 @@
         }
     });
 
+    let navUnsubscribe = navigating.subscribe(
+        (val) => val && (inspectionLog = {})
+    );
+
     onDestroy(() => {
         unsubscribe();
+        navUnsubscribe();
         childObserver?.disconnect();
     });
 
