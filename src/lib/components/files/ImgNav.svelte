@@ -1,41 +1,47 @@
 <script lang="ts">
     import imgPlaceholder from "$lib/assets/imgPlaceholder.svg";
     import { activeImage } from "$lib/scripts/shared/stores";
-    import { onMount } from "svelte";
+    import { onDestroy, onMount } from "svelte";
 
     export let files: FileResponse;
-    let active: string | undefined;
+    let active: string | undefined = $activeImage;
     let container: HTMLElement;
 
+    const unsubscribe = activeImage.subscribe((data) => {
+        if (data) {
+            active = data;
+        }
+    });
     onMount(() => {
-        return activeImage.subscribe((data) => {
-            console.log(data);
-            if (data) {
-                active = data;
-                let ele = container.querySelector(
-                    `[data-id="${data}"]`
-                ) as HTMLElement;
-                setTimeout(() => {
-                    ele.scrollIntoView({
-                        behavior: "instant",
-                        block: "center",
-                        inline: "center",
-                    });
-                }, 500);
-            }
-        });
+        if (active) {
+            let ele = container.querySelector(
+                `[data-id="${active}"]`
+            ) as HTMLElement;
+            setTimeout(() => {
+                ele.scrollIntoView({
+                    behavior: "instant",
+                    block: "center",
+                    inline: "center",
+                });
+            });
+        }
+    });
+    onDestroy(() => {
+        unsubscribe();
     });
 
     function thumbClick(e: KeyboardEvent) {
         if (e?.key === "Tab") return;
         const target = e.target as HTMLElement;
         const { id } = target.dataset;
-        active = id;
-        target.scrollIntoView({
-            behavior: "smooth",
-            block: "center",
-            inline: "center",
-        });
+        if (id) {
+            active = id;
+            target.scrollIntoView({
+                behavior: "smooth",
+                block: "center",
+                inline: "center",
+            });
+        }
     }
 </script>
 
