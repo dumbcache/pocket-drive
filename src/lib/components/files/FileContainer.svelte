@@ -71,7 +71,7 @@
             class="list"
             bind:this={container}
             on:click={handleImageClick}
-            on:keydown={handleImageClick}
+            on:keydown
         >
             {#each files as file}
                 {#key file.id}

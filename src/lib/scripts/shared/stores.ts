@@ -13,4 +13,4 @@ export let refreshTimeout = writable(false);
 export let dataCacheName = writable("");
 
 export let mode = writable("");
-export let activeImage = writable("");
+export let activeImage = writable<{ id: string; src: string }>();

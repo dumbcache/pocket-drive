@@ -1,9 +1,6 @@
 <script>
-    import { browser } from "$app/environment";
-    import { goto } from "$app/navigation";
     import { navigating } from "$app/stores";
     import Spinner from "$lib/components/Spinner.svelte";
-    import { isLoggedin } from "$lib/scripts/shared/stores";
     import "./app.css";
 </script>
 
@@ -22,7 +19,7 @@
         height: 100%;
         display: grid;
         place-content: center;
-        background-color: #0007;
+        background-color: #0005;
         backdrop-filter: blur(1px);
         z-index: 10;
     }

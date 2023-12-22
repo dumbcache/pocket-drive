@@ -3,7 +3,7 @@
     import ImgNav from "$lib/components/files/ImgNav.svelte";
     import { onMount } from "svelte";
     import Dialog from "./Dialog.svelte";
-    import { mode } from "$lib/scripts/shared/stores";
+    import { activeImage, mode } from "$lib/scripts/shared/stores";
 
     export let files;
     let view: Dialog;
@@ -26,7 +26,7 @@
             <ImgNav {files} />
         </section>
         <section class="two">
-            <img src="" alt="" />
+            <img src={$activeImage.src} alt="" />
         </section>
         <section class="three"></section>
     </artcle>
@@ -35,28 +35,56 @@
 <style>
     #view {
         box-sizing: border-box;
-        display: grid;
-        grid-template-columns: minmax(auto, 15rem) 1fr minmax(auto, 30rem);
-        grid-template-areas: "one two three";
         height: 100%;
-        /* width: 100%; */
-        /* border: 1px solid #fff9; */
         padding: 5rem;
         outline: none;
+        display: flex;
+        flex-flow: row nowrap;
     }
     section {
         height: 100%;
         /* border: 1px solid red; */
     }
     .one {
-        padding: 1rem;
+        min-width: 10%;
+        max-width: 15%;
+        padding: 0rem 2rem;
         overflow: auto;
         scroll-behavior: smooth;
     }
     .two {
+        margin: auto;
+        max-width: 100%;
         /* max-width: 100%; */
     }
     .three {
-        /* max-width: 20%; */
+        /* display: none; */
+        /* width: 20%; */
+    }
+
+    .two img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        margin: auto;
+        object-fit: contain;
+    }
+    @media (max-width: 600px) {
+        #view {
+            flex-flow: column-reverse;
+            padding: 1rem;
+        }
+        .two {
+        }
+        .one {
+            max-width: initial;
+            padding: 2rem 0rem;
+            height: fit-content;
+        }
+
+        .two img {
+            height: unset;
+            width: 100%;
+        }
     }
 </style>

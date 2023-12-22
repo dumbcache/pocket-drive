@@ -9,7 +9,7 @@
 
     const unsubscribe = activeImage.subscribe((data) => {
         if (data) {
-            active = data;
+            active = data.id;
         }
     });
     onMount(() => {
@@ -32,10 +32,13 @@
 
     function thumbClick(e: KeyboardEvent) {
         if (e?.key === "Tab") return;
-        const target = e.target as HTMLElement;
+        let target = e.target as HTMLElement;
+        target.localName !== "img" && (target = target.querySelector("img"));
         const { id } = target.dataset;
         if (id) {
             active = id;
+            $activeImage.id = id;
+            $activeImage.src = target.src;
             target.scrollIntoView({
                 behavior: "smooth",
                 block: "center",
@@ -69,11 +72,11 @@
 
 <style>
     .thumbs {
-        padding: 1rem;
         align-items: center;
         gap: 1rem;
         display: flex;
         flex-flow: column;
+        /* height: 100%; */
     }
     .thumbs ::-webkit-scrollbar {
         display: none;
@@ -91,7 +94,6 @@
         height: auto;
         filter: brightness(0.5);
         width: 80%;
-        transition: max-width 2s;
     }
     button:hover img {
         filter: brightness(0.8);
@@ -108,5 +110,16 @@
     }
 
     @media (max-width: 600px) {
+        .thumbs {
+            height: 100%;
+            flex-flow: row nowrap;
+        }
+        img {
+            width: 5rem;
+            /* height: 100%; */
+        }
+        .active img {
+            width: 4rem;
+        }
     }
 </style>
