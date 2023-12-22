@@ -97,7 +97,6 @@
     .content {
     }
     footer {
-        padding: 5rem 0rem;
         display: flex;
         justify-content: center;
         align-items: center;

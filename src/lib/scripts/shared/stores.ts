@@ -2,6 +2,7 @@ import { writable } from "svelte/store";
 
 export let folderStore = writable<GoogleFileResponse | undefined>();
 export let fileStore = writable<GoogleFileResponse | undefined>();
+export let searchItems = writable<GoogleFile[] | undefined>();
 
 export let isLoggedin = writable(false);
 
@@ -11,4 +12,5 @@ export let activeRefreshTimeout = writable(0);
 export let refreshTimeout = writable(false);
 export let dataCacheName = writable("");
 
-export let searchItems = writable<GoogleFile[] | undefined>();
+export let mode = writable("");
+export let activeImage = writable("");

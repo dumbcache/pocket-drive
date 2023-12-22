@@ -2,6 +2,7 @@
     import expandIcon from "$lib/assets/expandDown.svg?raw";
     import editIcon from "$lib/assets/edit.svg?raw";
     import deleteIcon from "$lib/assets/delete.svg?raw";
+    import moveIcon from "$lib/assets/moveOutline.svg?raw";
     import { createEventDispatcher } from "svelte";
 
     export let type: "dir" | "img";
@@ -21,19 +22,34 @@
     <button class="btn expand" on:click|stopPropagation>
         {@html expandIcon}
     </button>
-    <button class="btn action" on:click|stopPropagation={editHandler}>
+    <button
+        class="btn action"
+        title="edit"
+        on:click|stopPropagation={editHandler}
+    >
         {@html editIcon}
     </button>
-    <button class="btn action" on:click|stopPropagation={deleteHandler}>
+    <button
+        class="btn action"
+        title="move"
+        on:click|stopPropagation={editHandler}
+    >
+        {@html moveIcon}
+    </button>
+    <button
+        class="btn action"
+        title="delete"
+        on:click|stopPropagation={deleteHandler}
+    >
         {@html deleteIcon}
     </button>
 </div>
 
 <style>
     .edit-tools {
-        padding: 0.5rem;
+        padding: 0.5rem 0.2rem;
         position: absolute;
-        top: 1rem;
+        top: 0.5rem;
         right: 0.5rem;
         display: flex;
         flex-flow: column nowrap;
@@ -45,6 +61,9 @@
         display: flex;
         align-items: center;
         justify-content: center;
+    }
+    .btn:hover :global(svg) {
+        fill: var(--color-focus);
     }
     .btn :global(svg) {
         stroke: var(--color-black);
@@ -61,6 +80,9 @@
     }
     .edit-tools:hover {
         height: initial;
+        background-color: #0005;
+        border-radius: 5rem;
+        outline: 1px solid var(--color-focus);
     }
     .action {
         visibility: hidden;

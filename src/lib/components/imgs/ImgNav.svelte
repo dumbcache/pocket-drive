@@ -2,7 +2,6 @@
     import imgPlaceholder from "$lib/assets/imgPlaceholder.svg";
 
     export let imgs: GoogleFile[];
-    console.log(imgs);
 </script>
 
 {#if imgs}

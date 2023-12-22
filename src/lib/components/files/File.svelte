@@ -1,42 +1,30 @@
 <script lang="ts">
     import linkIcon from "$lib/assets/link.svg?raw";
     import { isValidUrl } from "$lib/scripts/shared/utils";
-    import { blobLocations, editMode, mode } from "$lib/scripts/stores";
-    // import imgPlaceholder from "$lib/assets/imgPlaceholder.svg";
+    import { mode } from "$lib/scripts/shared/stores";
     import Favorite from "../actions/Favorite.svelte";
 
     export let visible: Boolean;
     export let file: File;
+
     let selected = "";
-    function handleImageError() {
-        // console.log(e);
-        // const imageElement = e.target as HTMLImageElement;
-        // imageElement.src = imgPlaceholder;
-        visible = false;
-    }
 </script>
 
-<div
-    class="card"
-    class:select={selected}
-    data-id={file.id}
-    data-url={$blobLocations[file.id] || ""}
-    class:edit-mode={$editMode}
-    on:click
-    on:keypress
->
+<div class="card" class:select={selected} class:edit-mode={""}>
     {#if visible}
         <img
             src={file.thumbnailLink}
+            data-id={file.id}
+            alt=""
             class="img {$mode === 'delete' ? 'delete' : ''}"
             loading="lazy"
             height="200"
             width="200"
             referrerpolicy="no-referrer"
-            on:error={handleImageError}
+            on:error={() => (visible = false)}
         />
         <button class="anchor">.</button>
-        {#if !$editMode}
+        {#if $mode === ""}
             {#if file.appProperties?.origin || file.description}
                 <a
                     href={isValidUrl(file.appProperties?.origin) ||

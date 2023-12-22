@@ -1,8 +1,10 @@
 <script lang="ts">
     import { onDestroy } from "svelte";
-    import { fileStore } from "$lib/scripts/shared/stores";
+    import { fileStore, mode } from "$lib/scripts/shared/stores";
     import File from "./File.svelte";
     import { navigating } from "$app/stores";
+    import View from "../View.svelte";
+    import { handleImageClick } from "$lib/scripts/shared/handlers";
 
     export let view: string;
     export let observer: IntersectionObserver;
@@ -25,8 +27,8 @@
         }
     });
 
-    let navUnsubscribe = navigating.subscribe((val) => {
-        if (!val) {
+    let navUnsubscribe = navigating.subscribe((data) => {
+        if (!data) {
             inspectionLog = {};
         }
     });
@@ -65,7 +67,12 @@
     style:display={view === "file" ? "initial" : "none"}
 >
     {#if files && files.length > 0}
-        <ol class="list" bind:this={container}>
+        <ol
+            class="list"
+            bind:this={container}
+            on:click={handleImageClick}
+            on:keydown={handleImageClick}
+        >
             {#each files as file}
                 {#key file.id}
                     <li data-id={file.id}>
@@ -75,6 +82,10 @@
             {/each}
         </ol>
         <div id="file-foot" bind:this={foot}></div>
+    {/if}
+
+    {#if $mode === "view"}
+        <View {files} />
     {/if}
 </section>
 

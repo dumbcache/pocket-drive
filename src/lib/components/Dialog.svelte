@@ -3,7 +3,6 @@
 
     function handleKeyDown(e: KeyboardEvent) {
         if (e.key === "Escape") {
-            // console.log(view);
         }
     }
     export function close() {

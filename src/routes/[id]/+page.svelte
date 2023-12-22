@@ -204,19 +204,25 @@
     }
     .wrapper {
         width: 100%;
-        padding: 3rem 5rem;
+        padding: 0rem 5rem;
     }
     .nav {
-        width: fit-content;
+        width: 100%;
         margin-left: auto;
-        margin-bottom: 5rem;
+        margin-bottom: 2rem;
         display: flex;
         flex-flow: row nowrap;
         align-items: center;
         justify-content: center;
+        padding: 2rem 0rem;
+        position: sticky;
+        top: 0;
+        background-color: var(--primary-bg-color);
+        z-index: 1;
     }
     .count {
         font-size: 1.3rem;
+        width: 15rem;
     }
     button {
         padding: 0.5rem;

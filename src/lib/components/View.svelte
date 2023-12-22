@@ -1,56 +1,62 @@
 <script lang="ts">
     import { activeImgs } from "$lib/scripts/stores";
-    import ImgNav from "$lib/components/imgs/ImgNav.svelte";
+    import ImgNav from "$lib/components/files/ImgNav.svelte";
     import { onMount } from "svelte";
+    import Dialog from "./Dialog.svelte";
+    import { mode } from "$lib/scripts/shared/stores";
 
-    export let imgData;
-    let view: HTMLDialogElement;
+    export let files;
+    let view: Dialog;
+
+    onMount(() => {
+        view.show();
+    });
 
     function handleKeyDown(e: KeyboardEvent) {
         if (e.key === "Escape") {
-            // console.log(view);
+            $mode = "";
         }
     }
 </script>
 
-<dialog id="view" bind:this={view} on:keydown={handleKeyDown}>
-    <article class="img-view">
-        <nav class="img-nav">
-            <ImgNav imgs={$activeImgs} />
-        </nav>
-        <section class="left">
+<Dialog bind:this={view}>
+    <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
+    <artcle tabindex="0" id="view" on:keydown={handleKeyDown}>
+        <section class="one">
+            <ImgNav {files} />
+        </section>
+        <section class="two">
             <img src="" alt="" />
         </section>
-        <section class="right"></section>
-    </article>
-</dialog>
+        <section class="three"></section>
+    </artcle>
+</Dialog>
 
 <style>
     #view {
-        height: 100vh;
-        width: 100vw;
-        border: 1px solid #fff9;
-        background: none;
-        background-color: #12121205;
-        backdrop-filter: blur(50px);
+        box-sizing: border-box;
+        display: grid;
+        grid-template-columns: minmax(auto, 15rem) 1fr minmax(auto, 30rem);
+        grid-template-areas: "one two three";
+        height: 100%;
+        /* width: 100%; */
+        /* border: 1px solid #fff9; */
+        padding: 5rem;
+        outline: none;
     }
-
-    .img-view {
-        height: 90%;
-        width: 100%;
-        background-color: #12121205;
-        backdrop-filter: blur(50px);
-        display: flex;
-        flex-flow: row wrap;
+    section {
+        height: 100%;
+        /* border: 1px solid red; */
     }
-    .img-nav {
-        max-width: 15rem;
+    .one {
         padding: 1rem;
-        overflow-y: scroll;
-        display: flex;
-        flex-flow: column;
-        align-items: center;
-        gap: 1rem;
-        background-color: #fff6;
+        overflow: auto;
+        scroll-behavior: smooth;
+    }
+    .two {
+        /* max-width: 100%; */
+    }
+    .three {
+        /* max-width: 20%; */
     }
 </style>
