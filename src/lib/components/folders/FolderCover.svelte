@@ -24,7 +24,7 @@
 <div class="cover">
     {#if pics.length != 0}
         {#each pics as pic}
-            <div class="pic-wrapper">
+            <div class="pic-wrapper pic">
                 <img
                     src={pic.thumbnailLink}
                     alt="cover pic"
@@ -35,9 +35,9 @@
             </div>
         {/each}
     {:else}
-        <div class="pic-wrapper" />
-        <div class="pic-wrapper" />
-        <div class="pic-wrapper" />
+        <div class="pic-wrapper placeholder" />
+        <div class="pic-wrapper placeholder" />
+        <div class="pic-wrapper placeholder" />
     {/if}
     <EditTool type="dir" {id} {name} on:editDir on:deleteDir />
     <div class="favorite">
@@ -66,8 +66,12 @@
     /* .cover:hover {
         background-color: var(--content-background-color-hover);
     } */
-    .cover:hover .pic-wrapper {
-        /* filter: brightness(0.5); */
+    .cover:hover .pic {
+        filter: brightness(0.5);
+        background-color: var(--color-file-hover);
+    }
+    .cover:hover .placeholder {
+        filter: brightness(1);
         background-color: var(--color-file-hover);
     }
 
