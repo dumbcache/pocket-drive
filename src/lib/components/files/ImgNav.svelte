@@ -1,6 +1,7 @@
 <script lang="ts">
     import imgPlaceholder from "$lib/assets/imgPlaceholder.svg";
     import { activeImage } from "$lib/scripts/shared/stores";
+    import { setActiveImage } from "$lib/scripts/shared/utils";
     import { onDestroy, onMount } from "svelte";
 
     export let files: FileResponse;
@@ -32,13 +33,12 @@
 
     function thumbClick(e: KeyboardEvent) {
         if (e?.key === "Tab") return;
-        let target = e.target as HTMLElement;
+        let target = e.target as HTMLImageElement;
         target.localName !== "img" && (target = target.querySelector("img"));
         const { id } = target.dataset;
         if (id) {
             active = id;
-            $activeImage.id = id;
-            $activeImage.src = target.src;
+            setActiveImage(id, target.src);
             target.scrollIntoView({
                 behavior: "smooth",
                 block: "center",

@@ -5,9 +5,11 @@ import {
     activeTimeout,
     dataCacheName,
     sessionTimeout,
-    isLoggedin,
-} from "./stores";
-import { goto } from "$app/navigation";
+    activeImage,
+} from "$lib/scripts/shared/stores";
+import ChildWorker from "$lib/scripts/worker.ts?worker";
+
+export let childWorker: Worker;
 
 export const colorPalette = {
     ChocolateIceCream: "#ac725e",
@@ -128,4 +130,50 @@ export function setRefreshTimeout() {
         String(Date.now() + 24 * 60 * 60 * 1000)
     );
     checkRefreshTimeout();
+}
+
+export function setActiveImage(id: string, src: string) {
+    activeImage.set({ id, src });
+    fetchImgPreview(id);
+}
+
+export function fetchImgPreview(id: string) {
+    childWorker.postMessage({
+        context: "IMG_PREVIEW",
+        id,
+        token: getToken(),
+    });
+}
+
+if (browser) {
+    childWorker = new ChildWorker();
+    childWorker.onerror = (e) => console.warn(e);
+    childWorker.onmessage = ({ data }) => {
+        switch (data.context) {
+            case "IMG_PREVIEW":
+                const { id, blob } = data;
+                console.table({ id, blob });
+                const thumbs = document.querySelector(
+                    ".thumbs"
+                ) as HTMLDivElement;
+                const preview = document.querySelector(
+                    ".preview"
+                ) as HTMLDivElement;
+                const img = preview.querySelector(
+                    `[data-id='${id}']`
+                ) as HTMLImageElement;
+                const thumbImg = thumbs.querySelector(
+                    `[data-id='${id}']`
+                ) as HTMLImageElement;
+                if (img.dataset.id !== id) return;
+                let url = thumbImg.dataset.url;
+                url || (url = URL.createObjectURL(blob));
+                img.src = url;
+                thumbImg.dataset.url = url;
+                return;
+
+            case "IDB_RELOAD_REQUIRED":
+                return;
+        }
+    };
 }

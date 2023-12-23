@@ -9,7 +9,7 @@ import {
 
 let idbRequest: IDBOpenDBRequest;
 (() => {
-    idbRequest = indexedDB.open("krabfiles", 1);
+    idbRequest = indexedDB.open("Pocket Files", 1);
     idbRequest.onsuccess = () => {
         const db = idbRequest.result;
         db.onversionchange = () => {

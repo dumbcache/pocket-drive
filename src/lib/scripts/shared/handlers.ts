@@ -1,8 +1,8 @@
 import { mode, activeImage } from "$lib/scripts/shared/stores";
 import { get } from "svelte/store";
+import { fetchImgPreview, setActiveImage } from "$lib/scripts/shared/utils";
 
 export function handleImageClick(e) {
-    console.log(e);
     switch (get(mode)) {
         case "edit":
             return;
@@ -11,7 +11,8 @@ export function handleImageClick(e) {
             let target = e.target as HTMLImageElement;
             let { id } = target.dataset;
             if (!id) return;
-            activeImage.set({ id, src: target.src });
+            fetchImgPreview(id);
+            setActiveImage(id, target.src);
             mode.set("view");
             return;
     }

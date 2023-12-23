@@ -94,12 +94,11 @@
 </footer>
 
 <style>
-    .content {
-    }
     footer {
         display: flex;
         justify-content: center;
         align-items: center;
+        padding: 1rem 0rem;
     }
 
     @media (max-width: 600px) {
