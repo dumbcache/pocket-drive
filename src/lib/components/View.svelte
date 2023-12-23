@@ -4,6 +4,7 @@
     import { onMount } from "svelte";
     import Dialog from "./Dialog.svelte";
     import { activeImage, mode } from "$lib/scripts/shared/stores";
+    import closeIcon from "$lib/assets/close.svg?raw";
 
     export let files;
     let view: Dialog;
@@ -16,6 +17,11 @@
         if (e.key === "Escape") {
             $mode = "";
         }
+    }
+
+    function handleViewClose() {
+        $mode = "";
+        view.close();
     }
 </script>
 
@@ -30,6 +36,9 @@
         </section>
         <section class="three"></section>
     </artcle>
+    <button class="btn view-close" on:click={handleViewClose}
+        >{@html closeIcon}</button
+    >
 </Dialog>
 
 <style>
@@ -68,6 +77,11 @@
         height: 100%;
         margin: auto;
         object-fit: contain;
+    }
+    .view-close {
+        position: absolute;
+        top: 2rem;
+        right: 2rem;
     }
     @media (max-width: 600px) {
         #view {
