@@ -197,12 +197,12 @@
         gap: 2rem;
         font-size: 1.3rem;
         min-width: 5rem;
-        background-color: var(--bg-color-three);
+        /* background-color: var(--bg-color-three); */
         block-size: 100%;
         border: 1px solid var(--color-file-border);
         border-left: 5px solid var(--color-light-blue);
         text-align: right;
-        padding: 1rem;
+        padding: 0.5rem;
     }
     .no-files {
         position: absolute;
@@ -244,12 +244,12 @@
 
     button {
         padding: 0.5rem;
-        background-color: var(--bg-color-two);
+        /* background-color: var(--bg-color-two); */
         width: 5rem;
     }
 
     .active {
-        background-color: var(--bg-color-three);
+        /* background-color: var(--bg-color-three); */
         border-bottom: 2px solid var(--color-focus);
     }
 
@@ -266,6 +266,9 @@
         }
         .nav {
             margin-bottom: 2rem;
+        }
+        button {
+            width: 4rem;
         }
     }
 </style>
