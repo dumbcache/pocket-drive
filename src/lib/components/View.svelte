@@ -5,8 +5,9 @@
     import Dialog from "./Dialog.svelte";
     import { activeImage, mode } from "$lib/scripts/shared/stores";
     import closeIcon from "$lib/assets/close.svg?raw";
+    import { changeImage } from "$lib/scripts/shared/utils";
 
-    export let files;
+    export let files: FileResponse;
     let view: Dialog;
 
     onMount(() => {
@@ -14,8 +15,19 @@
     });
 
     function handleKeyDown(e: KeyboardEvent) {
-        if (e.key === "Escape") {
-            $mode = "";
+        e.preventDefault();
+        switch (e.key) {
+            case "Escape":
+                $mode = "";
+                return;
+            case "ArrowRight":
+            case "ArrowDown":
+                changeImage("NEXT");
+                return;
+            case "ArrowLeft":
+            case "ArrowUp":
+                changeImage("PREV");
+                return;
         }
     }
 
@@ -31,7 +43,11 @@
         <section class="one">
             <ImgNav {files} />
         </section>
-        <section class="two preview">
+        <section
+            class="two preview"
+            on:scroll|preventDefault
+            on:wheel|preventDefault
+        >
             <img
                 class="preview-img"
                 data-id={$activeImage.id}

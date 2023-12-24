@@ -5,7 +5,7 @@
     import { onDestroy, onMount } from "svelte";
 
     export let files: FileResponse;
-    let active: string | undefined = $activeImage;
+    let active: string | undefined = $activeImage.id;
     let container: HTMLElement;
 
     const unsubscribe = activeImage.subscribe((data) => {
@@ -31,8 +31,9 @@
         unsubscribe();
     });
 
-    function thumbClick(e: KeyboardEvent) {
+    function thumbClick(e: KeyboardEvent | MouseEvent) {
         if (e?.key === "Tab") return;
+        console.log(e);
         let target = e.target as HTMLImageElement;
         target.localName !== "img" && (target = target.querySelector("img"));
         const { id } = target.dataset;

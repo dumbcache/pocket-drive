@@ -153,27 +153,16 @@ export function setActiveImage(id: string, src: string) {
     activeImage.set({ id, src });
 }
 
-export function drawImage(blob: Blob) {
-    // const preview = document.querySelector(".preview") as HTMLCanvasElement;
-    const canvas = document.createElement("canvas");
-    const ctx = canvas.getContext("2d");
-    canvas.width = 500;
-    canvas.height = 500;
-
-    const reader = new FileReader();
-    reader.onload = function () {
-        const arrayBuffer = reader.result as ArrayBuffer;
-        const uint8Array = new Uint8Array(arrayBuffer);
-        const imageData = new ImageData(
-            new Uint8ClampedArray(uint8Array),
-            canvas.width,
-            canvas.height
-        );
-        ctx.putImageData(imageData, 0, 0);
-    };
-
-    reader.readAsArrayBuffer(blob);
-    document.body.append(canvas);
+export function changeImage(direction: "PREV" | "NEXT") {
+    const thumbs = document.querySelector(".thumbs");
+    if (!thumbs) return;
+    const active = thumbs.querySelector(`[data-id="${get(activeImage).id}"]`);
+    const ele = (
+        direction === "PREV"
+            ? active?.previousSibling?.firstChild
+            : active?.nextSibling?.firstChild
+    ) as HTMLImageElement;
+    ele && setActiveImage(ele.dataset.id!, ele.src);
 }
 
 if (browser) {
