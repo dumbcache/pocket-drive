@@ -109,9 +109,11 @@
 
         img {
             min-width: 5rem;
+            width: 5rem;
         }
         .active img {
             min-width: 4rem;
+            width: 4rem;
         }
     }
 </style>
