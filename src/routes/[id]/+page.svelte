@@ -38,14 +38,15 @@
     import { afterNavigate } from "$app/navigation";
 
     let view: "folder" | "file" = "folder";
+    let draggedOver = false;
 
-    let type: "update" | "delete";
-    let dirToggle = false;
-    let activeId = "";
-    let activeName = "";
-    let contentHidden: string;
-    $: contentHidden =
-        $editMode === true || $mode === "search" ? "none" : "initial";
+    // let type: "update" | "delete";
+    // let dirToggle = false;
+    // let activeId = "";
+    // let activeName = "";
+    // let contentHidden: string;
+    // $: contentHidden =
+    //     $editMode === true || $mode === "search" ? "none" : "initial";
     onMount(() => {
         if ($isLoggedin) {
             getInfo($activeParentId).then(({ name, parents }) => {
@@ -58,11 +59,19 @@
         return navigating.subscribe((val) => val || (view = "folder"));
     });
     onDestroy(() => {
-        $previewItem = undefined;
-        $mode = "";
-        $favoritesActive = false;
-        $reverseActive = false;
+        // $previewItem = undefined;
+        // $mode = "";
+        // $favoritesActive = false;
+        // $reverseActive = false;
     });
+
+    export function imgDropHandler(e: DragEvent) {
+        e.preventDefault();
+        draggedOver = false;
+        if (e.dataTransfer?.files) {
+            console.log(e);
+        }
+    }
 </script>
 
 <!-- {#if $activeDirs?.length !== 0 || $activeImgs?.length !== 0}
@@ -141,16 +150,15 @@
         <LoadIndicator />
     </div>
 {/if} -->
-<section class="wrapper">
+<section
+    class="wrapper{draggedOver === true ? 'dragover' : ''}"
+    on:dragstart
+    on:dragover|preventDefault
+    on:dragenter={() => (draggedOver = true)}
+    on:dragleave={() => (draggedOver = false)}
+    on:drop={imgDropHandler}
+>
     <nav class="nav">
-        <p class="count">
-            <span>count:</span>
-            <span
-                >{view === "folder"
-                    ? $folderStore?.files.length
-                    : $fileStore?.files.length}</span
-            >
-        </p>
         <span>
             <button
                 class=""
@@ -170,6 +178,12 @@
                 </span>
             </button>
         </span>
+        <p class="count">
+            <!-- <span>count:</span> -->
+            {view === "folder"
+                ? $folderStore?.files.length
+                : $fileStore?.files.length}
+        </p>
     </nav>
 
     <Content {view} />
@@ -177,11 +191,15 @@
 
 <style>
     .count {
-        display: flex;
         gap: 2rem;
-        width: fit-content;
-        margin-left: auto;
-        margin-right: 3rem;
+        font-size: 1.3rem;
+        min-width: 5rem;
+        background-color: var(--bg-color-three);
+        block-size: 100%;
+        border: 1px solid var(--color-file-border);
+        border-left: 5px solid var(--color-light-blue);
+        text-align: right;
+        padding: 1rem;
     }
     .no-files {
         position: absolute;
@@ -204,26 +222,23 @@
     }
     .wrapper {
         width: 100%;
-        padding: 0rem 5rem;
+        padding: 0rem;
     }
     .nav {
         width: 100%;
-        margin-left: auto;
         margin-bottom: 2rem;
         display: flex;
         flex-flow: row nowrap;
         align-items: center;
-        justify-content: center;
+        justify-content: flex-end;
         padding: 2rem 0rem;
         position: sticky;
         top: 0;
         background-color: var(--primary-bg-color);
         z-index: 1;
+        gap: 5rem;
     }
-    .count {
-        font-size: 1.3rem;
-        width: 15rem;
-    }
+
     button {
         padding: 0.5rem;
         background-color: var(--bg-color-two);
@@ -232,7 +247,11 @@
 
     .active {
         background-color: var(--bg-color-three);
-        border-bottom: 1px solid var(--color-focus);
+        border-bottom: 2px solid var(--color-focus);
+    }
+
+    .dragover {
+        background-color: #55f5;
     }
     /* .active :global(svg) {
         fill: var(--color-focus);

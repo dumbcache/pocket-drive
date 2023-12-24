@@ -94,6 +94,9 @@
 </footer>
 
 <style>
+    .content {
+        padding: 0rem 5rem;
+    }
     footer {
         display: flex;
         justify-content: center;
