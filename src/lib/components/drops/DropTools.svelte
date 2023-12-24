@@ -37,12 +37,9 @@
         on:keydown|stopPropagation
     />
     <span>
-        <button class="btn" title="clear completed" on:click={clearDropItems}>
-            {@html clearIcon}
-        </button>
         <button
             class="btn"
-            title="minimize to right"
+            title="minimize"
             on:click={() => {
                 $dropMini = !$dropMini;
                 $dropFull = false;
@@ -50,15 +47,7 @@
         >
             {@html doubleRightIcon}
         </button>
-        <button
-            class="btn"
-            title="expand"
-            on:click={() => {
-                $dropFull = !$dropFull;
-            }}
-        >
-            {@html expandIcon}
-        </button>
+
         <button
             class="btn {$autosave === true ? 'autosave' : ''}"
             title="toggle autosave"

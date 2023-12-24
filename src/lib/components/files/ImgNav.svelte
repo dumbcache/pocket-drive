@@ -79,6 +79,7 @@
 
     img {
         height: auto;
+        object-fit: contain;
         filter: brightness(0.5);
         width: 80%;
         border-radius: 0.5rem;
@@ -106,6 +107,7 @@
 
         img {
             min-width: 5rem;
+            max-height: 5rem;
             width: 5rem;
         }
         .active img {

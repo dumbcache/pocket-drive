@@ -6,7 +6,6 @@ import {
     activeParentName,
     touchCoords,
     previewItem,
-    dropItems,
     recents,
     editItems,
     selectedCount,
@@ -29,6 +28,7 @@ import {
     dropMini,
     autosave,
 } from "$lib/scripts/stores";
+import { dropItems } from "$lib/scripts/shared/stores";
 import { refreshMainContent, refreshCache } from "$lib/scripts/gdrive/utils";
 import { fetchFiles } from "$lib/scripts/gdrive/utils";
 import { checkLoginStatus } from "./shared/utils";

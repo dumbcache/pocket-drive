@@ -5,7 +5,7 @@
 </script>
 
 {#if $navigating}
-    <div class="loading">
+    <div class="loading" on:wheel|preventDefault>
         <Spinner />
     </div>
 {/if}

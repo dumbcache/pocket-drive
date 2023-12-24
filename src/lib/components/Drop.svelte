@@ -3,7 +3,7 @@
     import DropItem from "$lib/components/drops/DropItem.svelte";
     import DropTools from "$lib/components/drops/DropTools.svelte";
     import doubleLeftIcon from "$lib/assets/doubleLeft.svg?raw";
-    import { fly } from "svelte/transition";
+    import { fade, fly } from "svelte/transition";
 </script>
 
 {#if $dropItems.length !== 0}
@@ -16,7 +16,7 @@
             }}>{@html doubleLeftIcon}</button
         >
     {:else} -->
-    <div class="drop" transition:fly={{ duration: 500, x: 500, y: 500 }}>
+    <div class="drop" transition:fade={{ duration: 500, x: 500, y: 500 }}>
         <DropTools />
 
         <div class="drop-items">

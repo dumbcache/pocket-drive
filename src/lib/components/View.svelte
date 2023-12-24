@@ -38,6 +38,7 @@
     }
 
     function handleClick(e: PointerEvent) {
+        if (e.button != 0) return;
         const target = e.target as HTMLImageElement;
         const half = target.offsetWidth / 2;
         const clickx = e.clientX - target.getBoundingClientRect().left;
@@ -124,7 +125,7 @@
 
     .two img {
         display: block;
-        width: 100%;
+        width: auto;
         height: 100%;
         margin: auto;
         object-fit: contain;
@@ -144,13 +145,11 @@
         .one {
             max-width: 100%;
             margin: auto;
+            min-height: 10%;
             max-height: 10%;
             padding: 1rem 0rem;
         }
 
-        .two img {
-            width: 100%;
-        }
         .info-toggle {
             /* display: none; */
         }

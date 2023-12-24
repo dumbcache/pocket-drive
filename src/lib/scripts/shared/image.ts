@@ -73,3 +73,17 @@ export function previewAndSetDropItems(
         }
     }
 }
+
+export function dropCloseHandler() {
+    const running = get(dropItems).filter(
+        (item) => item.progress === "uploading"
+    );
+    if (running.length === 0) {
+        // dropFull.set(false);
+        dropItems.set([]);
+        // autosave.set(false);
+    } else {
+        // dropMini.set(!get(dropMini));
+        // dropFull.set(false);
+    }
+}

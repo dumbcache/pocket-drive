@@ -1,6 +1,11 @@
 import { browser } from "$app/environment";
 import type { PageLoad } from "./$types";
-import { getInfo, getRoot, loadAll } from "$lib/scripts/gdrive/utils";
+import {
+    fetchSingle,
+    getInfo,
+    getRoot,
+    loadAll,
+} from "$lib/scripts/gdrive/utils";
 import { checkLoginStatus, getToken } from "$lib/scripts/shared/utils";
 import { activeParentId, activeParentName } from "$lib/scripts/stores";
 import { goto } from "$app/navigation";
@@ -33,7 +38,7 @@ export const load = (async ({ params, fetch }) => {
             activeParent.set({ name: "#Pocket_Drive", id });
             return loadContent(id);
         }
-        let data = await getInfo(id);
+        let data = await fetchSingle(id, "FOLDER", getToken());
         activeParent.set({
             id: data.id,
             name: data.name,

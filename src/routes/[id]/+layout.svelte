@@ -61,8 +61,6 @@
             console.warn(error);
         }
     });
-
-    dropItems.subscribe(console.log);
 </script>
 
 <svelte:window
