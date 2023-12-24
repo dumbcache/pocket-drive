@@ -14,15 +14,7 @@
     }
 </script>
 
-<div
-    class="card {draggedOver === true ? 'dragover' : ''}"
-    on:dragstart|preventDefault
-    on:dragover|preventDefault
-    on:dragenter={() => (draggedOver = true)}
-    on:dragleave={() => (draggedOver = false)}
-    on:drop|stopPropagation
-    data-id={folder.id}
->
+<div class="card" on:dragstart|preventDefault data-id={folder.id}>
     <button on:click={dirNavigate}>
         <FolderCover
             id={folder.id}

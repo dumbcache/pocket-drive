@@ -6,6 +6,7 @@
     import { getInfo } from "$lib/scripts/gdrive/utils";
     import { childWorker } from "$lib/scripts/utils";
     import {
+        activeParent,
         fileStore,
         folderStore,
         isLoggedin,
@@ -48,14 +49,14 @@
     // $: contentHidden =
     //     $editMode === true || $mode === "search" ? "none" : "initial";
     onMount(() => {
-        if ($isLoggedin) {
-            getInfo($activeParentId).then(({ name, parents }) => {
-                $activeParentName = name;
-                $activeGrandParentId = parents![0];
-            });
-            $tempImgs = $activeImgs;
-            $tempDirs = $activeDirs;
-        }
+        // if ($isLoggedin) {
+        //     getInfo($activeParentId).then(({ name, parents }) => {
+        //         $activeParentName = name;
+        //         $activeGrandParentId = parents![0];
+        //     });
+        //     $tempImgs = $activeImgs;
+        //     $tempDirs = $activeDirs;
+        // }
         return navigating.subscribe((val) => val || (view = "folder"));
     });
     onDestroy(() => {
@@ -151,7 +152,7 @@
     </div>
 {/if} -->
 <section
-    class="wrapper{draggedOver === true ? 'dragover' : ''}"
+    class="wrapper {draggedOver === true ? 'dragover' : ''}"
     on:dragstart
     on:dragover|preventDefault
     on:dragenter={() => (draggedOver = true)}

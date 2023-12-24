@@ -2,7 +2,7 @@ import { get } from "svelte/store";
 import { dataCacheName, searchItems, sessionTimeout } from "../shared/stores";
 import { fetchDirs } from "./folder";
 import { fetchImgs } from "./file";
-import { checkLoginStatus, colorPalette } from "../shared/utils";
+import { checkLoginStatus, colorPalette, getToken } from "../shared/utils";
 import { activeParentId, recents, refreshClicked } from "../stores";
 
 export const FOLDER_MIME_TYPE = "application/vnd.google-apps.folder";
@@ -34,23 +34,6 @@ export function constructAPI(
     return api;
 }
 
-export async function searchHandler(token: string, search: string) {
-    const req = new Request(
-        FILE_API +
-            `?q=mimeType contains '${DIR_MIME_TYPE}' and name contains '${search}'&pageSize=1000&fields=${FIELDS_MULTIPLE}&orderBy=createdTime desc`,
-        {
-            method: "GET",
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        }
-    );
-    const res = await makeFetch(req);
-    if (res?.status === 200) {
-        searchItems.set((await res?.json()).files);
-    }
-}
-
 export const createRootDir = async (accessToken: string) => {
     const req = new Request(FILE_API, {
         method: "POST",
@@ -70,6 +53,43 @@ export const createRootDir = async (accessToken: string) => {
         return (await res?.json()) as CreateResourceResponse;
     }
 };
+
+export async function getRoot(accessToken: string): Promise<string> {
+    let root = window.localStorage.getItem("root");
+    if (root) return root;
+    const req = await fetch(
+        `${FILE_API}?&pageSize=1&fields=files(id,name)&orderBy=createdTime`,
+        {
+            headers: { authorization: `Bearer ${accessToken}` },
+        }
+    );
+    const { files } = await req.json();
+    if (files.length !== 0) {
+        const id = files[0].id;
+        window.localStorage.setItem("root", id);
+        return id;
+    }
+    const { id } = await createRootDir(accessToken);
+    window.localStorage.setItem("root", id);
+    return id;
+}
+
+export async function searchHandler(token: string, search: string) {
+    const req = new Request(
+        FILE_API +
+            `?q=mimeType contains '${DIR_MIME_TYPE}' and name contains '${search}'&pageSize=1000&fields=${FIELDS_MULTIPLE}&orderBy=createdTime desc`,
+        {
+            method: "GET",
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        }
+    );
+    const res = await makeFetch(req);
+    if (res?.status === 200) {
+        searchItems.set((await res?.json()).files);
+    }
+}
 
 export const refreshMainContent = (
     parent: string,
@@ -174,7 +194,7 @@ export const getInfo = async (id: string): Promise<GoogleFile> => {
     let res = await fetch(`${FILE_API}/${id}?fields=${FIELDS_SINGLE}`, {
         method: "GET",
         headers: {
-            Authorization: `Bearer ${window.localStorage.getItem("token")}`,
+            Authorization: `Bearer ${getToken()}`,
         },
     });
     let { status, statusText } = res;

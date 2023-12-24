@@ -13,4 +13,10 @@ export let refreshTimeout = writable(false);
 export let dataCacheName = writable("");
 
 export let mode = writable("");
+export let activeParent = writable<{
+    id: string;
+    name: string;
+    parents?: string[];
+}>();
 export let activeImage = writable<{ id: string; src: string }>();
+export let dropItems = writable<DropItem[]>([]);

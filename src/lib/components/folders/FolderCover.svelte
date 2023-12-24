@@ -8,6 +8,7 @@
     export let id: string;
     export let name: string;
     export let starred: Boolean;
+    let draggedOver = false;
     let pics: FileResponse = [];
 
     $: visible &&
@@ -19,9 +20,23 @@
                 pics = files;
             })
             .catch(console.warn);
+
+    export function imgDropHandler(e: DragEvent) {
+        e.preventDefault();
+        draggedOver = false;
+        if (e.dataTransfer?.files) {
+            console.log(e);
+        }
+    }
 </script>
 
-<div class="cover">
+<div
+    class="cover {draggedOver === true ? 'dragover' : ''}"
+    on:dragover|preventDefault
+    on:dragenter|stopPropagation={() => (draggedOver = true)}
+    on:dragleave={() => (draggedOver = false)}
+    on:drop|stopPropagation={imgDropHandler}
+>
     {#if pics.length != 0}
         {#each pics as pic}
             <div class="pic-wrapper pic">
@@ -107,6 +122,9 @@
     /* .favorite :global(svg) {
         fill: var(--primary-bg-color);
     } */
+    .dragover {
+        outline: 1px solid var(--color-focus);
+    }
     @media (max-width: 600px) {
         .favorite {
             right: 0.5rem;
