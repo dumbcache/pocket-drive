@@ -163,7 +163,13 @@ export function changeImage(direction: "PREV" | "NEXT") {
             ? active?.previousSibling?.firstChild
             : active?.nextSibling?.firstChild
     ) as HTMLImageElement;
-    ele && setActiveImage(ele.dataset.id!, ele.src);
+    if (!ele) return;
+    setActiveImage(ele.dataset.id!, ele.src);
+    ele.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+        inline: "center",
+    });
 }
 
 if (browser) {

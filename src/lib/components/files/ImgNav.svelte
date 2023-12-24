@@ -36,7 +36,6 @@
         target.localName !== "img" && (target = target.querySelector("img"));
         const { id } = target.dataset;
         if (id) {
-            active = id;
             setActiveImage(id, target.src);
             target.scrollIntoView({
                 behavior: "smooth",
