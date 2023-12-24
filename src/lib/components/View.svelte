@@ -1,11 +1,9 @@
 <script lang="ts">
-    import { activeImgs } from "$lib/scripts/stores";
     import ImgNav from "$lib/components/files/ImgNav.svelte";
     import { onMount } from "svelte";
     import Dialog from "./Dialog.svelte";
     import { activeImage, mode } from "$lib/scripts/shared/stores";
     import closeIcon from "$lib/assets/close.svg?raw";
-    import infoIcon from "$lib/assets/info.svg?raw";
     import { changeImage } from "$lib/scripts/shared/utils";
     import Info from "./Info.svelte";
 
@@ -39,6 +37,13 @@
         e.deltaY > 0 ? changeImage("NEXT") : changeImage("PREV");
     }
 
+    function handleClick(e: PointerEvent) {
+        const target = e.target as HTMLImageElement;
+        const half = target.offsetWidth / 2;
+        const clickx = e.clientX - target.getBoundingClientRect().left;
+        clickx > half ? changeImage("NEXT") : changeImage("PREV");
+    }
+
     function handleViewClose() {
         $mode = "";
         view.close();
@@ -55,6 +60,7 @@
             class="two preview"
             on:scroll|preventDefault
             on:wheel|preventDefault={handleWheel}
+            on:pointerdown={handleClick}
         >
             <img
                 class="preview-img"

@@ -73,18 +73,15 @@
     }
 
     button {
-        display: block;
-        /* max-height: 15rem; */
-        /* overflow: hidden; */
+        display: inline-block;
         border-radius: 0.5rem;
-        /* border: 1px solid var(--color-file-border); */
-        /* margin-bottom: 2rem; */
     }
 
     img {
         height: auto;
         filter: brightness(0.5);
         width: 80%;
+        border-radius: 0.5rem;
     }
     button:hover img {
         filter: brightness(0.8);
