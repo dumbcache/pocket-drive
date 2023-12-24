@@ -32,7 +32,12 @@
             <ImgNav {files} />
         </section>
         <section class="two preview">
-            <img data-id={$activeImage.id} src={$activeImage.src} alt="" />
+            <img
+                class="preview-img"
+                data-id={$activeImage.id}
+                src={$activeImage.src}
+                alt=""
+            />
         </section>
         <section class="three"></section>
     </artcle>

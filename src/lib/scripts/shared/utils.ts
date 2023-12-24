@@ -132,17 +132,48 @@ export function setRefreshTimeout() {
     checkRefreshTimeout();
 }
 
-export function setActiveImage(id: string, src: string) {
-    activeImage.set({ id, src });
-    fetchImgPreview(id);
-}
-
 export function fetchImgPreview(id: string) {
     childWorker.postMessage({
         context: "IMG_PREVIEW",
         id,
         token: getToken(),
     });
+}
+
+export function setActiveImage(id: string, src: string) {
+    let url = "";
+    let img = document.querySelector(".preview-img") as HTMLImageElement;
+    if (img && img.dataset.id === id) return;
+    fetchImgPreview(id);
+    if (img) {
+        url = img.src;
+        img.src = src;
+        URL.revokeObjectURL(url);
+    }
+    activeImage.set({ id, src });
+}
+
+export function drawImage(blob: Blob) {
+    // const preview = document.querySelector(".preview") as HTMLCanvasElement;
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
+    canvas.width = 500;
+    canvas.height = 500;
+
+    const reader = new FileReader();
+    reader.onload = function () {
+        const arrayBuffer = reader.result as ArrayBuffer;
+        const uint8Array = new Uint8Array(arrayBuffer);
+        const imageData = new ImageData(
+            new Uint8ClampedArray(uint8Array),
+            canvas.width,
+            canvas.height
+        );
+        ctx.putImageData(imageData, 0, 0);
+    };
+
+    reader.readAsArrayBuffer(blob);
+    document.body.append(canvas);
 }
 
 if (browser) {
@@ -152,24 +183,14 @@ if (browser) {
         switch (data.context) {
             case "IMG_PREVIEW":
                 const { id, blob } = data;
-                console.table({ id, blob });
-                const thumbs = document.querySelector(
-                    ".thumbs"
-                ) as HTMLDivElement;
-                const preview = document.querySelector(
-                    ".preview"
-                ) as HTMLDivElement;
-                const img = preview.querySelector(
-                    `[data-id='${id}']`
+
+                const img = document.querySelector(
+                    `.preview-img`
                 ) as HTMLImageElement;
-                const thumbImg = thumbs.querySelector(
-                    `[data-id='${id}']`
-                ) as HTMLImageElement;
+
                 if (img.dataset.id !== id) return;
-                let url = thumbImg.dataset.url;
-                url || (url = URL.createObjectURL(blob));
+                let url = URL.createObjectURL(blob);
                 img.src = url;
-                thumbImg.dataset.url = url;
                 return;
 
             case "IDB_RELOAD_REQUIRED":
