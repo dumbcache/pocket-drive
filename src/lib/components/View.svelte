@@ -53,7 +53,7 @@
 <Dialog bind:this={view}>
     <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
     <artcle tabindex="0" id="view" on:keydown={handleKeyDown}>
-        <section class="one">
+        <section class="one" on:wheel|stopPropagation>
             <ImgNav {files} />
         </section>
         <section

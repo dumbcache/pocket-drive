@@ -13,7 +13,12 @@
     }
 </script>
 
-<dialog id="dialog" bind:this={dialog} on:keydown={handleKeyDown}>
+<dialog
+    id="dialog"
+    bind:this={dialog}
+    on:keydown={handleKeyDown}
+    on:wheel|preventDefault
+>
     <slot />
 </dialog>
 

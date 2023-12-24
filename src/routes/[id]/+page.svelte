@@ -37,6 +37,7 @@
     import folderIcon from "$lib/assets/folder.svg?raw";
     import fileIcon from "$lib/assets/file.svg?raw";
     import { afterNavigate } from "$app/navigation";
+    import { previewAndSetDropItems } from "$lib/scripts/shared/image";
 
     let view: "folder" | "file" = "folder";
     let draggedOver = false;
@@ -69,8 +70,9 @@
     export function imgDropHandler(e: DragEvent) {
         e.preventDefault();
         draggedOver = false;
-        if (e.dataTransfer?.files) {
-            console.log(e);
+        let files = e.dataTransfer?.files;
+        if (files) {
+            previewAndSetDropItems(files);
         }
     }
 </script>

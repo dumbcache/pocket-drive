@@ -36,6 +36,7 @@
     import Dialog from "$lib/components/Dialog.svelte";
     import Main from "$lib/components/Content.svelte";
     import Spinner from "$lib/components/Spinner.svelte";
+    import { dropItems } from "$lib/scripts/shared/stores";
 
     let dialog: Dialog;
     let draggedOver = false;
@@ -60,6 +61,8 @@
             console.warn(error);
         }
     });
+
+    dropItems.subscribe(console.log);
 </script>
 
 <svelte:window
@@ -107,23 +110,23 @@
                 {/if}
                 <slot />
             </div>
-            <Drop />
             <Preview />
             {#if $sessionTimeout}
-                <Confirm
-                    text={"Session timeout. You want to continue?"}
-                    closeOnClick={false}
-                    on:confirmCloseNO={() => {
-                        signUserOut();
-                        goto("/");
-                    }}
-                    on:confirmCloseOK={() => {
-                        googleClient.requestToken();
-                    }}
-                />
+            <Confirm
+            text={"Session timeout. You want to continue?"}
+            closeOnClick={false}
+            on:confirmCloseNO={() => {
+                signUserOut();
+                goto("/");
+            }}
+            on:confirmCloseOK={() => {
+                googleClient.requestToken();
+            }}
+            />
             {/if}
         </main> -->
     <slot />
+    <Drop />
 </div>
 
 <style>

@@ -1,10 +1,5 @@
 <script>
-    import {
-        dropFull,
-        dropItems,
-        dropMini,
-        previewItem,
-    } from "$lib/scripts/stores";
+    import { dropItems } from "$lib/scripts/shared/stores";
     import DropItem from "$lib/components/drops/DropItem.svelte";
     import DropTools from "$lib/components/drops/DropTools.svelte";
     import doubleLeftIcon from "$lib/assets/doubleLeft.svg?raw";
@@ -12,7 +7,7 @@
 </script>
 
 {#if $dropItems.length !== 0}
-    {#if $dropMini}
+    <!-- {#if $dropMini}
         <button
             class="drop-mini btn"
             on:click={() => {
@@ -20,22 +15,19 @@
                 $dropMini = !$dropMini;
             }}>{@html doubleLeftIcon}</button
         >
-    {:else}
-        <div
-            class="drop {$dropFull === true ? 'full' : ''}"
-            transition:fly={{ duration: 500, x: 500, y: 500 }}
-        >
-            <DropTools />
+    {:else} -->
+    <div class="drop" transition:fly={{ duration: 500, x: 500, y: 500 }}>
+        <DropTools />
 
-            <div class="drop-items">
-                {#each $dropItems as item}
-                    {#key item.id}
-                        <DropItem {item} />
-                    {/key}
-                {/each}
-            </div>
+        <div class="drop-items">
+            {#each $dropItems as item}
+                {#key item.id}
+                    <DropItem {item} />
+                {/key}
+            {/each}
         </div>
-    {/if}
+    </div>
+    <!-- {/if} -->
 {/if}
 
 <style>

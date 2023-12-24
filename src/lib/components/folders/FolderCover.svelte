@@ -3,6 +3,7 @@
     import EditTool from "$lib/components/actions/EditTool.svelte";
     import Favorite from "$lib/components/actions/Favorite.svelte";
     import { getToken } from "$lib/scripts/shared/utils";
+    import { previewAndSetDropItems } from "$lib/scripts/shared/image";
 
     export let visible: Boolean;
     export let id: string;
@@ -16,16 +17,17 @@
             { parent: id, mimeType: IMG_MIME_TYPE, pageSize: 3 },
             getToken()
         )
-            .then(({ files }) => {
-                pics = files;
+            .then((data) => {
+                pics = data?.files;
             })
             .catch(console.warn);
 
     export function imgDropHandler(e: DragEvent) {
         e.preventDefault();
         draggedOver = false;
-        if (e.dataTransfer?.files) {
-            console.log(e);
+        let files = e.dataTransfer?.files;
+        if (files) {
+            previewAndSetDropItems(files, id, name);
         }
     }
 </script>

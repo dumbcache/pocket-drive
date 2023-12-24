@@ -25,14 +25,18 @@
 </script>
 
 <div class="drop-tools">
+    <button class="drop-cancel btn" title="close" on:click={dropCloseHandler}>
+        {@html closeIcon}
+    </button>
+    <!-- <span class="drop-parent">parent</span> -->
+    <input
+        type="text"
+        class="common-url"
+        placeholder="common-url"
+        value=""
+        on:keydown|stopPropagation
+    />
     <span>
-        <button
-            class="drop-cancel btn"
-            title="close"
-            on:click={dropCloseHandler}
-        >
-            {@html closeIcon}
-        </button>
         <button class="btn" title="clear completed" on:click={clearDropItems}>
             {@html clearIcon}
         </button>
@@ -63,19 +67,10 @@
             }}
         >
             {@html toggleIcon}
+        </button><button class="drop-ok btn" on:click={dropOkHandler}>
+            {@html doneIcon}
         </button>
     </span>
-    <!-- <span class="drop-parent">parent</span> -->
-    <input
-        type="text"
-        class="common-url"
-        placeholder="common-url"
-        value=""
-        on:keydown|stopPropagation
-    />
-    <button class="drop-ok btn" on:click={dropOkHandler}>
-        {@html doneIcon}
-    </button>
 </div>
 
 <style>
