@@ -5,13 +5,13 @@
     import Dialog from "./Dialog.svelte";
     import { activeImage, mode } from "$lib/scripts/shared/stores";
     import closeIcon from "$lib/assets/close.svg?raw";
-    import arrowLeftIcon from "$lib/assets/arrowLeftDouble.svg?raw";
-    import arrowRightIcon from "$lib/assets/arrowRightDouble.svg?raw";
+    import infoIcon from "$lib/assets/info.svg?raw";
     import { changeImage } from "$lib/scripts/shared/utils";
     import Info from "./Info.svelte";
 
     export let files: FileResponse;
     let view: Dialog;
+    let infoVisible = false;
 
     onMount(() => {
         view.show();
@@ -35,6 +35,10 @@
         }
     }
 
+    function handleWheel(e: WheelEvent) {
+        e.deltaY > 0 ? changeImage("NEXT") : changeImage("PREV");
+    }
+
     function handleViewClose() {
         $mode = "";
         view.close();
@@ -50,7 +54,7 @@
         <section
             class="two preview"
             on:scroll|preventDefault
-            on:wheel|preventDefault
+            on:wheel|preventDefault={handleWheel}
         >
             <img
                 class="preview-img"
@@ -58,11 +62,17 @@
                 src={$activeImage.src}
                 alt=""
             />
-            <button class="btn info-toggle">{@html arrowRightIcon}</button>
+            <!-- <button
+                class="btn info-toggle"
+                on:click={() => (infoVisible = !infoVisible)}
+                >{@html infoIcon}</button
+            > -->
         </section>
-        <section class="three">
-            <Info visible={true} />
-        </section>
+        {#if infoVisible}
+            <section class="three">
+                <Info />
+            </section>
+        {/if}
     </artcle>
     <button class="btn view-close" on:click={handleViewClose}
         >{@html closeIcon}</button
@@ -77,6 +87,7 @@
         outline: none;
         display: flex;
         flex-flow: row nowrap;
+        gap: 5rem;
     }
     section {
         height: 100%;
@@ -85,23 +96,19 @@
     .one {
         min-width: 10%;
         max-width: 15%;
-        padding: 0rem 2rem;
         overflow: auto;
         scroll-behavior: smooth;
+        padding: 0rem 2rem;
     }
     .two {
         position: relative;
         margin: auto;
         max-width: 100%;
-        /* max-width: 100%; */
     }
 
     .three {
-        /* display: none; */
-        /* width: 20%; */
-        max-width: 20%;
-        min-width: 15%;
-        border: 1px solid red;
+        min-width: 30rem;
+        /* border: 1px solid red; */
     }
     .info-toggle {
         position: absolute;
@@ -115,6 +122,7 @@
         height: 100%;
         margin: auto;
         object-fit: contain;
+        object-position: center;
     }
     .view-close {
         position: absolute;
@@ -124,19 +132,25 @@
     @media (max-width: 600px) {
         #view {
             flex-flow: column-reverse;
-            padding: 1rem;
-        }
-        .two {
+            padding: 0rem;
+            gap: 2rem;
         }
         .one {
-            max-width: initial;
-            padding: 2rem 0rem;
-            height: fit-content;
+            max-width: 100%;
+            margin: auto;
+            max-height: 10%;
+            padding: 1rem 0rem;
         }
 
         .two img {
-            height: unset;
             width: 100%;
+        }
+        .info-toggle {
+            /* display: none; */
+        }
+        .view-close {
+            top: 0.5rem;
+            right: 0.5rem;
         }
     }
 </style>

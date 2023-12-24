@@ -33,6 +33,7 @@
 
     function thumbClick(e: MouseEvent) {
         let target = e.target as HTMLImageElement;
+        if (target === container) return;
         target.localName !== "img" && (target = target.querySelector("img"));
         const { id } = target.dataset;
         if (id) {
@@ -69,11 +70,8 @@
         gap: 1rem;
         display: flex;
         flex-flow: column;
-        /* height: 100%; */
     }
-    .thumbs ::-webkit-scrollbar {
-        display: none;
-    }
+
     button {
         display: block;
         /* max-height: 15rem; */
@@ -106,13 +104,14 @@
         .thumbs {
             height: 100%;
             flex-flow: row nowrap;
+            width: initial;
         }
+
         img {
-            width: 5rem;
-            /* height: 100%; */
+            min-width: 5rem;
         }
         .active img {
-            width: 4rem;
+            min-width: 4rem;
         }
     }
 </style>

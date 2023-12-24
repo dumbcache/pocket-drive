@@ -195,8 +195,10 @@ if (browser) {
     };
 
     globalThis.addEventListener("keydown", (e: KeyboardEvent) => {
-        if (e.key === "Escape") {
-            mode.set("");
+        switch (e.key) {
+            case "Escape":
+                mode.set("");
+                return;
         }
     });
 }
