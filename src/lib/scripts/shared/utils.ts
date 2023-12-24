@@ -6,6 +6,7 @@ import {
     dataCacheName,
     sessionTimeout,
     activeImage,
+    mode,
 } from "$lib/scripts/shared/stores";
 import ChildWorker from "$lib/scripts/worker.ts?worker";
 
@@ -186,4 +187,10 @@ if (browser) {
                 return;
         }
     };
+
+    globalThis.addEventListener("keydown", (e: KeyboardEvent) => {
+        if (e.key === "Escape") {
+            mode.set("");
+        }
+    });
 }

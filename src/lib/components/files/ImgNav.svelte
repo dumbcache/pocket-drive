@@ -31,9 +31,7 @@
         unsubscribe();
     });
 
-    function thumbClick(e: KeyboardEvent | MouseEvent) {
-        if (e?.key === "Tab") return;
-        console.log(e);
+    function thumbClick(e: MouseEvent) {
         let target = e.target as HTMLImageElement;
         target.localName !== "img" && (target = target.querySelector("img"));
         const { id } = target.dataset;
@@ -50,12 +48,7 @@
 </script>
 
 {#if files}
-    <nav
-        class="thumbs"
-        on:click={thumbClick}
-        on:keydown={thumbClick}
-        bind:this={container}
-    >
+    <nav class="thumbs" on:click={thumbClick} on:keydown bind:this={container}>
         {#each files as file}
             <button class:active={file.id === active} data-id={file.id}>
                 <img
