@@ -1,13 +1,14 @@
 <script lang="ts">
-    import { onDestroy, onMount } from "svelte";
+    import { onDestroy } from "svelte";
+    import { navigating, page } from "$app/stores";
     import {
         activeView,
         fileStore,
         folderStore,
     } from "$lib/scripts/shared/stores";
-    import { navigating } from "$app/stores";
     import Content from "$lib/components/Content.svelte";
     import { previewAndSetDropItems } from "$lib/scripts/shared/image";
+    import beforeNavigate from "$lib/assets/beforeNavigate.svg?raw";
 
     let view = $activeView;
     let draggedOver = false;
@@ -39,8 +40,17 @@
     on:drop={imgDropHandler}
 >
     <nav class="nav">
+        {#if $page.params?.id !== "r"}
+            <button
+                class="back-button btn"
+                on:click={() => {
+                    history.back();
+                }}
+            >
+                {@html beforeNavigate}
+            </button>
+        {/if}
         <p class="count">
-            <!-- <span>count:</span> -->
             {view === "FOLDER"
                 ? $folderStore?.files.length
                 : $fileStore?.files.length}
@@ -81,7 +91,13 @@
         z-index: 1;
         gap: 5rem;
     }
-
+    .back-button {
+        position: absolute;
+        top: 50%;
+        left: 0%;
+        transform: translate(0%, -50%);
+        margin-left: 2rem;
+    }
     .dragover {
         background-color: #55f5;
     }
@@ -95,6 +111,9 @@
         }
         .nav {
             margin-bottom: 2rem;
+        }
+        .back-button {
+            margin-left: 0rem;
         }
     }
 </style>
