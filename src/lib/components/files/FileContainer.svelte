@@ -3,7 +3,7 @@
     import { fileStore, mode } from "$lib/scripts/shared/stores";
     import File from "./File.svelte";
     import { navigating } from "$app/stores";
-    import View from "../View.svelte";
+    import View from "./View.svelte";
     import { handleImageClick } from "$lib/scripts/shared/handlers";
 
     export let view: string;

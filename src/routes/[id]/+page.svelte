@@ -50,7 +50,7 @@
                 {@html beforeNavigate}
             </button>
         {/if}
-        <p class="count">
+        <p class="count" title="count">
             {view === "FOLDER"
                 ? $folderStore?.files.length
                 : $fileStore?.files.length}

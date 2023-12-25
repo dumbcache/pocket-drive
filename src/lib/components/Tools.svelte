@@ -29,21 +29,18 @@
 
 <div class="tools">
     <button
-        class=""
+        class="view"
         on:click={() => ($activeView = "FOLDER")}
         class:active={view === "FOLDER"}
     >
-        <span class="btn">
-            {@html folderIcon}
-        </span>
+        {@html folderIcon}
     </button>
     <button
-        class=""
+        class="view"
         on:click={() => ($activeView = "FILE")}
         class:active={view === "FILE"}
-        ><span class="btn">
-            {@html fileIcon}
-        </span>
+    >
+        {@html fileIcon}
     </button>
     <hr class="hr" />
     <button
@@ -112,9 +109,20 @@
     .hr {
         margin: 1rem 0rem;
     }
-    .active {
-        /* background-color: var(--bg-color-three); */
-        border-left: 5px solid var(--color-focus);
+
+    .active :global(svg) {
+        padding: 0.2rem;
+    }
+    .view {
+        position: relative;
+    }
+    button.active::before {
+        content: " ";
+        height: 100%;
+        border: 2px solid red;
+        position: absolute;
+        top: 0;
+        left: -0.5rem;
     }
     @media (max-width: 600px) {
         .tools {

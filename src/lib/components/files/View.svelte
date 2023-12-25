@@ -1,11 +1,11 @@
 <script lang="ts">
-    import ImgNav from "$lib/components/files/ImgNav.svelte";
+    import FileNav from "$lib/components/files/FileNav.svelte";
     import { onMount } from "svelte";
-    import Dialog from "./Dialog.svelte";
+    import Dialog from "$lib/components/Dialog.svelte";
     import { activeImage, mode } from "$lib/scripts/shared/stores";
     import closeIcon from "$lib/assets/close.svg?raw";
     import { changeImage } from "$lib/scripts/shared/utils";
-    import Info from "./Info.svelte";
+    import Info from "$lib/components/files/Info.svelte";
 
     export let files: FileResponse;
     let view: Dialog;
@@ -55,7 +55,7 @@
     <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
     <artcle tabindex="0" id="view" on:keydown={handleKeyDown}>
         <section class="one" on:wheel|stopPropagation>
-            <ImgNav {files} />
+            <FileNav {files} />
         </section>
         <section
             class="two preview"
