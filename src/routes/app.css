@@ -42,6 +42,10 @@
     --color-file-background: var(--color-white-two);
     --color-file-border: var(--color-black-light);
     --color-file-hover: var(--color-white-three);
+    --folder-width: 30rem;
+    --file-width: 20rem;
+    --file-height: 50rem;
+    --cover-height: 20rem;
 
     --color-black: #000;
     --color-black-light: #0002;
@@ -251,6 +255,9 @@ a {
         --cover-height: 9rem;
         --content-gap: 1rem;
         --content-padding: 1rem;
+        --folder-width: 14rem;
+        --file-width: 9rem;
+        --cover-height: 9rem;
     }
     h2 {
         font-size: 1.3rem;

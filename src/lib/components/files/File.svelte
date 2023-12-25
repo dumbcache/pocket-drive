@@ -58,7 +58,7 @@
         border-radius: 1rem;
         border: none;
         height: fit-content;
-        max-height: 50rem;
+        max-height: var(--file-height);
         overflow: hidden;
         cursor: zoom-in;
         background-color: var(--color-file-background);
@@ -107,7 +107,7 @@
         display: block;
         overflow: hidden;
         height: fit-content;
-        max-width: var(--img-width);
+        max-width: var(--file-width);
         border: none;
         border: 1px solid var(--color-file-border);
     }

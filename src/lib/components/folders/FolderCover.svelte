@@ -69,7 +69,7 @@
         position: relative;
         border: 1px solid var(--color-file-border);
         background-color: var(--color-file-background);
-        width: var(--dir-width);
+        width: var(--folder-width);
         height: var(--cover-height);
         display: grid;
         grid-template-rows: 60% 40%;
