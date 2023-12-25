@@ -64,7 +64,7 @@
 
 <section
     class="file-container"
-    style:display={view === "file" ? "initial" : "none"}
+    style:display={view === "FILE" ? "initial" : "none"}
 >
     {#if files && files.length > 0}
         <ol

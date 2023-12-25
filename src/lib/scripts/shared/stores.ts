@@ -5,6 +5,7 @@ export let fileStore = writable<GoogleFileResponse | undefined>();
 export let searchItems = writable<GoogleFile[] | undefined>();
 
 export let isLoggedin = writable(false);
+export let activeView = writable<"FILE" | "FOLDER">("FOLDER");
 
 export let activeTimeout = writable(0);
 export let sessionTimeout = writable(false);

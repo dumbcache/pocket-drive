@@ -62,7 +62,7 @@
 
 <section
     class="folder-container"
-    style:display={view === "folder" ? "initial" : "none"}
+    style:display={view === "FOLDER" ? "initial" : "none"}
 >
     {#if folders && folders.length > 0}
         <ol class="list" bind:this={container}>

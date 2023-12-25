@@ -1,5 +1,5 @@
 <script lang="ts">
-    import Tools from "$lib/components/actions/Tools.svelte";
+    import Tools from "$lib/components/Tools.svelte";
     import BackButton from "$lib/components/buttons/BackButton.svelte";
 </script>
 

@@ -19,7 +19,7 @@
     let mimeType: string;
     let status = "";
     $: status =
-        view === "folder"
+        view === "FOLDER"
             ? $folderStore?.nextPageToken
                 ? ""
                 : "completed"

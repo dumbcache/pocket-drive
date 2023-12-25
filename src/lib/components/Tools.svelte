@@ -1,0 +1,124 @@
+<script lang="ts">
+    import imgCreate from "$lib/assets/imgCreate.svg?raw";
+    import goToDrive from "$lib/assets/drive.svg?raw";
+    import folderCreate from "$lib/assets/folderCreate.svg?raw";
+    import { previewAndSetDropItems } from "$lib/scripts/shared/image";
+    import {
+        activeParent,
+        folderActionToggle,
+        activeView,
+    } from "$lib/scripts/shared/stores";
+    import History from "$lib/components/actions/History.svelte";
+    import FolderAction from "$lib/components/folders/FolderAction.svelte";
+    import editIcon from "$lib/assets/editMode.svg?raw";
+    import { editMode, mode } from "$lib/scripts/stores";
+    import folderIcon from "$lib/assets/folder.svg?raw";
+    import fileIcon from "$lib/assets/file.svg?raw";
+
+    let view: "FILE" | "FOLDER";
+    function imgPickerHandler(e: InputEvent) {
+        e.preventDefault();
+        const target = e.target as HTMLInputElement;
+        if (target.files) {
+            previewAndSetDropItems(target.files);
+        }
+    }
+
+    activeView.subscribe((data) => (view = data));
+</script>
+
+<div class="tools">
+    <button
+        class=""
+        on:click={() => ($activeView = "FOLDER")}
+        class:active={view === "FOLDER"}
+    >
+        <span class="btn">
+            {@html folderIcon}
+        </span>
+    </button>
+    <button
+        class=""
+        on:click={() => ($activeView = "FILE")}
+        class:active={view === "FILE"}
+        ><span class="btn">
+            {@html fileIcon}
+        </span>
+    </button>
+    <hr class="hr" />
+    <button
+        class="edit-button btn"
+        title="edit mode"
+        on:click={() => {
+            $editMode = true;
+            $mode = "select";
+        }}
+    >
+        {@html editIcon}
+    </button>
+
+    <History />
+    <button class="btn img-picker">
+        <label for="img-picker" class="button__create-img" title="add images">
+            {@html imgCreate}
+        </label>
+        <input
+            type="file"
+            name="img-picker"
+            id="img-picker"
+            accept="image/*"
+            multiple
+            on:change={imgPickerHandler}
+        />
+    </button>
+    <button
+        class="folder-button btn"
+        title="create folder"
+        on:click={() => ($folderActionToggle = !$folderActionToggle)}
+    >
+        {@html folderCreate}
+    </button>
+    <a
+        href={`https://drive.google.com/drive/folders/${$activeParent.id}`}
+        referrerpolicy="no-referrer"
+        rel="external noopener noreferrer nofollow"
+        class="drive-button btn"
+        title="open in Gdrive"
+        target="_blank"
+    >
+        {@html goToDrive}
+    </a>
+
+    {#if $folderActionToggle}
+        <FolderAction
+            type="create"
+            on:close={() => ($folderActionToggle = false)}
+        />
+    {/if}
+</div>
+
+<style>
+    .tools {
+        display: flex;
+        flex-flow: column nowrap;
+        gap: 1rem;
+    }
+    #img-picker {
+        display: none;
+    }
+    .img-picker * {
+        cursor: pointer;
+    }
+    .hr {
+        margin: 1rem 0rem;
+    }
+    .active {
+        /* background-color: var(--bg-color-three); */
+        border-left: 5px solid var(--color-focus);
+    }
+    @media (max-width: 600px) {
+        .tools {
+            flex-flow: row nowrap;
+        }
+    }
+</style>
