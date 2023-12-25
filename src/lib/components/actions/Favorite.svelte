@@ -2,6 +2,7 @@
     import { updateResource } from "$lib/scripts/gdrive/utils";
     import favoriteIcon from "$lib/assets/favorite.svg?raw";
     import { createEventDispatcher } from "svelte";
+    import { getToken } from "$lib/scripts/shared/utils";
 
     export let id: string;
     export let starred: Boolean;
@@ -15,13 +16,11 @@
 <button
     class="btn {starred && 'starred'}"
     on:click|stopPropagation={() => {
-        updateResource(
-            id,
-            { starred: !starred },
-            window.localStorage.getItem("token")
-        ).then(({ status }) => {
-            if (status === 200) favStatus();
-        });
+        updateResource(id, { starred: !starred }, getToken()).then(
+            ({ status }) => {
+                if (status === 200) favStatus();
+            }
+        );
     }}
 >
     {@html favoriteIcon}

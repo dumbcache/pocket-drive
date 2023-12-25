@@ -56,7 +56,9 @@
         <div class="pic-wrapper placeholder" />
         <div class="pic-wrapper placeholder" />
     {/if}
-    <EditTool type="dir" {id} {name} on:editDir on:deleteDir />
+    <div class="edit">
+        <EditTool type="dir" {id} {name} on:editDir on:deleteDir />
+    </div>
     <div class="favorite">
         <Favorite {id} {starred} on:favStatus />
     </div>
@@ -117,9 +119,26 @@
         right: 1rem;
         bottom: 1rem;
         /* opacity: 0; */
-        transition: opacity 0.3s linear;
         width: var(--size-small);
         height: var(--size-small);
+    }
+    .edit {
+        padding: 0.5rem 0.2rem;
+        position: absolute;
+        top: 0.5rem;
+        right: 0.5rem;
+        height: 4rem;
+    }
+
+    .favorite,
+    .edit {
+        opacity: 0;
+        transition: opacity 0.3s linear;
+    }
+
+    .cover:hover .favorite,
+    .cover:hover .edit {
+        opacity: 1;
     }
     /* .favorite :global(svg) {
         fill: var(--primary-bg-color);
@@ -128,6 +147,13 @@
         outline: 1px solid var(--color-focus);
     }
     @media (max-width: 600px) {
+        .favorite,
+        .edit {
+            opacity: 1;
+        }
+        .cover .pic {
+            filter: brightness(0.8);
+        }
         .favorite {
             right: 0.5rem;
             bottom: 0.5rem;
