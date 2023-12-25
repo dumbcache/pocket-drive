@@ -8,11 +8,11 @@
     import Info from "$lib/components/files/Info.svelte";
 
     export let files: FileResponse;
-    let view: Dialog;
+    let dialog: Dialog;
     let infoVisible = false;
 
     onMount(() => {
-        view.show();
+        dialog.show();
     });
 
     function handleKeyDown(e: KeyboardEvent) {
@@ -47,11 +47,11 @@
 
     function handleViewClose() {
         $mode = "";
-        view.close();
+        dialog.close();
     }
 </script>
 
-<Dialog bind:this={view}>
+<Dialog bind:this={dialog}>
     <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
     <artcle tabindex="0" id="view" on:keydown={handleKeyDown}>
         <section class="one" on:wheel|stopPropagation>
@@ -81,7 +81,7 @@
             </section>
         {/if}
     </artcle>
-    <button class="btn view-close" on:click={handleViewClose}
+    <button class="btn close" on:click={handleViewClose}
         >{@html closeIcon}</button
     >
 </Dialog>
@@ -131,7 +131,7 @@
         object-fit: contain;
         object-position: center;
     }
-    .view-close {
+    .close {
         position: absolute;
         top: 2rem;
         right: 2rem;
@@ -153,7 +153,7 @@
         .info-toggle {
             /* display: none; */
         }
-        .view-close {
+        .close {
             top: 0.5rem;
             right: 0.5rem;
         }

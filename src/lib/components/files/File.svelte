@@ -25,7 +25,7 @@
             on:error={() => (visible = false)}
         />
         <button class="anchor">.</button>
-        {#if $mode === ""}
+        {#if $mode !== "edit"}
             {#if file.appProperties?.origin || file.description}
                 <a
                     href={isValidUrl(file.appProperties?.origin) ||

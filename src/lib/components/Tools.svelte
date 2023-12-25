@@ -11,7 +11,7 @@
     import History from "$lib/components/actions/History.svelte";
     import FolderAction from "$lib/components/folders/FolderAction.svelte";
     import editIcon from "$lib/assets/editMode.svg?raw";
-    import { editMode, mode } from "$lib/scripts/stores";
+    import { mode } from "$lib/scripts/shared/stores";
     import folderIcon from "$lib/assets/folder.svg?raw";
     import fileIcon from "$lib/assets/file.svg?raw";
 
@@ -47,8 +47,7 @@
         class="edit-button btn"
         title="edit mode"
         on:click={() => {
-            $editMode = true;
-            $mode = "select";
+            $mode = "edit";
         }}
     >
         {@html editIcon}

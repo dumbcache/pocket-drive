@@ -26,6 +26,8 @@
     #dialog {
         height: 100%;
         width: 100%;
+        color: inherit;
+        background-color: inherit;
         background-color: #12121205;
         backdrop-filter: blur(50px);
         border: none;

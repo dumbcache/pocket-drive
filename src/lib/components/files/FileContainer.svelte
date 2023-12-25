@@ -1,9 +1,10 @@
 <script lang="ts">
     import { onDestroy } from "svelte";
     import { fileStore, mode } from "$lib/scripts/shared/stores";
-    import File from "./File.svelte";
+    import File from "$lib/components/files/File.svelte";
+    import View from "$lib/components/files/View.svelte";
+    import Edit from "$lib/components/files/Edit.svelte";
     import { navigating } from "$app/stores";
-    import View from "./View.svelte";
     import { handleImageClick } from "$lib/scripts/shared/handlers";
 
     export let view: string;
@@ -86,6 +87,10 @@
 
     {#if $mode === "view"}
         <View {files} />
+    {/if}
+
+    {#if $mode === "edit"}
+        <Edit {files} />
     {/if}
 </section>
 
