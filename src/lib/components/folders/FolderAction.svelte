@@ -2,12 +2,13 @@
     import { createEventDispatcher, onDestroy, onMount } from "svelte";
     import doneIcon from "$lib/assets/done.svg?raw";
     import progressIcon from "$lib/assets/progress.svg?raw";
-    import { activeParentId } from "$lib/scripts/stores";
+    import { activeParent } from "$lib/scripts/shared/stores";
     import {
-        createDir,
-        updateDir,
-        deleteDir,
+        createFolder,
+        deleteFolder,
+        updateFolder,
     } from "$lib/scripts/gdrive/folder";
+    import { getToken } from "$lib/scripts/shared/utils";
 
     const confirmText = "confirm";
     export let type: "create" | "update" | "delete";
@@ -19,28 +20,28 @@
     let progress = false;
 
     const dispatch = createEventDispatcher();
-    function dispatchClose(ctx: string, detail?: any) {
+    function closeAction(ctx: string, detail?: any) {
         dispatch(ctx, detail);
     }
-    async function dirActionHandler() {
+    async function actionHandler() {
         progress = true;
-        const token = window.localStorage.getItem("token")!;
+        const token = getToken();
         let dirName = placeholder
             .split(" ")
             .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
             .join(" ");
         type !== "delete" && (placeholder = dirName);
         if (type === "create") {
-            await createDir(dirName, $activeParentId, token);
-            dispatchClose("dirCreateClose");
+            await createFolder(dirName, $activeParent.id, token);
+            closeAction("close");
         }
         if (type === "update") {
-            await updateDir(dirName, id, $activeParentId, token);
-            dispatchClose("dirUpdateClose");
+            await updateFolder(dirName, id, $activeParent.id, token);
+            closeAction("close");
         }
         if (type === "delete") {
-            await deleteDir(id, $activeParentId, token);
-            dispatchClose("dirDeleteClose");
+            await deleteFolder(id, $activeParent.id, token);
+            closeAction("close");
         }
     }
     function checkDisabled() {
@@ -67,10 +68,9 @@
 
 <form
     class="create"
-    on:click={() =>
-        dispatchClose(type === "create" ? "dirCreateClose" : "dirUpdateClose")}
+    on:click={() => closeAction("close")}
     on:keypress|stopPropagation
-    on:submit|preventDefault={dirActionHandler}
+    on:submit|preventDefault={actionHandler}
 >
     <label
         class="wrapper"
@@ -107,7 +107,7 @@
 
 <style>
     .create {
-        color: var(--color-white-level-two);
+        /* color: var(--color-white-level-two); */
         position: fixed;
         top: 0;
         bottom: 0;
@@ -115,7 +115,7 @@
         left: 0;
         display: grid;
         place-content: center;
-        background-color: var(--primary-backdrop-color);
+        /* background-color: var(--primary-backdrop-color); */
         backdrop-filter: blur(1rem);
         -webkit-backdrop-filter: blur(1rem);
         z-index: 2;

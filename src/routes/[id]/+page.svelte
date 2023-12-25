@@ -1,7 +1,6 @@
 <script lang="ts">
     import Dirs from "$lib/components/dirs/Dirs.svelte";
     import Imgs from "$lib/components/imgs/Imgs.svelte";
-    import DirCreate from "$lib/components/actions/DirCreate.svelte";
     import { onDestroy, onMount } from "svelte";
     import { getInfo } from "$lib/scripts/gdrive/utils";
     import { childWorker } from "$lib/scripts/utils";

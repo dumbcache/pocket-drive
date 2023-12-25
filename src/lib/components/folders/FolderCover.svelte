@@ -80,9 +80,9 @@
         cursor: pointer;
     }
 
-    /* .cover:hover {
-        background-color: var(--content-background-color-hover);
-    } */
+    .cover:hover {
+        outline: 1px solid var(--color-focus);
+    }
     .cover:hover .pic {
         filter: brightness(0.5);
         background-color: var(--color-file-hover);

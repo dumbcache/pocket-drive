@@ -1,5 +1,6 @@
 <script lang="ts">
     import linkIcon from "$lib/assets/link.svg?raw";
+    import urlIcon from "$lib/assets/url.svg?raw";
     import { isValidUrl } from "$lib/scripts/shared/utils";
     import { mode } from "$lib/scripts/shared/stores";
     import Favorite from "../actions/Favorite.svelte";
@@ -29,16 +30,16 @@
                 <a
                     href={isValidUrl(file.appProperties?.origin) ||
                         isValidUrl(file.description)}
-                    class="img-link"
+                    class="img-link btn"
                     referrerpolicy="no-referrer"
                     rel="external noopener noreferrer nofollow"
                     on:click|stopPropagation
                 >
-                    {@html linkIcon}
+                    {@html urlIcon}
                 </a>
             {/if}
 
-            <span class="favorite">
+            <span class="favorite btn">
                 <Favorite
                     id={file.id}
                     starred={file.starred}
@@ -62,6 +63,9 @@
         cursor: zoom-in;
         background-color: var(--color-file-background);
     }
+    .card:hover {
+        outline: 1px solid var(--color-focus);
+    }
     .edit-mode {
         cursor: pointer;
     }
@@ -79,9 +83,10 @@
         right: 0.5rem;
         opacity: 0;
         transition: opacity 0.3s linear;
-        width: var(--size-small);
-        height: var(--size-small);
-        filter: none;
+        /* width: var(--size-small);
+        height: var(--size-small); */
+        /* filter: none; */
+        padding: 0.5rem;
     }
     .favorite {
         bottom: 0.5rem;
@@ -95,7 +100,7 @@
     }
     .img-link :global(svg) {
         fill: var(--color-white);
-        filter: none;
+        /* filter: none; */
     }
 
     .img {

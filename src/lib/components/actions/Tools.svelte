@@ -13,19 +13,21 @@
     import {
         activeDirs,
         activeImgs,
-        activeParentId,
         dropMini,
         favoritesActive,
         mode,
         previewItem,
         refreshClicked,
         reverseActive,
-        dirCreateToggle,
     } from "$lib/scripts/stores";
-    import DirCreate from "$lib/components/actions/DirCreate.svelte";
+    import {
+        activeParent,
+        folderActionToggle,
+    } from "$lib/scripts/shared/stores";
     import { refreshCache } from "$lib/scripts/gdrive/utils";
     import EditIcon from "$lib/components/actions/EditIcon.svelte";
     import History from "$lib/components/actions/History.svelte";
+    import FolderAction from "$lib/components/folders/FolderAction.svelte";
 
     function imgPickerHandler(e: InputEvent) {
         e.preventDefault();
@@ -96,24 +98,25 @@
     <button
         class="folder-button btn"
         title="create folder"
-        on:click={() => ($dirCreateToggle = !$dirCreateToggle)}
+        on:click={() => ($folderActionToggle = !$folderActionToggle)}
     >
         {@html folderCreate}
     </button>
     <a
-        href={`https://drive.google.com/drive/folders/${$activeParentId}`}
+        href={`https://drive.google.com/drive/folders/${$activeParent.id}`}
         referrerpolicy="no-referrer"
         rel="external noopener noreferrer nofollow"
         class="drive-button btn"
         title="open in Gdrive"
+        target="_blank"
     >
         {@html goToDrive}
     </a>
 
-    {#if $dirCreateToggle}
-        <DirCreate
+    {#if $folderActionToggle}
+        <FolderAction
             type="create"
-            on:dirCreateClose={() => ($dirCreateToggle = false)}
+            on:close={() => ($folderActionToggle = false)}
         />
     {/if}
 </div>

@@ -29,7 +29,6 @@
 
 <style>
     .btn {
-        filter: none;
         display: flex;
         align-items: center;
         justify-content: center;

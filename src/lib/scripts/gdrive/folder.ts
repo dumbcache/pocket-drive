@@ -4,7 +4,7 @@ import { fetchFiles } from "$lib/scripts/gdrive/utils";
 import { sessionTimeout } from "../shared/stores";
 import { activeDirs } from "../stores";
 
-export const createDir = async (
+export const createFolder = async (
     name: string,
     parent: string,
     token: string
@@ -40,7 +40,7 @@ export const createDir = async (
     fetchFiles(parent, "dirs", 1000, true);
 };
 
-export const updateDir = async (
+export const updateFolder = async (
     name: string,
     id: string,
     parent: string,
@@ -56,7 +56,7 @@ export const updateDir = async (
     fetchFiles(parent, "dirs", 1000, true);
 };
 
-export const deleteDir = async (
+export const deleteFolder = async (
     id: string,
     parent: string,
     token: string
