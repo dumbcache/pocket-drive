@@ -101,8 +101,8 @@
         /* border: 1px solid red; */
     }
     .one {
-        min-width: 10%;
-        max-width: 15%;
+        min-width: 10rem;
+        max-width: 20rem;
         overflow: auto;
         scroll-behavior: smooth;
         padding: 0rem 2rem;
