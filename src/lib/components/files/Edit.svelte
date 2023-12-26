@@ -68,7 +68,7 @@
             {#each files as file}
                 <img
                     src={file.thumbnailLink}
-                    alt="thumbnail to link"
+                    alt=""
                     height="150"
                     width="200"
                     data-id={file.id}
@@ -84,12 +84,9 @@
     .count {
         font-size: 1.3rem;
         min-width: 5rem;
-        block-size: 100%;
         border: 1px solid var(--color-file-border);
         border-right: 5px solid var(--color-light-blue);
-        /* text-align: right; */
         padding: 0.5rem;
-        /* background-color: var(--color-three); */
     }
 
     .wrapper {
@@ -137,6 +134,7 @@
         display: flex;
         flex-flow: row nowrap;
         justify-content: flex-end;
+        align-items: center;
         gap: 2rem;
     }
     .close {
@@ -150,6 +148,12 @@
         .close {
             top: 0.5rem;
             right: 0.5rem;
+        }
+        .edit-buttons {
+            padding-top: 0rem;
+            gap: 1rem;
+        }
+        .count {
         }
     }
 </style>

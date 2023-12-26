@@ -188,8 +188,8 @@ button {
 
 .btn {
     display: inline-block;
-    width: var(--primary-icon-size);
-    height: var(--primary-icon-size);
+    min-width: var(--primary-icon-size);
+    min-height: var(--primary-icon-size);
 }
 
 .btn svg,

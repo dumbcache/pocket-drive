@@ -84,15 +84,15 @@
         </ol>
         <div id="file-foot" bind:this={foot}></div>
     {/if}
-
-    {#if $mode === "view"}
-        <View {files} />
-    {/if}
-
-    {#if $mode === "edit"}
-        <Edit {files} />
-    {/if}
 </section>
+
+{#if $mode === "view"}
+    <View {files} />
+{/if}
+
+{#if $mode === "edit"}
+    <Edit {files} />
+{/if}
 
 <style>
     .file-container {

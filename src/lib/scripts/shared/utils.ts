@@ -7,6 +7,7 @@ import {
     sessionTimeout,
     activeImage,
     mode,
+    activeView,
 } from "$lib/scripts/shared/stores";
 import ChildWorker from "$lib/scripts/worker.ts?worker";
 
@@ -198,6 +199,11 @@ if (browser) {
         switch (e.key) {
             case "Escape":
                 mode.set("");
+                return;
+            case "e":
+                activeView.update((prev) =>
+                    prev === "FOLDER" ? "FILE" : "FOLDER"
+                );
                 return;
         }
     });

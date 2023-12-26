@@ -50,6 +50,7 @@
                 {@html beforeNavigate}
             </button>
         {/if}
+
         <p class="count" title="count">
             {view === "FOLDER"
                 ? $folderStore?.files.length
@@ -65,8 +66,6 @@
         gap: 2rem;
         font-size: 1.3rem;
         min-width: 5rem;
-        /* background-color: var(--bg-color-three); */
-        block-size: 100%;
         border: 1px solid var(--color-file-border);
         border-left: 5px solid var(--color-light-blue);
         text-align: right;
@@ -107,10 +106,10 @@
 
     @media (max-width: 600px) {
         .wrapper {
-            padding: 1rem;
+            padding: 0rem 0.5rem;
         }
         .nav {
-            margin-bottom: 2rem;
+            padding: 1rem;
         }
         .back-button {
             margin-left: 0rem;

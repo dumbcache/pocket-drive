@@ -32,5 +32,7 @@
         backdrop-filter: blur(50px);
         border: none;
         outline: none;
+        /* margin: 0; */
+        padding: 2rem;
     }
 </style>
