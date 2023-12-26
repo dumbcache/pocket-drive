@@ -48,6 +48,7 @@
                 class="back-button btn"
                 on:click={() => {
                     history.back();
+                    $activeView = "FOLDER";
                 }}
             >
                 {@html beforeNavigate}

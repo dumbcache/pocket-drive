@@ -71,6 +71,7 @@
     on:click={() => closeAction("close")}
     on:keypress|stopPropagation
     on:submit|preventDefault={actionHandler}
+    on:wheel|preventDefault
 >
     <label
         class="wrapper"

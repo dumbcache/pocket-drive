@@ -43,39 +43,46 @@
         {@html fileIcon}
     </button>
     <hr class="hr" />
-    <button
-        class="edit-button btn"
-        title="edit mode"
-        on:click={() => {
-            $mode = "edit";
-        }}
-    >
-        {@html editIcon}
-    </button>
 
-    <button class="history-button btn">
-        {@html historyIcon}
-    </button>
-    <button class="btn img-picker">
-        <label for="img-picker" class="button__create-img" title="add images">
-            {@html imgCreate}
-        </label>
-        <input
-            type="file"
-            name="img-picker"
-            id="img-picker"
-            accept="image/*"
-            multiple
-            on:change={imgPickerHandler}
-        />
-    </button>
-    <button
-        class="folder-button btn"
-        title="create folder"
-        on:click={() => ($folderActionToggle = !$folderActionToggle)}
-    >
-        {@html folderCreate}
-    </button>
+    {#if $activeView === "FILE"}
+        <button
+            class="edit-button btn"
+            title="edit mode"
+            on:click={() => {
+                $mode = "edit";
+            }}
+        >
+            {@html editIcon}
+        </button>
+        <button class="btn img-picker">
+            <label
+                for="img-picker"
+                class="button__create-img"
+                title="add images"
+            >
+                {@html imgCreate}
+            </label>
+            <input
+                type="file"
+                name="img-picker"
+                id="img-picker"
+                accept="image/*"
+                multiple
+                on:change={imgPickerHandler}
+            />
+        </button>
+    {:else}
+        <button class="history-button btn">
+            {@html historyIcon}
+        </button>
+        <button
+            class="folder-button btn"
+            title="create folder"
+            on:click={() => ($folderActionToggle = !$folderActionToggle)}
+        >
+            {@html folderCreate}
+        </button>
+    {/if}
     <a
         href={`https://drive.google.com/drive/folders/${$activeParent.id}`}
         referrerpolicy="no-referrer"
@@ -115,7 +122,7 @@
     }
 
     .active :global(svg) {
-        padding: 0.2rem;
+        padding: 0.1rem;
     }
     .view {
         position: relative;
@@ -135,12 +142,12 @@
         button.active::before {
             width: 100%;
             height: 10%;
-            border: 2px solid red;
+            border: 1px solid red;
             top: unset;
             bottom: 0;
             left: 0;
         }
-        hr {
+        .hr {
             transform: rotate(90deg);
             height: 2px;
             width: 2rem;

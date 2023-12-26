@@ -6,7 +6,11 @@
         fetchMultiple,
         IMG_MIME_TYPE,
     } from "$lib/scripts/gdrive/utils";
-    import { fileStore, folderStore } from "$lib/scripts/shared/stores";
+    import {
+        activeParent,
+        fileStore,
+        folderStore,
+    } from "$lib/scripts/shared/stores";
     import { getToken } from "$lib/scripts/shared/utils";
     import { activeParentId } from "$lib/scripts/stores";
     import { onMount } from "svelte";
@@ -48,7 +52,7 @@
                         if (nextPageToken) {
                             fetchMultiple(
                                 {
-                                    parent: $activeParentId,
+                                    parent: $activeParent.id,
                                     mimeType: mimeType,
                                     pageToken: nextPageToken,
                                 },

@@ -22,11 +22,8 @@
     } from "$lib/scripts/stores";
     import BackButton from "$lib/components/buttons/BackButton.svelte";
     import { onMount } from "svelte";
-    import Search from "$lib/components/actions/Search.svelte";
-    import Confirm from "$lib/components/actions/Confirm.svelte";
     import { goto } from "$app/navigation";
     import Move from "$lib/components/actions/Move.svelte";
-    import EditUrl from "$lib/components/actions/EditUrl.svelte";
     import Shortcuts from "$lib/components/Shortcuts.svelte";
     import {
         checkRefreshTimeout,
@@ -34,7 +31,6 @@
     } from "$lib/scripts/shared/utils";
     import { googleClient } from "$lib/scripts/login";
     import type Dialog from "$lib/components/Dialog.svelte";
-    import Main from "$lib/components/Content.svelte";
     import Spinner from "$lib/components/Spinner.svelte";
     import { dropItems } from "$lib/scripts/shared/stores";
 

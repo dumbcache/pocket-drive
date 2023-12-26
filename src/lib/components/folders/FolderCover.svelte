@@ -1,6 +1,6 @@
 <script lang="ts">
     import { IMG_MIME_TYPE, fetchMultiple } from "$lib/scripts/gdrive/utils";
-    import EditTool from "$lib/components/actions/EditTool.svelte";
+    import Actions from "$lib/components/folders/Actions.svelte";
     import Favorite from "$lib/components/actions/Favorite.svelte";
     import { getToken } from "$lib/scripts/shared/utils";
     import { previewAndSetDropItems } from "$lib/scripts/shared/image";
@@ -57,7 +57,7 @@
         <div class="pic-wrapper placeholder" />
     {/if}
     <div class="edit">
-        <EditTool type="dir" {id} {name} on:editDir on:deleteDir />
+        <Actions type="dir" {id} {name} on:edit on:delete />
     </div>
     <div class="favorite">
         <Favorite {id} {starred} on:favStatus />

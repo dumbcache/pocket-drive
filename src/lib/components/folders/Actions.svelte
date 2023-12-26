@@ -11,10 +11,10 @@
 
     const dispatch = createEventDispatcher();
     function editHandler() {
-        dispatch("editDir", { id, name });
+        dispatch("edit", { id, name });
     }
     function deleteHandler() {
-        dispatch("deleteDir", { id });
+        dispatch("delete", { id });
     }
 </script>
 
