@@ -15,9 +15,6 @@
 
 <header class="header">
     <div class="title-wrapper">
-        <button class="btn menu">
-            {@html menuButton}
-        </button>
         <button class="btn home" on:click={goHome}>
             {@html homeButton}
         </button>

@@ -8,12 +8,12 @@
         folderActionToggle,
         activeView,
     } from "$lib/scripts/shared/stores";
-    import History from "$lib/components/actions/History.svelte";
     import FolderAction from "$lib/components/folders/FolderAction.svelte";
     import editIcon from "$lib/assets/editMode.svg?raw";
     import { mode } from "$lib/scripts/shared/stores";
     import folderIcon from "$lib/assets/folder.svg?raw";
     import fileIcon from "$lib/assets/file.svg?raw";
+    import historyIcon from "$lib/assets/history.svg?raw";
 
     let view: "FILE" | "FOLDER";
     function imgPickerHandler(e: InputEvent) {
@@ -29,14 +29,14 @@
 
 <div class="tools">
     <button
-        class="view"
+        class="view btn"
         on:click={() => ($activeView = "FOLDER")}
         class:active={view === "FOLDER"}
     >
         {@html folderIcon}
     </button>
     <button
-        class="view"
+        class="view btn"
         on:click={() => ($activeView = "FILE")}
         class:active={view === "FILE"}
     >
@@ -53,7 +53,9 @@
         {@html editIcon}
     </button>
 
-    <History />
+    <button class="history-button btn">
+        {@html historyIcon}
+    </button>
     <button class="btn img-picker">
         <label for="img-picker" class="button__create-img" title="add images">
             {@html imgCreate}
@@ -97,8 +99,10 @@
     .tools {
         display: flex;
         flex-flow: column nowrap;
+        align-items: center;
         gap: 1rem;
     }
+
     #img-picker {
         display: none;
     }
@@ -107,6 +111,7 @@
     }
     .hr {
         margin: 1rem 0rem;
+        width: 100%;
     }
 
     .active :global(svg) {
@@ -126,6 +131,20 @@
     @media (max-width: 600px) {
         .tools {
             flex-flow: row nowrap;
+        }
+        button.active::before {
+            width: 100%;
+            height: 10%;
+            border: 2px solid red;
+            top: unset;
+            bottom: 0;
+            left: 0;
+        }
+        hr {
+            transform: rotate(90deg);
+            height: 2px;
+            width: 2rem;
+            color: var(--color-black-light);
         }
     }
 </style>

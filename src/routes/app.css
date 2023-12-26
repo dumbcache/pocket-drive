@@ -248,7 +248,7 @@ a {
 @media (max-width: 600px) {
     :root {
         --title-size: var(--size-small);
-        --primary-icon-size: var(--size-small);
+        --primary-icon-size: var(--size-default);
         --secondary-icon-size: var(--size-default);
         --dir-width: 14rem;
         --img-width: 9rem;

@@ -69,7 +69,13 @@ export function checkLoginStatus() {
     }
 }
 
+export function signUserOut() {
+    clearFiles();
+    console.info("logging user out");
+}
+
 export async function clearFiles() {
+    childWorker.postMessage({ context: "CLEAR_IMAGE_CACHE" });
     (await caches.keys()).forEach(
         (key) => key.startsWith("pd-") && caches.delete(key)
     );

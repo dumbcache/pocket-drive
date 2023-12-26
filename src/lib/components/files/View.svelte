@@ -53,7 +53,12 @@
 
 <Dialog bind:this={dialog}>
     <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
-    <artcle tabindex="0" id="view" on:keydown={handleKeyDown}>
+    <artcle
+        tabindex="0"
+        id="view"
+        on:keydown={handleKeyDown}
+        on:dragstart|preventDefault
+    >
         <section class="one" on:wheel|stopPropagation>
             <FileNav {files} />
         </section>

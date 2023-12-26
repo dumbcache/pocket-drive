@@ -146,6 +146,7 @@
         .favorite {
             width: var(--size-default);
             height: var(--size-default);
+            padding: 0rem;
         }
         .placeholder {
             width: 30vw;

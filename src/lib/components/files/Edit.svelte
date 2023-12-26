@@ -86,7 +86,7 @@
         min-width: 5rem;
         border: 1px solid var(--color-file-border);
         border-right: 5px solid var(--color-light-blue);
-        padding: 0.5rem;
+        padding: 0.2rem;
     }
 
     .wrapper {
@@ -116,8 +116,8 @@
         filter: brightness(0.8);
     }
     .select {
-        border: 2px solid var(--color-light-blue);
-        border-bottom: 5px solid var(--color-light-blue);
+        /* border: 1px solid var(--color-light-blue); */
+        border-bottom: 3px solid var(--color-light-blue);
         filter: none;
         /* margin: 2rem; */
         /* filter: brightness(0.5); */
@@ -151,9 +151,12 @@
         }
         .edit-buttons {
             padding-top: 0rem;
-            gap: 1rem;
+            /* gap: 1rem; */
         }
         .count {
+        }
+        img {
+            max-width: calc(var(--file-width) - 1rem);
         }
     }
 </style>

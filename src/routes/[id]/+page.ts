@@ -6,7 +6,11 @@ import {
     getRoot,
     loadAll,
 } from "$lib/scripts/gdrive/utils";
-import { checkLoginStatus, getToken } from "$lib/scripts/shared/utils";
+import {
+    checkLoginStatus,
+    clearFiles,
+    getToken,
+} from "$lib/scripts/shared/utils";
 import { activeParentId, activeParentName } from "$lib/scripts/stores";
 import { goto } from "$app/navigation";
 import {
@@ -27,6 +31,7 @@ export const load = (async ({ params, fetch }) => {
     if (browser) {
         if (!checkLoginStatus()) {
             isLoggedin.set(false);
+            clearFiles();
             goto("/");
             return;
         }
