@@ -7,8 +7,9 @@
         activeParent,
         folderActionToggle,
         activeView,
+        folderAction,
     } from "$lib/scripts/shared/stores";
-    import FolderAction from "$lib/components/folders/FolderAction.svelte";
+    import ActionForm from "$lib/components/folders/ActionForm.svelte";
     import editIcon from "$lib/assets/editMode.svg?raw";
     import { mode } from "$lib/scripts/shared/stores";
     import folderIcon from "$lib/assets/folder.svg?raw";
@@ -22,6 +23,9 @@
         if (target.files) {
             previewAndSetDropItems(target.files);
         }
+    }
+    function folderActionClose() {
+        folderACtion = undefined;
     }
 
     activeView.subscribe((data) => (view = data));
@@ -78,7 +82,7 @@
         <button
             class="folder-button btn"
             title="create folder"
-            on:click={() => ($folderActionToggle = !$folderActionToggle)}
+            on:click={() => ($folderAction = "CREATE")}
         >
             {@html folderCreate}
         </button>
@@ -93,13 +97,6 @@
     >
         {@html goToDrive}
     </a>
-
-    {#if $folderActionToggle}
-        <FolderAction
-            type="create"
-            on:close={() => ($folderActionToggle = false)}
-        />
-    {/if}
 </div>
 
 <style>

@@ -49,6 +49,14 @@ export function isValidUrl(url: string) {
     }
 }
 
+export function toTitleCase(str) {
+    return str
+        .toLowerCase()
+        .replace(/\b\w/g, (char) => char.toUpperCase())
+        .replace(/\s+/g, " ")
+        .trim();
+}
+
 export function getToken() {
     return window.localStorage.getItem("token") as string;
 }

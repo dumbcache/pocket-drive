@@ -1,7 +1,5 @@
 <script lang="ts">
-    import Nav from "$lib/components/Nav.svelte";
     import Header from "$lib/components/Header.svelte";
-    import Preview from "$lib/components/Preview.svelte";
     import Drop from "$lib/components/Drop.svelte";
     import {
         previewAndSetDropItems,
@@ -11,28 +9,17 @@
     } from "$lib/scripts/utils";
     import {
         autosave,
-        dropFull,
         dropMini,
-        editMode,
-        mode,
         previewItem,
         refreshClicked,
-        sessionTimeout,
-        shortcuts,
     } from "$lib/scripts/stores";
-    import BackButton from "$lib/components/buttons/BackButton.svelte";
     import { onMount } from "svelte";
-    import { goto } from "$app/navigation";
-    import Move from "$lib/components/actions/Move.svelte";
-    import Shortcuts from "$lib/components/Shortcuts.svelte";
     import {
         checkRefreshTimeout,
         checkSessionTimeout,
     } from "$lib/scripts/shared/utils";
-    import { googleClient } from "$lib/scripts/login";
     import type Dialog from "$lib/components/Dialog.svelte";
     import Spinner from "$lib/components/Spinner.svelte";
-    import { dropItems } from "$lib/scripts/shared/stores";
 
     let dialog: Dialog;
     let draggedOver = false;

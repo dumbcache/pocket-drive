@@ -4,17 +4,17 @@
     import deleteIcon from "$lib/assets/delete.svg?raw";
     import moveIcon from "$lib/assets/moveOutline.svg?raw";
     import { createEventDispatcher } from "svelte";
+    import {
+        folderAction,
+        folderActionDetail,
+    } from "$lib/scripts/shared/stores";
 
-    export let type: "dir" | "img";
     export let id: string;
     export let name: string;
 
-    const dispatch = createEventDispatcher();
-    function editHandler() {
-        dispatch("edit", { id, name });
-    }
-    function deleteHandler() {
-        dispatch("delete", { id });
+    function handler(type) {
+        $folderAction = type;
+        $folderActionDetail = { id, name };
     }
 </script>
 
@@ -24,22 +24,22 @@
     </button>
     <button
         class="btn action"
-        title="edit"
-        on:click|stopPropagation={editHandler}
+        title="edit folder"
+        on:click|stopPropagation={() => handler("EDIT")}
     >
         {@html editIcon}
     </button>
     <button
         class="btn action"
-        title="move"
-        on:click|stopPropagation={editHandler}
+        title="move folder"
+        on:click|stopPropagation={() => handler("MOVE")}
     >
         {@html moveIcon}
     </button>
     <button
         class="btn action"
-        title="delete"
-        on:click|stopPropagation={deleteHandler}
+        title="delete folder"
+        on:click|stopPropagation={() => handler("DELETE")}
     >
         {@html deleteIcon}
     </button>
@@ -89,6 +89,7 @@
         opacity: 0;
         transition: opacity 0.5s linear;
     }
+
     @media (max-width: 600px) {
         .edit-tools {
             top: 0;

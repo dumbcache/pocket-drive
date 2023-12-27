@@ -5,8 +5,10 @@
     import closeIcon from "$lib/assets/close.svg?raw";
     import deleteIcon from "$lib/assets/deleteOutline.svg?raw";
     import moveIcon from "$lib/assets/move.svg?raw";
+    import copyIcon from "$lib/assets/copy.svg?raw";
     import editIcon from "$lib/assets/editOutline.svg?raw";
     import selectallIcon from "$lib/assets/selectall.svg?raw";
+    import Count from "../actions/Count.svelte";
 
     export let files: FileResponse;
     let dialog: Dialog;
@@ -37,9 +39,6 @@
 <Dialog bind:this={dialog}>
     {#if files}
         <div class="edit-buttons">
-            <p class="count" title="count">
-                {set.size}
-            </p>
             <button
                 class="delelte-button btn"
                 title="select all"
@@ -51,9 +50,13 @@
             <button class="move-button btn" title="move"
                 >{@html moveIcon}</button
             >
+            <button class="move-button btn" title="copy"
+                >{@html copyIcon}</button
+            >
             <button class="delelte-button btn" title="delete"
                 >{@html deleteIcon}</button
             >
+            <Count count={set.size} />
             <button class="btn close" on:click={handleViewClose}
                 >{@html closeIcon}</button
             >
@@ -83,7 +86,7 @@
 <style>
     .count {
         font-size: 1.3rem;
-        min-width: 5rem;
+        min-width: 3rem;
         border: 1px solid var(--color-file-border);
         border-right: 5px solid var(--color-light-blue);
         padding: 0.2rem;
@@ -130,10 +133,10 @@
 
     .edit-buttons {
         position: relative;
-        padding: 2rem;
+        padding: 2rem 0rem;
         display: flex;
         flex-flow: row nowrap;
-        justify-content: flex-end;
+        justify-content: space-evenly;
         align-items: center;
         gap: 2rem;
     }
@@ -151,7 +154,7 @@
         }
         .edit-buttons {
             padding-top: 0rem;
-            /* gap: 1rem; */
+            gap: 1rem;
         }
         .count {
         }

@@ -1,7 +1,7 @@
 import { get } from "svelte/store";
 import { DEFAULT_PAGESIZE, updateResource } from "./utils";
 import { fetchFiles } from "$lib/scripts/gdrive/utils";
-import { sessionTimeout } from "../shared/stores";
+import { folderStore, sessionTimeout } from "../shared/stores";
 import { activeDirs } from "../stores";
 
 export const createFolder = async (
@@ -34,10 +34,7 @@ export const createFolder = async (
             return;
         }
     }
-    let old = get(activeDirs) ?? [];
-    old = [...old, { name: data.name, id: data.id }];
-    activeDirs.set(old.sort((a, b) => a.name.localeCompare(b.name)));
-    fetchFiles(parent, "dirs", 1000, true);
+    return data;
 };
 
 export const updateFolder = async (
@@ -50,10 +47,8 @@ export const updateFolder = async (
     if (status !== 200) {
         return;
     }
-    let old = get(activeDirs)?.filter((img) => img.id !== id) ?? [];
-    old = [...old, { name: data.name, id: data.id }];
-    activeDirs.set(old.sort((a, b) => a.name.localeCompare(b.name)));
-    fetchFiles(parent, "dirs", 1000, true);
+    // activeDirs.set(old.sort((a, b) => a.name.localeCompare(b.name)));
+    return data;
 };
 
 export const deleteFolder = async (
@@ -79,9 +74,6 @@ export const deleteFolder = async (
             return;
         }
     }
-    let old = get(activeDirs)?.filter((img) => img.id !== id) ?? [];
-    old.length === 0 ? activeDirs.set(undefined) : activeDirs.set(old);
-    fetchFiles(parent, "dirs", 1000, true);
 };
 
 export async function fetchDirs(

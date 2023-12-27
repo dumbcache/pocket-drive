@@ -117,6 +117,12 @@ declare global {
         files: FileResponse;
         nextPageToken?: string;
     }
+
+    type FolderAction = "EDIT" | "DELETE" | "MOVE" | "CREATE";
+    interface FolderActionDetail {
+        id: string;
+        name: string;
+    }
 }
 
 export {};

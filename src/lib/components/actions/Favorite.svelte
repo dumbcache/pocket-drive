@@ -9,20 +9,15 @@
 
     const dispatch = createEventDispatcher();
     function favStatus() {
-        dispatch("favStatus");
+        updateResource(id, { starred: !starred }, getToken()).then(
+            ({ status }) => {
+                if (status === 200) dispatch("fav");
+            }
+        );
     }
 </script>
 
-<button
-    class="btn {starred && 'starred'}"
-    on:click|stopPropagation={() => {
-        updateResource(id, { starred: !starred }, getToken()).then(
-            ({ status }) => {
-                if (status === 200) favStatus();
-            }
-        );
-    }}
->
+<button class="btn {starred && 'starred'}" on:click|stopPropagation={favStatus}>
     {@html favoriteIcon}
 </button>
 

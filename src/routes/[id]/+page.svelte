@@ -11,6 +11,7 @@
     import beforeNavigate from "$lib/assets/beforeNavigate.svg?raw";
     import Tools from "$lib/components/Tools.svelte";
     import menuButton from "$lib/assets/menu.svg?raw";
+    import Count from "$lib/components/actions/Count.svelte";
 
     let view = $activeView;
     let draggedOver = false;
@@ -63,27 +64,17 @@
             <Tools />
         </div>
 
-        <p class="count" title="count">
-            {view === "FOLDER"
+        <Count
+            count={view === "FOLDER"
                 ? $folderStore?.files.length
                 : $fileStore?.files.length}
-        </p>
+        />
     </nav>
 
     <Content {view} />
 </section>
 
 <style>
-    .count {
-        gap: 2rem;
-        font-size: 1.3rem;
-        min-width: 5rem;
-        border: 1px solid var(--color-file-border);
-        border-left: 5px solid var(--color-light-blue);
-        text-align: right;
-        padding: 0.2rem;
-    }
-
     .wrapper {
         width: 100%;
         padding: 0rem;
@@ -122,11 +113,6 @@
         display: none;
     }
     @media (max-width: 600px) {
-        .count {
-            min-width: 3rem;
-            border-left: 2px solid var(--color-light-blue);
-            max-width: 10rem;
-        }
         .wrapper {
             padding: 0rem 0.5rem;
         }

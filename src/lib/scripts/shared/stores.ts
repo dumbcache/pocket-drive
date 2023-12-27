@@ -23,3 +23,5 @@ export let activeImage = writable<{ id: string; src: string }>();
 export let dropItems = writable<DropItem[]>([]);
 
 export let folderActionToggle = writable(false);
+export let folderAction = writable<FolderAction | undefined>();
+export let folderActionDetail = writable<FolderActionDetail | undefined>();

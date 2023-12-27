@@ -1,8 +1,9 @@
 <script lang="ts">
     import { onDestroy, onMount } from "svelte";
-    import { folderStore } from "$lib/scripts/shared/stores";
+    import { folderStore, folderAction } from "$lib/scripts/shared/stores";
     import Folder from "./Folder.svelte";
     import { navigating } from "$app/stores";
+    import ActionForm from "./ActionForm.svelte";
 
     export let view: string;
     export let observer: IntersectionObserver;
@@ -31,12 +32,6 @@
         }
     });
 
-    onDestroy(() => {
-        unsubscribe();
-        navUnsubscribe();
-        childObserver?.disconnect();
-    });
-
     function childInspection(items: FileResponse | undefined) {
         childObserver = new IntersectionObserver(
             (entries) => {
@@ -58,6 +53,22 @@
             }
         });
     }
+
+    function actionHandler(e) {
+        folderActionDetail = e.detail;
+        folderAction = e.type.toUpperCase();
+    }
+
+    function actionClose() {
+        folderActionDetail = undefined;
+        folderAction = undefined;
+    }
+
+    onDestroy(() => {
+        unsubscribe();
+        navUnsubscribe();
+        childObserver?.disconnect();
+    });
 </script>
 
 <section
@@ -77,6 +88,12 @@
         <div id="folder-foot" bind:this={foot}></div>
     {/if}
 </section>
+
+{#if $folderAction}
+    {#if $folderAction === "MOVE"}{:else}
+        <ActionForm />
+    {/if}
+{/if}
 
 <style>
     .folder-container {

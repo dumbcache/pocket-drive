@@ -2,50 +2,96 @@
     import { createEventDispatcher, onDestroy, onMount } from "svelte";
     import doneIcon from "$lib/assets/done.svg?raw";
     import progressIcon from "$lib/assets/progress.svg?raw";
-    import { activeParent } from "$lib/scripts/shared/stores";
+    import {
+        activeParent,
+        folderAction,
+        folderActionDetail,
+        folderStore,
+    } from "$lib/scripts/shared/stores";
     import {
         createFolder,
         deleteFolder,
         updateFolder,
     } from "$lib/scripts/gdrive/folder";
-    import { getToken } from "$lib/scripts/shared/utils";
+    import { getToken, toTitleCase } from "$lib/scripts/shared/utils";
 
     const confirmText = "confirm";
-    export let type: "create" | "update" | "delete";
-    export let id = "";
-    export let name = "";
-    let placeholder = name || "";
+    let type: FolderAction, id: string, name: string, placeholder: string;
+
+    onMount(() => {
+        try {
+            type = $folderAction;
+            id = $folderActionDetail?.id;
+            name = $folderActionDetail?.name;
+            placeholder = name || "";
+            type === "DELETE" && (placeholder = "");
+        } catch (error) {
+            console.info(error);
+        }
+    });
+
     let dirField: HTMLInputElement;
     let submitDisabled = true;
     let progress = false;
 
-    const dispatch = createEventDispatcher();
-    function closeAction(ctx: string, detail?: any) {
-        dispatch(ctx, detail);
+    function close() {
+        $folderAction = undefined;
+        $folderActionDetail = undefined;
     }
-    async function actionHandler() {
+
+    async function applyAction() {
         progress = true;
         const token = getToken();
-        let dirName = placeholder
-            .split(" ")
-            .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-            .join(" ");
-        type !== "delete" && (placeholder = dirName);
-        if (type === "create") {
-            await createFolder(dirName, $activeParent.id, token);
-            closeAction("close");
+        let folderName = toTitleCase(placeholder);
+        console.log(folderName);
+        type !== "DELETE" && (placeholder = folderName);
+        let parent = $activeParent.id;
+        if (type === "CREATE") {
+            const data = await createFolder(folderName, parent, token);
+            folderStore.update((prev) => {
+                return {
+                    files: [
+                        ...prev?.files,
+                        {
+                            id: data.id,
+                            name: data.name,
+                            parents: [parent],
+                            starred: false,
+                        },
+                    ],
+                    nextPageToken: prev?.nextPageToken,
+                };
+            });
+            close();
         }
-        if (type === "update") {
-            await updateFolder(dirName, id, $activeParent.id, token);
-            closeAction("close");
+        if (type === "EDIT") {
+            await updateFolder(folderName, id, parent, token);
+            folderStore.update((prev) => {
+                return {
+                    files: prev?.files.map((file) => {
+                        if (file.id === id) {
+                            return { ...file, name: folderName };
+                        }
+                        return file;
+                    }),
+                    nextPageToken: prev?.nextPageToken,
+                };
+            });
+            close();
         }
-        if (type === "delete") {
-            await deleteFolder(id, $activeParent.id, token);
-            closeAction("close");
+        if (type === "DELETE") {
+            await deleteFolder(id, parent, token);
+            folderStore.update((prev) => {
+                return {
+                    files: prev?.files.filter((file) => file.id !== id),
+                    nextPageToken: prev?.nextPageToken,
+                };
+            });
+            close();
         }
     }
     function checkDisabled() {
-        if (type === "delete") {
+        if (type === "DELETE") {
             placeholder.trim() !== "confirm"
                 ? (submitDisabled = true)
                 : (submitDisabled = false);
@@ -68,9 +114,9 @@
 
 <form
     class="create"
-    on:click={() => closeAction("close")}
+    on:click={() => progress || close()}
     on:keypress|stopPropagation
-    on:submit|preventDefault={actionHandler}
+    on:submit|preventDefault={applyAction}
     on:wheel|preventDefault
 >
     <label
@@ -79,7 +125,7 @@
         on:click|stopPropagation
         on:keypress|stopPropagation
     >
-        {#if type === "delete"}
+        {#if type === "DELETE"}
             <p>
                 All files and subfolders will be deleted and cannot be restored,
                 Type ' <span class="h">confirm</span> ' if you want to continue.
@@ -88,7 +134,7 @@
         <input
             type="text"
             id="dir-name"
-            placeholder={type === "delete" ? confirmText : "Directory Name"}
+            placeholder={type === "DELETE" ? confirmText : "Directory Name"}
             bind:value={placeholder}
             bind:this={dirField}
             on:click|stopPropagation
@@ -99,8 +145,11 @@
         {#if progress}
             <span class="btn progress-button">{@html progressIcon}</span>
         {:else}
-            <button type="submit" class="btn" disabled={submitDisabled}
-                >{@html doneIcon}</button
+            <button
+                type="submit"
+                class="btn"
+                disabled={submitDisabled}
+                on:click={applyAction}>{@html doneIcon}</button
             >
         {/if}
     </label>
@@ -117,7 +166,7 @@
         display: grid;
         place-content: center;
         /* background-color: var(--primary-backdrop-color); */
-        backdrop-filter: blur(1rem);
+        backdrop-filter: blur(2px);
         -webkit-backdrop-filter: blur(1rem);
         z-index: 2;
     }
@@ -125,10 +174,11 @@
         cursor: not-allowed;
     }
     .btn:disabled :global(svg) {
-        fill: red;
+        fill: rgb(8, 226, 255);
         cursor: not-allowed;
     }
     .wrapper {
+        outline: 2px solid var(--color-focus);
         max-width: 35rem;
         padding: 5rem 4rem;
         background-color: var(--primary-backdrop-color);
@@ -159,7 +209,7 @@
         min-width: var(--primary-icon-size);
     }
     .btn {
-        filter: none;
+        background: none;
     }
 
     @keyframes spin {

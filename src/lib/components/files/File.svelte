@@ -43,7 +43,7 @@
                 <Favorite
                     id={file.id}
                     starred={file.starred}
-                    on:favStatus={() => (file.starred = !file.starred)}
+                    on:fav={() => (file.starred = !file.starred)}
                 />
             </span>
         {/if}

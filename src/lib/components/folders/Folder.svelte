@@ -21,9 +21,7 @@
             name={folder.name}
             starred={folder.starred}
             {visible}
-            on:editDir
-            on:deleteDir
-            on:favStatus={() => (folder.starred = !folder.starred)}
+            on:fav={() => (folder.starred = !folder.starred)}
         />
     </button>
     <h2 class="dir-title">{folder.name}</h2>
