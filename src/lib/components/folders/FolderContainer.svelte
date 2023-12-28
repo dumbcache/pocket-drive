@@ -4,6 +4,7 @@
     import Folder from "./Folder.svelte";
     import { navigating } from "$app/stores";
     import ActionForm from "./ActionForm.svelte";
+    import FolderSelect from "./FolderSelect.svelte";
 
     export let view: string;
     export let observer: IntersectionObserver;
@@ -90,7 +91,9 @@
 </section>
 
 {#if $folderAction}
-    {#if $folderAction === "MOVE"}{:else}
+    {#if $folderAction === "MOVE"}
+        <FolderSelect />
+    {:else}
         <ActionForm />
     {/if}
 {/if}

@@ -7,9 +7,9 @@ import { build, files, version } from "$service-worker";
 
 const sw = self as unknown as ServiceWorkerGlobalScope;
 
-const CACHE_STATIC = `pd-static-${version}`;
-const CACHE_APP = `pd-app-${version}`;
-const CACHE_DATA = `pd-data-${version}`;
+const CACHE_STATIC = `pd-static`;
+const CACHE_APP = `pd-app`;
+const CACHE_DATA = `pd-data`;
 
 /***************** SW Event Listners****************/
 sw.addEventListener("install", (e) => {
@@ -60,6 +60,8 @@ sw.addEventListener("fetch", (e) => {
             break;
 
         case "www.googleapis.com":
+            if (url.searchParams.has("pageToken")) return;
+
             if (url.search === "?alt=media") return;
             e.respondWith(
                 (async () => {

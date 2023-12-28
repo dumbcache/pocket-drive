@@ -14,6 +14,11 @@
         updateFolder,
     } from "$lib/scripts/gdrive/folder";
     import { getToken, toTitleCase } from "$lib/scripts/shared/utils";
+    import {
+        FOLDER_MIME_TYPE,
+        afterFolderAction,
+        fetchMultiple,
+    } from "$lib/scripts/gdrive/utils";
 
     const confirmText = "confirm";
     let type: FolderAction, id: string, name: string, placeholder: string;
@@ -43,7 +48,6 @@
         progress = true;
         const token = getToken();
         let folderName = toTitleCase(placeholder);
-        console.log(folderName);
         type !== "DELETE" && (placeholder = folderName);
         let parent = $activeParent.id;
         if (type === "CREATE") {
@@ -51,17 +55,18 @@
             folderStore.update((prev) => {
                 return {
                     files: [
-                        ...prev?.files,
                         {
                             id: data.id,
                             name: data.name,
                             parents: [parent],
                             starred: false,
                         },
+                        ...prev?.files,
                     ],
                     nextPageToken: prev?.nextPageToken,
                 };
             });
+            afterFolderAction(parent, token);
             close();
         }
         if (type === "EDIT") {
@@ -77,6 +82,7 @@
                     nextPageToken: prev?.nextPageToken,
                 };
             });
+            afterFolderAction(parent, token);
             close();
         }
         if (type === "DELETE") {
@@ -87,6 +93,7 @@
                     nextPageToken: prev?.nextPageToken,
                 };
             });
+            afterFolderAction(parent, token);
             close();
         }
     }

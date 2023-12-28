@@ -1,5 +1,10 @@
 import { get } from "svelte/store";
-import { dataCacheName, searchItems, sessionTimeout } from "../shared/stores";
+import {
+    dataCacheName,
+    folderStore,
+    searchItems,
+    sessionTimeout,
+} from "../shared/stores";
 import { fetchDirs } from "./folder";
 import { fetchImgs } from "./file";
 import { checkLoginStatus, colorPalette, getToken } from "../shared/utils";
@@ -16,7 +21,7 @@ export const FIELDS_SINGLE = "id,name,parents";
 export const FIELDS_MULTIPLE =
     "files(id,name,description,appProperties(origin),thumbnailLink,starred)";
 export const DEFAULT_PAGESIZE = 1000;
-export const PAGESIZE = 100;
+export const PAGESIZE = 10;
 
 export const wait = (s: number) => new Promise((res) => setTimeout(res, s));
 
@@ -296,8 +301,8 @@ export async function fetchMultiple(
 ): Promise<GoogleFileResponse> {
     return new Promise(async (resolve, reject) => {
         const req = constructRequest(params, accessToken);
-        if (updateCache)
-            await (await caches.open(get(dataCacheName))).delete(req);
+        console.log(get(dataCacheName));
+        if (updateCache) await (await caches.open("pd-data")).delete(req);
         const res = await makeFetch(req);
         resolve(res?.json() as Promise<GoogleFileResponse>);
         return;
@@ -448,3 +453,7 @@ export const loadAll = (
             });
     });
 };
+
+export async function afterFolderAction(parent: string, accessToken: string) {
+    fetchMultiple({ parent, mimeType: FOLDER_MIME_TYPE }, accessToken, true);
+}

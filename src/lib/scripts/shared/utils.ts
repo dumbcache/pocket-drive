@@ -49,9 +49,8 @@ export function isValidUrl(url: string) {
     }
 }
 
-export function toTitleCase(str) {
+export function toTitleCase(str: string) {
     return str
-        .toLowerCase()
         .replace(/\b\w/g, (char) => char.toUpperCase())
         .replace(/\s+/g, " ")
         .trim();
@@ -101,7 +100,7 @@ export async function setCache(refresh: Boolean) {
 
 export function checkRefreshTimeout() {
     let time = Number(window.localStorage.getItem("refreshTime")) - Date.now();
-    time > 0 &&
+    time < 0 &&
         activeRefreshTimeout.set(
             setTimeout(() => {
                 if (isRefreshNeeded()) {
@@ -116,7 +115,7 @@ export function checkRefreshTimeout() {
 }
 export function checkSessionTimeout() {
     let time = Number(window.localStorage.getItem("sessionTime")) - Date.now();
-    time > 0 &&
+    time < 0 &&
         activeTimeout.set(
             setTimeout(() => {
                 if (isTokenExpired()) {
