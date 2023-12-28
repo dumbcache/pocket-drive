@@ -56,6 +56,10 @@ export function toTitleCase(str: string) {
         .trim();
 }
 
+export function getRoot() {
+    return window.localStorage.getItem("root") as string;
+}
+
 export function getToken() {
     return window.localStorage.getItem("token") as string;
 }

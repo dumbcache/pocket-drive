@@ -92,7 +92,7 @@
 
 {#if $folderAction}
     {#if $folderAction === "MOVE"}
-        <FolderSelect />
+        <FolderSelect type="FOLDER" />
     {:else}
         <ActionForm />
     {/if}

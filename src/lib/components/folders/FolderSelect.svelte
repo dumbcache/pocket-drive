@@ -2,26 +2,47 @@
     import doneIcon from "$lib/assets/done.svg?raw";
     import beforeIcon from "$lib/assets/beforeNavigate.svg?raw";
     import progressIcon from "$lib/assets/progress.svg?raw";
-    import { getInfo } from "$lib/scripts/gdrive/utils";
-    import { fetchFiles } from "$lib/scripts/gdrive/utils";
     import {
-        activeGrandParentId,
-        activeParentId,
-        activeParentName,
-        editItems,
+        FOLDER_MIME_TYPE,
+        fetchMultiple,
+        fetchSingle,
+        getInfo,
+        moveSingle,
+    } from "$lib/scripts/gdrive/utils";
+    import { fetchFiles } from "$lib/scripts/gdrive/utils";
+    import { activeGrandParentId } from "$lib/scripts/stores";
+    import {
+        folderAction,
+        folderActionDetail,
         mode,
-    } from "$lib/scripts/stores";
+    } from "$lib/scripts/shared/stores";
     import { onDestroy, onMount } from "svelte";
-    import { childWorker } from "$lib/scripts/utils";
+    import { childWorker, getRoot } from "$lib/scripts/shared/utils";
     import { getToken } from "$lib/scripts/shared/utils";
+    import {
+        activeParent,
+        editItems,
+        folderStore,
+    } from "$lib/scripts/shared/stores";
+    import Spinner from "../Spinner.svelte";
+
+    export let type: "FOLDER" | "FILE";
+    let tempFolderStore = { ...$folderStore };
+    type === "FOLDER" &&
+        (tempFolderStore.files = tempFolderStore.files?.filter(
+            (file) => file.id !== $folderActionDetail.id
+        ));
+    let selectedName = $activeParent?.name;
+    let selectedId = $activeParent?.id;
+    let selectedParent = $activeParent.parents && $activeParent.parents[0];
+    let progress = false;
+    let listVisible = false;
+    let accessToken = getToken();
 
     let recentsClicked = false;
-    let progress = false;
-    let selectedName = $activeParentName;
-    let selectedId = $activeParentId;
     let selectedIdParent = $activeGrandParentId;
     let childs: GoogleFile[] = [];
-    const root = window.localStorage.getItem("root");
+    const root = getRoot();
     const token = getToken();
 
     async function beforeFetchDirs(id: string) {
@@ -33,6 +54,30 @@
         });
     }
 
+    function setData(data: GoogleFileRes) {}
+
+    async function fetchChildren(id: string) {
+        tempFolderStore = await fetchMultiple(
+            { parent: id, mimeType: FOLDER_MIME_TYPE },
+            accessToken
+        );
+        if (type === "FOLDER") {
+            if (selectedId === $activeParent.id) {
+                tempFolderStore.files = tempFolderStore.files?.filter(
+                    (file) => file.id !== $folderActionDetail.id
+                );
+            }
+        }
+    }
+
+    async function fetchInfo(id: string) {
+        const data = await fetchSingle(id, "FOLDER", accessToken);
+        await fetchChildren(data.id);
+        selectedId = data.id;
+        selectedName = data.name;
+        selectedParent = data?.parents[0];
+    }
+
     async function fetchDirs() {
         let { files } = await fetchFiles(selectedId, "dirs", 1000, false);
         childs = files;
@@ -41,86 +86,117 @@
     onMount(() => {
         fetchDirs();
     });
-    onDestroy(() => {});
+    async function okHandler(e: MouseEvent) {
+        e.stopPropagation();
+        listVisible = false;
+        progress = true;
+        if (type === "FOLDER") {
+            await moveSingle(selectedId, $folderActionDetail?.id, accessToken);
+            folderStore.update((prev) => {
+                return {
+                    files: prev?.files.filter(
+                        (file) => file.id !== $folderActionDetail.id
+                    ),
+                    nextPageToken: prev?.nextPageToken,
+                };
+            });
+            fetchMultiple(
+                { parent: selectedId, mimeType: FOLDER_MIME_TYPE },
+                accessToken,
+                true
+            );
+            fetchMultiple(
+                { parent: $folderActionDetail?.id, mimeType: FOLDER_MIME_TYPE },
+                accessToken,
+                true
+            );
+            $folderAction = undefined;
+            return;
+        }
+        childWorker.postMessage({
+            context: "MOVE",
+            parent: selectedId,
+            imgs: $editItems,
+            token,
+        });
+    }
+
+    async function selectFolder(e: MouseEvent) {
+        e.stopPropagation();
+        let tempId = e.target.dataset.id;
+        await fetchChildren(tempId);
+        selectedId = tempId;
+        selectedName = e.target.innerText;
+        selectedParent = selectedId;
+    }
 </script>
 
 <div
     class="move"
     on:keydown|stopPropagation
-    on:click={() => progress || ($mode = "select")}
+    on:click={() => ($folderAction = undefined)}
 >
-    <div
-        class="wrapper"
-        on:click|stopPropagation={() => {
-            recentsClicked = false;
-        }}
-        on:keydown={() => {}}
-    >
-        <div class="tools">
-            <button
-                class="btn root"
-                title="root"
-                on:click|stopPropagation={() => beforeFetchDirs(root)}
-                >/R</button
-            >
-            {#if selectedId !== root}
-                <button
-                    class="btn prev"
-                    title="previous"
-                    on:click|stopPropagation={() => {
-                        beforeFetchDirs(selectedIdParent);
-                    }}>{@html beforeIcon}</button
-                >
-            {/if}
+    {#if progress}
+        <div class="spinner">
+            <Spinner />
         </div>
-        <div class="selection">
-            <div class="label">Select folder to move</div>
-            <button
-                class="selected"
-                data-id={selectedId}
-                on:click|stopPropagation={() =>
-                    (recentsClicked = !recentsClicked)}
-            >
-                {selectedName}
-                {#if !progress}
+    {:else}
+        <div
+            class="wrapper"
+            on:click|stopPropagation={() => (listVisible = false)}
+            on:keydown
+        >
+            <div class="nav">
+                <button
+                    class="btn root"
+                    title="root"
+                    on:click|stopPropagation={() => fetchInfo(root)}>/R</button
+                >
+                {#if selectedId !== root}
+                    <button
+                        class="btn prev"
+                        title="previous"
+                        on:click|stopPropagation={() => {
+                            fetchInfo(selectedParent);
+                        }}>{@html beforeIcon}</button
+                    >
+                {/if}
+            </div>
+            <div class="selection">
+                <div class="label">Select destination folder</div>
+                <button
+                    class="selected"
+                    data-id={selectedId}
+                    on:click|stopPropagation={() =>
+                        (listVisible = !listVisible)}
+                >
+                    {selectedName}
                     <button
                         class="done-button btn"
-                        disabled={selectedId === $activeParentId}
-                        on:click|stopPropagation={() => {
-                            recentsClicked = false;
-                            progress = true;
-                            childWorker.postMessage({
-                                context: "MOVE",
-                                parent: selectedId,
-                                imgs: $editItems,
-                                token,
-                            });
-                        }}>{@html doneIcon}</button
+                        disabled={selectedId === $activeParent.id}
+                        on:click={okHandler}>{@html doneIcon}</button
                     >
-                {/if}
-                {#if progress}
-                    <button class="progress-button btn"
-                        >{@html progressIcon}</button
-                    >
-                {/if}
-                {#if recentsClicked}
-                    <div class="recents">
-                        {#if childs.length > 0}
-                            {#each childs as child}
-                                <button
-                                    class="recent"
-                                    data-id={child.id}
-                                    on:click|stopPropagation={() =>
-                                        beforeFetchDirs(child.id)}
-                                    >{child.name}</button
-                                >
-                            {/each}
-                        {/if}
-                    </div>
-                {/if}
-            </button>
+                    {#if listVisible}
+                        <ol
+                            class="list"
+                            on:keydown
+                            on:click|stopPropagation={selectFolder}
+                        >
+                            {#if tempFolderStore.files}
+                                {#if tempFolderStore.files.length > 0}
+                                    {#each tempFolderStore.files as file}
+                                        <li class="list-item" data-id={file.id}>
+                                            {file.name}
+                                        </li>
+                                    {/each}
+                                {/if}
+                            {/if}
+                        </ol>
+                    {/if}
+                </button>
+            </div>
         </div>
-    </div>
+    {/if}
 </div>
 
 <style>
@@ -139,7 +215,7 @@
         z-index: 3;
         user-select: none;
     }
-    .tools {
+    .nav {
         display: flex;
         flex-flow: column;
         gap: 1rem;
@@ -175,7 +251,7 @@
         cursor: pointer;
     }
     .selected,
-    .recents {
+    .list {
         filter: none;
         background-color: #555;
         width: 25rem;
@@ -197,22 +273,7 @@
     .done-button:disabled :global(svg) {
         cursor: not-allowed;
     }
-    @keyframes spin {
-        0% {
-            transform: translate(0%, -50%) rotate(0deg);
-        }
-        50% {
-            transform: translate(0%, -50%) rotate(180deg);
-        }
-        100% {
-            transform: translate(0%, -50%) rotate(360deg);
-        }
-    }
 
-    .progress-button {
-        -webkit-animation: spin 1.5s linear 0s infinite;
-        animation: spin 1s linear 0s infinite;
-    }
     .done-button:hover :global(svg) {
         fill: #3af;
     }
@@ -223,7 +284,7 @@
         padding: 1rem;
         position: relative;
     }
-    .recents {
+    .list {
         max-height: 21rem;
         position: absolute;
         top: 4rem;
@@ -233,10 +294,10 @@
         overflow-x: hidden;
         overflow-y: scroll;
     }
-    .recent {
+    .list-item {
         padding: 0.8rem 1rem;
     }
-    .recent:hover {
+    .list-item:hover {
         filter: none;
         background-color: #666;
     }

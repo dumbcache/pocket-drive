@@ -12,7 +12,6 @@
         folderStore,
     } from "$lib/scripts/shared/stores";
     import { getToken } from "$lib/scripts/shared/utils";
-    import { activeParentId } from "$lib/scripts/stores";
     import { onMount } from "svelte";
     import FileLoading from "./FileLoading.svelte";
 
