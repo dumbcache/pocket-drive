@@ -8,8 +8,10 @@
     import { previewItem, shortcuts } from "$lib/scripts/stores";
     import Nav from "./Nav.svelte";
     import { activeView } from "$lib/scripts/shared/stores";
+    import { page } from "$app/stores";
 
     function goHome() {
+        if ($page.params?.id === "r") return;
         $activeView = "FOLDER";
         goto("/r");
     }
