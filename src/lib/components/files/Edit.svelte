@@ -98,8 +98,11 @@
                 title="select all"
                 on:click={selectAllAction}>{@html selectallIcon}</button
             >
-            <button class="edit-button btn" title="edit" disabled={count === 0}
-                >{@html editIcon}</button
+            <button
+                class="edit-button btn"
+                title="edit"
+                disabled={count === 0}
+                on:click={() => (action = "EDIT")}>{@html editIcon}</button
             >
             <button
                 class="move-button btn"
@@ -151,6 +154,29 @@
             on:close={folderSelectClose}
             on:ok={folderSelectOk}
         />
+    {/if}
+    {#if action === "EDIT"}
+        <div
+            class="edit-form-wrapper"
+            on:keydown
+            on:click={() => (action = "")}
+        >
+            <form
+                class="edit-form"
+                on:keydown|stopPropagation
+                on:click|stopPropagation
+            >
+                <p>Enter URL or Name</p>
+                <input type="text" placeholder="url" />
+                <input type="text" placeholder="name" />
+                <div>
+                    <button class="cancel btn" on:click={() => (action = "")}
+                        >{@html closeIcon}</button
+                    >
+                    <button class="ok btn">{@html doneIcon}</button>
+                </div>
+            </form>
+        </div>
     {/if}
     {#if confirm}
         <section class="confirm-wrapper">
@@ -209,7 +235,7 @@
     }
 
     .confirm-wrapper,
-    .spinner {
+    .edit-form-wrapper {
         position: fixed;
         top: 0;
         left: 0;
@@ -221,6 +247,16 @@
         backdrop-filter: blur(1rem);
         -webkit-backdrop-filter: blur(1rem);
     }
+
+    .edit-form {
+        background-color: var(--primary-backdrop-color);
+        box-shadow: 0 0 10px 2px var(--color-focus);
+        display: flex;
+        flex-flow: column nowrap;
+        padding: 3rem;
+        gap: 1rem;
+        border-radius: 1rem;
+    }
     .confirm {
         background-color: var(--primary-backdrop-color);
         box-shadow: 0 0 10px 2px var(--color-focus);
@@ -228,6 +264,21 @@
         border-radius: 1rem;
         display: flex;
         align-items: center;
+    }
+    input {
+        background: var(--primary-bg-color);
+        color: var(--primary-color);
+        padding: 0.5rem;
+        border: none;
+        border-bottom: 1px solid var(--color-focus);
+        border-bottom-left-radius: 0.5rem;
+        border-bottom-right-radius: 0.5rem;
+    }
+    .cancel :global(svg) {
+        fill: red;
+    }
+    .ok :global(svg) {
+        fill: green;
     }
     @media (max-width: 600px) {
         .edit-buttons {

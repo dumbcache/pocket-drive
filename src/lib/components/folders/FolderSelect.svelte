@@ -262,6 +262,7 @@
     }
     .list {
         max-height: 21rem;
+        width: 100%;
         position: absolute;
         top: 4rem;
         left: 0rem;
@@ -276,5 +277,10 @@
     .list-item:hover {
         filter: none;
         background-color: #666;
+    }
+    @media (max-width: 600px) {
+        .selected {
+            width: 100%;
+        }
     }
 </style>
