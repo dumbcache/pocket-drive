@@ -4,7 +4,10 @@
     import loadingIcon from "$lib/assets/progress.svg?raw";
     import successIcon from "$lib/assets/success.svg?raw";
     import failureIcon from "$lib/assets/failure.svg?raw";
-    import { dropOkHandlerSingle, removeDropEntry } from "$lib/scripts/utils";
+    import {
+        dropOkHandlerSingle,
+        removeDropEntry,
+    } from "$lib/scripts/shared/image";
     export let item: DropItem;
 
     let progressIcon: string;
@@ -101,7 +104,6 @@
     .btn {
         position: absolute;
         top: 0.5rem;
-        filter: none;
         width: var(--size-small);
         height: var(--size-small);
         z-index: 1;

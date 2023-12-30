@@ -85,31 +85,31 @@ async function dropSave(dropItems: DropItem[], token: string) {
                     .then(async (location) => {
                         const { status } = await uploadImg(location, bytes);
                         status === 200
-                            ? postMessage({
-                                  context: "DROP_SAVE",
+                            ? resolve({
                                   id,
+                                  parent,
+                                  status: "success",
                               })
-                            : postMessage({
-                                  context: "DROP_SAVE_FAILED",
+                            : resolve({
                                   id,
-                                  status,
+                                  parent,
+                                  status: "failure",
                               });
-                        resolve("");
                     })
                     .catch((e) => {
-                        postMessage({
-                            context: "DROP_SAVE_FAILED",
+                        resolve({
                             id,
-                            status: e.status,
+                            parent,
+                            status: "failure",
                         });
-                        reject();
                     });
             })
         );
     }
-    Promise.allSettled(proms).then(() => {
+    Promise.allSettled(proms).then((proms) => {
         postMessage({
-            context: "DROP_SAVE_COMPLETE",
+            context: "DROP_SAVE",
+            data: proms,
         });
     });
 }

@@ -1,42 +1,18 @@
 <script lang="ts">
     import Header from "$lib/components/Header.svelte";
     import Drop from "$lib/components/drops/Drop.svelte";
-    import {
-        previewAndSetDropItems,
-        updateRecents,
-        shortcutHandler,
-        dropOkHandler,
-    } from "$lib/scripts/utils";
-    import {
-        autosave,
-        dropMini,
-        previewItem,
-        refreshClicked,
-    } from "$lib/scripts/stores";
+    import { updateRecents } from "$lib/scripts/shared/utils";
     import { onMount } from "svelte";
     import {
         checkRefreshTimeout,
         checkSessionTimeout,
     } from "$lib/scripts/shared/utils";
-    import type Dialog from "$lib/components/Dialog.svelte";
 
-    let draggedOver = false;
-    export function imgDropHandler(e: DragEvent) {
-        e.preventDefault();
-        draggedOver = false;
-        $dropMini = false;
-        previewItem.set(undefined);
-        if (e.dataTransfer?.files) {
-            previewAndSetDropItems(e.dataTransfer.files);
-        }
-        if ($autosave) dropOkHandler();
-    }
     onMount(() => {
         try {
             updateRecents();
             checkSessionTimeout();
             checkRefreshTimeout();
-            $refreshClicked = false;
         } catch (error) {
             console.warn(error);
         }
@@ -47,7 +23,7 @@
     on:offline={() => {
         window.alert("You're offline");
     }}
-    on:keydown={shortcutHandler}
+    on:keydown
 />
 
 <div class="layout">

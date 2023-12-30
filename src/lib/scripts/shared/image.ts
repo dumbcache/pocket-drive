@@ -1,4 +1,5 @@
 import { activeParent, dropItems } from "$lib/scripts/shared/stores";
+import { childWorker, getRoot, getToken } from "$lib/scripts/shared/utils";
 import { get } from "svelte/store";
 
 export function previewAndSetDropItems(
@@ -72,6 +73,81 @@ export function previewAndSetDropItems(
             }
         }
     }
+}
+
+export function setExtraInfo(items: DropItem[]) {
+    const droppeditems = document.querySelector(
+        ".drop-items"
+    ) as HTMLDivElement;
+    const commonUrl = (
+        document.querySelector(".common-url") as HTMLInputElement
+    ).value;
+    const tempDirItems = [];
+    for (let item of items) {
+        if (item.progress === "success" || item.progress === "uploading")
+            continue;
+        const id = item.id;
+        const dropItem = droppeditems.querySelector(
+            `[data-id='${id}']`
+        ) as HTMLDivElement;
+        let dropImg = dropItem.querySelector(".drop-img") as HTMLImageElement;
+        dropImg.classList.toggle("drop-item-uploading");
+        let name = dropItem.querySelector(".name") as HTMLInputElement;
+        item.name = name.value.trim();
+        let url = dropItem.querySelector(".url") as HTMLInputElement;
+        if (url.value.trim() !== "") {
+            item.url = decodeURI(url.value.trim());
+        } else {
+            item.url = decodeURI(commonUrl.trim());
+        }
+        item.progress = "uploading";
+        tempDirItems.push(item);
+    }
+    return tempDirItems;
+}
+
+export function removeDropEntry(id: string) {
+    dropItems.set(get(dropItems).filter((item) => item.id !== id));
+}
+
+export function clearDropItems() {
+    const a = get(dropItems).filter((item) => item.progress !== "success");
+    dropItems.set(a);
+}
+
+export function dropOkHandlerSingle(id: string) {
+    let items = get(dropItems).filter((item) => item.id === id);
+    const [itemSingle] = setExtraInfo(items);
+    items = get(dropItems).map((item) => {
+        if (item.id === id) {
+            return itemSingle;
+        } else {
+            return item;
+        }
+    });
+    dropItems.set(items);
+    const { pathname } = window.location;
+    const parent = pathname === "/" ? getRoot() : pathname.substring(1);
+    const token = getToken();
+    childWorker.postMessage({
+        context: "DROP_SAVE",
+        dropItems: [itemSingle],
+        parent,
+        token,
+    });
+}
+
+export function dropOkHandler() {
+    const tempDirItems = setExtraInfo(get(dropItems));
+    const { pathname } = window.location;
+    const parent = pathname === "/" ? getRoot() : pathname.substring(1);
+    const token = getToken();
+    childWorker.postMessage({
+        context: "DROP_SAVE",
+        dropItems: tempDirItems,
+        parent,
+        token,
+    });
 }
 
 export function dropCloseHandler() {

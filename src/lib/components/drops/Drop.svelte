@@ -3,40 +3,40 @@
     import DropItem from "$lib/components/drops/DropItem.svelte";
     import DropTools from "$lib/components/drops/DropTools.svelte";
     import doubleLeftIcon from "$lib/assets/doubleLeft.svg?raw";
-    import { fade, fly } from "svelte/transition";
+    import { fade } from "svelte/transition";
+
+    let mini = false;
 </script>
 
 {#if $dropItems.length !== 0}
-    <!-- {#if $dropMini}
+    {#if mini}
         <button
             class="drop-mini btn"
             on:click={() => {
-                $previewItem = undefined;
-                $dropMini = !$dropMini;
+                mini = !mini;
             }}>{@html doubleLeftIcon}</button
         >
-    {:else} -->
-    <div class="drop" transition:fade={{ duration: 500, x: 500, y: 500 }}>
-        <DropTools />
-        <div class="drop-items">
-            {#each $dropItems as item}
-                {#key item.id}
-                    <DropItem {item} />
-                {/key}
-            {/each}
+    {:else}
+        <div class="drop" transition:fade={{ duration: 500, x: 500, y: 500 }}>
+            <DropTools on:mini={() => (mini = true)} />
+            <div class="drop-items">
+                {#each $dropItems as item}
+                    {#key item.id}
+                        <DropItem {item} />
+                    {/key}
+                {/each}
+            </div>
         </div>
-    </div>
-    <!-- {/if} -->
+    {/if}
 {/if}
 
 <style>
     .drop-mini {
         position: fixed;
-        bottom: 1rem;
+        top: 5rem;
         right: 0;
         background-color: #043;
         z-index: 1;
-        filter: none;
         border-top-left-radius: 1rem;
         border-bottom-left-radius: 1rem;
     }
@@ -95,9 +95,7 @@
     .drop :global(input:hover) {
         background-color: var(--theme-button-hover-outline);
     }
-    .btn :global(svg) {
-        fill: var(--color-white);
-    }
+
     @media (max-width: 800px) {
         .drop-mini,
         .drop {
@@ -114,6 +112,10 @@
             min-width: 100%;
             max-width: 100%;
             border-left: none;
+        }
+        .drop-mini {
+            top: unset;
+            bottom: 2rem;
         }
         .drop-items {
             gap: 1rem;

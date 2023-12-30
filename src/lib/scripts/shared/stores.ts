@@ -2,6 +2,7 @@ import { writable } from "svelte/store";
 
 export let folderStore = writable<GoogleFileResponse | undefined>();
 export let fileStore = writable<GoogleFileResponse | undefined>();
+export let recentStore = writable<{ name: string; id: string }[]>([]);
 export let searchItems = writable<GoogleFile[] | undefined>();
 
 export let isLoggedin = writable(false);

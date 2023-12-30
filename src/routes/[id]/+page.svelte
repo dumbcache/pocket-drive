@@ -14,7 +14,6 @@
 
     let view = $activeView;
     let draggedOver = false;
-    let menu = false;
 
     export function imgDropHandler(e: DragEvent) {
         e.preventDefault();

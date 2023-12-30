@@ -11,9 +11,12 @@ import {
     progress,
     fileStore,
     activeParent,
+    recentStore,
+    dropItems,
 } from "$lib/scripts/shared/stores";
 import ChildWorker from "$lib/scripts/worker.ts?worker";
-import { IMG_MIME_TYPE, fetchMultiple } from "../gdrive/utils";
+import { IMG_MIME_TYPE, fetchMultiple } from "$lib/scripts/gdrive/utils";
+import { clearDropItems } from "$lib/scripts/shared/image";
 
 export let childWorker: Worker;
 
@@ -155,6 +158,24 @@ export function setRefreshTimeout() {
     checkRefreshTimeout();
 }
 
+export const updateRecents = (data?: { name: string; id: string }) => {
+    let old =
+        (JSON.parse(window.localStorage.getItem("recents")!) as {
+            name: string;
+            id: string;
+        }[]) ?? [];
+    if (old.length === 0 && !data) return;
+    if (data) {
+        if (old?.length === 10) {
+            old.pop();
+        }
+        old = old.filter((item) => item.id !== data.id);
+        old.unshift(data);
+    }
+    recentStore.set(old);
+    window.localStorage.setItem("recents", JSON.stringify(old));
+};
+
 export function fetchImgPreview(id: string) {
     childWorker.postMessage({
         context: "IMG_PREVIEW",
@@ -267,6 +288,51 @@ if (browser) {
                     getToken(),
                     true
                 );
+                return;
+            case "DROP_SAVE":
+                let successSet = new Set();
+                let failureSet = new Set();
+                let parentSet = new Set();
+                data.data.forEach((item) => {
+                    if (item.value.status === "success") {
+                        successSet.add(item.value.id);
+                        parentSet.add(item.value.parent);
+                    }
+                });
+                data.data.forEach(
+                    (item) =>
+                        item.value.status === "failure" &&
+                        failureSet.add(item.value.parent)
+                );
+                dropItems.set(
+                    get(dropItems).map((item) => {
+                        if (successSet.has(item.id)) {
+                            item.progress = "success";
+                            return item;
+                        }
+                        failureSet.has(item.id) && (item.progress = "failure");
+                        return item;
+                    })
+                );
+                setTimeout(() => {
+                    clearDropItems();
+                    let token = getToken();
+                    parentSet.forEach(async (parent) => {
+                        const data = await fetchMultiple(
+                            { parent, mimeType: IMG_MIME_TYPE },
+                            token,
+                            true
+                        );
+                        fetchMultiple(
+                            { parent, mimeType: IMG_MIME_TYPE, pageSize: 3 },
+                            token,
+                            true
+                        );
+                        if (parent === get(activeParent).id) {
+                            fileStore.set(data);
+                        }
+                    });
+                }, 5000);
                 return;
 
             case "IDB_RELOAD_REQUIRED":

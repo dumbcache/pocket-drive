@@ -2,22 +2,20 @@
     import { createEventDispatcher } from "svelte";
     import closeIcon from "$lib/assets/close.svg?raw";
     import doneIcon from "$lib/assets/done.svg?raw";
-    import clearIcon from "$lib/assets/clear.svg?raw";
-    import expandIcon from "$lib/assets/expand.svg?raw";
     import toggleIcon from "$lib/assets/toggle.svg?raw";
     import doubleRightIcon from "$lib/assets/doubleRight.svg?raw";
     import {
         dropCloseHandler,
         dropOkHandler,
         // clearDropItems,
-    } from "$lib/scripts/utils";
-    import {
-        autosave,
-        dropFull,
-        dropItems,
-        dropMini,
-    } from "$lib/scripts/stores";
+    } from "$lib/scripts/shared/image";
+    import { dropItems } from "$lib/scripts/shared/stores";
 
+    export let autosave;
+    const dispatch = createEventDispatcher();
+    function triggerDispatch(type: string) {
+        dispatch(type);
+    }
     export function clearDropItems() {
         const a = $dropItems.filter((item) => item.progress !== "success");
         dropItems.set(a);
@@ -36,8 +34,7 @@
             class="btn"
             title="minimize"
             on:click={() => {
-                $dropMini = !$dropMini;
-                $dropFull = false;
+                triggerDispatch("mini");
             }}
         >
             {@html doubleRightIcon}
@@ -54,10 +51,10 @@
     />
     <span>
         <button
-            class="btn {$autosave === true ? 'autosave' : ''}"
+            class="btn {autosave === true ? 'autosave' : ''}"
             title="toggle autosave"
             on:click={() => {
-                $autosave = !$autosave;
+                triggerDispatch("auto");
             }}
         >
             {@html toggleIcon}
