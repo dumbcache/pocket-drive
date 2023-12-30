@@ -8,8 +8,12 @@ import {
     activeImage,
     mode,
     activeView,
+    progress,
+    fileStore,
+    activeParent,
 } from "$lib/scripts/shared/stores";
 import ChildWorker from "$lib/scripts/worker.ts?worker";
+import { IMG_MIME_TYPE, fetchMultiple } from "../gdrive/utils";
 
 export let childWorker: Worker;
 
@@ -193,7 +197,8 @@ export function changeImage(direction: "PREV" | "NEXT") {
 if (browser) {
     childWorker = new ChildWorker();
     childWorker.onerror = (e) => console.warn(e);
-    childWorker.onmessage = ({ data }) => {
+    childWorker.onmessage = async ({ data }) => {
+        let parent: string, set: Set;
         switch (data.context) {
             case "IMG_PREVIEW":
                 const { id, blob } = data;
@@ -208,8 +213,60 @@ if (browser) {
                 return;
 
             case "MOVE":
-                const { parent } = data;
-                console.log(parent);
+                parent = data.parent;
+                set = new Set(data.set);
+                fileStore.update((prev) => ({
+                    nextPageToken: prev?.nextPageToken,
+                    files: prev?.files.filter((file) => !set.has(file.id)),
+                }));
+                progress.set(false);
+                fetchMultiple(
+                    { parent, mimeType: IMG_MIME_TYPE },
+                    getToken(),
+                    true
+                );
+                fetchMultiple(
+                    { parent, mimeType: IMG_MIME_TYPE, pageSize: 3 },
+                    getToken(),
+                    true
+                );
+                fetchMultiple(
+                    { parent: get(activeParent).id, mimeType: IMG_MIME_TYPE },
+                    getToken(),
+                    true
+                );
+                fetchMultiple(
+                    {
+                        parent: get(activeParent).id,
+                        mimeType: IMG_MIME_TYPE,
+                        pageSize: 3,
+                    },
+                    getToken(),
+                    true
+                );
+                return;
+
+            case "DELETE":
+                set = new Set(data.set);
+                fileStore.update((prev) => ({
+                    nextPageToken: prev?.nextPageToken,
+                    files: prev?.files.filter((file) => !set.has(file.id)),
+                }));
+                progress.set(false);
+                fetchMultiple(
+                    { parent: get(activeParent).id, mimeType: IMG_MIME_TYPE },
+                    getToken(),
+                    true
+                );
+                fetchMultiple(
+                    {
+                        parent: get(activeParent).id,
+                        mimeType: IMG_MIME_TYPE,
+                        pageSize: 3,
+                    },
+                    getToken(),
+                    true
+                );
                 return;
 
             case "IDB_RELOAD_REQUIRED":

@@ -189,7 +189,7 @@ export const deleteImgs = async (imgs: string[], token: string) => {
         );
     }
     Promise.allSettled(proms).then(() => {
-        postMessage({ context: "IMG_DELETE" });
+        postMessage({ context: "DELETE", set: imgs });
     });
 };
 
@@ -233,7 +233,7 @@ export function moveMulitple(
         proms.push(moveSingle(parent, id, accessToken));
     }
     Promise.allSettled(proms).then(() => {
-        postMessage({ context: "MOVE", parent });
+        postMessage({ context: "MOVE", parent, set: data });
     });
 }
 
@@ -242,14 +242,13 @@ onmessage = ({ data }) => {
         case "IMG_PREVIEW":
             checkForImgLocal(data.id, data.token);
             return;
-        case "IMG_DELETE":
-            deleteImgs(data.imgs, data.token);
+        case "DELETE":
+            deleteImgs(data.files, data.token);
             return;
         case "CLEAR_IMAGE_CACHE":
             clearImageCache();
             return;
         case "MOVE":
-            console.log(data.files);
             moveMulitple(data.parent, data.files, data.token);
             return;
         // case "EDIT_IMGS":

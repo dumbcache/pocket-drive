@@ -61,8 +61,8 @@ sw.addEventListener("fetch", (e) => {
 
         case "www.googleapis.com":
             if (url.searchParams.has("pageToken")) return;
-
             if (url.search === "?alt=media") return;
+
             e.respondWith(
                 (async () => {
                     const cache = await caches.open(CACHE_DATA);

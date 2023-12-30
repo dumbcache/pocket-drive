@@ -11,6 +11,7 @@
     import selectallIcon from "$lib/assets/selectall.svg?raw";
     import Count from "../actions/Count.svelte";
     import FolderSelect from "../folders/FolderSelect.svelte";
+    import { childWorker, getToken } from "$lib/scripts/shared/utils";
 
     export let files: FileResponse;
     let dialog: Dialog;
@@ -51,12 +52,14 @@
     }
 
     function deleteAction() {
-        // childWorker.postMessage({
-        //     context: "DELETE",
-        //     files: set,
-        //     token: getToken(),
-        // });
-        confirm = true;
+        childWorker.postMessage({
+            context: "DELETE",
+            files: set,
+            token: getToken(),
+        });
+        dialog.close();
+        $progress = true;
+        // confirm = true;
     }
 
     function selectAllAction() {
@@ -75,7 +78,12 @@
         folderSelectVisible = false;
         dialog.close();
         $progress = true;
-        setTimeout(() => ($progress = false), 5000);
+        childWorker.postMessage({
+            context: "MOVE",
+            parent: selectedParent,
+            files: set,
+            token: getToken(),
+        });
     }
     function folderSelectClose() {
         folderSelectVisible = false;

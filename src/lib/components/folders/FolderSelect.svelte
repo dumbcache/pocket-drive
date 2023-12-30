@@ -84,38 +84,33 @@
     async function okHandler(e: MouseEvent) {
         e.stopPropagation();
         listVisible = false;
-        $progress = true;
-        if (type === "FOLDER") {
-            await moveSingle(selectedId, $folderActionDetail?.id, accessToken);
-            folderStore.update((prev) => {
-                return {
-                    files: prev?.files.filter(
-                        (file) => file.id !== $folderActionDetail.id
-                    ),
-                    nextPageToken: prev?.nextPageToken,
-                };
-            });
-            fetchMultiple(
-                { parent: selectedId, mimeType: FOLDER_MIME_TYPE },
-                accessToken,
-                true
-            );
-            fetchMultiple(
-                { parent: $folderActionDetail?.id, mimeType: FOLDER_MIME_TYPE },
-                accessToken,
-                true
-            );
-            $folderAction = undefined;
-            $progress = false;
+        if (type === "FILE") {
+            dispatchOk();
             return;
         }
-        // childWorker.postMessage({
-        //     context: "MOVE",
-        //     parent: selectedId,
-        //     files: set,
-        //     token: accessToken,
-        // });
-        dispatchOk();
+        $progress = true;
+        await moveSingle(selectedId, $folderActionDetail?.id, accessToken);
+        folderStore.update((prev) => {
+            return {
+                files: prev?.files.filter(
+                    (file) => file.id !== $folderActionDetail.id
+                ),
+                nextPageToken: prev?.nextPageToken,
+            };
+        });
+        fetchMultiple(
+            { parent: selectedId, mimeType: FOLDER_MIME_TYPE },
+            accessToken,
+            true
+        );
+        fetchMultiple(
+            { parent: $folderActionDetail?.id, mimeType: FOLDER_MIME_TYPE },
+            accessToken,
+            true
+        );
+        $folderAction = undefined;
+        $progress = false;
+        return;
     }
 </script>
 

@@ -7,8 +7,10 @@
     import homeButton from "$lib/assets/home.svg?raw";
     import { previewItem, shortcuts } from "$lib/scripts/stores";
     import Nav from "./Nav.svelte";
+    import { activeView } from "$lib/scripts/shared/stores";
 
     function goHome() {
+        $activeView = "FOLDER";
         goto("/r");
     }
 </script>
