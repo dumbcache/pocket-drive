@@ -58,8 +58,8 @@
             token: getToken(),
         });
         dialog.close();
+        confirm = false;
         $progress = true;
-        // confirm = true;
     }
 
     function selectAllAction() {
@@ -93,35 +93,44 @@
 <Dialog bind:this={dialog}>
     {#if files}
         <div class="edit-buttons">
-            <button
-                class="delelte-button btn"
-                title="select all"
-                on:click={selectAllAction}>{@html selectallIcon}</button
-            >
-            <button
-                class="edit-button btn"
-                title="edit"
-                disabled={count === 0}
-                on:click={() => (action = "EDIT")}>{@html editIcon}</button
-            >
-            <button
-                class="move-button btn"
-                title="move"
-                disabled={count === 0}
-                on:click={() => {
-                    action = "MOVE";
-                    folderSelectVisible = true;
-                }}>{@html moveIcon}</button
-            >
-            <!-- <button class="copy-button btn" title="copy" disabled={count === 0}
+            {#if confirm}
+                <button class="cancel btn" on:click={() => (confirm = false)}
+                    >cancel</button
+                >
+                <button class="confirm btn" on:click={deleteAction}
+                    >confirm</button
+                >
+            {:else}
+                <button
+                    class="delelte-button btn"
+                    title="select all"
+                    on:click={selectAllAction}>{@html selectallIcon}</button
+                >
+                <button
+                    class="edit-button btn"
+                    title="edit"
+                    disabled={count === 0}
+                    on:click={() => (action = "EDIT")}>{@html editIcon}</button
+                >
+                <button
+                    class="move-button btn"
+                    title="move"
+                    disabled={count === 0}
+                    on:click={() => {
+                        action = "MOVE";
+                        folderSelectVisible = true;
+                    }}>{@html moveIcon}</button
+                >
+                <!-- <button class="copy-button btn" title="copy" disabled={count === 0}
                 >{@html copyIcon}</button
             > -->
-            <button
-                class="delete-button btn"
-                title="delete"
-                disabled={count === 0}
-                on:click={deleteAction}>{@html deleteIcon}</button
-            >
+                <button
+                    class="delete-button btn"
+                    title="delete"
+                    disabled={count === 0}
+                    on:click={() => (confirm = true)}>{@html deleteIcon}</button
+                >
+            {/if}
             <Count {count} />
             <button class="btn close" on:click={handleViewClose}
                 >{@html closeIcon}</button
@@ -178,15 +187,6 @@
             </form>
         </div>
     {/if}
-    {#if confirm}
-        <section class="confirm-wrapper">
-            <div class="confirm">
-                <p>confirm to continue</p>
-                <button class="btn">{@html closeIcon}</button>
-                <button class="btn">{@html doneIcon}</button>
-            </div>
-        </section>
-    {/if}
 </Dialog>
 
 <style>
@@ -234,7 +234,6 @@
         cursor: not-allowed;
     }
 
-    .confirm-wrapper,
     .edit-form-wrapper {
         position: fixed;
         top: 0;
@@ -257,13 +256,20 @@
         gap: 1rem;
         border-radius: 1rem;
     }
+    .confirm,
+    .cancel {
+        /* background-color: var(--primary-backdrop-color);
+        box-shadow: 0 0 10px 2px var(--color-focus); */
+        padding: 0.5rem;
+        border-radius: 0.5rem;
+        border: 1px solid var(--color-file-border);
+        color: var(--primary-bg-color);
+    }
+    .cancel {
+        background-color: #f00;
+    }
     .confirm {
-        background-color: var(--primary-backdrop-color);
-        box-shadow: 0 0 10px 2px var(--color-focus);
-        padding: 2rem;
-        border-radius: 1rem;
-        display: flex;
-        align-items: center;
+        background-color: #0f0;
     }
     input {
         background: var(--primary-bg-color);

@@ -35,6 +35,7 @@
         placeholder="common-url"
         value=""
         on:keydown|stopPropagation
+        on:click={(e) => e.target.select()}
     />
     <span>
         <button
@@ -65,8 +66,8 @@
 <style>
     .drop-tools {
         position: sticky;
-        top: 0;
-        right: o;
+        bottom: 0;
+        right: 0;
         background-color: inherit;
         display: flex;
         align-items: center;

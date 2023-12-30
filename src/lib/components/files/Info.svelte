@@ -4,7 +4,6 @@
 
 <div class="info">
     <header>
-        <button class="btn">{@html closeIcon}</button>
         <h5>Info</h5>
     </header>
     <input type="text" placeholder="Name" />

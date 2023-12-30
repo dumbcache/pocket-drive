@@ -21,7 +21,8 @@
             {@html homeButton}
         </button>
         <button class="title-button" on:click={goHome}
-            ><h1 class="title-long">Pocket Drive</h1></button
+            ><h1 class="title-long">Pocket Drive</h1>
+            <h1 class="title-short">PD</h1></button
         >
     </div>
     <!-- <button
@@ -78,7 +79,7 @@
         align-items: center;
         gap: 1rem;
     }
-    .title,
+    .title-short,
     .title-long {
         font-size: var(--title-size);
         background: linear-gradient(120deg, #bd34fe, #41d1ff, #473aff);
@@ -93,7 +94,7 @@
     .title-long {
         writing-mode: vertical-lr;
     }
-    .menu {
+    .title-short {
         display: none;
     }
     @media (max-width: 600px) {
@@ -121,15 +122,13 @@
         .help {
             display: none;
         }
-        .title {
-            display: none;
-        }
-        .menu,
-        .title-long {
-            display: initial;
-        }
+
         .title-long {
             writing-mode: initial;
+            display: none;
+        }
+        .title-short {
+            display: initial;
         }
         .home {
             display: none;

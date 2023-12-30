@@ -70,7 +70,7 @@
         cursor: pointer;
     }
     .card:hover .img {
-        filter: brightness(0.5);
+        filter: brightness(0.8);
     }
     .card:hover .img-link,
     .card:hover .favorite {

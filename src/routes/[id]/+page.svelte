@@ -10,7 +10,6 @@
     import { previewAndSetDropItems } from "$lib/scripts/shared/image";
     import beforeNavigate from "$lib/assets/beforeNavigate.svg?raw";
     import Tools from "$lib/components/Tools.svelte";
-    import menuButton from "$lib/assets/menu.svg?raw";
     import Count from "$lib/components/actions/Count.svelte";
 
     let view = $activeView;
@@ -55,11 +54,7 @@
                 {@html beforeNavigate}
             </button>
         {/if}
-        <!-- <button class="btn menu" on:click={() => (menu = !menu)}>
-            {@html menuButton}
-        </button> -->
-        <!-- {#if menu} -->
-        <!-- {/if} -->
+
         <div class="tool-wrapper">
             <Tools />
         </div>

@@ -232,16 +232,9 @@
         }
     }
 
-    .progress-button {
-        -webkit-animation: spin 1.5s linear 0s infinite;
-        animation: spin 1s linear 0s infinite;
-    }
-    .progress-button :global(svg) {
-        fill: var(--color-white-level-two);
-    }
     @media (max-width: 600px) {
         .wrapper {
-            max-width: 70%;
+            max-width: 85%;
             margin: auto;
             padding: 3rem;
         }

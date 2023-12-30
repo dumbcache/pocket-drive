@@ -17,8 +17,6 @@
         >
     {:else} -->
     <div class="drop" transition:fade={{ duration: 500, x: 500, y: 500 }}>
-        <DropTools />
-
         <div class="drop-items">
             {#each $dropItems as item}
                 {#key item.id}
@@ -26,6 +24,7 @@
                 {/key}
             {/each}
         </div>
+        <DropTools />
     </div>
     <!-- {/if} -->
 {/if}
@@ -47,10 +46,10 @@
         background-color: inherit;
         border-left: 1px solid var(--primary-color);
         overflow-y: scroll;
-        padding: 0rem 1rem 1rem 1rem;
-        max-width: 50%;
+        padding: 1rem;
+        max-width: 30%;
         z-index: 1;
-        min-width: 50%;
+        min-width: 30%;
         height: 100vh;
         backdrop-filter: blur(1rem);
         -webkit-backdrop-filter: blur(1rem);

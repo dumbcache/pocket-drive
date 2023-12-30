@@ -1,6 +1,6 @@
 <script lang="ts">
     import Header from "$lib/components/Header.svelte";
-    import Drop from "$lib/components/Drop.svelte";
+    import Drop from "$lib/components/drops/Drop.svelte";
     import {
         previewAndSetDropItems,
         updateRecents,
@@ -20,7 +20,6 @@
     } from "$lib/scripts/shared/utils";
     import type Dialog from "$lib/components/Dialog.svelte";
 
-    let dialog: Dialog;
     let draggedOver = false;
     export function imgDropHandler(e: DragEvent) {
         e.preventDefault();
@@ -53,57 +52,6 @@
 
 <div class="layout">
     <Header />
-    <!-- <Dialog bind:this={dialog}></Dialog> -->
-    <!-- <main
-        class="main {draggedOver === true ? 'dragover' : ''}"
-            on:dragstart
-            on:dragover|preventDefault
-            on:dragenter={() => (draggedOver = true)}
-            on:dragleave={() => (draggedOver = false)}
-            on:drop={imgDropHandler}
-        >
-            <div class="content {$dropFull === true ? 'content-hidden' : ''}">
-                {#if !$editMode}
-                    <div class="nav">
-                        <Nav />
-                    </div>
-                {/if}
-                {#if !$editMode}
-                    <div class="back">
-                        <BackButton />
-                    </div>
-                {/if}
-                {#if $mode === "search"}
-                    <div class="search">
-                        <Search />
-                    </div>
-                {/if}
-                {#if $mode === "move"}
-                    <Move />
-                {/if}
-                {#if $mode === "edit"}
-                    <EditUrl />
-                {/if}
-                {#if $shortcuts}
-                    <Shortcuts />
-                {/if}
-                <slot />
-            </div>
-            <Preview />
-            {#if $sessionTimeout}
-            <Confirm
-            text={"Session timeout. You want to continue?"}
-            closeOnClick={false}
-            on:confirmCloseNO={() => {
-                signUserOut();
-                goto("/");
-            }}
-            on:confirmCloseOK={() => {
-                googleClient.requestToken();
-            }}
-            />
-            {/if}
-        </main> -->
     <slot />
     <Drop />
 </div>
@@ -111,74 +59,13 @@
 <style>
     .layout {
         display: flex;
-        /* height: 100vh;
-        overflow-y: scroll; */
     }
-    /* .main {
-        background-color: inherit;
-        display: flex;
-        width: 100%;
-        min-height: 100vh;
-    }
-    .back {
-        position: sticky;
-        top: 1.5rem;
-        z-index: 1;
-    }
-    .search {
-        max-width: 30rem;
-        margin: auto;
-        position: sticky;
-        top: 1.5rem;
-        z-index: 1;
-    }
-    .content {
-        background-color: inherit;
-        width: 100%;
-    }
-    .content-hidden {
-        display: none;
-    } */
-
-    /* .dragover {
-        background-color: #55f5;
-    }
-    .nav {
-        background-color: inherit;
-        display: none;
-        z-index: 1;
-    } */
 
     @media (max-width: 800px) {
-        .main :global(.preview),
-        .main :global(.drop) {
-            position: fixed;
-            top: 0;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            border: none;
-            max-width: 100%;
-        }
     }
     @media (max-width: 600px) {
         .layout {
             height: initial;
-        }
-        .main {
-            min-height: initial;
-        }
-        .search {
-            top: 5rem;
-            max-width: 80%;
-        }
-        .nav {
-            display: initial;
-        }
-        .back {
-            display: none;
-        }
-        .layout {
             display: initial;
         }
     }
