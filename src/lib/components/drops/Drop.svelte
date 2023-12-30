@@ -17,6 +17,7 @@
         >
     {:else} -->
     <div class="drop" transition:fade={{ duration: 500, x: 500, y: 500 }}>
+        <DropTools />
         <div class="drop-items">
             {#each $dropItems as item}
                 {#key item.id}
@@ -24,7 +25,6 @@
                 {/key}
             {/each}
         </div>
-        <DropTools />
     </div>
     <!-- {/if} -->
 {/if}
@@ -47,6 +47,7 @@
         border-left: 1px solid var(--primary-color);
         overflow-y: scroll;
         padding: 1rem;
+        padding-top: 0rem;
         max-width: 30%;
         z-index: 1;
         min-width: 30%;
@@ -63,7 +64,7 @@
         display: flex;
         flex-flow: row wrap;
         align-self: start;
-        align-items: center;
+        align-items: start;
         justify-content: space-evenly;
         gap: 2rem 1rem;
     }
@@ -92,7 +93,6 @@
         cursor: not-allowed;
     }
     .drop :global(input:hover) {
-        background-color: var(--color-white-level-four);
         background-color: var(--theme-button-hover-outline);
     }
     .btn :global(svg) {
@@ -105,6 +105,16 @@
         }
     }
     @media (max-width: 600px) {
+        .drop {
+            position: fixed;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            min-width: 100%;
+            max-width: 100%;
+            border-left: none;
+        }
         .drop-items {
             gap: 1rem;
         }

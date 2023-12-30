@@ -11,8 +11,8 @@
     $: item.progress === "uploading"
         ? (progressIcon = loadingIcon)
         : item.progress === "success"
-        ? (progressIcon = successIcon)
-        : (progressIcon = failureIcon);
+          ? (progressIcon = successIcon)
+          : (progressIcon = failureIcon);
 </script>
 
 <div class="drop-item" data-id={item.id}>
@@ -93,6 +93,7 @@
         object-position: top;
         border-top-left-radius: 0.5rem;
         border-top-right-radius: 0.5rem;
+        filter: brightness(0.8);
     }
     .drop-item:hover .drop-img {
         filter: brightness(0.5);

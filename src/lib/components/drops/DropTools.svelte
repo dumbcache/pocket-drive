@@ -25,9 +25,24 @@
 </script>
 
 <div class="drop-tools">
-    <button class="drop-cancel btn" title="close" on:click={dropCloseHandler}>
-        {@html closeIcon}
-    </button>
+    <span>
+        <button
+            class="drop-cancel btn"
+            title="close"
+            on:click={dropCloseHandler}
+        >
+            {@html closeIcon}
+        </button><button
+            class="btn"
+            title="minimize"
+            on:click={() => {
+                $dropMini = !$dropMini;
+                $dropFull = false;
+            }}
+        >
+            {@html doubleRightIcon}
+        </button>
+    </span>
     <!-- <span class="drop-parent">parent</span> -->
     <input
         type="text"
@@ -38,17 +53,6 @@
         on:click={(e) => e.target.select()}
     />
     <span>
-        <button
-            class="btn"
-            title="minimize"
-            on:click={() => {
-                $dropMini = !$dropMini;
-                $dropFull = false;
-            }}
-        >
-            {@html doubleRightIcon}
-        </button>
-
         <button
             class="btn {$autosave === true ? 'autosave' : ''}"
             title="toggle autosave"
@@ -66,12 +70,12 @@
 <style>
     .drop-tools {
         position: sticky;
-        bottom: 0;
+        top: 0;
         right: 0;
-        background-color: inherit;
+        background-color: var(--primary-bg-color);
         display: flex;
         align-items: center;
-        padding: 1rem 0rem;
+        padding: 2rem 0rem;
         justify-content: space-between;
         justify-self: start;
         /* background-color: #eee; */
@@ -92,9 +96,16 @@
         align-items: center;
         justify-content: center;
     }
+    span {
+        display: inline-flex;
+        gap: 1rem;
+    }
     @media (max-width: 600px) {
         .common-url {
             max-width: 15rem;
+        }
+        .drop-tools {
+            padding: 1rem 0rem;
         }
     }
 </style>
