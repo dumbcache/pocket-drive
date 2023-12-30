@@ -87,7 +87,7 @@
     }
 </script>
 
-<main class="content">
+<main class="content" on:dragstart|preventDefault>
     <FolderContainer {observer} {view} />
     <FileContainer {observer} {view} />
 </main>

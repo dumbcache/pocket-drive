@@ -1,4 +1,15 @@
-<div class="spinner"></div>
+<script>
+    export let borderWidth = "5px";
+    export let width = "5rem";
+    export let height = "5rem";
+</script>
+
+<div
+    class="spinner"
+    style:border-width={borderWidth}
+    style:width
+    style:height
+></div>
 
 <style>
     @keyframes spin {

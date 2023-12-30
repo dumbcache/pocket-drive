@@ -19,7 +19,6 @@
         editItems,
         folderStore,
     } from "$lib/scripts/shared/stores";
-    import Spinner from "../Spinner.svelte";
     import { createEventDispatcher } from "svelte";
 
     export let type: "FOLDER" | "FILE";

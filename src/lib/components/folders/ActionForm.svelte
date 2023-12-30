@@ -19,6 +19,7 @@
         afterFolderAction,
         fetchMultiple,
     } from "$lib/scripts/gdrive/utils";
+    import Spinner from "../Spinner.svelte";
 
     const confirmText = "confirm";
     let type: FolderAction, id: string, name: string, placeholder: string;
@@ -150,7 +151,7 @@
             autocomplete="off"
         />
         {#if progress}
-            <span class="btn progress-button">{@html progressIcon}</span>
+            <Spinner borderWidth="2px" width="3rem" height="3rem" />
         {:else}
             <button
                 type="submit"
