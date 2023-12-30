@@ -66,7 +66,12 @@
         />
     </nav>
 
-    <Content {view} />
+    <Content
+        {view}
+        count={view === "FOLDER"
+            ? $folderStore?.files.length
+            : $fileStore?.files.length}
+    />
 </section>
 
 <style>

@@ -14,8 +14,11 @@
     import { getToken } from "$lib/scripts/shared/utils";
     import { onMount } from "svelte";
     import FileLoading from "./FileLoading.svelte";
+    import imgCreate from "$lib/assets/imgCreate.svg?raw";
+    import folderCreate from "$lib/assets/folderCreate.svg?raw";
 
     export let view: string;
+    export let count: number;
     let observer: IntersectionObserver;
     let footer: HTMLElement;
     let nextPageToken: string | undefined;
@@ -92,9 +95,26 @@
     <FileContainer {observer} {view} />
 </main>
 
-<footer bind:this={footer}>
-    <FileLoading {status} />
-</footer>
+{#if count > 0}
+    <footer bind:this={footer}>
+        <FileLoading {status} />
+    </footer>
+{:else}
+    <div class="no-content">
+        {#if view === "FILE"}
+            <p>No Data</p>
+            <p>
+                Click <span class="img">{@html imgCreate}</span> or Drag and Drop
+                to upload.
+            </p>
+        {:else}
+            <p>No Data</p>
+            <p>
+                Click <span class="img">{@html folderCreate}</span> to create
+            </p>
+        {/if}
+    </div>
+{/if}
 
 <style>
     .content {
@@ -106,13 +126,41 @@
         align-items: center;
         padding: 1rem 0rem;
     }
-
+    .no-content {
+        display: flex;
+        flex-flow: column nowrap;
+        gap: 0.5rem;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: #555;
+        text-align: center;
+        user-select: none;
+    }
+    .img {
+        vertical-align: bottom;
+        display: inline-flex;
+        align-items: center;
+        min-width: 2.4rem;
+        min-height: 2.4rem;
+    }
+    .img :global(svg) {
+        fill: #555;
+    }
     @media (max-width: 600px) {
         .content {
             padding: 0rem 1rem;
         }
         footer {
             padding: 2rem 0rem;
+        }
+        .no-content {
+            font-size: smaller;
+        }
+        .img {
+            min-width: 2rem;
+            min-height: 2rem;
         }
     }
 </style>
