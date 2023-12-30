@@ -1,4 +1,7 @@
 <script lang="ts">
+    import { mode } from "$lib/scripts/shared/stores";
+    import { onDestroy } from "svelte";
+
     let dialog: HTMLDialogElement;
 
     function handleKeyDown(e: KeyboardEvent) {
@@ -6,11 +9,13 @@
         }
     }
     export function close() {
+        $mode = false;
         dialog.close();
     }
     export function show() {
         dialog.showModal();
     }
+    onDestroy(() => {});
 </script>
 
 <dialog

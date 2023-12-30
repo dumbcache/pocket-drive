@@ -207,6 +207,11 @@ if (browser) {
                 img.src = url;
                 return;
 
+            case "MOVE":
+                const { parent } = data;
+                console.log(parent);
+                return;
+
             case "IDB_RELOAD_REQUIRED":
                 return;
         }

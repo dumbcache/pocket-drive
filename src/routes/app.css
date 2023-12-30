@@ -211,7 +211,8 @@ button:disabled svg:hover,
 .btn:disabled svg,
 .btn:disabled svg:hover {
     fill: var(--primary-color);
-    filter: opacity(0.5);
+    filter: opacity(0.2);
+    cursor: not-allowed;
 }
 
 p,

@@ -19,7 +19,6 @@
         checkSessionTimeout,
     } from "$lib/scripts/shared/utils";
     import type Dialog from "$lib/components/Dialog.svelte";
-    import Spinner from "$lib/components/Spinner.svelte";
 
     let dialog: Dialog;
     let draggedOver = false;
@@ -33,7 +32,6 @@
         }
         if ($autosave) dropOkHandler();
     }
-
     onMount(() => {
         try {
             updateRecents();
@@ -150,6 +148,7 @@
         display: none;
         z-index: 1;
     } */
+
     @media (max-width: 800px) {
         .main :global(.preview),
         .main :global(.drop) {

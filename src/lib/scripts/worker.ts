@@ -193,6 +193,50 @@ export const deleteImgs = async (imgs: string[], token: string) => {
     });
 };
 
+async function makeFetch(request: Request) {
+    try {
+        const res = await fetch(request);
+        if (res.status < 200 || res.status > 300) {
+            console.info(await res.text());
+            return;
+        }
+        return res;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export const moveSingle = async (
+    parent: string,
+    id: string,
+    accessToken: string
+): Promise<any> => {
+    return new Promise(async (resolve, reject) => {
+        let req = new Request(`${FILE_API}/${id}?addParents=${parent}`, {
+            method: "PATCH",
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+            },
+        });
+        const res = await makeFetch(req);
+        resolve(res?.status);
+    });
+};
+
+export function moveMulitple(
+    parent: string,
+    data: string[],
+    accessToken: string
+) {
+    let proms = [];
+    for (let id of data) {
+        proms.push(moveSingle(parent, id, accessToken));
+    }
+    Promise.allSettled(proms).then(() => {
+        postMessage({ context: "MOVE", parent });
+    });
+}
+
 onmessage = ({ data }) => {
     switch (data.context) {
         case "IMG_PREVIEW":
@@ -204,9 +248,10 @@ onmessage = ({ data }) => {
         case "CLEAR_IMAGE_CACHE":
             clearImageCache();
             return;
-        // case "MOVE":
-        //     moveMulitple(data.parent, data.imgs, data.token);
-        //     return;
+        case "MOVE":
+            console.log(data.files);
+            moveMulitple(data.parent, data.files, data.token);
+            return;
         // case "EDIT_IMGS":
         //     editImgs(data.url, data.imgs, data.token);
         //     return;

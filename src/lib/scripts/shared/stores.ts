@@ -13,6 +13,7 @@ export let activeRefreshTimeout = writable(0);
 export let refreshTimeout = writable(false);
 export let dataCacheName = writable("");
 
+export let progress = writable(false);
 export let mode = writable("");
 export let activeParent = writable<{
     id: string;

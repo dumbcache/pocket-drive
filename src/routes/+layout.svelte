@@ -1,10 +1,11 @@
 <script>
     import { navigating } from "$app/stores";
     import Spinner from "$lib/components/Spinner.svelte";
+    import { progress } from "$lib/scripts/shared/stores";
     import "./app.css";
 </script>
 
-{#if $navigating}
+{#if $navigating || $progress}
     <div class="loading" on:wheel|preventDefault>
         <Spinner />
     </div>
@@ -19,8 +20,9 @@
         height: 100%;
         display: grid;
         place-content: center;
-        background-color: #0005;
-        backdrop-filter: blur(1px);
+        /* background-color: #0005; */
+        backdrop-filter: blur(0.5rem);
+        -webkit-backdrop-filter: blur(0.5rem);
         z-index: 10;
     }
 </style>

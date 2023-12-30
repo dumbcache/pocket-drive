@@ -113,6 +113,7 @@ declare global {
     }
 
     type FileResponse = File[] | Folder[];
+
     interface GoogleFileResponse {
         files: FileResponse;
         nextPageToken?: string;

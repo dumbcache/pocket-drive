@@ -10,6 +10,7 @@
     import {
         folderAction,
         folderActionDetail,
+        progress,
     } from "$lib/scripts/shared/stores";
     import { childWorker, getRoot } from "$lib/scripts/shared/utils";
     import { getToken } from "$lib/scripts/shared/utils";
@@ -19,8 +20,10 @@
         folderStore,
     } from "$lib/scripts/shared/stores";
     import Spinner from "../Spinner.svelte";
+    import { createEventDispatcher } from "svelte";
 
     export let type: "FOLDER" | "FILE";
+    export let set: Set;
     let tempFolderStore = { ...$folderStore };
     type === "FOLDER" &&
         (tempFolderStore.files = tempFolderStore.files?.filter(
@@ -30,11 +33,17 @@
     let selectedName = $activeParent?.name;
     let selectedId = $activeParent?.id;
     let selectedParent = $activeParent.parents && $activeParent.parents[0];
-    let progress = false;
     let listVisible = false;
     let accessToken = getToken();
-
     const root = getRoot();
+
+    const dispatch = createEventDispatcher();
+    function dispatchOk() {
+        dispatch("ok", { id: selectedId });
+    }
+    function dispatchClose() {
+        dispatch("close");
+    }
 
     async function fetchChildren(id: string) {
         tempFolderStore = await fetchMultiple(
@@ -75,7 +84,7 @@
     async function okHandler(e: MouseEvent) {
         e.stopPropagation();
         listVisible = false;
-        progress = true;
+        $progress = true;
         if (type === "FOLDER") {
             await moveSingle(selectedId, $folderActionDetail?.id, accessToken);
             folderStore.update((prev) => {
@@ -97,27 +106,28 @@
                 true
             );
             $folderAction = undefined;
+            $progress = false;
             return;
         }
-        childWorker.postMessage({
-            context: "MOVE",
-            parent: selectedId,
-            imgs: $editItems,
-            token: accessToken,
-        });
+        // childWorker.postMessage({
+        //     context: "MOVE",
+        //     parent: selectedId,
+        //     files: set,
+        //     token: accessToken,
+        // });
+        dispatchOk();
     }
 </script>
 
 <div
     class="move"
     on:keydown|stopPropagation
-    on:click={() => ($folderAction = undefined)}
+    on:click={() => {
+        dispatchClose();
+        $folderAction = undefined;
+    }}
 >
-    {#if progress}
-        <div class="spinner">
-            <Spinner />
-        </div>
-    {:else}
+    {#if !$progress}
         <div
             class="wrapper"
             on:click|stopPropagation={() => (listVisible = false)}
@@ -186,9 +196,9 @@
         display: grid;
         place-content: center;
         color: var(--color-white);
-        background-color: var(--primary-backdrop-color);
-        backdrop-filter: blur(5rem);
-        -webkit-backdrop-filter: blur(5rem);
+        /* background-color: var(--primary-backdrop-color); */
+        backdrop-filter: blur(1rem);
+        -webkit-backdrop-filter: blur(1rem);
         z-index: 3;
         user-select: none;
     }
@@ -205,6 +215,7 @@
     }
     .wrapper {
         background-color: var(--primary-backdrop-color);
+        box-shadow: 0 0 10px 2px var(--color-focus);
         padding: 2rem;
         border-radius: 1rem;
         display: flex;
@@ -235,22 +246,16 @@
         cursor: pointer;
         border-radius: 0.5rem;
     }
-    .done-button,
-    .progress-button {
+    .done-button {
         position: absolute;
         right: 0.5rem;
         top: 50%;
         transform: translate(0%, -50%);
         filter: none;
     }
-    .done-button:disabled {
-        cursor: not-allowed;
-        filter: invert(0.5);
-    }
     .done-button:disabled :global(svg) {
-        cursor: not-allowed;
+        fill: initial;
     }
-
     .done-button:hover :global(svg) {
         fill: #3af;
     }
