@@ -1,22 +1,16 @@
 <script lang="ts">
     import doneIcon from "$lib/assets/done.svg?raw";
     import beforeIcon from "$lib/assets/beforeNavigate.svg?raw";
-    import progressIcon from "$lib/assets/progress.svg?raw";
     import {
         FOLDER_MIME_TYPE,
         fetchMultiple,
         fetchSingle,
-        getInfo,
         moveSingle,
     } from "$lib/scripts/gdrive/utils";
-    import { fetchFiles } from "$lib/scripts/gdrive/utils";
-    import { activeGrandParentId } from "$lib/scripts/stores";
     import {
         folderAction,
         folderActionDetail,
-        mode,
     } from "$lib/scripts/shared/stores";
-    import { onDestroy, onMount } from "svelte";
     import { childWorker, getRoot } from "$lib/scripts/shared/utils";
     import { getToken } from "$lib/scripts/shared/utils";
     import {
@@ -32,6 +26,7 @@
         (tempFolderStore.files = tempFolderStore.files?.filter(
             (file) => file.id !== $folderActionDetail.id
         ));
+
     let selectedName = $activeParent?.name;
     let selectedId = $activeParent?.id;
     let selectedParent = $activeParent.parents && $activeParent.parents[0];
@@ -39,22 +34,7 @@
     let listVisible = false;
     let accessToken = getToken();
 
-    let recentsClicked = false;
-    let selectedIdParent = $activeGrandParentId;
-    let childs: GoogleFile[] = [];
     const root = getRoot();
-    const token = getToken();
-
-    async function beforeFetchDirs(id: string) {
-        getInfo(id).then(({ id, name, parents }) => {
-            selectedIdParent = parents[0];
-            selectedId = id;
-            selectedName = name;
-            fetchDirs();
-        });
-    }
-
-    function setData(data: GoogleFileRes) {}
 
     async function fetchChildren(id: string) {
         tempFolderStore = await fetchMultiple(
@@ -72,20 +52,26 @@
 
     async function fetchInfo(id: string) {
         const data = await fetchSingle(id, "FOLDER", accessToken);
-        await fetchChildren(data.id);
+        selectedParent = data?.parents[0];
         selectedId = data.id;
         selectedName = data.name;
-        selectedParent = data?.parents[0];
+        listVisible = false;
+        await fetchChildren(data.id);
+        listVisible = true;
     }
 
-    async function fetchDirs() {
-        let { files } = await fetchFiles(selectedId, "dirs", 1000, false);
-        childs = files;
+    async function selectFolder(e: MouseEvent) {
+        e.stopPropagation();
+        let tempId = e.target.dataset.id;
+        let tempName = e.target.innerText;
+        selectedParent = selectedId;
+        selectedId = tempId;
+        selectedName = tempName;
+        listVisible = false;
+        await fetchChildren(tempId);
+        listVisible = true;
     }
 
-    onMount(() => {
-        fetchDirs();
-    });
     async function okHandler(e: MouseEvent) {
         e.stopPropagation();
         listVisible = false;
@@ -117,17 +103,8 @@
             context: "MOVE",
             parent: selectedId,
             imgs: $editItems,
-            token,
+            token: accessToken,
         });
-    }
-
-    async function selectFolder(e: MouseEvent) {
-        e.stopPropagation();
-        let tempId = e.target.dataset.id;
-        await fetchChildren(tempId);
-        selectedId = tempId;
-        selectedName = e.target.innerText;
-        selectedParent = selectedId;
     }
 </script>
 
