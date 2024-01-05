@@ -35,10 +35,16 @@
 
 <section
     class="wrapper {draggedOver === true ? 'dragover' : ''}"
-    on:dragstart
-    on:dragover|preventDefault
-    on:dragenter={() => (draggedOver = true)}
-    on:dragleave={() => (draggedOver = false)}
+    on:dragstart|preventDefault
+    on:dragover|preventDefault={(e) => {
+        draggedOver = true;
+    }}
+    on:dragenter={(e) => {
+        draggedOver = true;
+    }}
+    on:dragleave={(e) => {
+        draggedOver = false;
+    }}
     on:drop={imgDropHandler}
 >
     <nav class="nav">
@@ -105,12 +111,7 @@
     .dragover {
         background-color: #55f5;
     }
-    /* .active :global(svg) {
-        fill: var(--color-focus);
-    } */
-    .menu {
-        display: none;
-    }
+
     @media (max-width: 600px) {
         .wrapper {
             padding: 0rem 0.5rem;
@@ -121,16 +122,6 @@
         .nav {
             padding: 1rem;
             gap: 2rem;
-        }
-        .back-button {
-            /* margin-left: 0rem;
-            position: relative;
-            top: 50%;
-            left: 0%;
-            transform: unset; */
-        }
-        .menu {
-            display: initial;
         }
     }
 </style>

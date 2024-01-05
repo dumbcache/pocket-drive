@@ -1,10 +1,6 @@
 <script lang="ts">
-    import { onDestroy, onMount } from "svelte";
-    import {
-        folderStore,
-        folderAction,
-        activeView,
-    } from "$lib/scripts/shared/stores";
+    import { onDestroy } from "svelte";
+    import { folderStore, folderAction } from "$lib/scripts/shared/stores";
     import Folder from "./Folder.svelte";
     import { navigating } from "$app/stores";
     import ActionForm from "./ActionForm.svelte";

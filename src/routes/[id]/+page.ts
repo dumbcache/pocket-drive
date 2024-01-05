@@ -1,17 +1,11 @@
 import { browser } from "$app/environment";
 import type { PageLoad } from "./$types";
-import {
-    fetchSingle,
-    getInfo,
-    getRoot,
-    loadAll,
-} from "$lib/scripts/gdrive/utils";
+import { fetchSingle, getRoot, loadAll } from "$lib/scripts/gdrive/utils";
 import {
     checkLoginStatus,
     clearFiles,
     getToken,
 } from "$lib/scripts/shared/utils";
-import { activeParentId, activeParentName } from "$lib/scripts/stores";
 import { goto } from "$app/navigation";
 import {
     activeParent,

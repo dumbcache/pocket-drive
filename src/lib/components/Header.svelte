@@ -3,9 +3,7 @@
     import ColorScheme from "$lib/components/buttons/ColorScheme.svelte";
     import LogoutButton from "$lib/components/buttons/LogoutButton.svelte";
     import helpButton from "$lib/assets/help.svg?raw";
-    import menuButton from "$lib/assets/menu.svg?raw";
     import homeButton from "$lib/assets/home.svg?raw";
-    import { previewItem, shortcuts } from "$lib/scripts/stores";
     import Nav from "./Nav.svelte";
     import { activeView } from "$lib/scripts/shared/stores";
     import { page } from "$app/stores";
@@ -37,12 +35,8 @@
         <Nav />
     </div>
     <div class="wrapper">
-        <button
-            class="btn help"
-            title="shortcuts"
-            on:click={() => {
-                $shortcuts = !$shortcuts;
-            }}>{@html helpButton}</button
+        <button class="btn help" title="shortcuts" on:click={() => {}}
+            >{@html helpButton}</button
         >
         <ColorScheme />
         <LogoutButton />

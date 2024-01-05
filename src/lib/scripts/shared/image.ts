@@ -138,7 +138,7 @@ export function dropOkHandlerSingle(id: string) {
 }
 
 export function dropOkHandler() {
-    const tempDirItems = setExtraInfo(get(dropItems));
+    const tempDropItems = setExtraInfo(get(dropItems));
     const { pathname } = window.location;
     const parent = pathname === "/" ? getRoot() : pathname.substring(1);
     const token = getToken();

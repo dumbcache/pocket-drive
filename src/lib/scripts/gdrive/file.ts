@@ -1,4 +1,3 @@
-import { activeImgs } from "../stores";
 import { FILE_API, fetchFiles, updateResource } from "./utils";
 
 // export async function downloadImage(id: string, token: string): Promise<Blob> {
@@ -37,22 +36,6 @@ import { FILE_API, fetchFiles, updateResource } from "./utils";
 //     }
 //     return { status };
 // };
-
-export async function fetchImgs(
-    parent: string,
-    cache: Boolean = false
-): Promise<void> {
-    activeImgs.set(undefined);
-    return new Promise((resolve, reject) => {
-        fetchFiles(parent!, "imgs", 1000, cache)
-            .then(async (imgs) => {
-                activeImgs.set(imgs?.files);
-                resolve();
-                return;
-            })
-            .catch((status) => reject(status));
-    });
-}
 
 export const createImgMetadata = (
     imgMeta: ImgMeta,

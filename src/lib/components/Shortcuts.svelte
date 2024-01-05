@@ -1,14 +1,7 @@
 <script>
-    import { shortcuts } from "$lib/scripts/stores";
 </script>
 
-<div
-    class="shortcuts"
-    on:click={() => {
-        $shortcuts = !$shortcuts;
-    }}
-    on:keydown
->
+<div class="shortcuts" on:click={() => {}} on:keydown>
     <ul on:keydown on:click|stopPropagation>
         <li>
             <span class="l">s</span>:<span class="r"

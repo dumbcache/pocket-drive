@@ -58,6 +58,7 @@
         id="view"
         on:keydown={handleKeyDown}
         on:dragstart|preventDefault
+        on:wheel|preventDefault
     >
         <section class="one" on:wheel|stopPropagation>
             <FileNav {files} />

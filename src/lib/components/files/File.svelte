@@ -64,7 +64,8 @@
         background-color: var(--color-file-background);
     }
     .card:hover {
-        outline: 1px solid var(--color-focus);
+        outline: 2px solid var(--color-focus);
+        box-shadow: 0 0 5px 1px var(--color-focus);
     }
     .edit-mode {
         cursor: pointer;

@@ -5,11 +5,9 @@
     import { previewAndSetDropItems } from "$lib/scripts/shared/image";
     import {
         activeParent,
-        folderActionToggle,
         activeView,
         folderAction,
     } from "$lib/scripts/shared/stores";
-    import ActionForm from "$lib/components/folders/ActionForm.svelte";
     import editIcon from "$lib/assets/editMode.svg?raw";
     import { mode } from "$lib/scripts/shared/stores";
     import folderIcon from "$lib/assets/folder.svg?raw";

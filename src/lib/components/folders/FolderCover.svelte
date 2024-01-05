@@ -34,7 +34,7 @@
 
 <div
     class="cover {draggedOver === true ? 'dragover' : ''}"
-    on:dragover|preventDefault
+    on:dragover|preventDefault|stopPropagation={() => (draggedOver = true)}
     on:dragenter|stopPropagation={() => (draggedOver = true)}
     on:dragleave={() => (draggedOver = false)}
     on:drop|stopPropagation={imgDropHandler}
@@ -83,10 +83,11 @@
     }
 
     .cover:hover {
-        outline: 1px solid var(--color-focus);
+        /* outline: 1px solid var(--color-focus); */
+        box-shadow: 0 0 5px 5px var(--color-focus);
     }
     .cover:hover .pic {
-        filter: brightness(0.5);
+        filter: brightness(0.8);
         background-color: var(--color-file-hover);
     }
     .cover:hover .placeholder {
@@ -144,7 +145,11 @@
         fill: var(--primary-bg-color);
     } */
     .dragover {
-        outline: 1px solid var(--color-focus);
+        /* outline: 1px solid var(--color-focus); */
+        box-shadow: 0 0 5px 5px var(--color-focus);
+    }
+    .dragover .pic {
+        filter: brightness(0.2);
     }
     @media (max-width: 600px) {
         .favorite,

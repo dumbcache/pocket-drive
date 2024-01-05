@@ -1,8 +1,6 @@
 import { get } from "svelte/store";
-import { DEFAULT_PAGESIZE, updateResource } from "./utils";
-import { fetchFiles } from "$lib/scripts/gdrive/utils";
-import { folderStore, sessionTimeout } from "../shared/stores";
-import { activeDirs } from "../stores";
+import { updateResource } from "./utils";
+import { sessionTimeout } from "../shared/stores";
 
 export const createFolder = async (
     name: string,
@@ -47,7 +45,6 @@ export const updateFolder = async (
     if (status !== 200) {
         return;
     }
-    // activeDirs.set(old.sort((a, b) => a.name.localeCompare(b.name)));
     return data;
 };
 
@@ -75,24 +72,3 @@ export const deleteFolder = async (
         }
     }
 };
-
-export async function fetchDirs(
-    parent: string,
-    cache: Boolean = false
-): Promise<void> {
-    activeDirs.set(undefined);
-    return new Promise((resolve, reject) => {
-        fetchFiles(parent!, "dirs", DEFAULT_PAGESIZE, cache)
-            .then(async (dirs) => {
-                activeDirs.set(dirs?.files);
-                if (cache) {
-                    for (let dir of dirs!.files) {
-                        fetchFiles(dir.id, "covers", 3, cache);
-                    }
-                }
-                resolve();
-                return;
-            })
-            .catch((status) => reject(status));
-    });
-}

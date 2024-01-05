@@ -1,14 +1,6 @@
 import { get } from "svelte/store";
-import {
-    dataCacheName,
-    folderStore,
-    searchItems,
-    sessionTimeout,
-} from "../shared/stores";
-import { fetchDirs } from "./folder";
-import { fetchImgs } from "./file";
-import { checkLoginStatus, colorPalette, getToken } from "../shared/utils";
-import { activeParentId, recents, refreshClicked } from "../stores";
+import { dataCacheName, searchItems, sessionTimeout } from "../shared/stores";
+import { colorPalette, getToken } from "../shared/utils";
 
 export const FOLDER_MIME_TYPE = "application/vnd.google-apps.folder";
 export const DIR_MIME_TYPE = "application/vnd.google-apps.folder";
@@ -21,7 +13,7 @@ export const FIELDS_SINGLE = "id,name,parents";
 export const FIELDS_MULTIPLE =
     "files(id,name,description,appProperties(origin),thumbnailLink,starred)";
 export const DEFAULT_PAGESIZE = 1000;
-export const PAGESIZE = 10;
+export const PAGESIZE = 100;
 
 export const wait = (s: number) => new Promise((res) => setTimeout(res, s));
 
@@ -94,75 +86,6 @@ export async function searchHandler(token: string, search: string) {
     if (res?.status === 200) {
         searchItems.set((await res?.json()).files);
     }
-}
-
-export const refreshMainContent = (
-    parent: string,
-    type?: "dirs" | "imgs"
-): Promise<void> => {
-    return new Promise(async (resolve, reject) => {
-        const proms: Promise<void>[] = [];
-        switch (type) {
-            case "dirs":
-                proms.push(fetchDirs(parent, true));
-                break;
-            case "imgs":
-                proms.push(fetchImgs(parent, true));
-                break;
-            default:
-                proms.push(fetchDirs(parent, true), fetchImgs(parent, true));
-                break;
-        }
-
-        Promise.all(proms)
-            .then(() => {
-                resolve();
-            })
-            .catch(async (e) => {
-                if (e.status === 401) {
-                    get(sessionTimeout) === false && sessionTimeout.set(true);
-                    return;
-                }
-                console.warn(e);
-            });
-    });
-};
-
-export const loadMainContent = (parent: string): Promise<void> => {
-    return new Promise(async (resolve, reject) => {
-        const proms = [fetchDirs(parent!), fetchImgs(parent!)];
-        Promise.all(proms)
-            .then(() => {
-                resolve();
-            })
-            .catch(async (e) => {
-                console.warn(e);
-                if (e.status === 401) {
-                    get(sessionTimeout) === false && sessionTimeout.set(true);
-                    return;
-                }
-            });
-    });
-};
-
-export function localFetch(url: string, krabsCache: Cache) {
-    return krabsCache.match(url);
-}
-
-export async function refreshCache() {
-    if (!checkLoginStatus()) {
-        sessionTimeout.set(true);
-        return;
-    }
-    refreshClicked.set(true);
-    window.localStorage.setItem("recents", "[]");
-    recents.set([]);
-    for (const key of await caches.keys()) {
-        if (key === get(dataCacheName)) await caches.delete(key);
-    }
-    refreshMainContent(get(activeParentId)).then(() => {
-        refreshClicked.set(false);
-    });
 }
 
 export const updateResource = async (
@@ -395,38 +318,6 @@ export const deleteMultiple = async (data: string[], accessToken: string) => {
     }
     Promise.allSettled(proms).then(() => {
         postMessage({ context: "IMG_DELETE" });
-    });
-};
-
-export const refreshDir = (
-    parent: string,
-    type?: "dirs" | "imgs"
-): Promise<void> => {
-    return new Promise(async (resolve, reject) => {
-        const proms: Promise<void>[] = [];
-        switch (type) {
-            case "dirs":
-                proms.push(fetchDirs(parent, true));
-                break;
-            case "imgs":
-                proms.push(fetchImgs(parent, true));
-                break;
-            default:
-                proms.push(fetchDirs(parent, true), fetchImgs(parent, true));
-                break;
-        }
-
-        Promise.all(proms)
-            .then(() => {
-                resolve();
-            })
-            .catch(async (e) => {
-                if (e.status === 401) {
-                    get(sessionTimeout) === false && sessionTimeout.set(true);
-                    return;
-                }
-                console.warn(e);
-            });
     });
 };
 

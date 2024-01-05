@@ -18,12 +18,7 @@
     onDestroy(() => {});
 </script>
 
-<dialog
-    id="dialog"
-    bind:this={dialog}
-    on:keydown={handleKeyDown}
-    on:wheel|preventDefault
->
+<dialog id="dialog" bind:this={dialog} on:keydown={handleKeyDown}>
     <slot />
 </dialog>
 
