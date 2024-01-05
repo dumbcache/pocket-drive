@@ -84,7 +84,7 @@
 
     .cover:hover {
         /* outline: 1px solid var(--color-focus); */
-        box-shadow: 0 0 5px 5px var(--color-focus);
+        box-shadow: 0 0 2px 2px var(--color-focus);
     }
     .cover:hover .pic {
         filter: brightness(0.8);

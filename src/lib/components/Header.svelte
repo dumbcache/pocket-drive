@@ -4,9 +4,9 @@
     import LogoutButton from "$lib/components/buttons/LogoutButton.svelte";
     import helpButton from "$lib/assets/help.svg?raw";
     import homeButton from "$lib/assets/home.svg?raw";
-    import Nav from "./Nav.svelte";
     import { activeView } from "$lib/scripts/shared/stores";
     import { page } from "$app/stores";
+    import Tools from "$lib/components/Tools.svelte";
 
     function goHome() {
         if ($page.params?.id === "r") return;
@@ -25,14 +25,8 @@
             <h1 class="title-short">PD</h1></button
         >
     </div>
-    <!-- <button
-        on:click={() => {
-            $previewItem = undefined;
-            goto("r", { noScroll: true });
-        }}><h1 class="title">PD</h1></button
-    > -->
-    <div class="nav">
-        <Nav />
+    <div class="tool-wrapper">
+        <Tools />
     </div>
     <div class="wrapper">
         <button class="btn help" title="shortcuts" on:click={() => {}}
@@ -112,7 +106,7 @@
             justify-content: end;
             gap: 2rem;
         }
-        .nav {
+        .tool-wrapper {
             display: none;
         }
         .help {

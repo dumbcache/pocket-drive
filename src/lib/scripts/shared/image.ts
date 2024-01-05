@@ -9,8 +9,6 @@ export function previewAndSetDropItems(
 ) {
     for (let file of files!) {
         if (file.type.match("image/")) {
-            // previewLoadDropItem(img, dropArea);
-            // dropZone.hidden = false;
             const id = Math.round(Math.random() * Date.now()).toString();
             const imgRef = URL.createObjectURL(file);
             if (
@@ -144,7 +142,7 @@ export function dropOkHandler() {
     const token = getToken();
     childWorker.postMessage({
         context: "DROP_SAVE",
-        dropItems: tempDirItems,
+        dropItems: tempDropItems,
         parent,
         token,
     });

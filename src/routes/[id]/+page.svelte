@@ -2,6 +2,7 @@
     import { onDestroy } from "svelte";
     import { navigating, page } from "$app/stores";
     import {
+        activeParent,
         activeView,
         fileStore,
         folderStore,
@@ -64,6 +65,9 @@
             <Tools />
         </div>
 
+        <h2 class="folder-name one" title={$activeParent.name}>
+            {$activeParent.name}
+        </h2>
         <Count
             count={view === "FOLDER"
                 ? $folderStore?.files.length
@@ -71,6 +75,9 @@
         />
     </nav>
 
+    <h2 class="folder-name two" title={$activeParent.name}>
+        {$activeParent.name}
+    </h2>
     <Content
         {view}
         count={view === "FOLDER"
@@ -111,7 +118,21 @@
     .dragover {
         background-color: #55f5;
     }
-
+    .folder-name {
+        /* padding: 3rem; */
+        font-size: 2rem;
+        /* margin: auto; */
+        max-width: 40rem;
+        width: fit-content;
+        word-wrap: unset;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        margin: auto;
+    }
+    .two {
+        display: none;
+    }
     @media (max-width: 600px) {
         .wrapper {
             padding: 0rem 0.5rem;
@@ -120,8 +141,18 @@
             display: initial;
         }
         .nav {
-            padding: 1rem;
+            padding: 1rem 0.5rem 1rem 0.5rem;
             gap: 2rem;
+            margin-bottom: 0rem;
+        }
+        .one {
+            display: none;
+        }
+        .two {
+            display: block;
+            font-size: initial;
+            padding-bottom: 2rem;
+            max-width: 80%;
         }
     }
 </style>
