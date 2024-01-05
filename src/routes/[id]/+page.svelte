@@ -14,16 +14,16 @@
     import Count from "$lib/components/actions/Count.svelte";
 
     let view = $activeView;
-    let draggedOver = false;
+    // let draggedOver = false;
 
-    export function imgDropHandler(e: DragEvent) {
-        e.preventDefault();
-        draggedOver = false;
-        let files = e.dataTransfer?.files;
-        if (files) {
-            previewAndSetDropItems(files);
-        }
-    }
+    // export function imgDropHandler(e: DragEvent) {
+    //     e.preventDefault();
+    //     draggedOver = false;
+    //     let files = e.dataTransfer?.files;
+    //     if (files) {
+    //         previewAndSetDropItems(files);
+    //     }
+    // }
     const unsubscribeNavigation = navigating.subscribe(
         (val) => val || (view = "FOLDER")
     );
@@ -34,20 +34,7 @@
     });
 </script>
 
-<section
-    class="wrapper {draggedOver === true ? 'dragover' : ''}"
-    on:dragstart|preventDefault
-    on:dragover|preventDefault={(e) => {
-        draggedOver = true;
-    }}
-    on:dragenter={(e) => {
-        draggedOver = true;
-    }}
-    on:dragleave={(e) => {
-        draggedOver = false;
-    }}
-    on:drop={imgDropHandler}
->
+<section class="wrapper">
     <nav class="nav">
         {#if $page.params?.id !== "r"}
             <button
@@ -115,9 +102,7 @@
         transform: translate(0%, -50%);
         margin-left: 2rem;
     }
-    .dragover {
-        background-color: #55f5;
-    }
+
     .folder-name {
         /* padding: 3rem; */
         font-size: 2rem;

@@ -1,7 +1,6 @@
 <script lang="ts">
     import closeIcon from "$lib/assets/close.svg?raw";
     import doneIcon from "$lib/assets/done.svg?raw";
-    import loadingIcon from "$lib/assets/progress.svg?raw";
     import successIcon from "$lib/assets/success.svg?raw";
     import failureIcon from "$lib/assets/failure.svg?raw";
     import {
@@ -10,8 +9,6 @@
     } from "$lib/scripts/shared/image";
     import Spinner from "../Spinner.svelte";
     export let item: DropItem;
-
-    let progressIcon: string;
 </script>
 
 <div class="drop-item" data-id={item.id}>

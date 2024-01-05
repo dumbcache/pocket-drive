@@ -11,7 +11,7 @@
     } from "$lib/scripts/shared/image";
     import { dropItems } from "$lib/scripts/shared/stores";
 
-    export let autosave;
+    let auto = false;
     const dispatch = createEventDispatcher();
     function triggerDispatch(type: string) {
         dispatch(type);
@@ -51,7 +51,7 @@
     />
     <span>
         <button
-            class="btn {autosave === true ? 'autosave' : ''}"
+            class="btn {auto === true ? 'autosave' : ''}"
             title="toggle autosave"
             on:click={() => {
                 triggerDispatch("auto");

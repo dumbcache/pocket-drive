@@ -10,7 +10,18 @@
     import { isLoggedin, sessionTimeout } from "$lib/scripts/shared/stores";
     import { googleClient } from "$lib/scripts/login";
     import { goto } from "$app/navigation";
+    import { previewAndSetDropItems } from "$lib/scripts/shared/image";
 
+    let draggedOver = false;
+
+    export function imgDropHandler(e: DragEvent) {
+        e.preventDefault();
+        draggedOver = false;
+        let files = e.dataTransfer?.files;
+        if (files) {
+            previewAndSetDropItems(files);
+        }
+    }
     onMount(() => {
         try {
             updateRecents();
@@ -36,12 +47,25 @@
     on:keydown
 />
 
-<div class="layout">
+<div
+    class="layout {draggedOver === true ? 'dragover' : ''}"
+    on:dragstart|preventDefault
+    on:dragover|preventDefault={(e) => {
+        draggedOver = true;
+    }}
+    on:dragenter={(e) => {
+        draggedOver = true;
+    }}
+    on:dragleave={(e) => {
+        draggedOver = false;
+    }}
+    on:drop={imgDropHandler}
+>
     <Header />
     <slot />
     <Drop />
     {#if $sessionTimeout}
-        <div class="session-notify" on:on:wheel|preventDefault>
+        <div class="session-notify" on:wheel|preventDefault>
             <div class="session-wrapper">
                 <p>Session expired</p>
                 <div class="button-wrapper">
@@ -98,6 +122,9 @@
     }
     button:hover {
         background-color: var(--bg-color-four);
+    }
+    .dragover {
+        background-color: #55f5;
     }
     @media (max-width: 600px) {
         .layout {
