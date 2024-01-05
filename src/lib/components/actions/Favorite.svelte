@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { updateResource } from "$lib/scripts/gdrive/utils";
+    import { updateSingle } from "$lib/scripts/gdrive/utils";
     import favoriteIcon from "$lib/assets/favorite.svg?raw";
     import { createEventDispatcher } from "svelte";
     import { getToken } from "$lib/scripts/shared/utils";
@@ -9,7 +9,7 @@
 
     const dispatch = createEventDispatcher();
     function favStatus() {
-        updateResource(id, { starred: !starred }, getToken()).then(
+        updateSingle(id, { starred: !starred }, getToken()).then(
             ({ status }) => {
                 if (status === 200) dispatch("fav");
             }
@@ -23,18 +23,19 @@
 
 <style>
     .btn {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 100%;
-        display: block;
+        width: var(--size-medium);
+        height: var(--size-medium);
     }
     .btn :global(svg) {
-        stroke: var(--color-black);
-        stroke-width: 2rem;
         fill: var(--color-white-level-one);
     }
     .starred :global(svg) {
         fill: red;
+    }
+    @media (max-width: 600px) {
+        .btn {
+            width: var(--size-default);
+            height: var(--size-default);
+        }
     }
 </style>

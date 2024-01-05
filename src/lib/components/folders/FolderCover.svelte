@@ -115,13 +115,11 @@
     .cover .pic-wrapper:nth-child(3) {
         grid-area: three;
     }
+
     .favorite {
         position: absolute;
         right: 1rem;
         bottom: 1rem;
-        /* opacity: 0; */
-        width: var(--size-small);
-        height: var(--size-small);
     }
     .edit {
         padding: 0.5rem 0.2rem;
@@ -160,10 +158,8 @@
             filter: brightness(0.8);
         }
         .favorite {
-            right: 0.5rem;
+            right: 1rem;
             bottom: 0.5rem;
-            width: var(--size-default);
-            height: var(--size-default);
         }
     }
 </style>

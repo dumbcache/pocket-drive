@@ -39,7 +39,7 @@
                 </a>
             {/if}
 
-            <span class="favorite btn">
+            <span class="favorite">
                 <Favorite
                     id={file.id}
                     starred={file.starred}
@@ -84,20 +84,18 @@
         right: 0.5rem;
         opacity: 0;
         transition: opacity 0.3s linear;
-        /* width: var(--size-small);
-        height: var(--size-small); */
-        /* filter: none; */
-        padding: 0.5rem;
     }
     .favorite {
         bottom: 0.5rem;
     }
+    .img-link {
+        display: inline-block;
+        top: 0.5rem;
+        width: var(--size-medium);
+        height: var(--size-medium);
+    }
     .img-link:hover :global(svg) {
         fill: red;
-    }
-    .img-link {
-        display: block;
-        top: 0.5rem;
     }
     .img-link :global(svg) {
         fill: var(--color-white);
@@ -143,8 +141,7 @@
         .favorite {
             bottom: 0.2rem;
         }
-        .img-link,
-        .favorite {
+        .img-link {
             width: var(--size-default);
             height: var(--size-default);
             padding: 0rem;

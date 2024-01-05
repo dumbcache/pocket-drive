@@ -57,17 +57,23 @@
         height: 4rem;
         overflow: hidden;
     }
+    .edit-tools:hover {
+        height: initial;
+        background-color: #0005;
+        border-radius: 5rem;
+        outline: 1px solid var(--color-focus);
+        backdrop-filter: blur(2px);
+    }
     .btn {
         display: flex;
         align-items: center;
         justify-content: center;
+        background: none;
     }
     .btn:hover :global(svg) {
         fill: var(--color-focus);
     }
     .btn :global(svg) {
-        stroke: var(--color-black);
-        stroke-width: 1rem;
         fill: var(--color-white-level-one);
         width: var(--secondary-icon-size);
     }
@@ -78,12 +84,7 @@
         visibility: initial;
         opacity: 1;
     }
-    .edit-tools:hover {
-        height: initial;
-        background-color: #0005;
-        border-radius: 5rem;
-        outline: 1px solid var(--color-focus);
-    }
+
     .action {
         visibility: hidden;
         opacity: 0;
