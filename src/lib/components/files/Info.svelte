@@ -9,7 +9,7 @@
     import {
         IMG_MIME_TYPE,
         fetchMultiple,
-        updateResource,
+        updateSingle,
     } from "$lib/scripts/gdrive/utils";
     import { getToken, isValidUrl } from "$lib/scripts/shared/utils";
 
@@ -29,8 +29,10 @@
         });
     });
     async function handleSave() {
-        if (!checkValid()) return;
-        await updateResource(id, { name, description }, getToken());
+        if (description) {
+            if (!checkValid()) return;
+        }
+        await updateSingle(id, { name, description }, getToken());
         changes = false;
         let file = { ...$activeImage, name, description };
         fetchMultiple(

@@ -296,7 +296,7 @@ export const updateSingle = async (
         body: JSON.stringify(imgMeta),
     });
     const res = await makeFetch(req);
-    let data = (await req.json()) as CreateResourceResponse;
+    let data = (await res.json()) as CreateResourceResponse;
     return { status: res?.status, data };
 };
 

@@ -1,6 +1,6 @@
 <script lang="ts">
     import Dialog from "$lib/components/Dialog.svelte";
-    import { mode, progress } from "$lib/scripts/shared/stores";
+    import { activeParent, mode, progress } from "$lib/scripts/shared/stores";
     import { onMount } from "svelte";
     import doneIcon from "$lib/assets/done.svg?raw";
     import closeIcon from "$lib/assets/close.svg?raw";
@@ -96,26 +96,19 @@
         folderSelectVisible = false;
     }
     async function handleSave() {
-        if (!checkValid()) return;
-        // await updateResource(id, { name, description }, getToken());
-        // changes = false;
-        // let file = { ...$activeImage, name, description };
-        // fetchMultiple(
-        //     { parent: $activeParent.id, mimeType: IMG_MIME_TYPE },
-        //     getToken(),
-        //     true
-        // );
-        // fileStore.update((prev) => {
-        //     return {
-        //         nextPageToken: prev?.nextPageToken,
-        //         files: prev?.files.map((f) => {
-        //             if (f.id === id) return file;
-        //             else return f;
-        //         }),
-        //     };
-        // });
+        if (description) {
+            if (!checkValid()) return;
+        }
+        childWorker.postMessage({
+            parent: $activeParent.id,
+            context: "EDIT",
+            files: set,
+            detail: { name, description },
+            token: getToken(),
+        });
+        dialog.close();
+        $progress = true;
     }
-    function handleCancel() {}
 
     function handleChange(e) {
         e.target.name = "url" && checkValid();
@@ -135,10 +128,10 @@
     {#if files}
         <div class="edit-buttons">
             {#if confirm}
-                <button class="cancel btn" on:click={() => (confirm = false)}
+                <button class="cancel action" on:click={() => (confirm = false)}
                     >cancel</button
                 >
-                <button class="confirm btn" on:click={deleteAction}
+                <button class="confirm action" on:click={deleteAction}
                     >confirm</button
                 >
             {:else}
@@ -215,6 +208,7 @@
                 class="edit-form"
                 on:keydown|stopPropagation
                 on:click|stopPropagation
+                on:submit|preventDefault={handleSave}
             >
                 <input
                     type="text"
@@ -238,11 +232,15 @@
                     <p class="alert">Enter valid url</p>
                 {/if}
                 <div class="button-wrapper">
-                    <button class="cancel action" on:click={handleCancel}
-                        >cancel</button
+                    <button
+                        class="cancel action"
+                        type="reset"
+                        on:click={() => (action = "")}>cancel</button
                     >
-                    <button class="save action" on:click={handleSave}
-                        >save</button
+                    <button
+                        class="save action"
+                        type="submit"
+                        on:click={handleSave}>save</button
                     >
                 </div>
             </form>
@@ -344,6 +342,7 @@
         width: 5rem;
         padding: 0.5rem;
         border: 1px solid var(--color-file-border);
+        text-align: center;
     }
     .action:hover {
         background-color: var(--bg-color-four);

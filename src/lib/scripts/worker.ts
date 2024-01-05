@@ -237,6 +237,39 @@ export function moveMulitple(
     });
 }
 
+export const updateSingle = async (
+    id: string,
+    imgMeta: ImgMeta,
+    accessToken: string
+) => {
+    let req = new Request(`${FILE_API}/${id}`, {
+        method: "PATCH",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify(imgMeta),
+    });
+    const res = await makeFetch(req);
+    let data = (await res.json()) as CreateResourceResponse;
+    return { status: res?.status, data };
+};
+
+export function updateMultiple(
+    parent: string,
+    imgMeta: ImgMeta,
+    data: string[],
+    accessToken: string
+) {
+    let proms = [];
+    for (let id of data) {
+        proms.push(updateSingle(id, imgMeta, accessToken));
+    }
+    Promise.allSettled(proms).then(() => {
+        postMessage({ context: "EDIT", parent });
+    });
+}
+
 onmessage = ({ data }) => {
     switch (data.context) {
         case "IMG_PREVIEW":
@@ -251,9 +284,9 @@ onmessage = ({ data }) => {
         case "MOVE":
             moveMulitple(data.parent, data.files, data.token);
             return;
-        // case "EDIT_IMGS":
-        //     editImgs(data.url, data.imgs, data.token);
-        //     return;
+        case "EDIT":
+            updateMultiple(data.parent, data.detail, data.files, data.token);
+            return;
         case "DROP_SAVE":
             dropSave(data.dropItems, data.token);
             return;

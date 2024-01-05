@@ -234,6 +234,17 @@ if (browser) {
                 img.src = url;
                 return;
 
+            case "EDIT":
+                fileStore.set(
+                    await fetchMultiple(
+                        { parent: data.parent, mimeType: IMG_MIME_TYPE },
+                        getToken(),
+                        true
+                    )
+                );
+                progress.set(false);
+                return;
+
             case "MOVE":
                 parent = data.parent;
                 set = new Set(data.set);
