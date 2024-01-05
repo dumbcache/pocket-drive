@@ -69,7 +69,6 @@
         position: sticky;
         top: 0;
         right: 0;
-        background-color: var(--primary-bg-color);
         display: flex;
         align-items: center;
         padding: 2rem 0rem;

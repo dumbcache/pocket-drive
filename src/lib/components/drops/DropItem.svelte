@@ -8,14 +8,10 @@
         dropOkHandlerSingle,
         removeDropEntry,
     } from "$lib/scripts/shared/image";
+    import Spinner from "../Spinner.svelte";
     export let item: DropItem;
 
     let progressIcon: string;
-    $: item.progress === "uploading"
-        ? (progressIcon = loadingIcon)
-        : item.progress === "success"
-          ? (progressIcon = successIcon)
-          : (progressIcon = failureIcon);
 </script>
 
 <div class="drop-item" data-id={item.id}>
@@ -23,13 +19,13 @@
         <img src={item.imgRef} class="drop-img" alt="" />
         {#if item.progress}
             <div class="progress">
-                <div
-                    class="progress-icon {item.progress === 'uploading'
-                        ? 'anime uploading'
-                        : ''}"
-                >
-                    {@html progressIcon}
-                </div>
+                {#if item.progress === "uploading"}
+                    <Spinner borderWidth="2px" width="3rem" height="3rem" />
+                {:else if item.progress === "success"}
+                    <div>{@html successIcon}</div>
+                {:else}
+                    <div>{@html failureIcon}</div>
+                {/if}
             </div>
         {/if}
     </div>

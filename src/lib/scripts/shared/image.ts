@@ -80,7 +80,7 @@ export function setExtraInfo(items: DropItem[]) {
     const commonUrl = (
         document.querySelector(".common-url") as HTMLInputElement
     ).value;
-    const tempDirItems = [];
+    const tempItems = [];
     for (let item of items) {
         if (item.progress === "success" || item.progress === "uploading")
             continue;
@@ -99,9 +99,9 @@ export function setExtraInfo(items: DropItem[]) {
             item.url = decodeURI(commonUrl.trim());
         }
         item.progress = "uploading";
-        tempDirItems.push(item);
+        tempItems.push(item);
     }
-    return tempDirItems;
+    return [items, tempItems];
 }
 
 export function removeDropEntry(id: string) {
@@ -115,10 +115,11 @@ export function clearDropItems() {
 
 export function dropOkHandlerSingle(id: string) {
     let items = get(dropItems).filter((item) => item.id === id);
-    const [itemSingle] = setExtraInfo(items);
+    const tempItems = setExtraInfo(items);
+    let single = tempItems[1][0];
     items = get(dropItems).map((item) => {
         if (item.id === id) {
-            return itemSingle;
+            return single;
         } else {
             return item;
         }
@@ -129,20 +130,21 @@ export function dropOkHandlerSingle(id: string) {
     const token = getToken();
     childWorker.postMessage({
         context: "DROP_SAVE",
-        dropItems: [itemSingle],
+        dropItems: [single],
         parent,
         token,
     });
 }
 
 export function dropOkHandler() {
-    const tempDropItems = setExtraInfo(get(dropItems));
+    let [items, tempItems] = setExtraInfo(get(dropItems));
+    dropItems.set(items);
     const { pathname } = window.location;
     const parent = pathname === "/" ? getRoot() : pathname.substring(1);
     const token = getToken();
     childWorker.postMessage({
         context: "DROP_SAVE",
-        dropItems: tempDropItems,
+        dropItems: tempItems,
         parent,
         token,
     });
