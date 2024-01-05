@@ -52,6 +52,7 @@
         name = $activeImage.name;
         description = $activeImage.description;
         changes = false;
+        invalid = false;
     }
 
     function handleChange(e) {
@@ -85,6 +86,7 @@
         placeholder="Name"
         bind:value={name}
         on:change={handleChange}
+        autocomplete="off"
     />
     <input
         type="url"
@@ -93,6 +95,7 @@
         placeholder="URL"
         bind:value={description}
         on:change={handleChange}
+        autocomplete="off"
     />
 
     {#if invalid}
@@ -169,5 +172,13 @@
     }
     .alert {
         color: #aaa;
+        font-size: 1.3rem;
+        user-select: none;
+    }
+
+    @media (max-width: 600px) {
+        .info {
+            border-radius: 0rem;
+        }
     }
 </style>

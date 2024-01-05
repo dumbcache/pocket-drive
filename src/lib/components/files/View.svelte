@@ -5,6 +5,7 @@
     import { activeImage, mode } from "$lib/scripts/shared/stores";
     import closeIcon from "$lib/assets/close.svg?raw";
     import infoIcon from "$lib/assets/info.svg?raw";
+    import urlIcon from "$lib/assets/url.svg?raw";
     import { changeImage } from "$lib/scripts/shared/utils";
     import Info from "$lib/components/files/Info.svelte";
 
@@ -73,7 +74,7 @@
             <img
                 class="preview-img"
                 data-id={$activeImage.id}
-                src={$activeImage.src}
+                src={$activeImage.thumbnailLink}
                 alt=""
             />
             <!-- <button
@@ -94,6 +95,11 @@
     {#if !infoVisible}
         <button class="btn info" on:click={() => (infoVisible = !infoVisible)}
             >{@html infoIcon}</button
+        >
+    {/if}
+    {#if $activeImage.description}
+        <a href={$activeImage.description} target="_blank" class="btn url"
+            >{@html urlIcon}</a
         >
     {/if}
 </Dialog>
@@ -139,15 +145,21 @@
         object-fit: contain;
         object-position: center;
     }
-    .close {
+    .close,
+    .info,
+    .url {
         position: absolute;
         top: 2rem;
+        z-index: 10;
+    }
+    .close {
         left: 2rem;
     }
     .info {
-        position: absolute;
-        top: 2rem;
         right: 2rem;
+    }
+    .url {
+        right: 6rem;
     }
     @media (max-width: 600px) {
         #view {
@@ -170,16 +182,19 @@
             transform: translate(-50%, -50%);
             margin: auto;
             position: absolute;
-            z-index: 1;
+            z-index: 11;
         }
-        .info {
-            /* display: none; */
-            /* top: 0.5rem; */
-            position: absolute;
+        .info,
+        .url {
             bottom: 8rem;
-            right: 0.5rem;
             top: unset;
             height: fit-content;
+        }
+        .info {
+            right: 2rem;
+        }
+        .url {
+            right: 5rem;
         }
         .close {
             top: 0.5rem;

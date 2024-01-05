@@ -222,6 +222,7 @@
                     placeholder="Name"
                     bind:value={name}
                     on:change={handleChange}
+                    autocomplete="off"
                 />
                 <input
                     type="url"
@@ -230,6 +231,7 @@
                     placeholder="URL"
                     bind:value={description}
                     on:change={handleChange}
+                    autocomplete="off"
                 />
 
                 {#if invalid}
@@ -353,6 +355,7 @@
     }
     .alert {
         color: #aaa;
+        font-size: 1.2rem;
     }
 
     @media (max-width: 600px) {
