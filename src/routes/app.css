@@ -109,6 +109,8 @@
     --bg-color-one: var(--color-black-one);
     --bg-color-two: var(--color-black-two);
     --bg-color-three: var(--color-black-three);
+    --bg-color-four: #444;
+    --bg-color-five: #555;
     --color-one: var(--color-white-one);
     --color-two: var(--color-white-two);
     --color-three: var(--color-white-three);

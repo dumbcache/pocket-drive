@@ -50,7 +50,7 @@
         padding-top: 0rem;
         max-width: 30%;
         z-index: 1;
-        min-width: 30%;
+        min-width: 40%;
         height: 100vh;
         backdrop-filter: blur(1rem);
         -webkit-backdrop-filter: blur(1rem);

@@ -260,16 +260,16 @@
     .cancel {
         /* background-color: var(--primary-backdrop-color);
         box-shadow: 0 0 10px 2px var(--color-focus); */
-        padding: 0.5rem;
+        padding: 0rem 0.5rem;
         border-radius: 0.5rem;
         border: 1px solid var(--color-file-border);
-        color: var(--primary-bg-color);
+        color: var(--primary-color);
     }
-    .cancel {
-        background-color: #f00;
+    .cancel:hover {
+        background-color: var(--bg-color-four);
     }
-    .confirm {
-        background-color: #0f0;
+    .confirm:hover {
+        background-color: var(--bg-color-four);
     }
     input {
         background: var(--primary-bg-color);

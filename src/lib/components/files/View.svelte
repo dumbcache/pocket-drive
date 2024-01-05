@@ -4,6 +4,7 @@
     import Dialog from "$lib/components/Dialog.svelte";
     import { activeImage, mode } from "$lib/scripts/shared/stores";
     import closeIcon from "$lib/assets/close.svg?raw";
+    import infoIcon from "$lib/assets/info.svg?raw";
     import { changeImage } from "$lib/scripts/shared/utils";
     import Info from "$lib/components/files/Info.svelte";
 
@@ -83,13 +84,18 @@
         </section>
         {#if infoVisible}
             <section class="three">
-                <Info />
+                <Info on:close={() => (infoVisible = !infoVisible)} />
             </section>
         {/if}
     </artcle>
     <button class="btn close" on:click={handleViewClose}
         >{@html closeIcon}</button
     >
+    {#if !infoVisible}
+        <button class="btn info" on:click={() => (infoVisible = !infoVisible)}
+            >{@html infoIcon}</button
+        >
+    {/if}
 </Dialog>
 
 <style>
@@ -117,16 +123,12 @@
         position: relative;
         margin: auto;
         max-width: 100%;
+        min-width: 50%;
     }
 
     .three {
-        min-width: 30rem;
+        min-width: 40rem;
         /* border: 1px solid red; */
-    }
-    .info-toggle {
-        position: absolute;
-        top: 0;
-        right: 0;
     }
 
     .two img {
@@ -138,6 +140,11 @@
         object-position: center;
     }
     .close {
+        position: absolute;
+        top: 2rem;
+        left: 2rem;
+    }
+    .info {
         position: absolute;
         top: 2rem;
         right: 2rem;
@@ -155,13 +162,28 @@
             max-height: 10%;
             padding: 1rem 0rem;
         }
-
-        .info-toggle {
+        .three {
+            min-width: 100%;
+            height: 100%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            margin: auto;
+            position: absolute;
+            z-index: 1;
+        }
+        .info {
             /* display: none; */
+            /* top: 0.5rem; */
+            position: absolute;
+            bottom: 8rem;
+            right: 0.5rem;
+            top: unset;
+            height: fit-content;
         }
         .close {
             top: 0.5rem;
-            right: 0.5rem;
+            left: 0.5rem;
         }
     }
 </style>

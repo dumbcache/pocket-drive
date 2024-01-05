@@ -21,7 +21,7 @@ export let activeParent = writable<{
     name: string;
     parents?: string[];
 }>();
-export let activeImage = writable<{ id: string; src: string }>();
+export let activeImage = writable<GoogleFile>();
 export let dropItems = writable<DropItem[]>([]);
 export let editItems = writable<GoogleFile[]>([]);
 
