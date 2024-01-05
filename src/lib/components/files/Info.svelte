@@ -1,20 +1,71 @@
 <script lang="ts">
-    import { activeImage } from "$lib/scripts/shared/stores";
+    import {
+        activeImage,
+        activeParent,
+        fileStore,
+    } from "$lib/scripts/shared/stores";
     import closeIcon from "$lib/assets/close.svg?raw";
     import { createEventDispatcher, onMount } from "svelte";
+    import {
+        IMG_MIME_TYPE,
+        fetchMultiple,
+        updateResource,
+    } from "$lib/scripts/gdrive/utils";
+    import { getToken, isValidUrl } from "$lib/scripts/shared/utils";
 
     const dispatch = createEventDispatcher();
+    let id: string = $activeImage.id;
+    let name: string = $activeImage.name;
+    let description: string = $activeImage.description;
+    let invalid = false;
     let changes = true;
-    let file = { ...$activeImage };
     onMount(() => {
-        return activeImage.subscribe((data) => (file = data));
+        return activeImage.subscribe((data) => {
+            name = data.name;
+            description = data.description;
+            id = data.id;
+            invalid = false;
+            changes = false;
+        });
     });
-    function handleSave() {
-        console.log(file.id, file.name, file.description);
+    async function handleSave() {
+        if (!checkValid()) return;
+        await updateResource(id, { name, description }, getToken());
+        changes = false;
+        let file = { ...$activeImage, name, description };
+        fetchMultiple(
+            { parent: $activeParent.id, mimeType: IMG_MIME_TYPE },
+            getToken(),
+            true
+        );
+        fileStore.update((prev) => {
+            return {
+                nextPageToken: prev?.nextPageToken,
+                files: prev?.files.map((f) => {
+                    if (f.id === id) return file;
+                    else return f;
+                }),
+            };
+        });
     }
     function handleCancel() {
-        file = { ...$activeImage };
-        console.log(file);
+        name = $activeImage.name;
+        description = $activeImage.description;
+        changes = false;
+    }
+
+    function handleChange(e) {
+        changes = true;
+        e.target.name = "url" && checkValid();
+    }
+    function checkValid() {
+        const url = isValidUrl(description);
+        if (!url) {
+            invalid = true;
+            return false;
+        }
+        invalid = false;
+        return true;
     }
 </script>
 
@@ -25,16 +76,28 @@
             >{@html closeIcon}</button
         >
     </header>
-    <p class="id">{file.id}</p>
+    <p class="id">{id}</p>
     <!-- <hr /> -->
-    <input type="text" placeholder="Name" bind:value={file.name} />
+
+    <input
+        type="text"
+        name="name"
+        placeholder="Name"
+        bind:value={name}
+        on:change={handleChange}
+    />
     <input
         type="url"
-        name=""
-        id=""
+        name="url"
+        class:invalid
         placeholder="URL"
-        bind:value={file.description}
+        bind:value={description}
+        on:change={handleChange}
     />
+
+    {#if invalid}
+        <p class="alert">Enter valid url</p>
+    {/if}
     {#if changes}
         <footer>
             <button class="cancel action" on:click={handleCancel}>cancel</button
@@ -63,6 +126,7 @@
         height: 100%;
         width: 100%;
         position: relative;
+        border-radius: 1rem;
     }
     input {
         background: unset;
@@ -77,6 +141,9 @@
         background-color: var(--bg-color-five);
         border-bottom: 2px solid var(--color-focus);
         outline: none;
+    }
+    .invalid {
+        border-bottom: 2px solid #f00;
     }
     .id {
         color: var(--color-black-level-six);
@@ -99,5 +166,8 @@
     }
     .action:hover {
         background-color: var(--bg-color-four);
+    }
+    .alert {
+        color: #aaa;
     }
 </style>

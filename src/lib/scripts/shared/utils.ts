@@ -195,7 +195,7 @@ export function setActiveImage(id: string, src: string) {
         URL.revokeObjectURL(url);
     }
     const [file] = get(fileStore)?.files.filter((file) => file.id === id);
-    activeImage.set({ ...file });
+    activeImage.set(file);
 }
 
 export function changeImage(direction: "PREV" | "NEXT") {
