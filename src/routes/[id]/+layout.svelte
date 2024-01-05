@@ -1,22 +1,32 @@
 <script lang="ts">
     import Header from "$lib/components/Header.svelte";
     import Drop from "$lib/components/drops/Drop.svelte";
-    import { updateRecents } from "$lib/scripts/shared/utils";
+    import { signUserOut, updateRecents } from "$lib/scripts/shared/utils";
     import { onMount } from "svelte";
     import {
         checkRefreshTimeout,
         checkSessionTimeout,
     } from "$lib/scripts/shared/utils";
+    import { isLoggedin, sessionTimeout } from "$lib/scripts/shared/stores";
+    import { googleClient } from "$lib/scripts/login";
+    import { goto } from "$app/navigation";
 
     onMount(() => {
         try {
             updateRecents();
             checkSessionTimeout();
             checkRefreshTimeout();
+            googleClient.loadGSIScript();
         } catch (error) {
             console.warn(error);
         }
     });
+
+    function signoutHandler() {
+        isLoggedin.set(false);
+        signUserOut();
+        goto("/");
+    }
 </script>
 
 <svelte:window
@@ -30,6 +40,19 @@
     <Header />
     <slot />
     <Drop />
+    {#if $sessionTimeout}
+        <div class="session-notify" on:on:wheel|preventDefault>
+            <div class="session-wrapper">
+                <p>Session expired</p>
+                <div class="button-wrapper">
+                    <button on:click={signoutHandler}>logout</button>
+                    <button on:click={googleClient.requestToken}
+                        >continue</button
+                    >
+                </div>
+            </div>
+        </div>
+    {/if}
 </div>
 
 <style>
@@ -37,7 +60,44 @@
         display: flex;
     }
 
-    @media (max-width: 800px) {
+    .session-notify {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        display: grid;
+        place-content: center;
+        backdrop-filter: blur(2px);
+        -webkit-backdrop-filter: blur(2px);
+        z-index: 100;
+    }
+    .session-wrapper {
+        display: flex;
+        flex-flow: column;
+        gap: 1rem;
+        border: 1px solid var(--color-outline);
+        padding: 5rem;
+        border-radius: 1rem;
+        box-shadow: 0 0 10px 5px var(--color-focus);
+        background-color: var(--primary-backdrop-color);
+    }
+
+    p {
+        width: fit-content;
+        margin: auto;
+    }
+    .button-wrapper {
+        display: flex;
+        gap: 1rem;
+    }
+    button {
+        padding: 0.5rem;
+        width: 7rem;
+        border: 1px solid var(--color-outline);
+        border-radius: 0.5rem;
+    }
+    button:hover {
+        background-color: var(--bg-color-four);
     }
     @media (max-width: 600px) {
         .layout {
