@@ -11,7 +11,11 @@
     import selectallIcon from "$lib/assets/selectall.svg?raw";
     import Count from "../actions/Count.svelte";
     import FolderSelect from "../folders/FolderSelect.svelte";
-    import { childWorker, getToken } from "$lib/scripts/shared/utils";
+    import {
+        childWorker,
+        getToken,
+        isValidUrl,
+    } from "$lib/scripts/shared/utils";
 
     export let files: FileResponse;
     let dialog: Dialog;
@@ -23,6 +27,9 @@
     let folderSelectVisible = false;
     let selectedParent = "";
     let confirm = false;
+    let name: string;
+    let description: string;
+    let invalid = false;
 
     function thumbClick(e: MouseEvent) {
         let target = e.target as HTMLImageElement;
@@ -87,6 +94,40 @@
     }
     function folderSelectClose() {
         folderSelectVisible = false;
+    }
+    async function handleSave() {
+        if (!checkValid()) return;
+        // await updateResource(id, { name, description }, getToken());
+        // changes = false;
+        // let file = { ...$activeImage, name, description };
+        // fetchMultiple(
+        //     { parent: $activeParent.id, mimeType: IMG_MIME_TYPE },
+        //     getToken(),
+        //     true
+        // );
+        // fileStore.update((prev) => {
+        //     return {
+        //         nextPageToken: prev?.nextPageToken,
+        //         files: prev?.files.map((f) => {
+        //             if (f.id === id) return file;
+        //             else return f;
+        //         }),
+        //     };
+        // });
+    }
+    function handleCancel() {}
+
+    function handleChange(e) {
+        e.target.name = "url" && checkValid();
+    }
+    function checkValid() {
+        const url = isValidUrl(description);
+        if (!url) {
+            invalid = true;
+            return false;
+        }
+        invalid = false;
+        return true;
     }
 </script>
 
@@ -175,14 +216,32 @@
                 on:keydown|stopPropagation
                 on:click|stopPropagation
             >
-                <p>Enter URL or Name</p>
-                <input type="text" placeholder="url" />
-                <input type="text" placeholder="name" />
-                <div>
-                    <button class="cancel btn" on:click={() => (action = "")}
-                        >{@html closeIcon}</button
+                <input
+                    type="text"
+                    name="name"
+                    placeholder="Name"
+                    bind:value={name}
+                    on:change={handleChange}
+                />
+                <input
+                    type="url"
+                    name="url"
+                    class:invalid
+                    placeholder="URL"
+                    bind:value={description}
+                    on:change={handleChange}
+                />
+
+                {#if invalid}
+                    <p class="alert">Enter valid url</p>
+                {/if}
+                <div class="button-wrapper">
+                    <button class="cancel action" on:click={handleCancel}
+                        >cancel</button
                     >
-                    <button class="ok btn">{@html doneIcon}</button>
+                    <button class="save action" on:click={handleSave}
+                        >save</button
+                    >
                 </div>
             </form>
         </div>
@@ -196,6 +255,7 @@
         align-items: flex-start;
         justify-content: center;
         gap: var(--content-gap);
+        padding: 2rem 0rem;
     }
 
     img {
@@ -221,9 +281,11 @@
     }
 
     .edit-buttons {
-        position: relative;
-        padding-top: 2rem;
-        padding-bottom: 4rem;
+        position: sticky;
+        top: 0rem;
+        z-index: 1;
+        backdrop-filter: blur(5px);
+        padding: 2rem 0rem;
         display: flex;
         flex-flow: row nowrap;
         align-items: center;
@@ -238,6 +300,8 @@
         position: fixed;
         top: 0;
         left: 0;
+        bottom: 0;
+        right: 0;
         height: 100%;
         width: 100%;
         display: grid;
@@ -248,54 +312,65 @@
     }
 
     .edit-form {
-        background-color: var(--primary-backdrop-color);
-        box-shadow: 0 0 10px 2px var(--color-focus);
+        background-color: var(--primary-bg-color);
+        box-shadow: 0 0 1px 2px var(--color-focus);
         display: flex;
         flex-flow: column nowrap;
         padding: 3rem;
         gap: 1rem;
         border-radius: 1rem;
     }
-    .confirm,
-    .cancel {
-        /* background-color: var(--primary-backdrop-color);
-        box-shadow: 0 0 10px 2px var(--color-focus); */
-        padding: 0rem 0.5rem;
-        border-radius: 0.5rem;
-        border: 1px solid var(--color-file-border);
-        color: var(--primary-color);
-    }
-    .cancel:hover {
-        background-color: var(--bg-color-four);
-    }
-    .confirm:hover {
-        background-color: var(--bg-color-four);
-    }
     input {
-        background: var(--primary-bg-color);
-        color: var(--primary-color);
+        background: unset;
         padding: 0.5rem;
         border: none;
-        border-bottom: 1px solid var(--color-focus);
-        border-bottom-left-radius: 0.5rem;
-        border-bottom-right-radius: 0.5rem;
+        /* border-bottom: 1px solid var(--color-focus); */
+        background-color: var(--bg-color-four);
+        padding: 1rem;
     }
-    .cancel :global(svg) {
-        fill: red;
+    input:active,
+    input:focus {
+        background-color: var(--bg-color-five);
+        border-bottom: 2px solid var(--color-focus);
+        outline: none;
     }
-    .ok :global(svg) {
-        fill: green;
+    .invalid {
+        border-bottom: 2px solid #f00;
     }
+
+    .action {
+        width: 5rem;
+        padding: 0.5rem;
+        border: 1px solid var(--color-file-border);
+    }
+    .action:hover {
+        background-color: var(--bg-color-four);
+    }
+    .button-wrapper {
+        display: flex;
+        /* justify-content: center; */
+        gap: 1rem;
+    }
+    .alert {
+        color: #aaa;
+    }
+
     @media (max-width: 600px) {
         .edit-buttons {
-            padding-top: 0rem;
-            padding-bottom: 2rem;
+            padding: 1rem 0rem;
             gap: 1rem;
             justify-content: space-evenly;
         }
 
         img {
             max-width: calc(var(--file-width) - 1rem);
+        }
+        input {
+            font-size: 1.5rem;
+            padding: 0.5rem;
+            border: 1px solid #fff3;
+            border-top-left-radius: 0.5rem;
+            border-top-right-radius: 0.5rem;
         }
     }
 </style>
