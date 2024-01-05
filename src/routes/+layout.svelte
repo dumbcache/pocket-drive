@@ -1,11 +1,11 @@
 <script>
     import { navigating } from "$app/stores";
     import Spinner from "$lib/components/Spinner.svelte";
-    import { progress } from "$lib/scripts/shared/stores";
+    import { progress, refresh } from "$lib/scripts/shared/stores";
     import "./app.css";
 </script>
 
-{#if $navigating || $progress}
+{#if $navigating || $progress || $refresh}
     <div class="loading" on:wheel|preventDefault>
         <Spinner />
     </div>

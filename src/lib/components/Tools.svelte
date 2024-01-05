@@ -6,13 +6,23 @@
     import {
         activeParent,
         activeView,
+        fileStore,
         folderAction,
+        folderStore,
+        refresh,
     } from "$lib/scripts/shared/stores";
     import editIcon from "$lib/assets/editMode.svg?raw";
     import { mode } from "$lib/scripts/shared/stores";
     import folderIcon from "$lib/assets/folder.svg?raw";
     import fileIcon from "$lib/assets/file.svg?raw";
     import historyIcon from "$lib/assets/history.svg?raw";
+    import refreshIcon from "$lib/assets/refresh.svg?raw";
+    import {
+        FOLDER_MIME_TYPE,
+        fetchMultiple,
+        IMG_MIME_TYPE,
+    } from "$lib/scripts/gdrive/utils";
+    import { getToken } from "$lib/scripts/shared/utils";
 
     let view: "FILE" | "FOLDER";
     function imgPickerHandler(e: InputEvent) {
@@ -25,7 +35,25 @@
     function folderActionClose() {
         folderACtion = undefined;
     }
+    async function refreshHandler() {
+        $refresh = true;
+        fileStore.set(
+            await fetchMultiple(
+                { parent: $activeParent.id, mimeType: IMG_MIME_TYPE },
+                getToken(),
+                true
+            )
+        );
+        folderStore.set(
+            await fetchMultiple(
+                { parent: $activeParent.id, mimeType: FOLDER_MIME_TYPE },
+                getToken(),
+                true
+            )
+        );
 
+        $refresh = false;
+    }
     activeView.subscribe((data) => (view = data));
 </script>
 
@@ -85,6 +113,13 @@
             {@html folderCreate}
         </button>
     {/if}
+    <button
+        class="folder-button btn"
+        title="create folder"
+        on:click={refreshHandler}
+    >
+        {@html refreshIcon}
+    </button>
     <a
         href={`https://drive.google.com/drive/folders/${$activeParent.id}`}
         referrerpolicy="no-referrer"
