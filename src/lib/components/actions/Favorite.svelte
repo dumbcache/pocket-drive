@@ -26,7 +26,7 @@
 
 <style>
     .btn :global(svg) {
-        fill: var(--color-white-level-two);
+        fill: var(--color-white-two);
     }
     .btn:hover :global(svg) {
         fill: var(--color-focus);

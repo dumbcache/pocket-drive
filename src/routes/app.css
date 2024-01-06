@@ -53,35 +53,6 @@
     --file-height: 50rem;
     --cover-height: 20rem;
 
-    --color-black: #000;
-    --color-black-light: #0002;
-    --color-black-level-one: #111;
-    --color-black-level-two: #222;
-    --color-black-level-three: #333;
-    --color-black-level-four: #444;
-    --color-black-level-five: #555;
-    --color-black-level-six: #666;
-    --color-white: #fff;
-    --color-white-level-one: #eee;
-    --color-white-level-two: #ddd;
-    --color-white-level-three: #ccc;
-    --color-white-level-four: #bbb;
-    --color-white-level-five: #aaa;
-    --color-white-level-six: #999;
-    --color-blue-lightest: #cde;
-
-    --theme-button-outline: var(--color-black-level-six);
-    --input-background: var(--color-white-level-two);
-    --theme-button-hover-outline: var(--color-white-level-three);
-    --theme-button-background: var(--color-white-level-one);
-    --theme-button-hover-background: var(--color-white-level-two);
-    --theme-button-svg-fill: var(--color-black-level-two);
-    --header-border-color: var(--color-black-level-six);
-    --cover-background-color: var(--color-white-level-five);
-    --cover-border-color: #0003;
-    --content-background-color: var(--color-black-level-six);
-    --content-background-color-hover: var(--color-black-level-four);
-
     --line-size-default: 1.6rem;
     --title-size: var(--size-medium);
     --primary-icon-size: var(--size-large);
@@ -93,18 +64,6 @@
     --content-padding: 3rem;
 }
 .dark {
-    --input-background: var(--color-black-level-four);
-    --theme-button-outline: var(--color-white-level-six);
-    --theme-button-hover-outline: var(--color-black-level-five);
-    --theme-button-background: var(--color-white-level-four);
-    --theme-button-hover-background: var(--color-black-level-five);
-    --theme-button-svg-fill: var(--color-black);
-    --header-border-color: var(--color-white-level-six);
-    --cover-background-color: var(--color-black-two);
-    --cover-border-color: #fff5;
-    --content-background-color: var(--color-black-level-three);
-    --content-background-color-hover: var(--color-black-level-one);
-
     --title-background: linear-gradient(120deg, #bd34fe, #41d1ff, #473aff);
     --color-link: var(--color-pink);
     --color-focus: var(--color-pink);
@@ -160,17 +119,10 @@
 html,
 body,
 .app {
-    /* height: 100%; */
     font-size: var(--size-default);
     overscroll-behavior-y: contain;
     background: inherit;
-    /* overflow-y: scroll; */
 }
-
-/* .app {
-    display: flex;
-    flex-flow: row nowrap;
-} */
 
 img,
 picture,

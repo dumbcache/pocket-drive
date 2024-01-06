@@ -57,7 +57,7 @@
         flex-flow: column nowrap;
         justify-content: space-between;
         align-items: center;
-        border-right: 1px solid var(--header-border-color);
+        border-right: 1px solid var(--color-file-border);
         width: fit-content;
         height: 100vh;
         padding: 1rem 2.5rem;

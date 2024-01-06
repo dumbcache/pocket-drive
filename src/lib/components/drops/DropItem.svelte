@@ -77,7 +77,7 @@
         max-width: 20rem;
         border-bottom: none;
         /* background-color: #ddd; */
-        border: 1px solid var(--cover-border-color);
+        border: 1px solid var(--color-file-border);
         border-bottom: none;
         overflow: hidden;
     }
@@ -110,6 +110,9 @@
     }
     .btn :global(svg) {
         fill: var(--color-white);
+    }
+    .btn:hover :global(svg) {
+        fill: var(--color-focus);
     }
     .progress {
         border-radius: 1rem;

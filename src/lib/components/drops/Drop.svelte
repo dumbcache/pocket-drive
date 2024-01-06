@@ -81,7 +81,7 @@
         padding: 0.5rem;
         font-size: 1.6rem;
         color: var(--primary-color);
-        background-color: var(--input-background);
+        background-color: var(--bg-color-four);
         border-bottom: 2px solid var(--color-black);
         padding-left: 0.5rem;
     }
@@ -89,11 +89,11 @@
     .drop :global(input:disabled:hover),
     .drop :global(input:disabled) {
         background-color: var(--primary-bg-color);
-        color: var(--color-black-level-six);
+        color: #666;
         cursor: not-allowed;
     }
     .drop :global(input:hover) {
-        background-color: var(--theme-button-hover-outline);
+        background-color: var(--bg-color-five);
     }
 
     @media (max-width: 800px) {
