@@ -69,7 +69,7 @@
             class="two preview"
             on:scroll|preventDefault
             on:wheel|preventDefault={handleWheel}
-            on:pointerdown={handleClick}
+            on:pointerup={handleClick}
         >
             <img
                 class="preview-img"
@@ -128,10 +128,10 @@
         padding: 0rem 2rem;
     }
     .two {
-        position: relative;
         margin: auto;
         max-width: 100%;
         min-width: 50%;
+        max-height: 100%;
     }
 
     .three {
@@ -177,8 +177,6 @@
             padding: 1rem 0rem;
         }
         .two {
-            display: grid;
-            place-content: center;
         }
         .three {
             min-width: 100%;
