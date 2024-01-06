@@ -30,7 +30,7 @@
                 <a
                     href={isValidUrl(file.appProperties?.origin) ||
                         isValidUrl(file.description)}
-                    class="img-link btn"
+                    class="img-link btn s-second"
                     referrerpolicy="no-referrer"
                     rel="external noopener noreferrer nofollow"
                     on:click|stopPropagation
@@ -91,8 +91,6 @@
     .img-link {
         display: inline-block;
         top: 0.5rem;
-        width: var(--size-medium);
-        height: var(--size-medium);
     }
     .img-link:hover :global(svg) {
         fill: red;
@@ -142,8 +140,6 @@
             bottom: 0.2rem;
         }
         .img-link {
-            width: var(--size-default);
-            height: var(--size-default);
             padding: 0rem;
         }
         .placeholder {

@@ -4,7 +4,7 @@
     import Dialog from "$lib/components/Dialog.svelte";
     import { activeImage, mode } from "$lib/scripts/shared/stores";
     import closeIcon from "$lib/assets/close.svg?raw";
-    import infoIcon from "$lib/assets/info.svg?raw";
+    import infoIcon from "$lib/assets/arrowLeftDouble.svg?raw";
     import urlIcon from "$lib/assets/url.svg?raw";
     import { changeImage } from "$lib/scripts/shared/utils";
     import Info from "$lib/components/files/Info.svelte";
@@ -89,19 +89,27 @@
             </section>
         {/if}
     </artcle>
-    <button class="btn close" on:click={handleViewClose}
+    <button class="btn s-prime close" on:click={handleViewClose}
         >{@html closeIcon}</button
     >
-    {#if !infoVisible}
-        <button class="btn info" on:click={() => (infoVisible = !infoVisible)}
-            >{@html infoIcon}</button
-        >
-    {/if}
-    {#if $activeImage.description}
-        <a href={$activeImage.description} target="_blank" class="btn url"
-            >{@html urlIcon}</a
-        >
-    {/if}
+    <div class="action">
+        {#if !infoVisible}
+            <button
+                class="btn s-prime info"
+                title="info"
+                on:click={() => (infoVisible = !infoVisible)}
+                >{@html infoIcon}</button
+            >
+        {/if}
+        {#if $activeImage.description}
+            <a
+                title="go to website"
+                href={$activeImage.description}
+                target="_blank"
+                class="btn s-second url">{@html urlIcon}</a
+            >
+        {/if}
+    </div>
 </Dialog>
 
 <style>
@@ -145,21 +153,22 @@
         object-fit: contain;
         object-position: center;
     }
-    .close,
-    .info,
-    .url {
+
+    .close {
         position: absolute;
         top: 2rem;
         z-index: 10;
-    }
-    .close {
         left: 2rem;
     }
-    .info {
+
+    .action {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: fixed;
+        top: 2rem;
         right: 2rem;
-    }
-    .url {
-        right: 6rem;
+        gap: 1rem;
     }
     @media (max-width: 600px) {
         #view {
@@ -184,17 +193,13 @@
             position: absolute;
             z-index: 11;
         }
-        .info,
-        .url {
+        .action {
             bottom: 8rem;
             top: unset;
-            height: fit-content;
         }
+
         .info {
-            right: 2rem;
-        }
-        .url {
-            right: 5rem;
+            rotate: 90deg;
         }
         .close {
             top: 0.5rem;

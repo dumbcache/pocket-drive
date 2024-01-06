@@ -19,25 +19,25 @@
 </script>
 
 <div class="edit-tools">
-    <button class="btn expand" on:click|stopPropagation>
+    <button class="btn s-second expand" on:click|stopPropagation>
         {@html expandIcon}
     </button>
     <button
-        class="btn action"
+        class="btn s-second action"
         title="edit folder"
         on:click|stopPropagation={() => handler("EDIT")}
     >
         {@html editIcon}
     </button>
     <button
-        class="btn action"
+        class="btn s-second action"
         title="move folder"
         on:click|stopPropagation={() => handler("MOVE")}
     >
         {@html moveIcon}
     </button>
     <button
-        class="btn action"
+        class="btn s-second action"
         title="delete folder"
         on:click|stopPropagation={() => handler("DELETE")}
     >
@@ -59,23 +59,17 @@
     }
     .edit-tools:hover {
         height: initial;
-        background-color: #0005;
+        background-color: var(--color-black-light);
         border-radius: 5rem;
         outline: 1px solid var(--color-focus);
         backdrop-filter: blur(2px);
     }
-    .btn {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: none;
+
+    .btn :global(svg) {
+        fill: var(--color-white);
     }
     .btn:hover :global(svg) {
         fill: var(--color-focus);
-    }
-    .btn :global(svg) {
-        fill: var(--color-white-level-one);
-        width: var(--secondary-icon-size);
     }
     .edit-tools:hover .expand {
         display: none;

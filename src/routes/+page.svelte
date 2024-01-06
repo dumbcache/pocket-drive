@@ -65,29 +65,18 @@
         justify-items: center;
         height: 100vh;
     }
-    .bg {
-        width: 100%;
-        height: 500px;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background-image: linear-gradient(30deg, #bd34fe 50%, #41d1ff 50%);
-        filter: blur(100px);
-    }
 
     .home-title {
         font-weight: 900;
         font-size: 10rem;
-        background: linear-gradient(120deg, #bd34fe, #41d1ff, #473aff);
+        background: var(--title-background);
         background-clip: text;
         -webkit-text-fill-color: transparent;
     }
     .sub {
         padding-top: 1rem;
         font-size: var(--size-small);
-        /* color: #41d1ff; */
-        background: linear-gradient(-45deg, #bd34fe, #41d1ff);
+        background: var(--title-background);
         background-clip: text;
         -webkit-text-fill-color: transparent;
     }

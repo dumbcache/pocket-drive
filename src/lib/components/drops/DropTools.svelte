@@ -24,14 +24,10 @@
 
 <div class="drop-tools">
     <span>
-        <button
-            class="drop-cancel btn"
-            title="close"
-            on:click={dropCloseHandler}
-        >
+        <button class="btn s-prime" title="close" on:click={dropCloseHandler}>
             {@html closeIcon}
         </button><button
-            class="btn"
+            class="btn s-prime"
             title="minimize"
             on:click={() => {
                 triggerDispatch("mini");
@@ -51,14 +47,14 @@
     />
     <span>
         <button
-            class="btn {auto === true ? 'autosave' : ''}"
+            class="btn s-prime {auto === true ? 'autosave' : ''}"
             title="toggle autosave"
             on:click={() => {
                 triggerDispatch("auto");
             }}
         >
             {@html toggleIcon}
-        </button><button class="drop-ok btn" on:click={dropOkHandler}>
+        </button><button class="btn s-prime" on:click={dropOkHandler}>
             {@html doneIcon}
         </button>
     </span>

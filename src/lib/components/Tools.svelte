@@ -59,14 +59,14 @@
 
 <div class="tools">
     <button
-        class="view btn"
+        class="view btn s-prime"
         on:click={() => ($activeView = "FOLDER")}
         class:active={view === "FOLDER"}
     >
         {@html folderIcon}
     </button>
     <button
-        class="view btn"
+        class="view btn s-prime"
         on:click={() => ($activeView = "FILE")}
         class:active={view === "FILE"}
     >
@@ -76,7 +76,7 @@
 
     {#if $activeView === "FILE"}
         <button
-            class="edit-button btn"
+            class="btn s-prime"
             title="edit mode"
             on:click={() => {
                 $mode = "edit";
@@ -84,7 +84,7 @@
         >
             {@html editIcon}
         </button>
-        <button class="btn img-picker">
+        <button class="img-picker btn s-prime">
             <label
                 for="img-picker"
                 class="button__create-img"
@@ -102,29 +102,25 @@
             />
         </button>
     {:else}
-        <button class="history-button btn">
+        <button class="btn s-prime">
             {@html historyIcon}
         </button>
         <button
-            class="folder-button btn"
+            class="btn s-prime"
             title="create folder"
             on:click={() => ($folderAction = "CREATE")}
         >
             {@html folderCreate}
         </button>
     {/if}
-    <button
-        class="folder-button btn"
-        title="create folder"
-        on:click={refreshHandler}
-    >
+    <button class="btn s-prime" title="create folder" on:click={refreshHandler}>
         {@html refreshIcon}
     </button>
     <a
         href={`https://drive.google.com/drive/folders/${$activeParent.id}`}
         referrerpolicy="no-referrer"
         rel="external noopener noreferrer nofollow"
-        class="drive-button btn"
+        class="btn s-prime"
         title="open in Gdrive"
         target="_blank"
     >
@@ -157,7 +153,7 @@
     .view {
         position: relative;
     }
-    button.active::before {
+    .active::before {
         content: " ";
         height: 100%;
         border: 2px solid red;
@@ -169,7 +165,7 @@
         .tools {
             flex-flow: row nowrap;
         }
-        button.active::before {
+        .active::before {
             width: 100%;
             height: 10%;
             border: 1px solid red;

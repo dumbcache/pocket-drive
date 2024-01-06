@@ -17,7 +17,7 @@
 
 <header class="header">
     <div class="title-wrapper">
-        <button class="btn home" on:click={goHome}>
+        <button class="btn s-prime home" on:click={goHome}>
             {@html homeButton}
         </button>
         <button class="title-button" on:click={goHome}
@@ -71,7 +71,7 @@
     .title-short,
     .title-long {
         font-size: var(--title-size);
-        background: linear-gradient(120deg, #bd34fe, #41d1ff, #473aff);
+        background: var(--title-background);
         background-clip: text;
         -webkit-text-fill-color: transparent;
     }

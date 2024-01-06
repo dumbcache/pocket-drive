@@ -139,11 +139,8 @@
     .cover:hover .edit {
         opacity: 1;
     }
-    /* .favorite :global(svg) {
-        fill: var(--primary-bg-color);
-    } */
+
     .dragover {
-        /* outline: 1px solid var(--color-focus); */
         box-shadow: 0 0 5px 5px var(--color-focus);
     }
     .dragover .pic {
@@ -158,7 +155,7 @@
             filter: brightness(0.8);
         }
         .favorite {
-            right: 1rem;
+            right: 0.7rem;
             bottom: 0.5rem;
         }
     }

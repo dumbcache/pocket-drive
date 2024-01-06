@@ -20,7 +20,7 @@
 
 <button
     type="button"
-    class="color-theme"
+    class="color-theme btn s-prime"
     title="Toggle dark mode"
     role="switch"
     aria-label="Toggle dark mode"

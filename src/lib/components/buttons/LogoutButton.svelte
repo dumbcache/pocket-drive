@@ -11,7 +11,11 @@
     }
 </script>
 
-<button class="button__signout btn" on:click={signoutHandler} title="logout">
+<button
+    class="button__signout btn s-prime"
+    on:click={signoutHandler}
+    title="logout"
+>
     {@html logoutIcon}
 </button>
 

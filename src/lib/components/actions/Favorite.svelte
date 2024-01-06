@@ -17,25 +17,29 @@
     }
 </script>
 
-<button class="btn {starred && 'starred'}" on:click|stopPropagation={favStatus}>
+<button
+    class="btn s-second {starred && 'starred'}"
+    on:click|stopPropagation={favStatus}
+>
     {@html favoriteIcon}
 </button>
 
 <style>
-    .btn {
-        width: var(--size-medium);
-        height: var(--size-medium);
-    }
     .btn :global(svg) {
-        fill: var(--color-white-level-one);
+        fill: var(--color-white-level-two);
+    }
+    .btn:hover :global(svg) {
+        fill: var(--color-focus);
+    }
+    .btn:active :global(svg) {
+        fill: red;
     }
     .starred :global(svg) {
         fill: red;
     }
+    .starred:hover :global(svg) {
+        fill: red;
+    }
     @media (max-width: 600px) {
-        .btn {
-            width: var(--size-default);
-            height: var(--size-default);
-        }
     }
 </style>

@@ -75,7 +75,7 @@
 <div class="info" on:wheel|preventDefault on:keydown|stopPropagation>
     <header>
         <h5>Info</h5>
-        <button class="btn close" on:click={() => dispatch("close")}
+        <button class="btn s-prime close" on:click={() => dispatch("close")}
             >{@html closeIcon}</button
         >
     </header>

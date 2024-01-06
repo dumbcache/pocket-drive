@@ -27,12 +27,13 @@
     --color-white-light: #fff5;
     --color-black-light: #0008;
 
+    --title-background: linear-gradient(120deg, #0ac0ee, #d00bc3, #473aff);
     --color-link: var(--color-blue);
     --color-focus: var(--color-light-blue);
     --color-outline: #bbb;
     --primary-bg-color: var(--color-white);
     --primary-color: var(--color-black-one);
-    --primary-svg-fill: var(--color-black-two);
+    --svg-fill: var(--color-black-two);
     --bg-color-one: var(--color-white-one);
     --bg-color-two: var(--color-white-two);
     --bg-color-three: var(--color-white-three);
@@ -100,12 +101,13 @@
     --content-background-color: var(--color-black-level-three);
     --content-background-color-hover: var(--color-black-level-one);
 
+    --title-background: linear-gradient(120deg, #bd34fe, #41d1ff, #473aff);
     --color-link: var(--color-pink);
     --color-focus: var(--color-pink);
     --color-outline: #666;
     --primary-bg-color: var(--color-black-one);
     --primary-color: var(--color-white-one);
-    --primary-svg-fill: var(--color-white-two);
+    --svg-fill: var(--color-white-two);
     --bg-color-one: var(--color-black-one);
     --bg-color-two: var(--color-black-two);
     --bg-color-three: var(--color-black-three);
@@ -190,16 +192,13 @@ button {
 }
 
 .btn {
-    width: var(--primary-icon-size);
-    height: var(--primary-icon-size);
+    background: none;
 }
 
-.btn svg,
-button svg {
-    fill: var(--primary-svg-fill);
+.btn svg {
+    fill: var(--svg-fill);
 }
-.btn svg:hover,
-button svg:hover {
+.btn svg:hover {
     fill: var(--color-focus);
 }
 
@@ -210,6 +209,16 @@ button:disabled svg:hover,
     fill: var(--primary-color);
     filter: opacity(0.2);
     cursor: not-allowed;
+}
+
+.s-prime {
+    width: var(--primary-icon-size);
+    height: var(--primary-icon-size);
+}
+
+.s-second {
+    width: var(--secondary-icon-size);
+    height: var(--secondary-icon-size);
 }
 
 p,
@@ -267,14 +276,6 @@ a {
     }
 }
 @media (prefers-color-scheme: dark) {
-    /* :root {
-        --primary-color: var(--color-white-level-two);
-        --primary-bg-color: var(--color-black-level-two);
-        --theme-button-outline: var(--color-black-level-six);
-        --theme-button-background: var(--color-black-level-four);
-        --theme-button-svg-fill: var(--color-black);
-        --primary-svg-fill: var(--color-white-level-four);
-    } */
 }
 @media (prefers-reduced-motion: no-preference) {
 }

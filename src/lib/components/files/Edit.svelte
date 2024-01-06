@@ -136,18 +136,18 @@
                 >
             {:else}
                 <button
-                    class="delelte-button btn"
+                    class="btn s-prime"
                     title="select all"
                     on:click={selectAllAction}>{@html selectallIcon}</button
                 >
                 <button
-                    class="edit-button btn"
+                    class="ebtn s-prime"
                     title="edit"
                     disabled={count === 0}
                     on:click={() => (action = "EDIT")}>{@html editIcon}</button
                 >
                 <button
-                    class="move-button btn"
+                    class="btn s-prime"
                     title="move"
                     disabled={count === 0}
                     on:click={() => {
@@ -159,14 +159,14 @@
                 >{@html copyIcon}</button
             > -->
                 <button
-                    class="delete-button btn"
+                    class="btn s-prime"
                     title="delete"
                     disabled={count === 0}
                     on:click={() => (confirm = true)}>{@html deleteIcon}</button
                 >
             {/if}
             <Count {count} />
-            <button class="btn close" on:click={handleViewClose}
+            <button class="btn s-prime" on:click={handleViewClose}
                 >{@html closeIcon}</button
             >
         </div>

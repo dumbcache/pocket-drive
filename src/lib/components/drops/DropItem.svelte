@@ -27,11 +27,14 @@
         {/if}
     </div>
     {#if item.progress !== "uploading" && item.progress !== "success"}
-        <button class="remove btn" on:click={() => removeDropEntry(item.id)}>
+        <button
+            class="remove btn s-prime"
+            on:click={() => removeDropEntry(item.id)}
+        >
             {@html closeIcon}
         </button>
         <button
-            class="done btn"
+            class="done btn s-prime"
             on:click={() => {
                 dropOkHandlerSingle(item.id);
             }}
@@ -97,8 +100,6 @@
     .btn {
         position: absolute;
         top: 0.5rem;
-        width: var(--size-small);
-        height: var(--size-small);
         z-index: 1;
     }
     .remove {
@@ -121,34 +122,7 @@
         bottom: 0;
         background-color: var(--primary-backdrop-color);
     }
-    .progress :global(svg) {
-        width: var(--primary-icon-size);
-        height: var(--primary-icon-size);
-    }
-    .progress-icon {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
 
-    .progress .uploading {
-        fill: var(--color-white);
-    }
-    @keyframes spin {
-        0% {
-            transform: rotate(0deg);
-        }
-        50% {
-            transform: rotate(180deg);
-        }
-        100% {
-            transform: rotate(360deg);
-        }
-    }
-    .anime {
-        -webkit-animation: spin 1.5s linear 0s infinite;
-        animation: spin 1s linear 0s infinite;
-    }
     @media (max-width: 600px) {
         .drop-item {
             max-width: 45%;
