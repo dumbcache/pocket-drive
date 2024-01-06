@@ -145,7 +145,7 @@
                     on:click={selectAllAction}>{@html selectallIcon}</button
                 >
                 <button
-                    class="ebtn s-prime"
+                    class="btn s-prime"
                     title="edit"
                     disabled={count === 0}
                     on:click={() => (action = "EDIT")}>{@html editIcon}</button
@@ -214,6 +214,7 @@
                 on:click|stopPropagation
                 on:submit|preventDefault={handleSave}
             >
+                <p>Enter either values</p>
                 <input
                     type="text"
                     name="name"
@@ -316,6 +317,7 @@
     }
 
     .edit-form {
+        color: var(--color-three);
         background-color: var(--primary-bg-color);
         box-shadow: 0 0 1px 2px var(--color-focus);
         display: flex;
@@ -331,6 +333,8 @@
         /* border-bottom: 1px solid var(--color-focus); */
         background-color: var(--bg-color-four);
         padding: 1rem;
+        border-top-left-radius: 0.5rem;
+        border-top-right-radius: 0.5rem;
     }
     input:active,
     input:focus {
@@ -341,12 +345,16 @@
     .invalid {
         border-bottom: 2px solid #f00;
     }
+    .invalid:hover {
+        border-bottom: 2px solid #f00;
+    }
 
     .action {
         width: 5rem;
         padding: 0.5rem;
         border: 1px solid var(--color-file-border);
         text-align: center;
+        border-radius: 0.5rem;
     }
     .action:hover {
         background-color: var(--bg-color-four);

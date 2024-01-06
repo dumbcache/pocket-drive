@@ -131,6 +131,7 @@
         flex-flow: column;
         justify-content: start;
         gap: 2rem;
+        color: var(--color-three);
         background-color: var(--primary-bg-color);
         height: 100%;
         width: 100%;
@@ -176,6 +177,7 @@
         width: 10rem;
         padding: 0.5rem;
         border: 1px solid var(--color-file-border);
+        border-radius: 0.5rem;
     }
     .action:hover {
         background-color: var(--bg-color-four);
