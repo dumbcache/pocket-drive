@@ -16,7 +16,13 @@
         const root = document.documentElement;
         root.classList.toggle("dark");
     }
+
+    function handleKeyDown(e: KeyboardEvent) {
+        e.key === "c" && toggleTheme();
+    }
 </script>
+
+<svelte:window on:keydown={handleKeyDown} />
 
 <button
     type="button"

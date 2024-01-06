@@ -37,6 +37,8 @@
     --bg-color-one: var(--color-white-one);
     --bg-color-two: var(--color-white-two);
     --bg-color-three: var(--color-white-three);
+    --bg-color-four: #bbb;
+    --bg-color-five: #aaa;
     --color-one: var(--color-black-one);
     --color-two: var(--color-black-two);
     --color-three: var(--color-black-three);

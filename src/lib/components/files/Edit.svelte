@@ -114,6 +114,10 @@
         e.target.name = "url" && checkValid();
     }
     function checkValid() {
+        if (description.trim() === "") {
+            invalid = false;
+            return;
+        }
         const url = isValidUrl(description);
         if (!url) {
             invalid = true;

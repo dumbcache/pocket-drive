@@ -142,7 +142,6 @@
 
     .three {
         min-width: 40rem;
-        /* border: 1px solid red; */
     }
 
     .two img {

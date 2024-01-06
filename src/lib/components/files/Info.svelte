@@ -62,6 +62,10 @@
         e.target.name = "url" && checkValid();
     }
     function checkValid() {
+        if (description.trim() === "") {
+            invalid = false;
+            return;
+        }
         const url = isValidUrl(description);
         if (!url) {
             invalid = true;
@@ -127,11 +131,12 @@
         flex-flow: column;
         justify-content: start;
         gap: 2rem;
-        background-color: var(--color-black-three);
+        background-color: var(--primary-bg-color);
         height: 100%;
         width: 100%;
         position: relative;
         border-radius: 1rem;
+        border: 1px solid var(--color-file-border);
     }
     input {
         background: unset;
@@ -140,6 +145,8 @@
         /* border-bottom: 1px solid var(--color-focus); */
         background-color: var(--bg-color-four);
         padding: 1rem;
+        border-top-left-radius: 0.5rem;
+        border-top-right-radius: 0.5rem;
     }
     input:active,
     input:focus {
@@ -147,7 +154,8 @@
         border-bottom: 2px solid var(--color-focus);
         outline: none;
     }
-    .invalid {
+    .invalid,
+    .invalid:focus {
         border-bottom: 2px solid #f00;
     }
     .id {
