@@ -142,8 +142,8 @@
         vertical-align: bottom;
         display: inline-flex;
         align-items: center;
-        min-width: 2.4rem;
-        min-height: 2.4rem;
+        width: var(--primary-icon-size);
+        height: var(--primary-icon-size);
     }
     .img :global(svg) {
         fill: #555;

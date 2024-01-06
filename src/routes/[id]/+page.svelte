@@ -27,7 +27,7 @@
     <nav class="nav">
         {#if $page.params?.id !== "r"}
             <button
-                class="back-button btn"
+                class="back-button btn s-prime"
                 on:click={() => {
                     history.back();
                     $activeView = "FOLDER";
