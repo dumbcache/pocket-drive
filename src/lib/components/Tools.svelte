@@ -15,7 +15,7 @@
     import { mode } from "$lib/scripts/shared/stores";
     import folderIcon from "$lib/assets/folder.svg?raw";
     import fileIcon from "$lib/assets/file.svg?raw";
-    import historyIcon from "$lib/assets/history.svg?raw";
+    import searchIcon from "$lib/assets/search.svg?raw";
     import refreshIcon from "$lib/assets/refresh.svg?raw";
     import {
         FOLDER_MIME_TYPE,
@@ -103,7 +103,7 @@
         </button>
     {:else}
         <button class="btn s-prime">
-            {@html historyIcon}
+            {@html searchIcon}
         </button>
         <button
             class="btn s-prime"

@@ -7,7 +7,11 @@
         checkRefreshTimeout,
         checkSessionTimeout,
     } from "$lib/scripts/shared/utils";
-    import { isLoggedin, sessionTimeout } from "$lib/scripts/shared/stores";
+    import {
+        dropItems,
+        isLoggedin,
+        sessionTimeout,
+    } from "$lib/scripts/shared/stores";
     import { googleClient } from "$lib/scripts/login";
     import { goto } from "$app/navigation";
     import { previewAndSetDropItems } from "$lib/scripts/shared/image";
@@ -63,7 +67,9 @@
 >
     <Header />
     <slot />
-    <Drop />
+    {#if $dropItems.length > 0}
+        <Drop />
+    {/if}
     {#if $sessionTimeout}
         <div class="session-notify" on:wheel|preventDefault>
             <div class="session-wrapper">

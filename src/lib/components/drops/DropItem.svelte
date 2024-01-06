@@ -19,9 +19,9 @@
                 {#if item.progress === "uploading"}
                     <Spinner borderWidth="2px" width="3rem" height="3rem" />
                 {:else if item.progress === "success"}
-                    <div>{@html successIcon}</div>
+                    <div class="status">{@html successIcon}</div>
                 {:else}
-                    <div>{@html failureIcon}</div>
+                    <div class="status">{@html failureIcon}</div>
                 {/if}
             </div>
         {/if}
@@ -123,9 +123,12 @@
         left: 0;
         right: 0;
         bottom: 0;
-        background-color: var(--primary-backdrop-color);
+        background-color: var(--color-black-light);
     }
-
+    .status {
+        width: var(--primary-icon-size);
+        height: var(--primary-icon-size);
+    }
     @media (max-width: 600px) {
         .drop-item {
             max-width: 45%;

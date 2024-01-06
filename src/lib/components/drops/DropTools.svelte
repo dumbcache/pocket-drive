@@ -4,14 +4,9 @@
     import doneIcon from "$lib/assets/done.svg?raw";
     import toggleIcon from "$lib/assets/toggle.svg?raw";
     import doubleRightIcon from "$lib/assets/doubleRight.svg?raw";
-    import {
-        dropCloseHandler,
-        dropOkHandler,
-        // clearDropItems,
-    } from "$lib/scripts/shared/image";
-    import { dropItems } from "$lib/scripts/shared/stores";
+    import { dropOkHandler } from "$lib/scripts/shared/image";
+    import { autosave, dropItems } from "$lib/scripts/shared/stores";
 
-    let auto = false;
     const dispatch = createEventDispatcher();
     function triggerDispatch(type: string) {
         dispatch(type);
@@ -19,6 +14,18 @@
     export function clearDropItems() {
         const a = $dropItems.filter((item) => item.progress !== "success");
         dropItems.set(a);
+    }
+
+    export function dropCloseHandler() {
+        const running = $dropItems.filter(
+            (item) => item.progress === "uploading"
+        );
+        if (running.length === 0) {
+            $dropItems = [];
+            $autosave = false;
+        } else {
+            triggerDispatch("mini");
+        }
     }
 </script>
 
@@ -47,10 +54,10 @@
     />
     <span>
         <button
-            class="btn s-prime {auto === true ? 'autosave' : ''}"
+            class="btn s-prime {$autosave === true ? 'autosave' : ''}"
             title="toggle autosave"
             on:click={() => {
-                triggerDispatch("auto");
+                $autosave = !$autosave;
             }}
         >
             {@html toggleIcon}
@@ -75,9 +82,6 @@
     }
     .autosave :global(svg) {
         fill: red;
-    }
-    .autosave {
-        filter: none;
     }
 
     .common-url {

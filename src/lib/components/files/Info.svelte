@@ -12,6 +12,7 @@
         updateSingle,
     } from "$lib/scripts/gdrive/utils";
     import { getToken, isValidUrl } from "$lib/scripts/shared/utils";
+    import { fade } from "svelte/transition";
 
     const dispatch = createEventDispatcher();
     let id: string = $activeImage.id;
@@ -76,7 +77,12 @@
     }
 </script>
 
-<div class="info" on:wheel|preventDefault on:keydown|stopPropagation>
+<div
+    class="info"
+    on:wheel|preventDefault
+    on:keydown|stopPropagation
+    transition:fade={{ duration: 100 }}
+>
     <header>
         <h5>Info</h5>
         <button class="btn s-prime close" on:click={() => dispatch("close")}

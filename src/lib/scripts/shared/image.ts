@@ -1,4 +1,4 @@
-import { activeParent, dropItems } from "$lib/scripts/shared/stores";
+import { activeParent, autosave, dropItems } from "$lib/scripts/shared/stores";
 import { childWorker, getRoot, getToken } from "$lib/scripts/shared/utils";
 import { get } from "svelte/store";
 
@@ -20,18 +20,19 @@ export function previewAndSetDropItems(
                 reader.onload = (e) => {
                     const result = e.target?.result! as ArrayBuffer;
                     const bytes = new Uint8Array(result);
-                    dropItems.set([
-                        ...get(dropItems),
-                        {
-                            id,
-                            name: file.name,
-                            mimeType: file.type,
-                            bytes,
-                            imgRef,
-                            parent: parent || get(activeParent).id,
-                            parentName: parentName || get(activeParent).name,
-                        },
-                    ]);
+                    let item = {
+                        id,
+                        name: file.name,
+                        mimeType: file.type,
+                        bytes,
+                        imgRef,
+                        parent: parent || get(activeParent).id,
+                        parentName: parentName || get(activeParent).name,
+                    };
+                    dropItems.set([...get(dropItems), item]);
+                    if (get(autosave)) {
+                        setTimeout(() => autosaveItem(item), 500);
+                    }
                 };
                 reader.readAsArrayBuffer(file);
             } else {
@@ -48,19 +49,19 @@ export function previewAndSetDropItems(
                             (await blob?.arrayBuffer()) as ArrayBuffer;
                         const bytes = new Uint8Array(result);
                         const imgRef = URL.createObjectURL(blob);
-                        dropItems.set([
-                            ...get(dropItems),
-                            {
-                                id,
-                                name: file.name.split(".")[0],
-                                mimeType: blob?.type!,
-                                bytes,
-                                imgRef,
-                                parent: parent || get(activeParent).id,
-                                parentName:
-                                    parentName || get(activeParent).name,
-                            },
-                        ]);
+                        let item = {
+                            id,
+                            name: file.name,
+                            mimeType: file.type,
+                            bytes,
+                            imgRef,
+                            parent: parent || get(activeParent).id,
+                            parentName: parentName || get(activeParent).name,
+                        };
+                        dropItems.set([...get(dropItems), item]);
+                        if (get(autosave)) {
+                            setTimeout(() => autosaveItem(item), 500);
+                        }
                     }, "image/webp");
                 };
                 image.onerror = function () {
@@ -71,6 +72,28 @@ export function previewAndSetDropItems(
             }
         }
     }
+}
+
+function autosaveItem(item: DropItem) {
+    const tempItems = setExtraInfo([item]);
+    let single = tempItems[1][0];
+    let items = get(dropItems).map((i) => {
+        if (i.id === item.id) {
+            return single;
+        } else {
+            return i;
+        }
+    });
+    dropItems.set(items);
+    const { pathname } = window.location;
+    const parent = pathname === "/" ? getRoot() : pathname.substring(1);
+    const token = getToken();
+    childWorker.postMessage({
+        context: "DROP_SAVE",
+        dropItems: [single],
+        parent,
+        token,
+    });
 }
 
 export function setExtraInfo(items: DropItem[]) {
@@ -148,18 +171,4 @@ export function dropOkHandler() {
         parent,
         token,
     });
-}
-
-export function dropCloseHandler() {
-    const running = get(dropItems).filter(
-        (item) => item.progress === "uploading"
-    );
-    if (running.length === 0) {
-        // dropFull.set(false);
-        dropItems.set([]);
-        // autosave.set(false);
-    } else {
-        // dropMini.set(!get(dropMini));
-        // dropFull.set(false);
-    }
 }

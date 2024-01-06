@@ -1,23 +1,27 @@
 <script>
-    import { dropItems } from "$lib/scripts/shared/stores";
+    import { autosave, dropItems } from "$lib/scripts/shared/stores";
     import DropItem from "$lib/components/drops/DropItem.svelte";
     import DropTools from "$lib/components/drops/DropTools.svelte";
     import doubleLeftIcon from "$lib/assets/doubleLeft.svg?raw";
     import { fade } from "svelte/transition";
+    import { onDestroy, onMount } from "svelte";
 
     let mini = false;
+    onDestroy(() => {
+        $autosave = false;
+    });
 </script>
 
 {#if $dropItems.length !== 0}
     {#if mini}
         <button
-            class="drop-mini btn"
+            class="drop-mini btn s-prime"
             on:click={() => {
                 mini = !mini;
             }}>{@html doubleLeftIcon}</button
         >
     {:else}
-        <div class="drop" transition:fade={{ duration: 500, x: 500, y: 500 }}>
+        <div class="drop" transition:fade={{ duration: 200 }}>
             <DropTools on:mini={() => (mini = true)} />
             <div class="drop-items">
                 {#each $dropItems as item}
@@ -33,12 +37,16 @@
 <style>
     .drop-mini {
         position: fixed;
-        top: 5rem;
+        top: 7rem;
         right: 0;
         background-color: #043;
         z-index: 1;
         border-top-left-radius: 1rem;
         border-bottom-left-radius: 1rem;
+        outline: 1px solid var(--color-five);
+    }
+    .drop-mini :global(svg) {
+        fill: var(--color-white);
     }
     .drop {
         position: sticky;
