@@ -89,12 +89,13 @@
             >{@html closeIcon}</button
         >
     </header>
-    <p class="id">{id}</p>
+    <p class="id" title="id">{id}</p>
     <!-- <hr /> -->
 
     <input
         type="text"
         name="name"
+        title="file name"
         placeholder="Name"
         bind:value={name}
         on:change={handleChange}
@@ -103,6 +104,7 @@
     <input
         type="url"
         name="url"
+        title="link to website"
         class:invalid
         placeholder="URL"
         bind:value={description}
@@ -166,7 +168,12 @@
         border-bottom: 2px solid #f00;
     }
     .id {
-        color: var(--color-black-level-six);
+        color: var(--bg-color-five);
+        word-wrap: nowrap;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 100%;
         /* background-color: var(--bg-color-two); */
         /* padding: 1rem 0rem; */
     }
@@ -197,6 +204,9 @@
     @media (max-width: 600px) {
         .info {
             border-radius: 0rem;
+        }
+        .id {
+            max-width: 25rem;
         }
     }
 </style>

@@ -3,8 +3,8 @@ import type { PageLoad } from "./$types";
 import { fetchSingle, getRoot, loadAll } from "$lib/scripts/gdrive/utils";
 import {
     checkLoginStatus,
-    clearFiles,
     getToken,
+    signUserOut,
 } from "$lib/scripts/shared/utils";
 import { goto } from "$app/navigation";
 import {
@@ -25,7 +25,7 @@ export const load = (async ({ params, fetch }) => {
     if (browser) {
         if (!checkLoginStatus()) {
             isLoggedin.set(false);
-            clearFiles();
+            signUserOut();
             goto("/");
             return;
         }
