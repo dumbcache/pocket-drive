@@ -173,28 +173,28 @@
         left: 0;
         display: grid;
         place-content: center;
-        /* background-color: var(--primary-backdrop-color); */
-        backdrop-filter: blur(2px);
-        -webkit-backdrop-filter: blur(1rem);
+        background-color: var(--primary-backdrop-color);
+        backdrop-filter: blur(0.5rem);
+        -webkit-backdrop-filter: blur(0.5rem);
         z-index: 2;
     }
     .btn:disabled {
         cursor: not-allowed;
     }
     .btn:disabled :global(svg) {
-        fill: rgb(8, 226, 255);
+        fill: var(--color-three);
         cursor: not-allowed;
     }
     .wrapper {
         outline: 2px solid var(--color-focus);
         max-width: 35rem;
         padding: 5rem 4rem;
-        background-color: var(--primary-backdrop-color);
+        color: var(--color-three);
+        background-color: var(--primary-bg-color);
         border-radius: 1rem;
         display: flex;
         flex-flow: row wrap;
         gap: 1rem;
-        box-shadow: 0 0 1px 1px #fff3;
         justify-content: space-evenly;
         align-items: center;
         text-align: center;
@@ -208,28 +208,17 @@
         border-radius: 0.5rem;
         border: none;
         outline: none;
-        background-color: var(--color-black-level-four);
-        color: var(--color-white-level-two);
+        background-color: var(--bg-color-four);
+    }
+    input:active,
+    input:focus {
+        background-color: var(--bg-color-three);
+        outline: none;
     }
 
     .btn :global(svg) {
         fill: #0f0;
         min-width: var(--primary-icon-size);
-    }
-    .btn {
-        background: none;
-    }
-
-    @keyframes spin {
-        0% {
-            transform: rotate(0deg);
-        }
-        50% {
-            transform: rotate(180deg);
-        }
-        100% {
-            transform: rotate(360deg);
-        }
     }
 
     @media (max-width: 600px) {

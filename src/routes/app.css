@@ -33,6 +33,7 @@
     --color-outline: #bbb;
     --primary-bg-color: var(--color-white);
     --primary-color: var(--color-black-one);
+    --primary-backdrop-color: #111a;
     --svg-fill: var(--color-black-two);
     --bg-color-one: var(--color-white-one);
     --bg-color-two: var(--color-white-two);
@@ -42,6 +43,8 @@
     --color-one: var(--color-black-one);
     --color-two: var(--color-black-two);
     --color-three: var(--color-black-three);
+    --color-four: #444;
+    --color-five: #555;
     --color-file-background: var(--color-white-two);
     --color-file-border: var(--color-black-light);
     --color-file-hover: var(--color-white-three);
@@ -67,7 +70,6 @@
     --color-white-level-six: #999;
     --color-blue-lightest: #cde;
 
-    --primary-backdrop-color: #111a;
     --theme-button-outline: var(--color-black-level-six);
     --input-background: var(--color-white-level-two);
     --theme-button-hover-outline: var(--color-white-level-three);
@@ -109,6 +111,7 @@
     --color-outline: #666;
     --primary-bg-color: var(--color-black-one);
     --primary-color: var(--color-white-one);
+    --primary-backdrop-color: unset;
     --svg-fill: var(--color-white-two);
     --bg-color-one: var(--color-black-one);
     --bg-color-two: var(--color-black-two);
@@ -118,6 +121,8 @@
     --color-one: var(--color-white-one);
     --color-two: var(--color-white-two);
     --color-three: var(--color-white-three);
+    --color-four: #bbb;
+    --color-five: #aaa;
     --color-file-background: var(--color-black-two);
     --color-file-border: var(--color-white-light);
     --color-file-hover: var(--color-black-one);
