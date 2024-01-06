@@ -69,9 +69,9 @@
             class="two preview"
             on:scroll|preventDefault
             on:wheel|preventDefault={handleWheel}
-            on:pointerup={handleClick}
         >
             <img
+                on:pointerup={handleClick}
                 class="preview-img"
                 data-id={$activeImage.id}
                 src={$activeImage.thumbnailLink}
@@ -131,7 +131,6 @@
         margin: auto;
         max-width: 100%;
         min-width: 50%;
-        max-height: 100%;
     }
 
     .three {
@@ -176,8 +175,12 @@
             max-height: 10%;
             padding: 1rem 0rem;
         }
+
         .two {
+            min-height: 85%;
+            max-height: 85%;
         }
+
         .three {
             min-width: 100%;
             height: 100%;
@@ -188,9 +191,11 @@
             position: absolute;
             z-index: 11;
         }
+
         .preview-img {
             object-position: center;
         }
+
         .action {
             bottom: 8rem;
             top: unset;
