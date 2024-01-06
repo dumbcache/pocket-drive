@@ -2,11 +2,9 @@
     import Dialog from "$lib/components/Dialog.svelte";
     import { activeParent, mode, progress } from "$lib/scripts/shared/stores";
     import { onMount } from "svelte";
-    import doneIcon from "$lib/assets/done.svg?raw";
     import closeIcon from "$lib/assets/close.svg?raw";
     import deleteIcon from "$lib/assets/deleteOutline.svg?raw";
     import moveIcon from "$lib/assets/move.svg?raw";
-    import copyIcon from "$lib/assets/copy.svg?raw";
     import editIcon from "$lib/assets/editOutline.svg?raw";
     import selectallIcon from "$lib/assets/selectall.svg?raw";
     import Count from "../actions/Count.svelte";
@@ -189,7 +187,6 @@
                     width="200"
                     data-id={file.id}
                     class:select={allSelected}
-                    on:error={(e) => (e.target.src = imgPlaceholder)}
                 />
             {/each}
         </div>
@@ -311,7 +308,6 @@
         width: 100%;
         display: grid;
         place-content: center;
-        /* background-color: var(--primary-backdrop-color); */
         backdrop-filter: blur(1rem);
         -webkit-backdrop-filter: blur(1rem);
     }

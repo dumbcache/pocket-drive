@@ -1,5 +1,4 @@
 <script lang="ts">
-    import linkIcon from "$lib/assets/link.svg?raw";
     import urlIcon from "$lib/assets/url.svg?raw";
     import { isValidUrl } from "$lib/scripts/shared/utils";
     import { mode } from "$lib/scripts/shared/stores";
@@ -97,7 +96,6 @@
     }
     .img-link :global(svg) {
         fill: var(--color-white);
-        /* filter: none; */
     }
 
     .img {
@@ -124,7 +122,6 @@
     .anchor {
         display: inline-block;
         height: 5px;
-        /* width: 2px; */
         position: absolute;
         top: 0;
         left: 0;

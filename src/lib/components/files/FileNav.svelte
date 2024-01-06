@@ -91,7 +91,6 @@
     .active {
         border: 2px solid var(--color-focus);
         box-shadow: 0 0 5px 1px var(--color-white-light);
-        /* margin: 2rem; */
     }
     .active img {
         filter: none;

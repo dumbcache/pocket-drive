@@ -72,8 +72,6 @@
         width: 30rem;
     }
     li {
-        /* font-size: 2rem; */
-        /* list-style-type: none; */
         padding-bottom: 1rem;
     }
     .section,
@@ -102,7 +100,6 @@
         }
         li {
             font-size: 1.3rem;
-            /* list-style-type: none; */
         }
         .section2 {
             flex-flow: column;

@@ -17,20 +17,6 @@ export const PAGESIZE = 100;
 
 export const wait = (s: number) => new Promise((res) => setTimeout(res, s));
 
-export function constructAPI(
-    parent: string,
-    mimeType: string,
-    pageSize?: number,
-    pageToken?: string
-) {
-    let api = `${FILE_API}?q='${parent}' in parents and mimeType contains '${mimeType}'&fields=${FIELDS_MULTIPLE}&pageSize=${pageSize}`;
-    pageToken && (api = api + `&pageToken=` + pageToken);
-    api =
-        `${api}&orderBy=` +
-        (mimeType === DIR_MIME_TYPE ? "name" : "createdTime desc");
-    return api;
-}
-
 export const createRootDir = async (accessToken: string) => {
     const req = new Request(FILE_API, {
         method: "POST",
@@ -85,93 +71,6 @@ export async function searchHandler(token: string, search: string) {
     const res = await makeFetch(req);
     if (res?.status === 200) {
         searchItems.set((await res?.json()).files);
-    }
-}
-
-export const updateResource = async (
-    id: string,
-    imgMeta: ImgMeta,
-    token: string
-): Promise<any> => {
-    const url = `https://www.googleapis.com/drive/v3/files/${id}`;
-    let req = await fetch(url, {
-        method: "PATCH",
-        headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(imgMeta),
-    });
-    let { status, statusText } = req;
-    let data = (await req.json()) as CreateResourceResponse;
-    if (status !== 200) {
-        console.log(
-            `error while updating resource ${status} ${statusText}`,
-            data
-        );
-        if (status === 401) {
-            get(sessionTimeout) === false && sessionTimeout.set(true);
-            return;
-        }
-        return status;
-    }
-    return { status, data };
-};
-
-export const getInfo = async (id: string): Promise<GoogleFile> => {
-    let res = await fetch(`${FILE_API}/${id}?fields=${FIELDS_SINGLE}`, {
-        method: "GET",
-        headers: {
-            Authorization: `Bearer ${getToken()}`,
-        },
-    });
-    let { status, statusText } = res;
-    let data = (await res.json()) as CreateResourceResponse;
-    if (status !== 200) {
-        console.log(
-            `error while updating resource ${status} ${statusText}`,
-            data
-        );
-        if (res.status === 401) {
-            get(sessionTimeout) === false && sessionTimeout.set(true);
-            return;
-        }
-        return;
-    }
-    return data;
-};
-
-export async function fetchFiles(
-    parent: string,
-    type: "dirs" | "imgs" | "covers",
-    pageSize: number = 1000,
-    updateCache: Boolean = false
-): Promise<GoogleFileRes | undefined> {
-    try {
-        let mimeType = type == "dirs" ? DIR_MIME_TYPE : IMG_MIME_TYPE;
-        const token = window.localStorage.getItem("token");
-        const req = new Request(constructAPI(parent, mimeType, pageSize), {
-            method: "GET",
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        });
-        if (updateCache)
-            await (await caches.open(get(dataCacheName))).delete(req);
-        return new Promise(async (resolve, reject) => {
-            let res = await makeFetch(req);
-            if (res.status !== 200) {
-                if (res.status === 401) {
-                    reject({ status: 401 });
-                    return;
-                }
-                reject({ status: res.status });
-                return;
-            }
-            resolve(res.json());
-        });
-    } catch (error) {
-        console.warn(error);
     }
 }
 

@@ -43,7 +43,6 @@
             {@html doubleRightIcon}
         </button>
     </span>
-    <!-- <span class="drop-parent">parent</span> -->
     <input
         type="text"
         class="common-url"
@@ -77,7 +76,6 @@
         padding: 2rem 0rem;
         justify-content: space-between;
         justify-self: start;
-        /* background-color: #eee; */
         z-index: 2;
     }
     .autosave :global(svg) {

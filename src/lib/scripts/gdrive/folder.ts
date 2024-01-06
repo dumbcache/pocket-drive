@@ -1,5 +1,5 @@
 import { get } from "svelte/store";
-import { updateResource } from "./utils";
+import { updateSingle } from "./utils";
 import { sessionTimeout } from "../shared/stores";
 
 export const createFolder = async (
@@ -41,7 +41,7 @@ export const updateFolder = async (
     parent: string,
     token: string
 ): Promise<any> => {
-    const { status, data } = await updateResource(id, { name }, token);
+    const { status, data } = await updateSingle(id, { name }, token);
     if (status !== 200) {
         return;
     }

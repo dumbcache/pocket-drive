@@ -3,7 +3,6 @@
     import { onMount } from "svelte";
     import googleIcon from "$lib/assets/google.png";
 
-    // console.log($isLoggedin);
     onMount(() => {
         try {
             googleClient.loadGSIScript();
@@ -27,13 +26,11 @@
         inline-size: 3.6rem;
         padding: 0.2rem;
         border-radius: 50%;
-        /* border: 1px solid var(--color-outline); */
         filter: none;
     }
     .login:hover {
         border: none;
         padding: 0rem;
-        /* outline: 1px solid var(--color-focus); */
     }
 
     .login:active {

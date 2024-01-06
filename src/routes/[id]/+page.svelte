@@ -8,22 +8,11 @@
         folderStore,
     } from "$lib/scripts/shared/stores";
     import Content from "$lib/components/Content.svelte";
-    import { previewAndSetDropItems } from "$lib/scripts/shared/image";
     import beforeNavigate from "$lib/assets/beforeNavigate.svg?raw";
     import Tools from "$lib/components/Tools.svelte";
     import Count from "$lib/components/actions/Count.svelte";
 
     let view = $activeView;
-    // let draggedOver = false;
-
-    // export function imgDropHandler(e: DragEvent) {
-    //     e.preventDefault();
-    //     draggedOver = false;
-    //     let files = e.dataTransfer?.files;
-    //     if (files) {
-    //         previewAndSetDropItems(files);
-    //     }
-    // }
     const unsubscribeNavigation = navigating.subscribe(
         (val) => val || (view = "FOLDER")
     );
@@ -104,9 +93,7 @@
     }
 
     .folder-name {
-        /* padding: 3rem; */
         font-size: 2rem;
-        /* margin: auto; */
         max-width: 40rem;
         width: fit-content;
         word-wrap: unset;

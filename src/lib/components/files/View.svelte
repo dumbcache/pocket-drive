@@ -77,11 +77,6 @@
                 src={$activeImage.thumbnailLink}
                 alt=""
             />
-            <!-- <button
-                class="btn info-toggle"
-                on:click={() => (infoVisible = !infoVisible)}
-                >{@html infoIcon}</button
-            > -->
         </section>
         {#if infoVisible}
             <section class="three">
@@ -124,7 +119,6 @@
     }
     section {
         height: 100%;
-        /* border: 1px solid red; */
     }
     .one {
         min-width: 10rem;

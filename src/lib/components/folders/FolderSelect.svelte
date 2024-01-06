@@ -12,17 +12,12 @@
         folderActionDetail,
         progress,
     } from "$lib/scripts/shared/stores";
-    import { childWorker, getRoot } from "$lib/scripts/shared/utils";
+    import { getRoot } from "$lib/scripts/shared/utils";
     import { getToken } from "$lib/scripts/shared/utils";
-    import {
-        activeParent,
-        editItems,
-        folderStore,
-    } from "$lib/scripts/shared/stores";
+    import { activeParent, folderStore } from "$lib/scripts/shared/stores";
     import { createEventDispatcher } from "svelte";
 
     export let type: "FOLDER" | "FILE";
-    export let set: Set;
     let tempFolderStore = { ...$folderStore };
     type === "FOLDER" &&
         (tempFolderStore.files = tempFolderStore.files?.filter(
@@ -189,7 +184,6 @@
         right: 0;
         display: grid;
         place-content: center;
-        /* color: var(--color-white); */
         background-color: var(--primary-backdrop-color);
         backdrop-filter: blur(0.5rem);
         -webkit-backdrop-filter: blur(0.5rem);
@@ -208,10 +202,8 @@
         fill: red;
     }
     .wrapper {
-        /* background-color: var(--primary-backdrop-color); */
         background-color: var(--primary-bg-color);
         outline: 2px solid var(--color-focus);
-        /* box-shadow: 0 0 10px 2px var(--color-focus); */
         padding: 2rem;
         border-radius: 1rem;
         display: flex;

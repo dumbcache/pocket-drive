@@ -76,7 +76,6 @@
         border-radius: 1rem;
         max-width: 20rem;
         border-bottom: none;
-        /* background-color: #ddd; */
         border: 1px solid var(--color-file-border);
         border-bottom: none;
         overflow: hidden;

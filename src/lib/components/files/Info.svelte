@@ -90,7 +90,6 @@
         >
     </header>
     <p class="id" title="id">{id}</p>
-    <!-- <hr /> -->
 
     <input
         type="text"
@@ -174,8 +173,6 @@
         overflow: hidden;
         text-overflow: ellipsis;
         max-width: 100%;
-        /* background-color: var(--bg-color-two); */
-        /* padding: 1rem 0rem; */
     }
     footer {
         position: absolute;

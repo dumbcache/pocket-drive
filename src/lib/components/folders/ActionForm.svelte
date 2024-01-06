@@ -1,7 +1,6 @@
 <script lang="ts">
-    import { createEventDispatcher, onDestroy, onMount } from "svelte";
+    import { onDestroy, onMount } from "svelte";
     import doneIcon from "$lib/assets/done.svg?raw";
-    import progressIcon from "$lib/assets/progress.svg?raw";
     import {
         activeParent,
         folderAction,
@@ -14,11 +13,7 @@
         updateFolder,
     } from "$lib/scripts/gdrive/folder";
     import { getToken, toTitleCase } from "$lib/scripts/shared/utils";
-    import {
-        FOLDER_MIME_TYPE,
-        afterFolderAction,
-        fetchMultiple,
-    } from "$lib/scripts/gdrive/utils";
+    import { afterFolderAction } from "$lib/scripts/gdrive/utils";
     import Spinner from "../Spinner.svelte";
 
     const confirmText = "confirm";
@@ -165,7 +160,6 @@
 
 <style>
     .create {
-        /* color: var(--color-white-level-two); */
         position: fixed;
         top: 0;
         bottom: 0;

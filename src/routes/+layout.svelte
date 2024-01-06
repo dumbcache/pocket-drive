@@ -21,7 +21,6 @@
         height: 100%;
         display: grid;
         place-content: center;
-        /* background-color: #0005; */
         backdrop-filter: blur(0.5rem);
         -webkit-backdrop-filter: blur(0.5rem);
         z-index: 10;

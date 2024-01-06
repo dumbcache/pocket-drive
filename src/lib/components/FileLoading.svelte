@@ -22,7 +22,6 @@
     .end::before {
         position: absolute;
         top: 50%;
-        /* left: 0%; */
         content: " ";
         width: 5rem;
         max-width: 10rem;

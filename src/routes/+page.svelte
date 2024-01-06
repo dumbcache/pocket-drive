@@ -16,12 +16,10 @@
             <LoginButton />
         </header>
         <section class="title-wrapper">
-            <!-- <div class="bg"></div> -->
             <h1 class="home-title">Pocket Drive</h1>
             <p class="sub">A google drive based image & bookmark application</p>
         </section>
     </article>
-    <!-- <About /> -->
 </main>
 
 <style>
@@ -80,12 +78,7 @@
         background-clip: text;
         -webkit-text-fill-color: transparent;
     }
-    .loading {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-    }
+
     a {
         color: var(--color-link);
         text-decoration: none;
@@ -101,9 +94,7 @@
             right: 2rem;
             gap: 2rem;
         }
-        /* .signin {
-            width: var(--size-large);
-        } */
+
         .home-title {
             font-size: 10vw;
             width: fit-content;

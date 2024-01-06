@@ -83,7 +83,6 @@
     }
 
     .cover:hover {
-        /* outline: 1px solid var(--color-focus); */
         box-shadow: 0 0 2px 2px var(--color-focus);
     }
     .cover:hover .pic {

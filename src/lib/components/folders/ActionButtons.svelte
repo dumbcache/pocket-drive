@@ -3,7 +3,6 @@
     import editIcon from "$lib/assets/edit.svg?raw";
     import deleteIcon from "$lib/assets/delete.svg?raw";
     import moveIcon from "$lib/assets/moveOutline.svg?raw";
-    import { createEventDispatcher } from "svelte";
     import {
         folderAction,
         folderActionDetail,

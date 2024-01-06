@@ -4,7 +4,7 @@
     import DropTools from "$lib/components/drops/DropTools.svelte";
     import doubleLeftIcon from "$lib/assets/doubleLeft.svg?raw";
     import { fade } from "svelte/transition";
-    import { onDestroy, onMount } from "svelte";
+    import { onDestroy } from "svelte";
 
     let mini = false;
     onDestroy(() => {
@@ -62,9 +62,6 @@
         height: 100vh;
         backdrop-filter: blur(1rem);
         -webkit-backdrop-filter: blur(1rem);
-    }
-    .full {
-        min-width: 100%;
     }
 
     .drop-items {

@@ -98,7 +98,6 @@
             padding: 1rem 1rem;
             border-right: none;
             border-bottom: 1px solid var(--color-file-border);
-            /* display: none; */
         }
         .wrapper {
             flex-flow: row nowrap;
