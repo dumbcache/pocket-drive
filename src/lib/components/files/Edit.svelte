@@ -287,6 +287,7 @@
         top: 0rem;
         z-index: 1;
         backdrop-filter: blur(5px);
+        -webkit-backdrop-filter: blur(5px);
         padding: 2rem 0rem;
         display: flex;
         flex-flow: row nowrap;

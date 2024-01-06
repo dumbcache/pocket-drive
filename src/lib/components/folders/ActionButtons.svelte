@@ -62,6 +62,7 @@
         border-radius: 5rem;
         outline: 1px solid var(--color-focus);
         backdrop-filter: blur(2px);
+        -webkit-backdrop-filter: blur(2px);
     }
 
     .btn :global(svg) {

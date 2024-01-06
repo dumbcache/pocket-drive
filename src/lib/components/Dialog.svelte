@@ -30,6 +30,7 @@
         background-color: inherit;
         background-color: #12121205;
         backdrop-filter: blur(50px);
+        -webkit-backdrop-filter: blur(50px);
         border: none;
         outline: none;
         /* margin: 0; */
