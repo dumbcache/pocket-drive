@@ -138,7 +138,7 @@
         min-width: 40rem;
     }
 
-    .two img {
+    .preview-img {
         display: block;
         width: auto;
         height: 100%;
@@ -176,6 +176,10 @@
             max-height: 10%;
             padding: 1rem 0rem;
         }
+        .two {
+            display: grid;
+            place-content: center;
+        }
         .three {
             min-width: 100%;
             height: 100%;
@@ -185,6 +189,9 @@
             margin: auto;
             position: absolute;
             z-index: 11;
+        }
+        .preview-img {
+            object-position: center;
         }
         .action {
             bottom: 8rem;

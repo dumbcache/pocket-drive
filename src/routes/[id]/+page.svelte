@@ -126,5 +126,8 @@
             padding-bottom: 2rem;
             max-width: 80%;
         }
+        .back-button {
+            margin-left: 0rem;
+        }
     }
 </style>

@@ -227,12 +227,11 @@ a {
         --secondary-icon-size: var(--size-default);
         --dir-width: 14rem;
         --img-width: 9rem;
-        --cover-height: 9rem;
+        --cover-height: 10rem;
         --content-gap: 1rem;
         --content-padding: 1rem;
         --folder-width: 14rem;
         --file-width: 9rem;
-        --cover-height: 9rem;
     }
     h2 {
         font-size: 1.3rem;

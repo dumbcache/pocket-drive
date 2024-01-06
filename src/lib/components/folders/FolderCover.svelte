@@ -153,9 +153,13 @@
         .cover .pic {
             filter: brightness(0.8);
         }
+
+        .edit {
+            top: 0rem;
+        }
         .favorite {
             right: 0.7rem;
-            bottom: 0.5rem;
+            bottom: 0rem;
         }
     }
 </style>
