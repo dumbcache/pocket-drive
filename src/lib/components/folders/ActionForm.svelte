@@ -150,7 +150,7 @@
         {:else}
             <button
                 type="submit"
-                class="btn"
+                class="btn s-prime"
                 disabled={submitDisabled}
                 on:click={applyAction}>{@html doneIcon}</button
             >

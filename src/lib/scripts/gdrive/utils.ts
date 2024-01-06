@@ -1,6 +1,6 @@
 import { get } from "svelte/store";
-import { dataCacheName, searchItems, sessionTimeout } from "../shared/stores";
-import { colorPalette, getToken } from "../shared/utils";
+import { searchItems, sessionTimeout } from "../shared/stores";
+import { colorPalette } from "../shared/utils";
 
 export const FOLDER_MIME_TYPE = "application/vnd.google-apps.folder";
 export const DIR_MIME_TYPE = "application/vnd.google-apps.folder";

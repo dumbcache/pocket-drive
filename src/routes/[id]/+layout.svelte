@@ -1,12 +1,13 @@
 <script lang="ts">
     import Header from "$lib/components/Header.svelte";
     import Drop from "$lib/components/drops/Drop.svelte";
-    import { signUserOut, updateRecents } from "$lib/scripts/shared/utils";
-    import { onMount } from "svelte";
     import {
-        checkRefreshTimeout,
-        checkSessionTimeout,
+        setRefreshTimeout,
+        signUserOut,
+        updateRecents,
+        setSessionTimeout,
     } from "$lib/scripts/shared/utils";
+    import { onMount } from "svelte";
     import {
         dropItems,
         isLoggedin,
@@ -29,8 +30,8 @@
     onMount(() => {
         try {
             updateRecents();
-            checkSessionTimeout();
-            checkRefreshTimeout();
+            setSessionTimeout();
+            setRefreshTimeout();
             googleClient.loadGSIScript();
         } catch (error) {
             console.warn(error);
@@ -109,7 +110,7 @@
         padding: 5rem;
         border-radius: 1rem;
         box-shadow: 0 0 10px 5px var(--color-focus);
-        background-color: var(--primary-backdrop-color);
+        background-color: var(--primary-bg-color);
     }
 
     p {
@@ -127,7 +128,7 @@
         border-radius: 0.5rem;
     }
     button:hover {
-        background-color: var(--bg-color-four);
+        background-color: var(--bg-color-two);
     }
     .dragover {
         background-color: #55f5;

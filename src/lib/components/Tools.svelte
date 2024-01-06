@@ -145,6 +145,9 @@
     .hr {
         margin: 1rem 0rem;
         width: 100%;
+        border: none;
+        height: 1px;
+        background-color: var(--color-file-border);
     }
 
     .active :global(svg) {
@@ -175,9 +178,7 @@
         }
         .hr {
             transform: rotate(90deg);
-            height: 2px;
             width: 2rem;
-            color: var(--color-black-light);
         }
     }
 </style>

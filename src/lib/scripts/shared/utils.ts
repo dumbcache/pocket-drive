@@ -15,7 +15,11 @@ import {
     dropItems,
 } from "$lib/scripts/shared/stores";
 import ChildWorker from "$lib/scripts/worker.ts?worker";
-import { IMG_MIME_TYPE, fetchMultiple } from "$lib/scripts/gdrive/utils";
+import {
+    FOLDER_MIME_TYPE,
+    IMG_MIME_TYPE,
+    fetchMultiple,
+} from "$lib/scripts/gdrive/utils";
 import { clearDropItems } from "$lib/scripts/shared/image";
 
 export let childWorker: Worker;
@@ -87,6 +91,15 @@ export function checkLoginStatus() {
     }
 }
 
+export function signUserOutPartial() {
+    childWorker.postMessage({ context: "CLEAR_IMAGE_CACHE" });
+    let theme = window.localStorage.getItem("theme");
+    let refreshTime = window.localStorage.getItem("refreshTime");
+    window.localStorage.clear();
+    window.localStorage.setItem("theme", theme);
+    window.localStorage.setItem("refreshTime", refreshTime);
+}
+
 export function signUserOut() {
     clearFiles();
     console.info("logging user out");
@@ -94,68 +107,71 @@ export function signUserOut() {
 
 export async function clearFiles() {
     childWorker.postMessage({ context: "CLEAR_IMAGE_CACHE" });
-    (await caches.keys()).forEach(
-        (key) => key.startsWith("pd-") && caches.delete(key)
-    );
+    await caches.delete("pd-data");
+    let theme = window.localStorage.getItem("theme");
     window.localStorage.clear();
+    window.localStorage.setItem("theme", theme);
 }
 
 export async function setCache(refresh: Boolean) {
-    for (let key of await caches.keys()) {
-        if (key.startsWith("pd-data")) {
-            dataCacheName.set(key);
-            refresh && caches.delete(key);
-        }
-    }
+    let name = "pd-data";
+    dataCacheName.set(name);
+    if (!refresh) return;
+    caches.delete(name);
+    // let parent = getRoot();
+    // let token = getToken();
+    // fetchMultiple({ parent, mimeType: FOLDER_MIME_TYPE }, token, false);
+    // fetchMultiple({ parent, mimeType: IMG_MIME_TYPE }, token, false);
 }
 
-export function checkRefreshTimeout() {
-    let time = Number(window.localStorage.getItem("refreshTime")) - Date.now();
-    time < 0 &&
-        activeRefreshTimeout.set(
-            setTimeout(() => {
-                if (isRefreshNeeded()) {
-                    setCache(true);
-                } else {
-                    clearTimeout(get(activeRefreshTimeout));
-                    checkRefreshTimeout();
-                    setCache(false);
-                }
-            }, time)
-        );
-}
-export function checkSessionTimeout() {
-    let time = Number(window.localStorage.getItem("sessionTime")) - Date.now();
-    time < 0 &&
-        activeTimeout.set(
-            setTimeout(() => {
-                if (isTokenExpired()) {
-                    sessionTimeout.set(true);
-                } else {
-                    clearTimeout(get(activeTimeout));
-                    checkSessionTimeout();
-                }
-            }, time)
-        );
-}
-
-export function setSessionTimeout(expires: number) {
-    window.localStorage.setItem(
-        "sessionTime",
-        String(Date.now() + expires * 1000)
+export function checkRefreshTimeout(time: number) {
+    activeRefreshTimeout.set(
+        setTimeout(() => {
+            if (isRefreshNeeded()) {
+                setCache(true);
+                setRefreshTimeout();
+            } else {
+                clearTimeout(get(activeRefreshTimeout));
+                checkRefreshTimeout(time);
+                setCache(false);
+            }
+        }, time)
     );
+}
+export function checkSessionTimeout(time: number) {
+    activeTimeout.set(
+        setTimeout(() => {
+            if (isTokenExpired()) {
+                console.log("session timed out");
+                sessionTimeout.set(true);
+            } else {
+                clearTimeout(get(activeTimeout));
+                checkSessionTimeout(time);
+            }
+        }, time)
+    );
+}
+
+export function setSessionTimeout(expires?: number) {
+    expires &&
+        window.localStorage.setItem(
+            "sessionTime",
+            String(Date.now() + expires * 1000)
+        );
     sessionTimeout.set(false);
-    checkSessionTimeout();
+    let time = Number(window.localStorage.getItem("sessionTime")) - Date.now();
+    checkSessionTimeout(time);
 }
 
 export function setRefreshTimeout() {
     let time = Number(window.localStorage.getItem("refreshTime")) - Date.now();
-    if (time > 0) return;
-    window.localStorage.setItem(
-        "refreshTime",
-        String(Date.now() + 24 * 60 * 60 * 1000)
-    );
-    checkRefreshTimeout();
+    if (time > 0) {
+        checkRefreshTimeout(time);
+        return;
+    }
+    time = Date.now() + 24 * 60 * 60 * 1000;
+    window.localStorage.setItem("refreshTime", String(time));
+    checkRefreshTimeout(time);
 }
 
 export const updateRecents = (data?: { name: string; id: string }) => {

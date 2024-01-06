@@ -4,7 +4,7 @@ import { fetchSingle, getRoot, loadAll } from "$lib/scripts/gdrive/utils";
 import {
     checkLoginStatus,
     getToken,
-    signUserOut,
+    signUserOutPartial,
 } from "$lib/scripts/shared/utils";
 import { goto } from "$app/navigation";
 import {
@@ -12,7 +12,9 @@ import {
     fileStore,
     folderStore,
     isLoggedin,
+    sessionTimeout,
 } from "$lib/scripts/shared/stores";
+import { get } from "svelte/store";
 
 async function loadContent(parent: string) {
     const [folders, files] = await loadAll(parent, getToken());
@@ -24,8 +26,12 @@ async function loadContent(parent: string) {
 export const load = (async ({ params, fetch }) => {
     if (browser) {
         if (!checkLoginStatus()) {
+            if (get(isLoggedin)) {
+                sessionTimeout.set(true);
+                return;
+            }
             isLoggedin.set(false);
-            signUserOut();
+            signUserOutPartial();
             goto("/");
             return;
         }

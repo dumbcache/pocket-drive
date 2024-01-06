@@ -130,7 +130,7 @@
                 >
                 {#if selectedId !== root}
                     <button
-                        class="btn prev"
+                        class="btn s-prime prev"
                         title="previous"
                         on:click|stopPropagation={() => {
                             fetchInfo(selectedParent);
@@ -148,7 +148,7 @@
                 >
                     {selectedName}
                     <button
-                        class="done-button btn"
+                        class="done-button btn s-prime"
                         disabled={selectedId === $activeParent.id}
                         on:click={okHandler}>{@html doneIcon}</button
                     >
