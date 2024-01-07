@@ -1,5 +1,4 @@
 <script lang="ts">
-    import imgPlaceholder from "$lib/assets/imgPlaceholder.svg";
     import { activeImage } from "$lib/scripts/shared/stores";
     import { setActiveImage } from "$lib/scripts/shared/utils";
     import { onDestroy, onMount } from "svelte";
@@ -57,7 +56,6 @@
                     height="150"
                     width="200"
                     data-id={file.id}
-                    on:error={(e) => (e.target.src = imgPlaceholder)}
                 />
             </button>
         {/each}

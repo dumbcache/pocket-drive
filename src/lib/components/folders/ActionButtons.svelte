@@ -2,7 +2,7 @@
     import expandIcon from "$lib/assets/expandDown.svg?raw";
     import editIcon from "$lib/assets/edit.svg?raw";
     import deleteIcon from "$lib/assets/delete.svg?raw";
-    import moveIcon from "$lib/assets/moveOutline.svg?raw";
+    import moveIcon from "$lib/assets/move.svg?raw";
     import {
         folderAction,
         folderActionDetail,

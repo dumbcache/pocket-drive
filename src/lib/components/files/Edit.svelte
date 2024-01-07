@@ -3,9 +3,9 @@
     import { activeParent, mode, progress } from "$lib/scripts/shared/stores";
     import { onMount } from "svelte";
     import closeIcon from "$lib/assets/close.svg?raw";
-    import deleteIcon from "$lib/assets/deleteOutline.svg?raw";
+    import deleteIcon from "$lib/assets/delete.svg?raw";
     import moveIcon from "$lib/assets/move.svg?raw";
-    import editIcon from "$lib/assets/editOutline.svg?raw";
+    import editIcon from "$lib/assets/edit.svg?raw";
     import selectallIcon from "$lib/assets/selectall.svg?raw";
     import Count from "../actions/Count.svelte";
     import FolderSelect from "../folders/FolderSelect.svelte";

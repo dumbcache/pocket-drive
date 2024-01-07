@@ -2,7 +2,7 @@
     import { autosave, dropItems } from "$lib/scripts/shared/stores";
     import DropItem from "$lib/components/drops/DropItem.svelte";
     import DropTools from "$lib/components/drops/DropTools.svelte";
-    import doubleLeftIcon from "$lib/assets/doubleLeft.svg?raw";
+    import doubleLeftIcon from "$lib/assets/arrowLeftDouble.svg?raw";
     import { fade } from "svelte/transition";
     import { onDestroy } from "svelte";
 

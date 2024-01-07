@@ -3,7 +3,7 @@
     import closeIcon from "$lib/assets/close.svg?raw";
     import doneIcon from "$lib/assets/done.svg?raw";
     import toggleIcon from "$lib/assets/toggle.svg?raw";
-    import doubleRightIcon from "$lib/assets/doubleRight.svg?raw";
+    import doubleRightIcon from "$lib/assets/arrowRightDouble.svg?raw";
     import { dropOkHandler } from "$lib/scripts/shared/image";
     import { autosave, dropItems } from "$lib/scripts/shared/stores";
 
