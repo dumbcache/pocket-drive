@@ -62,7 +62,24 @@
             folder.name.toLowerCase().includes(search.toLowerCase())
         );
     }
+
+    function handleKeyDown(e: KeyboardEvent) {
+        switch (e.key) {
+            case "E":
+                $mode = "edit";
+                return;
+            case "s":
+                $mode = "search";
+                return;
+            case "S":
+                $mode = "search";
+                global = true;
+                return;
+        }
+    }
 </script>
+
+<svelte:window on:keydown={handleKeyDown} />
 
 <section class="wrapper" style:display="">
     <nav class="nav">
