@@ -6,6 +6,7 @@
     import { previewAndSetDropItems } from "$lib/scripts/shared/image";
 
     export let visible: Boolean;
+    export let toolsVisible: Boolean;
     export let id: string;
     export let name: string;
     export let starred: Boolean;
@@ -56,12 +57,14 @@
         <div class="pic-wrapper placeholder" />
         <div class="pic-wrapper placeholder" />
     {/if}
-    <div class="edit">
-        <ActionButtons type="dir" {id} {name} />
-    </div>
-    <div class="favorite">
-        <Favorite {id} {starred} on:fav />
-    </div>
+    {#if toolsVisible}
+        <div class="edit">
+            <ActionButtons type="dir" {id} {name} />
+        </div>
+        <div class="favorite">
+            <Favorite {id} {starred} on:fav />
+        </div>
+    {/if}
 </div>
 
 <style>

@@ -95,10 +95,6 @@
 {/if}
 
 <style>
-    .file-container {
-        padding-top: 10rem;
-    }
-
     .list {
         display: flex;
         flex-flow: row wrap;
@@ -108,8 +104,5 @@
     }
 
     @media (max-width: 600px) {
-        .file-container {
-            padding-top: 5rem;
-        }
     }
 </style>

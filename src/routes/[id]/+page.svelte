@@ -12,18 +12,56 @@
     import beforeNavigate from "$lib/assets/beforeNavigate.svg?raw";
     import Tools from "$lib/components/Tools.svelte";
     import Count from "$lib/components/actions/Count.svelte";
+    import Folder from "$lib/components/folders/Folder.svelte";
+    import { searchHandler } from "$lib/scripts/gdrive/utils";
+    import { getToken } from "$lib/scripts/shared/utils";
 
     let view = $activeView;
     let global = false;
     let search = "";
-    const unsubscribeNavigation = navigating.subscribe(
-        (val) => val || (view = "FOLDER")
-    );
+    let folders: Folder[] = [];
+    let searchElement: HTMLInputElement;
+    let token = getToken();
+    let searchTimeout;
+    const unsubscribeNavigation = navigating.subscribe((val) => {
+        val || (view = "FOLDER");
+        $mode = "";
+    });
     const unsubscribeView = activeView.subscribe((data) => (view = data));
+    const unsubscribeMode = mode.subscribe((data) => {
+        data === "search" && (folders = [...$folderStore?.files]);
+        if (data === "") {
+            search = "";
+            global = false;
+        }
+    });
     onDestroy(() => {
         unsubscribeView();
         unsubscribeNavigation();
+        unsubscribeMode();
     });
+    async function handleChange() {
+        if (search.trim() === "") {
+            folders = [...$folderStore?.files];
+            return;
+        }
+    }
+    function handleSearch() {
+        if (search.trim() === "") {
+            folders = [...$folderStore?.files];
+            return;
+        }
+        if (global) {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(async () => {
+                folders = await searchHandler(token, search.trim());
+            }, 500);
+            return;
+        }
+        folders = $folderStore?.files.filter((folder) =>
+            folder.name.toLowerCase().includes(search.toLowerCase())
+        );
+    }
 </script>
 
 <section class="wrapper" style:display="">
@@ -58,7 +96,7 @@
     <h2 class="folder-name two" title={$activeParent.name}>
         {$activeParent.name}
     </h2>
-    {#if $mode === "search" && view === "FOLDER"}
+    {#if $mode === "search"}
         <div class="search-wrapper" on:keydown|stopPropagation>
             <button
                 title="global"
@@ -66,7 +104,10 @@
                 aria-checked="false"
                 class="global"
                 class:active={global}
-                on:click={() => (global = !global)}>/R</button
+                on:click={() => {
+                    global = !global;
+                    searchElement.focus();
+                }}>/R</button
             >
             <input
                 type="search"
@@ -75,16 +116,42 @@
                 autocomplete="off"
                 autofocus
                 placeholder="search"
+                bind:this={searchElement}
                 bind:value={search}
+                on:input={handleSearch}
+                on:change={handleChange}
             />
         </div>
+
+        <section class="folder-container">
+            {#if folders && folders.length > 0}
+                <ol class="list">
+                    {#each folders as folder}
+                        {#key folder.id}
+                            <li data-id={folder.id}>
+                                <Folder
+                                    {folder}
+                                    toolsVisible={false}
+                                    visible={true}
+                                />
+                            </li>
+                        {/key}
+                    {/each}
+                </ol>
+            {/if}
+        </section>
     {/if}
-    <Content
-        {view}
-        count={view === "FOLDER"
-            ? $folderStore?.files.length
-            : $fileStore?.files.length}
-    />
+    <div
+        class="content"
+        style:display={$mode === "search" ? "none" : "initial"}
+    >
+        <Content
+            {view}
+            count={view === "FOLDER"
+                ? $folderStore?.files.length
+                : $fileStore?.files.length}
+        />
+    </div>
 </section>
 
 <style>
@@ -136,6 +203,11 @@
         padding: 1rem;
         width: 100%;
         color: var(--color-three);
+        position: sticky;
+        top: 5rem;
+        z-index: 1;
+        /* box-shadow: 0 0 5px 1px var(--color-file-border); */
+        background-color: var(--primary-bg-color);
     }
     .global {
         padding: 1rem;
@@ -157,11 +229,19 @@
         border-top-right-radius: 0.5rem;
         border-bottom-right-radius: 0.5rem;
         border-bottom: 2px solid var(--color-file-border);
-        /* box-shadow: 0 0 5px 1px var(--color-file-border); */
         background-color: var(--bg-color-two);
     }
     #search:focus {
         background-color: var(--bg-color-three);
+    }
+
+    .list {
+        display: flex;
+        flex-flow: row wrap;
+        align-items: flex-start;
+        justify-content: center;
+        gap: var(--content-gap);
+        padding: 2rem 0rem;
     }
 
     @media (max-width: 600px) {
@@ -189,6 +269,7 @@
         }
         .search-wrapper {
             padding: 1rem;
+            top: 3.5rem;
         }
         #search,
         .global {

@@ -3,6 +3,7 @@
     import FolderCover from "$lib/components/folders/FolderCover.svelte";
 
     export let visible: Boolean;
+    export let toolsVisible: Boolean = true;
     export let folder: Folder;
     function dirNavigate(e: MouseEvent) {
         goto(`/${folder.id}`);
@@ -15,6 +16,7 @@
             id={folder.id}
             name={folder.name}
             starred={folder.starred}
+            {toolsVisible}
             {visible}
             on:fav={() => (folder.starred = !folder.starred)}
         />

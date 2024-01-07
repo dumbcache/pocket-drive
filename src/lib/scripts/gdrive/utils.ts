@@ -10,69 +10,10 @@ export const FIELDS_IMG =
     "id,name,description,appProperties(origin),thumbnailLink,starred";
 export const FIELDS_FOLDER = "id,name,starred,parents";
 export const FIELDS_SINGLE = "id,name,parents";
-export const FIELDS_MULTIPLE =
-    "files(id,name,description,appProperties(origin),thumbnailLink,starred)";
 export const DEFAULT_PAGESIZE = 1000;
 export const PAGESIZE = 100;
 
 export const wait = (s: number) => new Promise((res) => setTimeout(res, s));
-
-export const createRootDir = async (accessToken: string) => {
-    const req = new Request(FILE_API, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${accessToken}`,
-        },
-        body: JSON.stringify({
-            name: "Pocket_#Drive",
-            mimeType: "application/vnd.google-apps.folder",
-            folderColorRgb: colorPalette.Cardinal,
-            description: "",
-        }),
-    });
-    let res = await makeFetch(req);
-    if (res?.status === 200) {
-        return (await res?.json()) as CreateResourceResponse;
-    }
-};
-
-export async function getRoot(accessToken: string): Promise<string> {
-    let root = window.localStorage.getItem("root");
-    if (root) return root;
-    const req = await fetch(
-        `${FILE_API}?&pageSize=1&fields=files(id,name)&orderBy=createdTime`,
-        {
-            headers: { authorization: `Bearer ${accessToken}` },
-        }
-    );
-    const { files } = await req.json();
-    if (files.length !== 0) {
-        const id = files[0].id;
-        window.localStorage.setItem("root", id);
-        return id;
-    }
-    const { id } = await createRootDir(accessToken);
-    window.localStorage.setItem("root", id);
-    return id;
-}
-
-export async function searchHandler(token: string, search: string) {
-    const req = new Request(
-        FILE_API +
-            `?q=mimeType contains '${DIR_MIME_TYPE}' and name contains '${search}'&pageSize=1000&fields=${FIELDS_MULTIPLE}&orderBy=createdTime desc`,
-        {
-            method: "GET",
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        }
-    );
-    const res = await makeFetch(req);
-    if (res?.status === 200) {
-        searchItems.set((await res?.json()).files);
-    }
-}
 
 /***********************************************/
 
@@ -114,6 +55,66 @@ export function constructRequest(
         },
     });
     return req;
+}
+
+export const createRootDir = async (accessToken: string) => {
+    const req = new Request(FILE_API, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify({
+            name: "Pocket_#Drive",
+            mimeType: "application/vnd.google-apps.folder",
+            folderColorRgb: colorPalette.Cardinal,
+            description: "",
+        }),
+    });
+    let res = await makeFetch(req);
+    if (res?.status === 200) {
+        return (await res?.json()) as CreateResourceResponse;
+    }
+};
+
+export async function getRoot(accessToken: string): Promise<string> {
+    let root = window.localStorage.getItem("root");
+    if (root) return root;
+    const req = new Request(
+        `${FILE_API}?&pageSize=1&fields=files(id,name)&orderBy=createdTime`,
+        {
+            headers: { authorization: `Bearer ${accessToken}` },
+        }
+    );
+    const res = await makeFetch(req);
+    if (res?.status === 200) {
+        const { files } = await res.json();
+        if (files.length !== 0) {
+            const id = files[0].id;
+            window.localStorage.setItem("root", id);
+            return id;
+        }
+        const { id } = await createRootDir(accessToken);
+        window.localStorage.setItem("root", id);
+        return id;
+    }
+}
+
+export async function searchHandler(token: string, search: string) {
+    const req = new Request(
+        FILE_API +
+            `?q=mimeType contains '${DIR_MIME_TYPE}' and name contains '${search}'&pageSize=1000&fields=files(${FIELDS_SINGLE})&orderBy=createdTime desc`,
+        {
+            method: "GET",
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        }
+    );
+    const res = await makeFetch(req);
+    if (res?.status === 200) {
+        return (await res?.json()).files;
+    }
 }
 
 export async function fetchMultiple(
