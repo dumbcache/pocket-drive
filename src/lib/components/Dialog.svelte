@@ -9,7 +9,7 @@
         }
     }
     export function close() {
-        $mode = false;
+        $mode = "";
         dialog.close();
     }
     export function show() {

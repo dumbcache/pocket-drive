@@ -6,6 +6,7 @@
         activeView,
         fileStore,
         folderStore,
+        mode,
     } from "$lib/scripts/shared/stores";
     import Content from "$lib/components/Content.svelte";
     import beforeNavigate from "$lib/assets/beforeNavigate.svg?raw";
@@ -13,6 +14,8 @@
     import Count from "$lib/components/actions/Count.svelte";
 
     let view = $activeView;
+    let global = false;
+    let search = "";
     const unsubscribeNavigation = navigating.subscribe(
         (val) => val || (view = "FOLDER")
     );
@@ -23,7 +26,7 @@
     });
 </script>
 
-<section class="wrapper">
+<section class="wrapper" style:display="">
     <nav class="nav">
         {#if $page.params?.id !== "r"}
             <button
@@ -44,6 +47,7 @@
         <h2 class="folder-name one" title={$activeParent.name}>
             {$activeParent.name}
         </h2>
+
         <Count
             count={view === "FOLDER"
                 ? $folderStore?.files.length
@@ -54,6 +58,27 @@
     <h2 class="folder-name two" title={$activeParent.name}>
         {$activeParent.name}
     </h2>
+    {#if $mode === "search" && view === "FOLDER"}
+        <div class="search-wrapper" on:keydown|stopPropagation>
+            <button
+                title="global"
+                role="switch"
+                aria-checked="false"
+                class="global"
+                class:active={global}
+                on:click={() => (global = !global)}>/R</button
+            >
+            <input
+                type="search"
+                name="search"
+                id="search"
+                autocomplete="off"
+                autofocus
+                placeholder="search"
+                bind:value={search}
+            />
+        </div>
+    {/if}
     <Content
         {view}
         count={view === "FOLDER"
@@ -72,7 +97,6 @@
     }
     .nav {
         width: 100%;
-        margin-bottom: 2rem;
         display: flex;
         flex-flow: row nowrap;
         align-items: center;
@@ -105,6 +129,41 @@
     .two {
         display: none;
     }
+    .search-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
+        width: 100%;
+        color: var(--color-three);
+    }
+    .global {
+        padding: 1rem;
+        border: 1px solid var(--color-file-border);
+        border-top-left-radius: 0.5rem;
+        border-bottom-left-radius: 0.5rem;
+    }
+    .global.active {
+        color: #f00;
+        /* background-color: var(--bg-color-three); */
+    }
+    #search {
+        width: 100%;
+        max-width: 30rem;
+        padding: 1rem;
+        display: block;
+        outline: none;
+        border: none;
+        border-top-right-radius: 0.5rem;
+        border-bottom-right-radius: 0.5rem;
+        border-bottom: 2px solid var(--color-file-border);
+        /* box-shadow: 0 0 5px 1px var(--color-file-border); */
+        background-color: var(--bg-color-two);
+    }
+    #search:focus {
+        background-color: var(--bg-color-three);
+    }
+
     @media (max-width: 600px) {
         .wrapper {
             padding: 0rem 0.5rem;
@@ -123,11 +182,17 @@
         .two {
             display: block;
             font-size: initial;
-            padding-bottom: 2rem;
             max-width: 80%;
         }
         .back-button {
             margin-left: 0rem;
+        }
+        .search-wrapper {
+            padding: 1rem;
+        }
+        #search,
+        .global {
+            padding: 0.7rem;
         }
     }
 </style>

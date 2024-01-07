@@ -26,13 +26,13 @@ async function loadContent(parent: string) {
 export const load = (async ({ params, fetch }) => {
     if (browser) {
         if (!checkLoginStatus()) {
-            if (get(isLoggedin)) {
-                sessionTimeout.set(true);
+            if (!get(isLoggedin)) {
+                isLoggedin.set(false);
+                signUserOutPartial();
+                goto("/");
                 return;
             }
-            isLoggedin.set(false);
-            signUserOutPartial();
-            goto("/");
+            sessionTimeout.set(true);
             return;
         }
         isLoggedin.set(true);

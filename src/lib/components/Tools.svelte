@@ -102,7 +102,10 @@
             />
         </button>
     {:else}
-        <button class="btn s-prime">
+        <button
+            class="btn s-prime"
+            on:click={() => ($mode = $mode === "" ? "search" : "")}
+        >
             {@html searchIcon}
         </button>
         <button
