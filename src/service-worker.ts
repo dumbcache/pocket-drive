@@ -61,6 +61,7 @@ sw.addEventListener("fetch", (e) => {
 
         case "www.googleapis.com":
             if (url.searchParams.has("pageToken")) return;
+            if (url.searchParams.get("q")?.includes("name contains")) return;
             if (url.search === "?alt=media") return;
 
             e.respondWith(
