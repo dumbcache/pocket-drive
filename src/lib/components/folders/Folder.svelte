@@ -21,7 +21,7 @@
             on:fav={() => (folder.starred = !folder.starred)}
         />
     </button>
-    <h2 class="dir-title">{folder.name}</h2>
+    <h2 class="dir-title" title={folder.name}>{folder.name}</h2>
 </div>
 
 <style>
@@ -33,5 +33,11 @@
     }
     .card {
         width: var(--dir-width);
+    }
+    .dir-title {
+        word-wrap: unset;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 </style>

@@ -14,7 +14,7 @@
     import Count from "$lib/components/actions/Count.svelte";
     import Folder from "$lib/components/folders/Folder.svelte";
     import { searchHandler } from "$lib/scripts/gdrive/utils";
-    import { getToken } from "$lib/scripts/shared/utils";
+    import { getRoot, getToken } from "$lib/scripts/shared/utils";
 
     let view = $activeView;
     let global = false;
@@ -83,9 +83,10 @@
 
 <section class="wrapper" style:display="">
     <nav class="nav">
-        {#if $page.params?.id !== "r"}
+        {#if $activeParent.id !== getRoot()}
             <button
                 class="back-button btn s-prime"
+                title="go back"
                 on:click={() => {
                     history.back();
                     $activeView = "FOLDER";
@@ -99,7 +100,14 @@
             <Tools />
         </div>
 
-        <h2 class="folder-name one" title={$activeParent.name}>
+        <h2 class="folder-name one">
+            {#if $activeParent.id !== getRoot() && $activeParent.parents}
+                <a
+                    class="title-sub"
+                    title="go to parent"
+                    href={$activeParent.parents[0]}>./</a
+                >
+            {/if}
             {$activeParent.name}
         </h2>
 
@@ -110,7 +118,14 @@
         />
     </nav>
 
-    <h2 class="folder-name two" title={$activeParent.name}>
+    <h2 class="folder-name two">
+        {#if $activeParent.id !== getRoot() && $activeParent.parents}
+            <a
+                class="title-sub"
+                title="go to parent"
+                href={$activeParent.parents[0]}>./</a
+            >
+        {/if}
         {$activeParent.name}
     </h2>
     {#if $mode === "search"}
@@ -200,6 +215,10 @@
         margin-left: 2rem;
     }
 
+    .title-sub {
+        color: var(--color-light-blue);
+        /* color: #f00; */
+    }
     .folder-name {
         font-size: 2rem;
         max-width: 40rem;
