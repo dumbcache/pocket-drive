@@ -5,6 +5,8 @@
     import { activeImage, mode } from "$lib/scripts/shared/stores";
     import closeIcon from "$lib/assets/close.svg?raw";
     import infoIcon from "$lib/assets/arrowLeftDouble.svg?raw";
+    import zoomInIcon from "$lib/assets/zoomIn.svg?raw";
+    import zoomOutIcon from "$lib/assets/zoomOut.svg?raw";
     import urlIcon from "$lib/assets/url.svg?raw";
     import { changeImage } from "$lib/scripts/shared/utils";
     import Info from "$lib/components/files/Info.svelte";
@@ -12,6 +14,7 @@
     export let files: FileResponse;
     let dialog: Dialog;
     let infoVisible = false;
+    let zoom = false;
 
     onMount(() => {
         dialog.show();
@@ -36,10 +39,13 @@
     }
 
     function handleWheel(e: WheelEvent) {
+        if (zoom) return;
+        e.preventDefault();
         e.deltaY > 0 ? changeImage("NEXT") : changeImage("PREV");
     }
 
     function handleClick(e: PointerEvent) {
+        if (zoom) return;
         if (e.button != 0) return;
         const target = e.target as HTMLImageElement;
         const half = target.offsetWidth / 2;
@@ -60,7 +66,9 @@
         id="view"
         on:keydown={handleKeyDown}
         on:dragstart|preventDefault
-        on:wheel|preventDefault
+        on:wheel={(e) => {
+            zoom || e.preventDefault();
+        }}
     >
         <section class="one" on:wheel|stopPropagation>
             <FileNav {files} />
@@ -68,11 +76,12 @@
         <section
             class="two preview"
             on:scroll|preventDefault
-            on:wheel|preventDefault={handleWheel}
+            on:wheel={handleWheel}
         >
             <img
                 on:pointerup={handleClick}
                 class="preview-img"
+                class:zoom
                 data-id={$activeImage.id}
                 src={$activeImage.thumbnailLink}
                 alt=""
@@ -100,10 +109,12 @@
             <a
                 title="go to website"
                 href={$activeImage.description}
-                target="_blank"
                 class="btn s-second url">{@html urlIcon}</a
             >
         {/if}
+        <button class="btn s-prime" title="zoom" on:click={() => (zoom = !zoom)}
+            >{@html zoom ? zoomOutIcon : zoomInIcon}</button
+        >
     </div>
 </Dialog>
 
@@ -131,6 +142,7 @@
         margin: auto;
         max-width: 100%;
         min-width: 50%;
+        overflow: auto;
     }
 
     .three {
@@ -144,6 +156,13 @@
         margin: auto;
         object-fit: contain;
         object-position: center;
+    }
+
+    .zoom {
+        width: 100vw;
+        height: auto;
+        min-height: 100%;
+        /* max-width: 120%; */
     }
 
     .close {
@@ -162,6 +181,7 @@
         right: 2rem;
         gap: 1rem;
     }
+
     @media (max-width: 600px) {
         #view {
             flex-flow: column-reverse;
@@ -196,6 +216,10 @@
             object-position: center;
         }
 
+        .zoom {
+            width: unset;
+            max-width: 170%;
+        }
         .action {
             bottom: 8rem;
             top: unset;
