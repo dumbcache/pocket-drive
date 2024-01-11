@@ -6,8 +6,7 @@ export const FOLDER_MIME_TYPE = "application/vnd.google-apps.folder";
 export const DIR_MIME_TYPE = "application/vnd.google-apps.folder";
 export const IMG_MIME_TYPE = "image/";
 export const FILE_API = "https://www.googleapis.com/drive/v3/files";
-export const FIELDS_IMG =
-    "id,name,description,appProperties(origin),thumbnailLink,starred";
+export const FIELDS_IMG = "id,name,description,thumbnailLink,starred";
 export const FIELDS_FOLDER = "id,name,starred,parents";
 export const FIELDS_SINGLE = "id,name,parents";
 export const DEFAULT_PAGESIZE = 1000;

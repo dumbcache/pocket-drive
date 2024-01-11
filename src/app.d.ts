@@ -100,9 +100,6 @@ declare global {
         description: string;
         starred: Boolean;
         thumbnailLink: string;
-        appProperties?: {
-            origin: string;
-        };
         parents?: string[];
     }
     interface Folder {

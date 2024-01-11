@@ -25,10 +25,9 @@
         />
         <button class="anchor">.</button>
         {#if $mode !== "edit"}
-            {#if file.appProperties?.origin || file.description}
+            {#if file.description}
                 <a
-                    href={isValidUrl(file.appProperties?.origin) ||
-                        isValidUrl(file.description)}
+                    href={isValidUrl(file.description)}
                     class="img-link btn s-second"
                     referrerpolicy="no-referrer"
                     rel="external noopener noreferrer nofollow"

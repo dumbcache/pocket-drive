@@ -26,6 +26,7 @@
     const unsubscribeNavigation = navigating.subscribe((val) => {
         val || (view = "FOLDER");
         $mode = "";
+        $activeView = "FOLDER";
     });
     const unsubscribeView = activeView.subscribe((data) => (view = data));
     const unsubscribeMode = mode.subscribe((data) => {

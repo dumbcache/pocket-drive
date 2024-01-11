@@ -258,6 +258,8 @@
         justify-content: center;
         gap: var(--content-gap);
         padding: 2rem 0rem;
+        height: 84%;
+        overflow-y: auto;
     }
 
     img {
