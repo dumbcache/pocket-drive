@@ -206,6 +206,38 @@ async function makeFetch(request: Request) {
     }
 }
 
+export const copySingle = async (
+    parent: string,
+    id: string,
+    accessToken: string
+): Promise<any> => {
+    return new Promise(async (resolve, reject) => {
+        let req = new Request(`${FILE_API}/${id}/copy`, {
+            method: "POST",
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+            },
+            body: JSON.stringify({ parents: [parent] }),
+        });
+        const res = await makeFetch(req);
+        resolve(res?.status);
+    });
+};
+
+export function copyMulitple(
+    parent: string,
+    data: string[],
+    accessToken: string
+) {
+    let proms = [];
+    for (let id of data) {
+        proms.push(copySingle(parent, id, accessToken));
+    }
+    Promise.allSettled(proms).then(() => {
+        postMessage({ context: "COPY", parent, set: data });
+    });
+}
+
 export const moveSingle = async (
     parent: string,
     id: string,
@@ -283,6 +315,9 @@ onmessage = ({ data }) => {
             return;
         case "MOVE":
             moveMulitple(data.parent, data.files, data.token);
+            return;
+        case "COPY":
+            copyMulitple(data.parent, data.files, data.token);
             return;
         case "EDIT":
             updateMultiple(data.parent, data.detail, data.files, data.token);

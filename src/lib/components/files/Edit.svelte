@@ -5,6 +5,7 @@
     import closeIcon from "$lib/assets/close.svg?raw";
     import deleteIcon from "$lib/assets/delete.svg?raw";
     import moveIcon from "$lib/assets/move.svg?raw";
+    import copyIcon from "$lib/assets/copy.svg?raw";
     import editIcon from "$lib/assets/edit.svg?raw";
     import selectallIcon from "$lib/assets/selectall.svg?raw";
     import Count from "../actions/Count.svelte";
@@ -84,14 +85,16 @@
         dialog.close();
         $progress = true;
         childWorker.postMessage({
-            context: "MOVE",
+            context: action,
             parent: selectedParent,
             files: set,
             token: getToken(),
         });
+        action = "";
     }
     function folderSelectClose() {
         folderSelectVisible = false;
+        action = "";
     }
     async function handleSave() {
         if (description) {
@@ -157,9 +160,15 @@
                         folderSelectVisible = true;
                     }}>{@html moveIcon}</button
                 >
-                <!-- <button class="copy-button btn" title="copy" disabled={count === 0}
-                >{@html copyIcon}</button
-            > -->
+                <button
+                    class="btn s-prime"
+                    title="copy"
+                    disabled={count === 0}
+                    on:click={() => {
+                        action = "COPY";
+                        folderSelectVisible = true;
+                    }}>{@html copyIcon}</button
+                >
                 <button
                     class="btn s-prime"
                     title="delete"

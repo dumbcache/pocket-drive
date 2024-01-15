@@ -246,9 +246,23 @@ if (browser) {
                 progress.set(false);
                 return;
 
+            case "COPY":
+                parent = data.parent;
+                fetchMultiple(
+                    { parent, mimeType: IMG_MIME_TYPE },
+                    getToken(),
+                    true
+                );
+                fetchMultiple(
+                    { parent, mimeType: IMG_MIME_TYPE, pageSize: 3 },
+                    getToken(),
+                    true
+                );
+                progress.set(false);
+                return;
             case "MOVE":
                 parent = data.parent;
-                set = new Set(data.set);
+                set = new Set(data?.set);
                 fileStore.update((prev) => ({
                     nextPageToken: prev?.nextPageToken,
                     files: prev?.files.filter((file) => !set.has(file.id)),
