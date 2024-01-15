@@ -90,10 +90,10 @@
     }
 </script>
 
-<main class="content" on:dragstart|preventDefault>
+<div class="content" on:dragstart|preventDefault>
     <FolderContainer {observer} {view} />
     <FileContainer {observer} {view} />
-</main>
+</div>
 
 {#if count > 0}
     <footer bind:this={footer}>

@@ -78,6 +78,16 @@
             on:scroll|preventDefault
             on:wheel={handleWheel}
         >
+            <video
+                class="preview-video"
+                data-id={$activeImage.id}
+                src=""
+                muted
+                controls
+                loop
+                playsinline
+            ></video>
+
             <img
                 on:pointerup={handleClick}
                 class="preview-img"
@@ -149,7 +159,8 @@
         min-width: 40rem;
     }
 
-    .preview-img {
+    .preview-img,
+    .preview-video {
         display: block;
         width: auto;
         height: 100%;
@@ -157,12 +168,13 @@
         object-fit: contain;
         object-position: center;
     }
-
+    .preview-video {
+        display: none;
+    }
     .zoom {
         width: 100vw;
         height: auto;
         min-height: 100%;
-        /* max-width: 120%; */
     }
 
     .close {
@@ -199,6 +211,7 @@
         .two {
             min-height: 85%;
             max-height: 85%;
+            min-width: 100%;
         }
 
         .three {
@@ -212,7 +225,8 @@
             z-index: 11;
         }
 
-        .preview-img {
+        .preview-img,
+        .preview-video {
             object-position: center;
         }
 

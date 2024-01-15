@@ -7,11 +7,11 @@
 <main class="home">
     <article class="article">
         <header class="header">
-            <a href="/help" class="help" title="Go to help"
+            <!-- <a href="/help" class="help" title="Go to help"
                 ><span>
                     {@html helpIcon}
                 </span>Help</a
-            >
+            > -->
             <ColorScheme />
             <LoginButton />
         </header>

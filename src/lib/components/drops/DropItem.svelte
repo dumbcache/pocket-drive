@@ -13,7 +13,11 @@
 
 <div class="drop-item" data-id={item.id}>
     <div class="img-wrapper">
-        <img src={item.imgRef} class="drop-img" alt="" />
+        {#if item.mimeType.match("image/")}
+            <img src={item.imgRef} class="drop-img" alt="" />
+        {:else if item.mimeType.match("video/")}
+            <video src={item.imgRef} muted class="drop-img"></video>
+        {/if}
         {#if item.progress}
             <div class="progress">
                 {#if item.progress === "uploading"}

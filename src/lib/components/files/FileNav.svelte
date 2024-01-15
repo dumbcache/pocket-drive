@@ -52,7 +52,8 @@
             <button class:active={file.id === active} data-id={file.id}>
                 <img
                     src={file.thumbnailLink}
-                    alt="thumbnail to link"
+                    alt=""
+                    class:no={!file.thumbnailLink}
                     height="150"
                     width="200"
                     data-id={file.id}
@@ -94,7 +95,10 @@
         filter: none;
         width: 100%;
     }
-
+    .no {
+        height: 10rem;
+        background-color: var(--color-file-background);
+    }
     @media (max-width: 600px) {
         .thumbs {
             height: 100%;
@@ -110,6 +114,9 @@
         .active img {
             min-width: 4rem;
             width: 4rem;
+        }
+        .no {
+            width: 5rem;
         }
     }
 </style>

@@ -15,11 +15,7 @@ import {
     dropItems,
 } from "$lib/scripts/shared/stores";
 import ChildWorker from "$lib/scripts/worker.ts?worker";
-import {
-    FOLDER_MIME_TYPE,
-    IMG_MIME_TYPE,
-    fetchMultiple,
-} from "$lib/scripts/gdrive/utils";
+import { IMG_MIME_TYPE, fetchMultiple } from "$lib/scripts/gdrive/utils";
 import { clearDropItems } from "$lib/scripts/shared/image";
 
 export let childWorker: Worker;
@@ -225,14 +221,27 @@ if (browser) {
         switch (data.context) {
             case "IMG_PREVIEW":
                 const { id, blob } = data;
-
                 const img = document.querySelector(
                     `.preview-img`
                 ) as HTMLImageElement;
-
+                const video = document.querySelector(
+                    `.preview-video`
+                ) as HTMLVideoElement;
                 if (img.dataset.id !== id) return;
+                if (blob.type.match("video/")) {
+                    let url = video.src;
+                    video.src = URL.createObjectURL(blob);
+                    video.poster = get(activeImage).thumbnailLink;
+                    URL.revokeObjectURL(url);
+                    video.style.display = "block";
+                    img.style.display = "none";
+                    return;
+                }
+
                 let url = URL.createObjectURL(blob);
                 img.src = url;
+                video.style.display = "none";
+                img.style.display = "block";
                 return;
 
             case "EDIT":

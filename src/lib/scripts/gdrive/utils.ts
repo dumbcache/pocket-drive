@@ -33,7 +33,11 @@ export function constructRequest(
     { parent, mimeType, pageSize, pageToken }: ParamsObject,
     accessToken: string
 ) {
-    let q = `q='${parent}' in parents and mimeType contains '${mimeType}'`;
+    let mime =
+        mimeType === FOLDER_MIME_TYPE
+            ? `mimeType contains '${mimeType}'`
+            : `mimeType contains '${mimeType}' or mimeType contains 'video/'`;
+    let q = `q=${mime} and '${parent}' in parents`;
     let p = `&pageSize=${pageSize || PAGESIZE}`;
     let f = `&fields=nextPageToken,files(${
         mimeType === IMG_MIME_TYPE ? FIELDS_IMG : FIELDS_FOLDER

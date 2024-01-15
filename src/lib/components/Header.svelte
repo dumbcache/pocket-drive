@@ -29,9 +29,9 @@
         <Tools />
     </div>
     <div class="wrapper">
-        <button class="btn help" title="shortcuts" on:click={() => {}}
+        <!-- <button class="btn help" title="shortcuts" on:click={() => {}}
             >{@html helpButton}</button
-        >
+        > -->
         <ColorScheme />
         <LogoutButton />
     </div>

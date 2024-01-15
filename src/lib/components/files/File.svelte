@@ -109,6 +109,7 @@
         width: 20rem;
         height: 20rem;
         border: 1px solid var(--color-file-border);
+        background-color: var(--color-file-background);
     }
     .delete:hover {
         cursor: pointer;
@@ -141,7 +142,6 @@
         .placeholder {
             width: 30vw;
             height: 10rem;
-            background-color: var(--color-file-background);
             border: 1px solid var(--color-file-border);
         }
     }

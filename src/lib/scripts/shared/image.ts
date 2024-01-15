@@ -8,9 +8,9 @@ export function previewAndSetDropItems(
     parentName?: string
 ) {
     for (let file of files!) {
+        const id = Math.round(Math.random() * Date.now()).toString();
+        const imgRef = URL.createObjectURL(file);
         if (file.type.match("image/")) {
-            const id = Math.round(Math.random() * Date.now()).toString();
-            const imgRef = URL.createObjectURL(file);
             if (
                 file.type === "image/gif" ||
                 file.type === "image/avif" ||
@@ -70,6 +70,27 @@ export function previewAndSetDropItems(
                 image.crossOrigin = ""; // if from different origin
                 image.src = imgRef;
             }
+        }
+        if (file.type.match("video/")) {
+            const reader = new FileReader();
+
+            reader.onload = function (event) {
+                const bytes = new Uint8Array(event.target.result);
+                let item = {
+                    id,
+                    name: file.name,
+                    mimeType: file.type,
+                    bytes,
+                    imgRef,
+                    parent: parent || get(activeParent).id,
+                    parentName: parentName || get(activeParent).name,
+                };
+                dropItems.set([...get(dropItems), item]);
+                if (get(autosave)) {
+                    setTimeout(() => autosaveItem(item), 500);
+                }
+            };
+            reader.readAsArrayBuffer(file);
         }
     }
 }

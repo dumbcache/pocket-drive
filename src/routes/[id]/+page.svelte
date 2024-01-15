@@ -174,17 +174,14 @@
             {/if}
         </section>
     {/if}
-    <div
-        class="content"
-        style:display={$mode === "search" ? "none" : "initial"}
-    >
+    <main class="main" style:display={$mode === "search" ? "none" : "initial"}>
         <Content
             {view}
             count={view === "FOLDER"
                 ? $folderStore?.files.length
                 : $fileStore?.files.length}
         />
-    </div>
+    </main>
 </section>
 
 <style>
