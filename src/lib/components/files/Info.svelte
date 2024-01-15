@@ -201,6 +201,7 @@
     @media (max-width: 600px) {
         .info {
             border-radius: 0rem;
+            border: none;
         }
         .id {
             max-width: 25rem;

@@ -13,6 +13,7 @@ import {
     activeParent,
     recentStore,
     dropItems,
+    previewLoading,
 } from "$lib/scripts/shared/stores";
 import ChildWorker from "$lib/scripts/worker.ts?worker";
 import { IMG_MIME_TYPE, fetchMultiple } from "$lib/scripts/gdrive/utils";
@@ -186,6 +187,7 @@ export function setActiveImage(id: string, src: string) {
     let img = document.querySelector(".preview-img") as HTMLImageElement;
     if (img && img.dataset.id === id) return;
     fetchImgPreview(id);
+    previewLoading.set(true);
     if (img) {
         url = img.src;
         img.src = src;
@@ -228,13 +230,15 @@ if (browser) {
                     `.preview-video`
                 ) as HTMLVideoElement;
                 if (img.dataset.id !== id) return;
+                let active = get(activeImage);
                 if (blob.type.match("video/")) {
                     let url = video.src;
                     video.src = URL.createObjectURL(blob);
-                    video.poster = get(activeImage).thumbnailLink;
+                    video.poster = active.thumbnailLink;
                     URL.revokeObjectURL(url);
                     video.style.display = "block";
                     img.style.display = "none";
+                    previewLoading.set(false);
                     return;
                 }
 
@@ -242,6 +246,7 @@ if (browser) {
                 img.src = url;
                 video.style.display = "none";
                 img.style.display = "block";
+                previewLoading.set(false);
                 return;
 
             case "EDIT":

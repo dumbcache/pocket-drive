@@ -2,7 +2,11 @@
     import FileNav from "$lib/components/files/FileNav.svelte";
     import { onMount } from "svelte";
     import Dialog from "$lib/components/Dialog.svelte";
-    import { activeImage, mode } from "$lib/scripts/shared/stores";
+    import {
+        activeImage,
+        mode,
+        previewLoading,
+    } from "$lib/scripts/shared/stores";
     import closeIcon from "$lib/assets/close.svg?raw";
     import infoIcon from "$lib/assets/arrowLeftDouble.svg?raw";
     import zoomInIcon from "$lib/assets/zoomIn.svg?raw";
@@ -10,6 +14,7 @@
     import urlIcon from "$lib/assets/url.svg?raw";
     import { changeImage } from "$lib/scripts/shared/utils";
     import Info from "$lib/components/files/Info.svelte";
+    import Spinner from "../Spinner.svelte";
 
     export let files: FileResponse;
     let dialog: Dialog;
@@ -79,6 +84,7 @@
             on:wheel={handleWheel}
         >
             <video
+                on:wheel|stopPropagation|preventDefault
                 class="preview-video"
                 data-id={$activeImage.id}
                 src=""
@@ -106,6 +112,11 @@
     <button class="btn s-prime close" on:click={handleViewClose}
         >{@html closeIcon}</button
     >
+    {#if $previewLoading}
+        <div class="spinner">
+            <Spinner borderWidth="2px" width="1rem" height="1rem" />
+        </div>
+    {/if}
     <div class="action">
         {#if !infoVisible}
             <button
@@ -184,6 +195,13 @@
         left: 2rem;
     }
 
+    .spinner {
+        position: absolute;
+        z-index: 10;
+        top: 2.7rem;
+        right: 13rem;
+    }
+
     .action {
         display: flex;
         justify-content: center;
@@ -245,6 +263,10 @@
         .close {
             top: 0.5rem;
             left: 0.5rem;
+        }
+        .spinner {
+            top: 0.5rem;
+            right: 0.5rem;
         }
     }
 </style>
