@@ -101,6 +101,7 @@ declare global {
         starred: Boolean;
         thumbnailLink: string;
         parents?: string[];
+        mimeType: string;
     }
     interface Folder {
         id: string;

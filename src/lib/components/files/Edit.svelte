@@ -3,6 +3,7 @@
     import { activeParent, mode, progress } from "$lib/scripts/shared/stores";
     import { onMount } from "svelte";
     import closeIcon from "$lib/assets/close.svg?raw";
+    import playIcon from "$lib/assets/play.svg?raw";
     import deleteIcon from "$lib/assets/delete.svg?raw";
     import moveIcon from "$lib/assets/move.svg?raw";
     import copyIcon from "$lib/assets/copy.svg?raw";
@@ -189,14 +190,19 @@
             bind:this={container}
         >
             {#each files as file}
-                <img
-                    src={file.thumbnailLink}
-                    alt=""
-                    height="150"
-                    width="200"
-                    data-id={file.id}
-                    class:select={allSelected}
-                />
+                <div class="img">
+                    <img
+                        src={file.thumbnailLink}
+                        alt=""
+                        height="150"
+                        width="200"
+                        data-id={file.id}
+                        class:select={allSelected}
+                    />
+                    {#if file.mimeType.match("video/")}
+                        <div class="play">{@html playIcon}</div>
+                    {/if}
+                </div>
             {/each}
         </div>
     {/if}
@@ -269,6 +275,9 @@
         padding: 2rem 0rem;
         height: 84%;
         overflow-y: auto;
+    }
+    .img {
+        position: relative;
     }
 
     img {
@@ -376,7 +385,21 @@
         color: #aaa;
         font-size: 1.2rem;
     }
-
+    .play {
+        width: 4rem;
+        height: 4rem;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: #0007;
+        box-shadow: 0 0 20px 5px #fff;
+        border-radius: 50%;
+        backdrop-filter: blur(10px);
+    }
+    .play :global(svg) {
+        fill: #fff;
+    }
     @media (max-width: 600px) {
         .edit-buttons {
             padding: 1rem 0rem;
@@ -393,6 +416,10 @@
             border: 1px solid #fff3;
             border-top-left-radius: 0.5rem;
             border-top-right-radius: 0.5rem;
+        }
+        .play {
+            width: 2rem;
+            height: 2rem;
         }
     }
 </style>

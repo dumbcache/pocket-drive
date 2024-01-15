@@ -6,7 +6,7 @@ export const FOLDER_MIME_TYPE = "application/vnd.google-apps.folder";
 export const DIR_MIME_TYPE = "application/vnd.google-apps.folder";
 export const IMG_MIME_TYPE = "image/";
 export const FILE_API = "https://www.googleapis.com/drive/v3/files";
-export const FIELDS_IMG = "id,name,description,thumbnailLink,starred";
+export const FIELDS_IMG = "id,name,description,thumbnailLink,starred,mimeType";
 export const FIELDS_FOLDER = "id,name,starred,parents";
 export const FIELDS_SINGLE = "id,name,parents";
 export const DEFAULT_PAGESIZE = 1000;
@@ -37,7 +37,7 @@ export function constructRequest(
         mimeType === FOLDER_MIME_TYPE
             ? `mimeType contains '${mimeType}'`
             : `mimeType contains '${mimeType}' or mimeType contains 'video/'`;
-    let q = `q=${mime} and '${parent}' in parents`;
+    let q = `q='${parent}' in parents and (${mime})`;
     let p = `&pageSize=${pageSize || PAGESIZE}`;
     let f = `&fields=nextPageToken,files(${
         mimeType === IMG_MIME_TYPE ? FIELDS_IMG : FIELDS_FOLDER

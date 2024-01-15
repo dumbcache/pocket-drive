@@ -1,5 +1,6 @@
 <script lang="ts">
     import urlIcon from "$lib/assets/url.svg?raw";
+    import playIcon from "$lib/assets/play.svg?raw";
     import { isValidUrl } from "$lib/scripts/shared/utils";
     import { mode } from "$lib/scripts/shared/stores";
     import Favorite from "../actions/Favorite.svelte";
@@ -24,6 +25,9 @@
             on:error={() => (visible = false)}
         />
         <button class="anchor">.</button>
+        {#if file.mimeType.match("video/")}
+            <div class="play">{@html playIcon}</div>
+        {/if}
         {#if $mode !== "edit"}
             {#if file.description}
                 <a
@@ -127,7 +131,21 @@
         left: 0;
         z-index: -1;
     }
-
+    .play {
+        width: 4rem;
+        height: 4rem;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: #0007;
+        box-shadow: 0 0 20px 5px #fff;
+        border-radius: 50%;
+        backdrop-filter: blur(10px);
+    }
+    .play :global(svg) {
+        fill: #fff;
+    }
     @media (max-width: 600px) {
         .img-link,
         .favorite {
@@ -143,6 +161,10 @@
             width: 30vw;
             height: 10rem;
             border: 1px solid var(--color-file-border);
+        }
+        .play {
+            width: 2rem;
+            height: 2rem;
         }
     }
 </style>
