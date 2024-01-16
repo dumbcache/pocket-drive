@@ -331,6 +331,7 @@ if (browser) {
                 );
                 return;
             case "DROP_SAVE":
+                clearDropItems();
                 let successSet = new Set();
                 let failureSet = new Set();
                 let parentSet = new Set();
@@ -356,7 +357,6 @@ if (browser) {
                     })
                 );
                 setTimeout(() => {
-                    clearDropItems();
                     let token = getToken();
                     parentSet.forEach(async (parent) => {
                         const data = await fetchMultiple(
@@ -373,7 +373,7 @@ if (browser) {
                             fileStore.set(data);
                         }
                     });
-                }, 5000);
+                }, 2000);
                 return;
 
             case "IDB_RELOAD_REQUIRED":

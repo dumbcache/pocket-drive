@@ -5,10 +5,15 @@
     import doubleLeftIcon from "$lib/assets/arrowLeftDouble.svg?raw";
     import { fade } from "svelte/transition";
     import { onDestroy } from "svelte";
+    import { navigating } from "$app/stores";
 
     let mini = false;
+    const unsubscribe = navigating.subscribe((data) => {
+        data && (mini = true);
+    });
     onDestroy(() => {
         $autosave = false;
+        unsubscribe();
     });
 </script>
 

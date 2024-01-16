@@ -127,7 +127,11 @@ export async function fetchMultiple(
 ): Promise<GoogleFileResponse> {
     return new Promise(async (resolve, reject) => {
         const req = constructRequest(params, accessToken);
-        if (updateCache) await (await caches.open("pd-data")).delete(req);
+        try {
+            if (updateCache) await (await caches.open("pd-data")).delete(req);
+        } catch (error) {
+            console.log(error);
+        }
         const res = await makeFetch(req);
         resolve(res?.json() as Promise<GoogleFileResponse>);
         return;
