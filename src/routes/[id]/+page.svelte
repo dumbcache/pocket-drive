@@ -24,7 +24,6 @@
     let token = getToken();
     let searchTimeout;
     const unsubscribeNavigation = navigating.subscribe((val) => {
-        val || (view = "FOLDER");
         $mode = "";
         val || ($activeView = "FOLDER");
     });
