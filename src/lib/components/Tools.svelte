@@ -96,7 +96,7 @@
                 type="file"
                 name="img-picker"
                 id="img-picker"
-                accept="image/*"
+                accept="image/*,video/*"
                 multiple
                 on:change={imgPickerHandler}
             />
