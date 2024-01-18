@@ -10,7 +10,7 @@
 
     function goHome() {
         if ($page.params?.id === "r") return;
-        $activeView = "FOLDER";
+        // $activeView = "FOLDER";
         goto("/r");
     }
 </script>

@@ -89,7 +89,6 @@
                 title="go back"
                 on:click={() => {
                     history.back();
-                    $activeView = "FOLDER";
                 }}
             >
                 {@html beforeNavigate}
