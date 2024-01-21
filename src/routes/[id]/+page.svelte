@@ -25,7 +25,15 @@
     let searchTimeout;
     const unsubscribeNavigation = navigating.subscribe((val) => {
         $mode = "";
-        val || ($activeView = "FOLDER");
+        if (!val) {
+            $activeView = "FOLDER";
+            if (
+                $folderStore?.files.length === 0 &&
+                $fileStore?.files.length !== 0
+            ) {
+                $activeView = "FILE";
+            }
+        }
     });
     const unsubscribeView = activeView.subscribe((data) => (view = data));
     const unsubscribeMode = mode.subscribe((data) => {

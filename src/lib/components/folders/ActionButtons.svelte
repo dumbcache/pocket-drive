@@ -11,7 +11,7 @@
     export let id: string;
     export let name: string;
 
-    function handler(type) {
+    function handler(type: FolderAction) {
         $folderAction = type;
         $folderActionDetail = { id, name };
     }
