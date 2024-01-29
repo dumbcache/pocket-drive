@@ -27,7 +27,7 @@
 <button
     type="button"
     class="color-theme btn s-prime"
-    title="Toggle dark mode"
+    title="toggle theme"
     role="switch"
     aria-label="Toggle dark mode"
     aria-checked={theme === "" ? "false" : "true"}

@@ -17,10 +17,10 @@
 
 <header class="header">
     <div class="title-wrapper">
-        <button class="btn s-prime home" on:click={goHome}>
+        <button class="btn s-prime home" title="home" on:click={goHome}>
             {@html homeButton}
         </button>
-        <button class="title-button" on:click={goHome}
+        <button class="title-button" title="home" on:click={goHome}
             ><h1 class="title-long">Pocket Drive</h1>
             <h1 class="title-short">PD</h1></button
         >

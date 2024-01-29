@@ -1,7 +1,7 @@
 <script lang="ts">
     import Dialog from "$lib/components/Dialog.svelte";
     import { activeParent, mode, progress } from "$lib/scripts/shared/stores";
-    import { onMount } from "svelte";
+    import { onDestroy, onMount } from "svelte";
     import closeIcon from "$lib/assets/close.svg?raw";
     import playIcon from "$lib/assets/play.svg?raw";
     import deleteIcon from "$lib/assets/delete.svg?raw";
@@ -51,6 +51,9 @@
 
     onMount(() => {
         dialog.show();
+    });
+    onDestroy(() => {
+        $mode = "";
     });
 
     function handleViewClose() {

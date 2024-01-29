@@ -60,6 +60,7 @@
 <div class="tools">
     <button
         class="view btn s-prime"
+        title="folders"
         on:click={() => ($activeView = "FOLDER")}
         class:active={view === "FOLDER"}
     >
@@ -67,6 +68,7 @@
     </button>
     <button
         class="view btn s-prime"
+        title="files"
         on:click={() => ($activeView = "FILE")}
         class:active={view === "FILE"}
     >
@@ -104,6 +106,7 @@
     {:else}
         <button
             class="btn s-prime"
+            title="search folders"
             on:click={() => ($mode = $mode === "" ? "search" : "")}
         >
             {@html searchIcon}
@@ -116,7 +119,11 @@
             {@html folderCreate}
         </button>
     {/if}
-    <button class="btn s-prime" title="create folder" on:click={refreshHandler}>
+    <button
+        class="btn s-prime"
+        title="refresh folder"
+        on:click={refreshHandler}
+    >
         {@html refreshIcon}
     </button>
     <a
@@ -124,7 +131,7 @@
         referrerpolicy="no-referrer"
         rel="external noopener noreferrer nofollow"
         class="btn s-prime"
-        title="open in Gdrive"
+        title="open in google drive"
         target="_blank"
     >
         {@html goToDrive}
