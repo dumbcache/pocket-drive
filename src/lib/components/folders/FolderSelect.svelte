@@ -98,7 +98,7 @@
             true
         );
         fetchMultiple(
-            { parent: $folderActionDetail?.id, mimeType: FOLDER_MIME_TYPE },
+            { parent: $activeParent?.id, mimeType: FOLDER_MIME_TYPE },
             accessToken,
             true
         );
