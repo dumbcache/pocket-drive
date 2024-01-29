@@ -177,19 +177,21 @@ export const uploadImg = async (
 };
 
 export const deleteImgs = async (imgs: string[], token: string) => {
-    const proms = [];
-    for (let id of imgs) {
-        proms.push(
-            fetch(`${FILE_API}/${id}`, {
-                method: "DELETE",
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            })
-        );
-    }
-    Promise.allSettled(proms).then(() => {
-        postMessage({ context: "DELETE", set: imgs });
+    return new Promise((res) => {
+        const proms = [];
+        for (let id of imgs) {
+            proms.push(
+                fetch(`${FILE_API}/${id}`, {
+                    method: "DELETE",
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                })
+            );
+        }
+        Promise.allSettled(proms).then(() => {
+            res("");
+        });
     });
 };
 
@@ -229,12 +231,14 @@ export function copyMulitple(
     data: string[],
     accessToken: string
 ) {
-    let proms = [];
-    for (let id of data) {
-        proms.push(copySingle(parent, id, accessToken));
-    }
-    Promise.allSettled(proms).then(() => {
-        postMessage({ context: "COPY", parent, set: data });
+    return new Promise((res) => {
+        let proms = [];
+        for (let id of data) {
+            proms.push(copySingle(parent, id, accessToken));
+        }
+        Promise.allSettled(proms).then(() => {
+            res("");
+        });
     });
 }
 
@@ -303,21 +307,42 @@ export function updateMultiple(
 }
 
 onmessage = ({ data }) => {
+    let { parent, files, token } = data;
     switch (data.context) {
         case "IMG_PREVIEW":
             checkForImgLocal(data.id, data.token);
             return;
         case "DELETE":
-            deleteImgs(data.files, data.token);
+            deleteImgs(files, token).then(() => {
+                postMessage({ context: "DELETE", set: files });
+            });
             return;
         case "CLEAR_IMAGE_CACHE":
             clearImageCache();
             return;
         case "MOVE":
-            moveMulitple(data.parent, data.files, data.token);
+            moveMulitple(parent, files, token);
             return;
         case "COPY":
-            copyMulitple(data.parent, data.files, data.token);
+            copyMulitple(parent, files, token).then(() => {
+                postMessage({
+                    context: "COPY",
+                    parent,
+                    set: files,
+                });
+            });
+            return;
+        case "TOP":
+            copyMulitple(parent, files, token).then(() => {
+                deleteImgs(data.files, data.token).then(() => {
+                    postMessage({
+                        context: "COPY",
+                        parent,
+                        set: files,
+                        top: true,
+                    });
+                });
+            });
             return;
         case "EDIT":
             updateMultiple(data.parent, data.detail, data.files, data.token);

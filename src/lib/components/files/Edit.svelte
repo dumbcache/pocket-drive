@@ -8,6 +8,7 @@
     import moveIcon from "$lib/assets/move.svg?raw";
     import copyIcon from "$lib/assets/copy.svg?raw";
     import editIcon from "$lib/assets/edit.svg?raw";
+    import startIcon from "$lib/assets/start.svg?raw";
     import selectallIcon from "$lib/assets/selectall.svg?raw";
     import Count from "../actions/Count.svelte";
     import FolderSelect from "../folders/FolderSelect.svelte";
@@ -16,6 +17,7 @@
         getToken,
         isValidUrl,
     } from "$lib/scripts/shared/utils";
+    import { updateSingle } from "$lib/scripts/gdrive/utils";
 
     export let files: FileResponse;
     let dialog: Dialog;
@@ -81,6 +83,18 @@
         }
         set.clear();
         count = set.size;
+    }
+
+    function moveToTop() {
+        $progress = true;
+        $mode = "";
+        childWorker.postMessage({
+            context: "TOP",
+            parent: $activeParent.id,
+            files: set,
+            token: getToken(),
+        });
+        action = "";
     }
 
     function folderSelectOk(e) {
@@ -154,6 +168,12 @@
                     title="edit"
                     disabled={count === 0}
                     on:click={() => (action = "EDIT")}>{@html editIcon}</button
+                >
+                <button
+                    class="btn s-prime"
+                    title="move to start"
+                    disabled={count === 0}
+                    on:click={() => moveToTop()}>{@html startIcon}</button
                 >
                 <button
                     class="btn s-prime"

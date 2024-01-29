@@ -51,6 +51,11 @@
                 true
             )
         );
+        fetchMultiple(
+            { parent: $activeParent.id, mimeType: IMG_MIME_TYPE, pageSize: 3 },
+            getToken(),
+            true
+        );
 
         $refresh = false;
     }

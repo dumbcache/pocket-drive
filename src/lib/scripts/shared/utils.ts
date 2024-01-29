@@ -266,7 +266,9 @@ if (browser) {
                     { parent, mimeType: IMG_MIME_TYPE },
                     getToken(),
                     true
-                );
+                ).then((files) => {
+                    data.top && fileStore.set(files);
+                });
                 fetchMultiple(
                     { parent, mimeType: IMG_MIME_TYPE, pageSize: 3 },
                     getToken(),
