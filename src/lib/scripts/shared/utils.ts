@@ -233,11 +233,13 @@ if (browser) {
                 let active = get(activeImage);
                 if (blob.type.match("video/")) {
                     let url = video.src;
-                    video.src = URL.createObjectURL(blob);
-                    video.poster = active.thumbnailLink;
-                    URL.revokeObjectURL(url);
                     video.style.display = "block";
                     img.style.display = "none";
+                    setTimeout(() => {
+                        video.src = URL.createObjectURL(blob);
+                    }, 0);
+                    video.poster = active.thumbnailLink;
+                    URL.revokeObjectURL(url);
                     previewLoading.set(false);
                     return;
                 }

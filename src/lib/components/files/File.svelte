@@ -26,7 +26,7 @@
         />
         <button class="anchor">.</button>
         {#if file.mimeType.match("video/")}
-            <div class="play" data-id={file.id}>{@html playIcon}</div>
+            <div class="play">{@html playIcon}</div>
         {/if}
         {#if $mode !== "edit"}
             {#if file.description}

@@ -8,8 +8,9 @@ export function handleImageClick(e) {
             return;
         case "":
         default:
-            let target = e.target as HTMLImageElement;
-            let { id } = target.dataset;
+            let eles = e.composedPath();
+            let [target] = eles.filter((ele) => ele.localName === "li");
+            let { id } = target?.dataset;
             if (!id) return;
             setActiveImage(id, target.src);
             mode.set("view");
