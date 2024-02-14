@@ -89,7 +89,7 @@
         box-shadow: 0 0 2px 2px var(--color-focus);
     }
     .cover:hover .pic {
-        filter: brightness(0.8);
+        filter: brightness(0.6);
         background-color: var(--color-file-hover);
     }
     .cover:hover .placeholder {
