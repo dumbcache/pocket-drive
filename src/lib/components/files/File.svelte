@@ -11,7 +11,12 @@
     let selected = "";
 </script>
 
-<div class="card" class:select={selected} class:edit-mode={""}>
+<div
+    class="card"
+    title={file.name}
+    class:select={selected}
+    class:edit-mode={""}
+>
     {#if visible}
         <img
             src={file.thumbnailLink}
@@ -35,6 +40,7 @@
                     class="img-link btn s-second"
                     referrerpolicy="no-referrer"
                     rel="external noopener noreferrer nofollow"
+                    title={file.description}
                     on:click|stopPropagation
                 >
                     {@html urlIcon}
