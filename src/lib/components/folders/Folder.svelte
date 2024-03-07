@@ -3,7 +3,7 @@
     import FolderCover from "$lib/components/folders/FolderCover.svelte";
     import { IMG_MIME_TYPE, fetchMultiple } from "$lib/scripts/gdrive/utils";
     import { getToken } from "$lib/scripts/shared/utils";
-    import FolderPeak from "./FolderPeak.svelte";
+    // import FolderPeak from "./FolderPeak.svelte";
 
     export let visible: Boolean;
     export let toolsVisible: Boolean = true;
@@ -37,6 +37,7 @@
             //     y = window.innerHeight - peakElement.offsetHeight;
             //     peakElement.style.top = `${y}px`;
             // }
+            document.querySelector(".peak").style.display = "none";
             peakElement.style.display = "initial";
             peakElement.onmouseover = () => peakElement.parentElement?.focus();
         }, 1000);
@@ -47,13 +48,9 @@
     }
 </script>
 
-<div
-    class="card"
-    on:dragstart|preventDefault
-    data-id={folder.id}
-    on:mouseenter={displayPeak}
-    on:mouseleave={closePeak}
->
+<div class="card" on:dragstart|preventDefault data-id={folder.id}>
+    <!-- on:mouseleave={closePeak}
+    on:mouseenter={displayPeak} -->
     <button on:click={dirNavigate} class:hover>
         <FolderCover
             id={folder.id}
@@ -66,14 +63,14 @@
     </button>
     <h2 class="dir-title" title={folder.name}>{folder.name}</h2>
 
-    <div
+    <!-- <div
         class="peak"
         bind:this={peakElement}
         on:mouseenter={() => (hover = true)}
         on:mouseleave={() => (hover = false)}
     >
         <FolderPeak {files} />
-    </div>
+    </div> -->
 </div>
 
 <style>
