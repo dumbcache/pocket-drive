@@ -309,7 +309,6 @@
         height: fit-content;
         max-width: var(--file-width);
         border-radius: 1rem;
-        filter: brightness(0.6);
     }
 
     img:hover {
@@ -317,12 +316,18 @@
         filter: brightness(0.8);
     }
     .select {
-        border-bottom: 3px solid var(--color-light-blue);
-        filter: none;
+        /* filter: none; */
         box-shadow: 0 0 5px 1px #fff5;
+        filter: brightness(0.3);
+    }
+
+    .img:has(.select) {
+        border-bottom: 5px solid var(--color-light-blue);
+        border-radius: 1rem;
     }
     .select:hover {
         filter: none;
+        filter: brightness(0.3);
     }
 
     .edit-buttons {
