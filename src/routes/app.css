@@ -1,0 +1,243 @@
+@import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&family=Poppins:ital,wght@0,400;0,600;0,800;0,900;1,400;1,600;1,800;1,900&display=swap");
+
+:root {
+    --font-poppins: "Poppins", sans-serif;
+    --font-lato: "Lato", sans-serif;
+    --font-system: system-ui, Avenir, Helvetica, Arial, sans-serif;
+    --font-default: var(--font-lato);
+    --size-system: 62.5%;
+    --size-default: 1.6rem;
+    --size-small: 2rem;
+    --size-medium: 2.4rem;
+    --size-large: 2.8rem;
+
+    --color-blue: #473aff;
+    --color-light-blue: #41d1ff;
+    --color-pink: #bd34fe;
+    --color-bluegrey: #145;
+    --color-lightgreen: #052;
+    --color-black: #000;
+    --color-black-one: #1b1b1f;
+    --color-black-two: #202127;
+    --color-black-three: #303137;
+    --color-white: #fff;
+    --color-white-one: #ebebef;
+    --color-white-two: #d0d1d7;
+    --color-white-three: #c0c1c7;
+    --color-white-light: #fff5;
+    --color-black-light: #0008;
+
+    --title-background: linear-gradient(120deg, #0ac0ee, #d00bc3, #473aff);
+    --color-link: var(--color-blue);
+    --color-focus: var(--color-light-blue);
+    --color-outline: #bbb;
+    --primary-bg-color: var(--color-white);
+    --primary-color: var(--color-black-one);
+    --primary-backdrop-color: #111a;
+    --svg-fill: var(--color-black-two);
+    --bg-color-one: var(--color-white-one);
+    --bg-color-two: var(--color-white-two);
+    --bg-color-three: var(--color-white-three);
+    --bg-color-four: #bbb;
+    --bg-color-five: #aaa;
+    --color-one: var(--color-black-one);
+    --color-two: var(--color-black-two);
+    --color-three: var(--color-black-three);
+    --color-four: #444;
+    --color-five: #555;
+    --color-file-background: var(--color-white-two);
+    --color-file-border: var(--color-black-light);
+    --color-file-hover: var(--color-white-three);
+    --folder-width: 30rem;
+    --file-width: 20rem;
+    --file-height: 30rem;
+    --cover-height: 20rem;
+
+    --line-size-default: 1.6rem;
+    --title-size: var(--size-medium);
+    --primary-icon-size: var(--size-large);
+    --secondary-icon-size: var(--size-small);
+    --dir-width: 30rem;
+    --img-width: 20rem;
+    --cover-height: 20rem;
+    --content-gap: 2rem;
+    --content-padding: 3rem;
+}
+.dark {
+    --title-background: linear-gradient(120deg, #bd34fe, #41d1ff, #473aff);
+    --color-link: var(--color-pink);
+    --color-focus: var(--color-pink);
+    --color-outline: #666;
+    --primary-bg-color: var(--color-black-one);
+    --primary-color: var(--color-white-one);
+    --primary-backdrop-color: unset;
+    --svg-fill: var(--color-white-two);
+    --bg-color-one: var(--color-black-one);
+    --bg-color-two: var(--color-black-two);
+    --bg-color-three: var(--color-black-three);
+    --bg-color-four: #444;
+    --bg-color-five: #555;
+    --color-one: var(--color-white-one);
+    --color-two: var(--color-white-two);
+    --color-three: var(--color-white-three);
+    --color-four: #bbb;
+    --color-five: #aaa;
+    --color-file-background: var(--color-black-two);
+    --color-file-border: var(--color-white-light);
+    --color-file-hover: var(--color-black-one);
+}
+
+:root {
+    font-family: var(--font-default);
+    font-size: var(--size-system);
+    line-height: var(--line-height-default);
+    min-height: 100%;
+
+    color-scheme: light dark;
+    background-color: var(--primary-bg-color);
+    color: var(--primary-color);
+
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-text-size-adjust: 100%;
+
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+}
+
+*:not(dialog),
+*::before,
+*::after {
+    margin: 0rem;
+    padding: 0rem;
+    box-sizing: inherit;
+    scroll-behavior: inherit;
+}
+
+html,
+body,
+.app {
+    font-size: var(--size-default);
+    overscroll-behavior-y: contain;
+    background: inherit;
+}
+
+img,
+picture,
+video,
+canvas,
+svg {
+    max-width: 100%;
+    border: none;
+}
+
+svg {
+    width: 100%;
+}
+
+input,
+button,
+textarea,
+select {
+    font: inherit;
+    color: inherit;
+    display: inline-block;
+}
+
+button {
+    color: inherit;
+    background: inherit;
+    border: none;
+    cursor: pointer;
+    display: inline-block;
+}
+
+.btn {
+    background: none;
+}
+
+.btn svg {
+    fill: var(--svg-fill);
+}
+.btn svg:hover {
+    fill: var(--color-focus);
+}
+
+button:disabled svg,
+button:disabled svg:hover,
+.btn:disabled svg,
+.btn:disabled svg:hover {
+    fill: var(--primary-color);
+    filter: opacity(0.2);
+    cursor: not-allowed;
+}
+
+.s-prime {
+    width: var(--primary-icon-size);
+    height: var(--primary-icon-size);
+}
+
+.s-second {
+    width: var(--secondary-icon-size);
+    height: var(--secondary-icon-size);
+}
+
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    overflow-wrap: break-word;
+    font-weight: unset;
+    font-size: unset;
+}
+
+li {
+    list-style: none;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+::-webkit-scrollbar {
+    width: 0.5rem;
+}
+::-webkit-scrollbar-track {
+    background: var(--color-black-light);
+    backdrop-filter: blur(1rem);
+}
+::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 0.5rem;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: var(--color-lightgreen);
+}
+
+@media (max-width: 600px) {
+    :root {
+        --title-size: var(--size-default);
+        --primary-icon-size: var(--size-small);
+        --secondary-icon-size: var(--size-default);
+        --dir-width: 14rem;
+        --img-width: 9rem;
+        --cover-height: 10rem;
+        --content-gap: 1rem;
+        --content-padding: 1rem;
+        --folder-width: 14rem;
+        --file-width: 9rem;
+    }
+    h2 {
+        font-size: 1.3rem;
+    }
+}
+@media (prefers-color-scheme: dark) {
+}
+@media (prefers-reduced-motion: no-preference) {
+}

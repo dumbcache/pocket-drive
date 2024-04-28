@@ -1,0 +1,75 @@
+<script>
+    import ColorScheme from "$lib/components/utils/ColorScheme.svelte";
+    import LoginButton from "$lib/components/utils/LoginButton.svelte";
+</script>
+
+<main class="start-page">
+    <article class="article one">
+        <header class="header">
+            <ColorScheme />
+            <LoginButton />
+        </header>
+        <section class="section">
+            <h1 class="title">Pocket Drive</h1>
+            <p class="sub">A google drive based image & bookmark application</p>
+        </section>
+    </article>
+</main>
+
+<style>
+    .start-page {
+        scroll-behavior: smooth;
+        overflow-y: auto;
+    }
+
+    .one {
+        height: 100vh;
+        position: relative;
+        display: grid;
+        place-content: center;
+        padding: 1rem;
+    }
+    .header {
+        position: absolute;
+        top: 10vh;
+        right: 15rem;
+        display: flex;
+        align-items: center;
+        gap: 3rem;
+    }
+
+    .title {
+        width: fit-content;
+        margin: auto;
+        font-size: 8rem;
+        font-weight: 900;
+        /* font-family: var(--font-roboto); */
+        background: var(--title-background);
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .sub {
+        width: fit-content;
+        margin: auto;
+        font-size: 1.6rem;
+        padding-top: 1rem;
+        background: var(--title-background);
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    @media (max-width: 600px) {
+        .header {
+            right: 2rem;
+            gap: 2rem;
+        }
+
+        .title {
+            font-size: 12vw;
+        }
+        .sub {
+            font-size: 1.3rem;
+        }
+    }
+</style>
