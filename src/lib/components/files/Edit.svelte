@@ -312,11 +312,13 @@
         height: fit-content;
         max-width: var(--file-width);
         border-radius: 1rem;
+        transition: transform 0.1s ease-in-out;
     }
 
     img:hover {
         cursor: pointer;
         filter: brightness(0.8);
+        transform: scale(1.02);
     }
     .select {
         /* filter: none; */

@@ -33,6 +33,7 @@
 </script>
 
 <div
+    role="listitem"
     class="cover {draggedOver === true ? 'dragover' : ''}"
     on:dragover|preventDefault|stopPropagation={() => (draggedOver = true)}
     on:dragenter|stopPropagation={() => (draggedOver = true)}
@@ -69,7 +70,7 @@
 <style>
     .cover {
         position: relative;
-        border: 1px solid var(--color-file-border);
+        border: 2px solid var(--color-file-border);
         background-color: var(--color-file-background);
         width: var(--folder-width);
         height: var(--cover-height);
@@ -82,10 +83,12 @@
         border-radius: 1rem;
         overflow: hidden;
         cursor: pointer;
+        transition: transform 0.1s ease-in-out;
     }
 
     .cover:hover {
-        box-shadow: 0 0 2px 2px var(--color-focus);
+        /* box-shadow: 0 0 2px 2px var(--color-focus); */
+        transform: scale(1.01);
     }
     .cover:hover .pic {
         filter: brightness(0.6);
@@ -148,6 +151,9 @@
         filter: brightness(0.2);
     }
     @media (max-width: 600px) {
+        .cover {
+            border: 1px solid var(--color-file-border);
+        }
         .favorite,
         .edit {
             opacity: 1;

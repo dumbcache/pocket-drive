@@ -70,10 +70,12 @@
         overflow: hidden;
         cursor: zoom-in;
         background-color: var(--color-file-background);
+        transition: transform 0.1s ease-in-out;
     }
     .card:hover {
-        outline: 2px solid var(--color-focus);
+        /* outline: 2px solid var(--color-focus); */
         box-shadow: 0 0 5px 1px var(--color-focus);
+        transform: scale(1.02);
     }
     .edit-mode {
         cursor: pointer;
