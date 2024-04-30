@@ -86,9 +86,9 @@ export function previewAndSetDropItems(
                     parentName: parentName || get(activeParent).name,
                 };
                 dropItems.set([...get(dropItems), item]);
-                if (get(autosave)) {
-                    setTimeout(() => autosaveItem(item), 500);
-                }
+                // if (get(autosave)) {
+                //     setTimeout(() => autosaveItem(item), 500);
+                // }
             };
             reader.readAsArrayBuffer(file);
         }

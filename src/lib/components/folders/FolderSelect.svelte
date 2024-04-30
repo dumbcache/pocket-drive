@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { createEventDispatcher } from "svelte";
+    import { createEventDispatcher, onMount } from "svelte";
     import doneIcon from "$lib/assets/done.svg?raw";
     import beforeIcon from "$lib/assets/beforeNavigate.svg?raw";
     import {
@@ -19,11 +19,14 @@
     } from "$lib/scripts/utils";
 
     export let type: "FOLDER" | "FILE";
-    let tempFolderStore = { ...$folderStore };
-    type === "FOLDER" &&
-        (tempFolderStore.files = tempFolderStore.files?.filter(
-            (file) => file.id !== $folderActionDetail.id
-        ));
+    let tempFolderStore = {};
+    onMount(() => {
+        fetchChildren($activeParent.id);
+        type === "FOLDER" &&
+            (tempFolderStore.files = tempFolderStore.files?.filter(
+                (file) => file.id !== $folderActionDetail.id
+            ));
+    });
 
     let selectedName = $activeParent?.name;
     let selectedId = $activeParent?.id;
