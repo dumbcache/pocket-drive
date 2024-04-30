@@ -16,25 +16,19 @@ export function previewAndSetDropItems(
                 file.type === "image/avif" ||
                 file.type === "image/webp"
             ) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    const result = e.target?.result! as ArrayBuffer;
-                    const bytes = new Uint8Array(result);
-                    let item = {
-                        id,
-                        name: file.name,
-                        mimeType: file.type,
-                        bytes,
-                        imgRef,
-                        parent: parent || get(activeParent).id,
-                        parentName: parentName || get(activeParent).name,
-                    };
-                    dropItems.set([...get(dropItems), item]);
-                    if (get(autosave)) {
-                        setTimeout(() => autosaveItem(item), 500);
-                    }
+                let item = {
+                    id,
+                    name: file.name,
+                    mimeType: file.type,
+                    file,
+                    imgRef,
+                    parent: parent || get(activeParent).id,
+                    parentName: parentName || get(activeParent).name,
                 };
-                reader.readAsArrayBuffer(file);
+                dropItems.set([...get(dropItems), item]);
+                if (get(autosave)) {
+                    setTimeout(() => autosaveItem(item), 500);
+                }
             } else {
                 const image = new Image();
                 const canvas = document.createElement("canvas");
@@ -48,10 +42,10 @@ export function previewAndSetDropItems(
                         const result =
                             (await blob?.arrayBuffer()) as ArrayBuffer;
                         const bytes = new Uint8Array(result);
-                        const imgRef = URL.createObjectURL(blob);
+                        // const imgRef = URL.createObjectURL(blob);
                         let item = {
                             id,
-                            name: file.name,
+                            name: file.name.replace(/\..*$/, ".webp"),
                             mimeType: file.type,
                             bytes,
                             imgRef,
@@ -72,25 +66,19 @@ export function previewAndSetDropItems(
             }
         }
         if (file.type.match("video/")) {
-            const reader = new FileReader();
-
-            reader.onload = function (event) {
-                const bytes = new Uint8Array(event.target.result);
-                let item = {
-                    id,
-                    name: file.name,
-                    mimeType: file.type,
-                    bytes,
-                    imgRef,
-                    parent: parent || get(activeParent).id,
-                    parentName: parentName || get(activeParent).name,
-                };
-                dropItems.set([...get(dropItems), item]);
-                // if (get(autosave)) {
-                //     setTimeout(() => autosaveItem(item), 500);
-                // }
+            let item = {
+                id,
+                name: file.name,
+                mimeType: file.type,
+                file,
+                imgRef,
+                parent: parent || get(activeParent).id,
+                parentName: parentName || get(activeParent).name,
             };
-            reader.readAsArrayBuffer(file);
+            dropItems.set([...get(dropItems), item]);
+            // if (get(autosave)) {
+            //     setTimeout(() => autosaveItem(item), 500);
+            // }
         }
     }
 }

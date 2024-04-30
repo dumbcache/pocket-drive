@@ -88,6 +88,7 @@ declare global {
         progress?: string;
         parent: string;
         parentName: string;
+        file: File;
     }
 
     interface DropItems {

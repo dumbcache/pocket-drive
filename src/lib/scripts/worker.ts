@@ -70,10 +70,52 @@ function checkForImgLocal(id: string, token: string) {
     };
 }
 
+async function uploadVideo(file: File, location: string): Promise<void> {
+    const chunkSize = 20 * 256 * 1024; // 256 KB chunk size
+    let offset = 0;
+
+    while (offset < file.size) {
+        const chunk = file.slice(offset, offset + chunkSize);
+        const reader = new FileReader();
+        const chunkData = await new Promise<ArrayBuffer>((resolve, reject) => {
+            reader.onload = () => resolve(reader.result as ArrayBuffer);
+            reader.onerror = () => reject(reader.error);
+            reader.readAsArrayBuffer(chunk);
+        });
+
+        const startByte = offset;
+        const endByte = Math.min(offset + chunkSize - 1, file.size - 1);
+        const contentRange = `bytes ${startByte}-${endByte}/${file.size}`;
+
+        const headers = new Headers();
+        headers.append("Content-Length", chunk.size.toString());
+        headers.append("Content-Range", contentRange);
+
+        const response = await fetch(location, {
+            method: "PUT",
+            headers,
+            body: chunkData,
+        });
+        if (response.ok) {
+            console.info("Upload completed");
+            return;
+        }
+
+        const rangeHeader = response.headers.get("Range");
+        if (rangeHeader) {
+            const [_, nextOffset] = rangeHeader.split("-").map(Number);
+            offset = nextOffset + 1;
+        } else {
+            console.error("Range header not found in response.");
+            return;
+        }
+    }
+}
+
 async function dropSave(dropItems: DropItem[], token: string) {
     let proms = [];
     for (let item of dropItems) {
-        const { id, name, url, mimeType, bytes, parent } = item;
+        const { id, name, url, mimeType, bytes, parent, file } = item;
         const imgMeta: ImgMeta = {
             name: name || id,
             mimeType,
@@ -81,6 +123,46 @@ async function dropSave(dropItems: DropItem[], token: string) {
             description: url || "",
             // appProperties: { origin: url || "" },
         };
+        if (
+            mimeType.match("video/") ||
+            file.type === "image/gif" ||
+            file.type === "image/avif" ||
+            file.type === "image/webp"
+        ) {
+            createImgMetadata(imgMeta, token)
+                .then(async (location) => {
+                    uploadVideo(file, location).then(() => {
+                        console.log("complete");
+                        postMessage({
+                            context: "DROP_SAVE",
+                            data: [
+                                {
+                                    value: {
+                                        id,
+                                        parent,
+                                        status: "success",
+                                    },
+                                },
+                            ],
+                        });
+                    });
+                })
+                .catch((e) => {
+                    postMessage({
+                        context: "DROP_SAVE",
+                        data: [
+                            {
+                                value: {
+                                    id,
+                                    parent,
+                                    status: "failure",
+                                },
+                            },
+                        ],
+                    });
+                });
+            return;
+        }
         proms.push(
             new Promise((resolve, reject) => {
                 createImgMetadata(imgMeta, token)
