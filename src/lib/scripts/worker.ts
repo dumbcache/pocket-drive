@@ -70,132 +70,89 @@ function checkForImgLocal(id: string, token: string) {
     };
 }
 
-async function uploadVideo(file: File, location: string): Promise<void> {
+async function uploadFile(
+    file: File | Blob,
+    location: string
+): Promise<number> {
     const chunkSize = 20 * 256 * 1024; // 256 KB chunk size
     let offset = 0;
+    let fileSize = file.size;
 
-    while (offset < file.size) {
+    while (offset < fileSize) {
         const chunk = file.slice(offset, offset + chunkSize);
-        const reader = new FileReader();
-        const chunkData = await new Promise<ArrayBuffer>((resolve, reject) => {
-            reader.onload = () => resolve(reader.result as ArrayBuffer);
-            reader.onerror = () => reject(reader.error);
-            reader.readAsArrayBuffer(chunk);
-        });
 
         const startByte = offset;
-        const endByte = Math.min(offset + chunkSize - 1, file.size - 1);
-        const contentRange = `bytes ${startByte}-${endByte}/${file.size}`;
+        const endByte = Math.min(offset + chunkSize - 1, fileSize - 1);
+        const contentRange = `bytes ${startByte}-${endByte}/${fileSize}`;
 
         const headers = new Headers();
         headers.append("Content-Length", chunk.size.toString());
         headers.append("Content-Range", contentRange);
 
-        const response = await fetch(location, {
+        const res = await fetch(location, {
             method: "PUT",
             headers,
-            body: chunkData,
+            body: chunk,
         });
-        if (response.ok) {
+
+        if (res.status === 200) {
             console.info("Upload completed");
-            return;
+            return 200;
+        }
+        if (res.status !== 200 && res.status !== 308) {
+            return 500;
         }
 
-        const rangeHeader = response.headers.get("Range");
+        const rangeHeader = res.headers.get("Range");
         if (rangeHeader) {
             const [_, nextOffset] = rangeHeader.split("-").map(Number);
             offset = nextOffset + 1;
         } else {
             console.error("Range header not found in response.");
-            return;
+            return 500;
         }
     }
+    return 200;
 }
 
-async function dropSave(dropItems: DropItem[], token: string) {
-    let proms = [];
-    for (let item of dropItems) {
-        const { id, name, url, mimeType, bytes, parent, file } = item;
-        const imgMeta: ImgMeta = {
-            name: name || id,
-            mimeType,
-            parents: [parent],
-            description: url || "",
-            // appProperties: { origin: url || "" },
-        };
-        if (
-            mimeType.match("video/") ||
-            file.type === "image/gif" ||
-            file.type === "image/avif" ||
-            file.type === "image/webp"
-        ) {
-            createImgMetadata(imgMeta, token)
-                .then(async (location) => {
-                    uploadVideo(file, location).then(() => {
-                        console.log("complete");
-                        postMessage({
-                            context: "DROP_SAVE",
-                            data: [
-                                {
-                                    value: {
-                                        id,
-                                        parent,
-                                        status: "success",
-                                    },
-                                },
-                            ],
-                        });
+async function dropSave(item: DropItem, token: string) {
+    const { id, name, url, mimeType, parent, file } = item;
+    const imgMeta: ImgMeta = {
+        name: name || id,
+        mimeType,
+        parents: [parent],
+        description: url || "",
+        // appProperties: { origin: url || "" },
+    };
+
+    createImgMetadata(imgMeta, token)
+        .then(async (location) => {
+            uploadFile(file, location)
+                .then((status) => {
+                    postMessage({
+                        context: "DROP_SAVE",
+                        id,
+                        parent,
+                        status: status === 200 ? "success" : " failure",
                     });
                 })
                 .catch((e) => {
                     postMessage({
                         context: "DROP_SAVE",
-                        data: [
-                            {
-                                value: {
-                                    id,
-                                    parent,
-                                    status: "failure",
-                                },
-                            },
-                        ],
+                        id,
+                        parent,
+                        status: "failure",
                     });
                 });
-            return;
-        }
-        proms.push(
-            new Promise((resolve, reject) => {
-                createImgMetadata(imgMeta, token)
-                    .then(async (location) => {
-                        const { status } = await uploadImg(location, bytes);
-                        status === 200
-                            ? resolve({
-                                  id,
-                                  parent,
-                                  status: "success",
-                              })
-                            : resolve({
-                                  id,
-                                  parent,
-                                  status: "failure",
-                              });
-                    })
-                    .catch((e) => {
-                        resolve({
-                            id,
-                            parent,
-                            status: "failure",
-                        });
-                    });
-            })
-        );
-    }
-    Promise.allSettled(proms).then((proms) => {
-        postMessage({
-            context: "DROP_SAVE",
-            data: proms,
+        })
+        .catch((e) => {
+            postMessage({
+                context: "DROP_SAVE",
+                id,
+                parent,
+                status: "failure",
+            });
         });
-    });
 }
 
 export async function downloadImage(id: string, token: string): Promise<Blob> {
@@ -238,26 +195,6 @@ export const createImgMetadata = (
         }
         resolve(req.headers.get("Location")!);
     });
-};
-
-export const uploadImg = async (
-    location: string,
-    bytes: Uint8Array
-    // mimeType: string
-) => {
-    let req = await fetch(location, {
-        method: "PUT",
-        // headers: {
-        //     "Content-Type": mimeType,
-        // },
-        body: bytes,
-    });
-    let { status, statusText } = req;
-    if (status !== 200) {
-        console.log(`error while uploadingImg ${status} ${statusText}`);
-        return { status };
-    }
-    return { status };
 };
 
 export const deleteImgs = async (imgs: string[], token: string) => {
@@ -468,7 +405,7 @@ onmessage = ({ data }) => {
             updateMultiple(data.parent, data.detail, data.files, data.token);
             return;
         case "DROP_SAVE":
-            dropSave(data.dropItems, data.token);
+            dropSave(data.item, data.token);
             return;
     }
 };

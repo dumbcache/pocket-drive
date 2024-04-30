@@ -39,15 +39,15 @@ export function previewAndSetDropItems(
                     canvas.height = this.naturalHeight;
                     ctx.drawImage(this, 0, 0);
                     canvas.toBlob(async function (blob) {
-                        const result =
-                            (await blob?.arrayBuffer()) as ArrayBuffer;
-                        const bytes = new Uint8Array(result);
+                        // const result =
+                        //     (await blob?.arrayBuffer()) as ArrayBuffer;
+                        // const bytes = new Uint8Array(result);
                         // const imgRef = URL.createObjectURL(blob);
                         let item = {
                             id,
                             name: file.name.replace(/\..*$/, ".webp"),
                             mimeType: file.type,
-                            bytes,
+                            file: blob,
                             imgRef,
                             parent: parent || get(activeParent).id,
                             parentName: parentName || get(activeParent).name,
@@ -99,7 +99,7 @@ function autosaveItem(item: DropItem) {
     const token = getToken();
     childWorker.postMessage({
         context: "DROP_SAVE",
-        dropItems: [single],
+        item: single,
         parent,
         token,
     });
@@ -162,7 +162,7 @@ export function dropOkHandlerSingle(id: string) {
     const token = getToken();
     childWorker.postMessage({
         context: "DROP_SAVE",
-        dropItems: [single],
+        item: single,
         parent,
         token,
     });
@@ -174,10 +174,12 @@ export function dropOkHandler() {
     const { pathname } = window.location;
     const parent = pathname === "/" ? getRoot() : pathname.substring(1);
     const token = getToken();
-    childWorker.postMessage({
-        context: "DROP_SAVE",
-        dropItems: tempItems,
-        parent,
-        token,
+    tempItems.forEach((item) => {
+        childWorker.postMessage({
+            context: "DROP_SAVE",
+            item,
+            parent,
+            token,
+        });
     });
 }

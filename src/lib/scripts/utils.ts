@@ -648,47 +648,31 @@ if (browser) {
                 return;
             case "DROP_SAVE":
                 clearDropItems();
-                let successSet = new Set();
-                let failureSet = new Set();
-                let parentSet = new Set();
-                data.data.forEach((item) => {
-                    if (item.value.status === "success") {
-                        successSet.add(item.value.id);
-                        parentSet.add(item.value.parent);
-                    }
-                });
-                data.data.forEach(
-                    (item) =>
-                        item.value.status === "failure" &&
-                        failureSet.add(item.value.parent)
-                );
+                parent = data.parent;
                 dropItems.set(
                     get(dropItems).map((item) => {
-                        if (successSet.has(item.id)) {
-                            item.progress = "success";
-                            return item;
-                        }
-                        failureSet.has(item.id) && (item.progress = "failure");
+                        if (item.id === data.id) item.progress = data.status;
                         return item;
                     })
                 );
-                setTimeout(() => {
-                    let token = getToken();
-                    parentSet.forEach(async (parent) => {
-                        const data = await fetchMultiple(
-                            { parent, mimeType: IMG_MIME_TYPE },
-                            token,
-                            true
-                        );
-                        fetchMultiple(
-                            { parent, mimeType: IMG_MIME_TYPE, pageSize: 3 },
-                            token,
-                            true
-                        );
-                        if (parent === get(activeParent).id) {
-                            fileStore.set(data);
-                        }
-                    });
+                setTimeout(async () => {
+                    const res = await fetchMultiple(
+                        { parent, mimeType: IMG_MIME_TYPE },
+                        getToken(),
+                        true
+                    );
+                    fetchMultiple(
+                        {
+                            parent,
+                            mimeType: IMG_MIME_TYPE,
+                            pageSize: 3,
+                        },
+                        getToken(),
+                        true
+                    );
+                    if (parent === get(activeParent).id) {
+                        fileStore.set(res);
+                    }
                 }, 2000);
                 return;
             case "PROGRESS":

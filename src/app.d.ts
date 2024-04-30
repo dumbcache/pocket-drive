@@ -83,7 +83,6 @@ declare global {
         id: string;
         mimeType: string;
         url?: string;
-        bytes: Uint8Array;
         imgRef: string;
         progress?: string;
         parent: string;
