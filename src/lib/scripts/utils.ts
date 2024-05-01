@@ -675,6 +675,16 @@ if (browser) {
                     }
                 }, 2000);
                 return;
+
+            case "DROP_PROGRESS":
+                let dropItem = document.querySelector(
+                    `.drop-item[data-id="${data.id}"]`
+                );
+                dropItem.querySelector(
+                    ".progress-count"
+                ).innerHTML = `${data.progress}%`;
+                return;
+
             case "PROGRESS":
                 if (data.type === "DELETE" || data.type === "MOVE") {
                     if (data.status === 1) {

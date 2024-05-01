@@ -77,7 +77,8 @@
         justify-content: space-between;
         justify-self: start;
         z-index: 2;
-        background-color: var(--primary-bg-color);
+        backdrop-filter: blur(1rem);
+        -webkit-backdrop-filter: blur(1rem);
     }
     .autosave :global(svg) {
         fill: red;

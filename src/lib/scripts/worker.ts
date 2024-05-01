@@ -1,4 +1,4 @@
-import { activeParent } from "./stores";
+import { activeParent, progress } from "./stores";
 
 const FILE_API = "https://www.googleapis.com/drive/v3/files";
 const FILE_API_UPLOAD = "https://www.googleapis.com/upload/drive/v3/files";
@@ -72,12 +72,12 @@ function checkForImgLocal(id: string, token: string) {
 
 async function uploadFile(
     file: File | Blob,
-    location: string
+    location: string,
+    id: string
 ): Promise<number> {
     const chunkSize = 20 * 256 * 1024; // 256 KB chunk size
     let offset = 0;
     let fileSize = file.size;
-
     while (offset < fileSize) {
         const chunk = file.slice(offset, offset + chunkSize);
 
@@ -102,7 +102,11 @@ async function uploadFile(
         if (res.status !== 200 && res.status !== 308) {
             return 500;
         }
-
+        postMessage({
+            context: "DROP_PROGRESS",
+            id,
+            progress: Math.trunc((endByte / fileSize) * 100),
+        });
         const rangeHeader = res.headers.get("Range");
         if (rangeHeader) {
             const [_, nextOffset] = rangeHeader.split("-").map(Number);
@@ -127,7 +131,7 @@ async function dropSave(item: DropItem, token: string) {
 
     createImgMetadata(imgMeta, token)
         .then(async (location) => {
-            uploadFile(file, location)
+            uploadFile(file, location, id)
                 .then((status) => {
                     postMessage({
                         context: "DROP_SAVE",

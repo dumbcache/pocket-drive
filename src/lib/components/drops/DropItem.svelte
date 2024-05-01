@@ -19,6 +19,7 @@
             <div class="progress">
                 {#if item.progress === "uploading"}
                     <Spinner borderWidth="2px" width="3rem" height="3rem" />
+                    <div class="progress-count">0%</div>
                 {:else if item.progress === "success"}
                     <div class="status">{@html successIcon}</div>
                 {:else}
@@ -125,6 +126,14 @@
         bottom: 0;
         background-color: var(--color-black-light);
     }
+    .progress-count {
+        color: white;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 0.8rem;
+    }
     .status {
         width: var(--primary-icon-size);
         height: var(--primary-icon-size);
@@ -134,7 +143,7 @@
             max-width: 45%;
         }
         .drop-img {
-            height: 15rem;
+            max-height: 15rem;
         }
     }
 </style>
