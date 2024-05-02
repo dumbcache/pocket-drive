@@ -551,9 +551,11 @@ if (browser) {
                 }
 
                 let url = URL.createObjectURL(blob);
-                img.src = url;
-                video.style.display = "none";
-                img.style.display = "block";
+                if (img) {
+                    img.style.display = "block";
+                    img.src = url;
+                }
+                video && (video.style.display = "none");
                 previewLoading.set(false);
                 return;
 
