@@ -12,7 +12,7 @@ export const load = () => {
             window.localStorage.getItem("refreshTime") ??
                 window.localStorage.setItem(
                     "refreshTime",
-                    String(Date.now() + 12 * 60 * 60 * 1000)
+                    String(Date.now() + 1 * 60 * 60 * 1000)
                 );
         }
     }
