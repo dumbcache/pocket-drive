@@ -86,10 +86,9 @@ export function checkLoginStatus() {
 export function signUserOutPartial() {
     childWorker.postMessage({ context: "CLEAR_IMAGE_CACHE" });
     let theme = window.localStorage.getItem("theme");
-    let refreshTime = window.localStorage.getItem("refreshTime");
     window.localStorage.clear();
     window.localStorage.setItem("theme", theme);
-    window.localStorage.setItem("refreshTime", refreshTime);
+    window.localStorage.removeItem("refreshTime");
 }
 
 export async function signUserOut() {

@@ -3,7 +3,7 @@ import { get } from "svelte/store";
 import { PUBLIC_KRAB_CLIENT_ID } from "$env/static/public";
 import {
     setSessionTimeout,
-    setRefreshTimeout,
+    // setRefreshTimeout,
     createRootFolder,
 } from "$lib/scripts/utils";
 import { goto } from "$app/navigation";
@@ -16,7 +16,7 @@ export let googleClient = (() => {
         window.localStorage.setItem("token", accessToken);
         clearTimeout(get(activeTimeout));
         setSessionTimeout(tokenResponse.expires_in);
-        setRefreshTimeout();
+        // setRefreshTimeout();
         if (!window.localStorage.getItem("root")) {
             const res = await fetch(
                 `https://www.googleapis.com/drive/v3/files?&pageSize=1&fields=files(id,name)&orderBy=createdTime`,

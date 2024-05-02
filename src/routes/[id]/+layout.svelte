@@ -2,7 +2,7 @@
     import Header from "$lib/components/Header.svelte";
     import Drop from "$lib/components/drops/Drop.svelte";
     import {
-        setRefreshTimeout,
+        // setRefreshTimeout,
         signUserOut,
         updateRecents,
         setSessionTimeout,
@@ -27,7 +27,7 @@
         try {
             updateRecents();
             setSessionTimeout();
-            setRefreshTimeout();
+            // setRefreshTimeout();
             googleClient.loadGSIScript();
         } catch (error) {
             console.warn(error);

@@ -6,13 +6,6 @@ import { pocketState } from "$lib/scripts/stores";
 
 export const load = async () => {
     if (browser) {
-        try {
-            let time =
-                Number(window.localStorage.getItem("refreshTime")) - Date.now();
-            if (time < 0) {
-                await setCache(true);
-            }
-        } catch (error) {}
         if (checkLoginStatus()) {
             let state = get(pocketState) || "r";
             throw redirect(302, `/${state}`);
