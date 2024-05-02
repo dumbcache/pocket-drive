@@ -595,6 +595,12 @@ if (browser) {
                         nextPageToken: prev?.nextPageToken,
                         files: prev?.files.filter((file) => !set.has(file.id)),
                     }));
+                } else {
+                    const { files, folders } = pocketStore.get(aParent);
+                    files.files = files.files.filter(
+                        (element) => !set.has(element.id)
+                    );
+                    pocketStore.set(aParent, { files, folders });
                 }
                 editProgress.set(false);
                 fetchMultiple(
