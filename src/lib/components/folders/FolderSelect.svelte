@@ -19,14 +19,11 @@
     } from "$lib/scripts/utils";
 
     export let type: "FOLDER" | "FILE";
-    let tempFolderStore = {};
-    onMount(() => {
-        fetchChildren($activeParent.id);
-        type === "FOLDER" &&
-            (tempFolderStore.files = tempFolderStore.files?.filter(
-                (file) => file.id !== $folderActionDetail.id
-            ));
-    });
+    let tempFolderStore = { ...$folderStore };
+    type === "FOLDER" &&
+        (tempFolderStore.files = tempFolderStore.files?.filter(
+            (file) => file.id !== $folderActionDetail.id
+        ));
 
     let selectedName = $activeParent?.name;
     let selectedId = $activeParent?.id;
