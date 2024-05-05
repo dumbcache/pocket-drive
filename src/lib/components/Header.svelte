@@ -66,6 +66,7 @@
 
     .title {
         writing-mode: vertical-lr;
+        font-family: var(--font-lato);
     }
 
     .title-wrapper :global(.back-button) {

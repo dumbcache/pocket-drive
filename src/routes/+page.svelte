@@ -43,7 +43,7 @@
         margin: auto;
         font-size: 8rem;
         font-weight: 900;
-        /* font-family: var(--font-roboto); */
+        font-family: var(--font-lato);
         background: var(--title-background);
         background-clip: text;
         -webkit-text-fill-color: transparent;
@@ -53,6 +53,7 @@
         width: fit-content;
         margin: auto;
         font-size: 1.6rem;
+        font-family: var(--font-lato);
         padding-top: 1rem;
         background: var(--title-background);
         background-clip: text;

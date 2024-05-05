@@ -4,7 +4,7 @@
     --font-poppins: "Poppins", sans-serif;
     --font-lato: "Lato", sans-serif;
     --font-system: system-ui, Avenir, Helvetica, Arial, sans-serif;
-    --font-default: var(--font-lato);
+    --font-default: var(--font-poppins);
     --size-system: 62.5%;
     --size-default: 1.6rem;
     --size-small: 2rem;
