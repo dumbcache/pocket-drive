@@ -118,8 +118,8 @@
         border: 1px solid var(--color-file-border);
     }
     .placeholder {
-        width: 20rem;
-        height: 20rem;
+        width: var(--file-width);
+        height: var(--file-width);
         border: 1px solid var(--color-file-border);
         background-color: var(--color-file-background);
     }
@@ -165,11 +165,7 @@
         .img-link {
             padding: 0rem;
         }
-        .placeholder {
-            width: 30vw;
-            height: 10rem;
-            border: 1px solid var(--color-file-border);
-        }
+
         .play {
             width: 2rem;
             height: 2rem;

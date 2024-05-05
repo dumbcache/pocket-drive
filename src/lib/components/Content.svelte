@@ -115,7 +115,7 @@
 
 <style>
     .content {
-        padding: 2rem 5rem;
+        padding: var(--content-padding);
     }
     footer {
         display: flex;
@@ -146,9 +146,6 @@
         fill: #555;
     }
     @media (max-width: 600px) {
-        .content {
-            padding: 2rem 1rem;
-        }
         footer {
             padding: 2rem 0rem;
         }

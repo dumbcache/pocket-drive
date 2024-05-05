@@ -124,7 +124,7 @@
         }
 
         .title-wrapper {
-            gap: 2rem;
+            gap: 3rem;
         }
         .title-button {
             flex-flow: row wrap;

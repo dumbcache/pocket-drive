@@ -102,7 +102,7 @@
         filter: none;
     }
     .card {
-        width: var(--dir-width);
+        width: var(--folder-width);
     }
     .dir-title {
         word-wrap: unset;

@@ -199,7 +199,7 @@
         flex-flow: row nowrap;
         align-items: center;
         justify-content: flex-end;
-        padding: 2rem 0rem;
+        padding: 1rem 0rem;
         position: sticky;
         top: 0;
         background-color: var(--primary-bg-color);
@@ -227,6 +227,7 @@
         overflow: hidden;
         text-overflow: ellipsis;
         margin: auto;
+        padding: 1rem;
     }
 
     .loading {
@@ -296,7 +297,7 @@
             display: none;
         }
         .nav {
-            padding: 1rem 0.5rem 1rem 0.5rem;
+            padding: 1rem 0.5rem;
             gap: 2rem;
             margin-bottom: 0rem;
         }
@@ -315,6 +316,10 @@
         #search,
         .global {
             padding: 0.7rem;
+        }
+
+        .folder-name {
+            padding: 0.5rem;
         }
     }
 </style>
