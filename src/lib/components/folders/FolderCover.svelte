@@ -73,12 +73,12 @@
 
 <style>
     .cover {
+        display: grid;
         position: relative;
         border: 1px solid var(--color-file-border);
         background-color: var(--color-file-background);
         width: var(--folder-width);
         height: var(--cover-height);
-        display: grid;
         grid-template-rows: 60% 40%;
         grid-template-columns: 70% 30%;
         grid-template-areas:
@@ -100,9 +100,18 @@
         background-color: var(--color-file-hover);
     }
 
-    .pic {
-        display: block;
-        width: 100%;
+    .cover .pic-wrapper:nth-child(1) {
+        grid-area: one;
+        border-right: 1px solid var(--color-file-border);
+        height: 100%;
+    }
+    .cover .pic-wrapper:nth-child(2) {
+        grid-area: two;
+        border-bottom: 1px solid var(--color-file-border);
+        height: 100%;
+    }
+    .cover .pic-wrapper:nth-child(3) {
+        grid-area: three;
         height: 100%;
     }
 
@@ -114,19 +123,6 @@
         border: none;
         display: block;
     }
-
-    .cover .pic-wrapper:nth-child(1) {
-        grid-area: one;
-        border-right: 1px solid var(--color-file-border);
-    }
-    .cover .pic-wrapper:nth-child(2) {
-        grid-area: two;
-        border-bottom: 1px solid var(--color-file-border);
-    }
-    .cover .pic-wrapper:nth-child(3) {
-        grid-area: three;
-    }
-
     .hover {
         filter: brightness(0.5);
     }
