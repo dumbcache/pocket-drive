@@ -25,7 +25,7 @@
     --color-white-two: #d0d1d7;
     --color-white-three: #c0c1c7;
     --color-white-light: #fff5;
-    --color-black-light: #0008;
+    --color-black-light: #0005;
 
     --title-background: linear-gradient(120deg, #0ac0ee, #d00bc3, #473aff);
     --color-link: var(--color-blue);
@@ -45,7 +45,7 @@
     --color-three: var(--color-black-three);
     --color-four: #444;
     --color-five: #555;
-    --color-file-background: var(--color-white-two);
+    --color-file-background: var(--color-white-one);
     --color-file-border: var(--color-black-light);
     --color-file-hover: var(--color-white-three);
 

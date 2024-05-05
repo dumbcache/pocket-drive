@@ -115,15 +115,15 @@
         display: block;
     }
 
-    .pic-wrapper:nth-child(1) {
+    .cover .pic-wrapper:nth-child(1) {
         grid-area: one;
         border-right: 1px solid var(--color-file-border);
     }
-    .pic-wrapper:nth-child(2) {
+    .cover .pic-wrapper:nth-child(2) {
         grid-area: two;
         border-bottom: 1px solid var(--color-file-border);
     }
-    .pic-wrapper:nth-child(3) {
+    .cover .pic-wrapper:nth-child(3) {
         grid-area: three;
     }
 
