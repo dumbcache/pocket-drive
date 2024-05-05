@@ -4,10 +4,12 @@
     import LogoutButton from "$lib/components/utils/LogoutButton.svelte";
     // import helpButton from "$lib/assets/help.svg?raw";
     // import homeButton from "$lib/assets/home.svg?raw";
-    import { storeSnap } from "$lib/scripts/stores";
+    import { activeParent, storeSnap } from "$lib/scripts/stores";
     import { page } from "$app/stores";
     import Tools from "$lib/components/Tools.svelte";
     import { onMount } from "svelte";
+    import BackButton from "./utils/BackButton.svelte";
+    import { getRoot } from "$lib/scripts/utils";
 
     let homeButton = "";
 
@@ -26,12 +28,12 @@
 
 <header class="header">
     <div class="title-wrapper">
-        <button class="btn s-prime home" title="home" on:click={goHome}>
-            {@html homeButton}
-        </button>
-        <button class="title-button" title="home" on:click={goHome}
-            ><h1 class="title-long">Pocket Drive</h1>
-            <!-- <h1 class="title-short">PD</h1> -->
+        <BackButton />
+        <button class="title-button" on:click={goHome}>
+            <span class="btn s-prime home" title="home">
+                {@html homeButton}
+            </span>
+            <h1 class="title">Pocket Drive</h1>
         </button>
     </div>
     <div class="tool-wrapper">
@@ -50,15 +52,26 @@
     .title-wrapper {
         display: flex;
         flex-flow: column;
-        gap: 2rem;
+        gap: 1rem;
         align-items: center;
         justify-content: center;
     }
     .title-button {
         display: flex;
+        flex-flow: column nowrap;
         align-items: center;
         justify-content: center;
+        gap: 2rem;
     }
+
+    .title {
+        writing-mode: vertical-lr;
+    }
+
+    .title-wrapper :global(.back-button) {
+        display: none;
+    }
+
     .header {
         position: sticky;
         top: 0;
@@ -77,23 +90,11 @@
         align-items: center;
         gap: 1rem;
     }
-    .title-short,
-    .title-long {
+    .title {
         font-size: var(--title-size);
         background: var(--title-background);
         background-clip: text;
         -webkit-text-fill-color: transparent;
-    }
-
-    .help {
-        width: var(--size-small);
-    }
-
-    .title-long {
-        writing-mode: vertical-lr;
-    }
-    .title-short {
-        display: none;
     }
 
     .home :global(svg) {
@@ -121,19 +122,19 @@
         .tool-wrapper {
             display: none;
         }
-        .help {
-            display: none;
-        }
 
-        .title-long {
+        .title-wrapper {
+            gap: 2rem;
+        }
+        .title-button {
+            flex-flow: row wrap;
+            gap: 0.5rem;
+        }
+        .title {
             writing-mode: initial;
-            /* display: none; */
         }
-        .title-short {
+        .title-wrapper :global(.back-button) {
             display: initial;
-        }
-        .home {
-            /* display: none; */
         }
         .home :global(svg) {
             height: initial;

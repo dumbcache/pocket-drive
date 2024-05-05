@@ -38,7 +38,7 @@ export let folderAction = writable<FolderAction | undefined>();
 export let folderActionDetail = writable<FolderActionDetail | undefined>();
 
 export function storeSnap(
-    parent: string,
+    parent?: string,
     files?: GoogleFileResponse,
     folders?: GoogleFileResponse
 ) {

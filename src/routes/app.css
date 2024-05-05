@@ -237,6 +237,23 @@ a {
         font-size: 1.3rem;
     }
 }
+
+@media (max-width: 400px) {
+    :root {
+        --title-size: var(--size-small);
+        --primary-icon-size: var(--size-medium);
+        --secondary-icon-size: var(--size-default);
+        --cover-height: 10rem;
+        --content-gap: 1rem;
+        --content-row-gap: 2rem;
+        --content-padding: 1rem;
+        --folder-width: 14rem;
+        --file-width: 14rem;
+    }
+    h2 {
+        font-size: 1.3rem;
+    }
+}
 @media (prefers-color-scheme: dark) {
 }
 @media (prefers-reduced-motion: no-preference) {

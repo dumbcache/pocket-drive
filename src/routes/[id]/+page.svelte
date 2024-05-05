@@ -1,6 +1,6 @@
 <script lang="ts">
     import { onDestroy } from "svelte";
-    import { navigating, page } from "$app/stores";
+    import { navigating } from "$app/stores";
     import {
         activeParent,
         activeView,
@@ -8,15 +8,14 @@
         fileStore,
         folderStore,
         mode,
-        storeSnap,
     } from "$lib/scripts/stores";
     import Content from "$lib/components/Content.svelte";
-    import beforeNavigate from "$lib/assets/beforeNavigate.svg?raw";
     import Tools from "$lib/components/Tools.svelte";
     import Count from "$lib/components/utils/Count.svelte";
     import Folder from "$lib/components/folders/Folder.svelte";
     import { getRoot, getToken, searchHandler } from "$lib/scripts/utils";
     import Spinner from "$lib/components/utils/Spinner.svelte";
+    import BackButton from "$lib/components/utils/BackButton.svelte";
 
     let view = $activeView;
     let global = false;
@@ -93,19 +92,7 @@
 
 <section class="wrapper" style:display="">
     <nav class="nav">
-        {#if $activeParent.id !== getRoot()}
-            <button
-                class="back-button btn s-prime"
-                title="go back"
-                on:click={() => {
-                    storeSnap();
-                    history.back();
-                }}
-            >
-                {@html beforeNavigate}
-            </button>
-        {/if}
-
+        <BackButton />
         <div class="tool-wrapper">
             <Tools />
         </div>
@@ -219,7 +206,7 @@
         z-index: 1;
         gap: 5rem;
     }
-    .back-button {
+    .nav :global(.back-button) {
         position: absolute;
         top: 50%;
         left: 0%;
@@ -305,6 +292,9 @@
         .tool-wrapper {
             display: initial;
         }
+        .nav :global(.back-button) {
+            display: none;
+        }
         .nav {
             padding: 1rem 0.5rem 1rem 0.5rem;
             gap: 2rem;
@@ -317,9 +307,6 @@
             display: block;
             font-size: initial;
             max-width: 80%;
-        }
-        .back-button {
-            margin-left: 0rem;
         }
         .search-wrapper {
             padding: 1rem;
