@@ -196,6 +196,10 @@ h6 {
     font-size: unset;
 }
 
+h2 {
+    font-size: 1.4rem;
+}
+
 li {
     list-style: none;
 }
@@ -234,9 +238,6 @@ a {
         --cover-height: 17rem;
         --folder-width: 25rem;
         --file-width: 15rem;
-    }
-    h2 {
-        font-size: 1.3rem;
     }
 }
 

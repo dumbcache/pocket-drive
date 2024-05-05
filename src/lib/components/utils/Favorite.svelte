@@ -17,7 +17,7 @@
 </script>
 
 <button
-    class="btn s-second {starred && 'starred'}"
+    class="favorite btn s-second {starred && 'starred'}"
     on:click|stopPropagation={favStatus}
 >
     {@html favoriteIcon}

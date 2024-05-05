@@ -1,6 +1,5 @@
 <script lang="ts">
     import ActionButtons from "$lib/components/folders/ActionButtons.svelte";
-    import Favorite from "$lib/components/utils/Favorite.svelte";
     import { getToken, IMG_MIME_TYPE, fetchMultiple } from "$lib/scripts/utils";
     import { previewAndSetDropItems } from "$lib/scripts/image";
     import { storeSnap } from "$lib/scripts/stores";
@@ -10,7 +9,6 @@
     export let toolsVisible: Boolean;
     export let id: string;
     export let name: string;
-    export let starred: Boolean;
     let draggedOver = false;
     let pics: FileResponse = [];
     let hover = false;
@@ -70,16 +68,13 @@
         <div class="edit">
             <ActionButtons type="dir" {id} {name} />
         </div>
-        <div class="favorite">
-            <Favorite {id} {starred} on:fav />
-        </div>
     {/if}
 </button>
 
 <style>
     .cover {
         position: relative;
-        border: 2px solid var(--color-file-border);
+        border: 1px solid var(--color-file-border);
         background-color: var(--color-file-background);
         width: var(--folder-width);
         height: var(--cover-height);
@@ -89,16 +84,13 @@
         grid-template-areas:
             "one two"
             "one three";
-        border-radius: 1rem;
+        border-top-left-radius: 1rem;
+        border-top-right-radius: 1rem;
         overflow: hidden;
         cursor: pointer;
         transition: transform 0.1s ease-in-out;
     }
 
-    .cover:hover {
-        /* box-shadow: 0 0 2px 2px var(--color-focus); */
-        transform: scale(1.01);
-    }
     .cover:hover .pic {
         filter: brightness(0.6);
         background-color: var(--color-file-hover);
@@ -121,7 +113,6 @@
         object-position: top;
         border: none;
         display: block;
-        /* display: none; */
     }
 
     .pic-wrapper:nth-child(1) {
@@ -140,11 +131,6 @@
         filter: brightness(0.5);
     }
 
-    .favorite {
-        position: absolute;
-        right: 1.5rem;
-        bottom: 1rem;
-    }
     .edit {
         padding: 0.5rem 0.2rem;
         position: absolute;
@@ -153,15 +139,11 @@
         height: 4rem;
     }
 
-    .favorite,
     .edit {
         opacity: 0;
         transition: opacity 0.3s linear;
     }
 
-    .cover:focus .favorite,
-    .cover:focus .edit,
-    .cover:hover .favorite,
     .cover:hover .edit {
         opacity: 1;
     }
@@ -173,24 +155,8 @@
         filter: brightness(0.2);
     }
     @media (max-width: 600px) {
-        .cover {
-            border: 1px solid var(--color-file-border);
-        }
-        /* .favorite,
-        .edit {
-            opacity: 1;
-        } */
-
-        /* .pic {
-            filter: brightness(0.8);
-        } */
-
         .edit {
             top: 0rem;
-        }
-        .favorite {
-            right: 1rem;
-            bottom: 0rem;
         }
     }
 </style>
