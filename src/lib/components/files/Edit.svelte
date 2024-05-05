@@ -433,16 +433,8 @@
     .play :global(svg) {
         fill: #fff;
     }
-    @media (max-width: 600px) {
-        .edit-buttons {
-            padding: 1rem 0rem;
-            gap: 1rem;
-            justify-content: space-evenly;
-        }
 
-        img {
-            max-width: calc(var(--file-width) - 1rem);
-        }
+    @media (max-width: 900px) {
         input {
             font-size: 1.5rem;
             padding: 0.5rem;
@@ -453,6 +445,17 @@
         .play {
             width: 2rem;
             height: 2rem;
+        }
+    }
+    @media (max-width: 500px) {
+        .edit-buttons {
+            padding: 1rem 0rem;
+            gap: 1rem;
+            justify-content: space-evenly;
+        }
+
+        img {
+            max-width: calc(var(--file-width) - 1.3rem);
         }
     }
 </style>
