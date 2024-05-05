@@ -8,16 +8,10 @@
     export let toolsVisible: Boolean = true;
     export let folder: Folder;
 
-    let hover = false;
     let timeout: number;
     let peakElement: HTMLDivElement;
     let files: GoogleFile[] = [];
 
-    function dirNavigate(e: MouseEvent) {
-        clearTimeout(timeout);
-        storeSnap();
-        goto(`/${folder.id}`);
-    }
     function displayPeak(e: MouseEvent) {
         timeout = setTimeout(async () => {
             const fileRes = await fetchMultiple(
@@ -48,19 +42,22 @@
     }
 </script>
 
-<div class="card" on:dragstart|preventDefault data-id={folder.id}>
+<div
+    class="card"
+    role="listitem"
+    on:dragstart|preventDefault
+    data-id={folder.id}
+>
     <!-- on:mouseleave={closePeak}
     on:mouseenter={displayPeak} -->
-    <button on:click={dirNavigate} class:hover>
-        <FolderCover
-            id={folder.id}
-            name={folder.name}
-            starred={folder.starred}
-            {toolsVisible}
-            {visible}
-            on:fav={() => (folder.starred = !folder.starred)}
-        />
-    </button>
+    <FolderCover
+        id={folder.id}
+        name={folder.name}
+        starred={folder.starred}
+        {toolsVisible}
+        {visible}
+        on:fav={() => (folder.starred = !folder.starred)}
+    />
     <h2 class="dir-title" title={folder.name}>{folder.name}</h2>
 
     <!-- <div
@@ -95,12 +92,6 @@
         filter: none;
     }
 
-    .hover {
-        filter: brightness(0.5);
-    }
-    button {
-        filter: none;
-    }
     .card {
         width: var(--folder-width);
     }

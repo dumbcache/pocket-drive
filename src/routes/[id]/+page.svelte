@@ -102,7 +102,7 @@
                 <a
                     class="title-sub"
                     title="go to parent"
-                    href={$activeParent.parents[0]}>./</a
+                    href={$activeParent.parents[0]}>.../</a
                 >
             {/if}
             {$activeParent.name}
@@ -216,7 +216,7 @@
 
     .title-sub {
         color: var(--color-light-blue);
-        /* color: #f00; */
+        color: #f00;
     }
     .folder-name {
         font-size: 2rem;

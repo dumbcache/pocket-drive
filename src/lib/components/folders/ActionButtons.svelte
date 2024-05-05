@@ -15,9 +15,6 @@
 </script>
 
 <div class="edit-tools">
-    <button class="btn s-second expand" on:click|stopPropagation>
-        {@html expandIcon}
-    </button>
     <button
         class="btn s-second action"
         title="edit folder"
@@ -39,22 +36,26 @@
     >
         {@html deleteIcon}
     </button>
+    <button class="btn s-second expand" on:click|stopPropagation>
+        {@html expandIcon}
+    </button>
 </div>
 
 <style>
+    .expand {
+        transform: rotate(90deg);
+    }
     .edit-tools {
-        padding: 0.5rem 0.2rem;
+        padding: 0.5rem 0.5rem;
         position: absolute;
         top: 0.5rem;
         right: 0.5rem;
         display: flex;
-        flex-flow: column nowrap;
-        gap: 0.5rem;
-        height: 4rem;
+        flex-flow: rwo nowrap;
+        gap: 0.7rem;
         overflow: hidden;
     }
     .edit-tools:hover {
-        height: initial;
         background-color: var(--color-black-light);
         border-radius: 5rem;
         outline: 1px solid var(--color-focus);
@@ -68,23 +69,26 @@
     .btn:hover :global(svg) {
         fill: var(--color-focus);
     }
-    .edit-tools:hover .expand {
-        display: none;
+    .edit-tools:hover .expand :global(svg) {
+        /* display: none; */
+        /* visibility: hidden; */
+        fill: var(--color-focus);
     }
     .edit-tools:hover .action {
-        visibility: initial;
-        opacity: 1;
+        /* visibility: initial;
+        opacity: 1; */
+        display: initial;
     }
 
     .action {
-        visibility: hidden;
+        display: none;
+        /* visibility: hidden;
         opacity: 0;
-        transition: opacity 0.5s linear;
+        transition: opacity 0.5s linear; */
     }
 
     @media (max-width: 600px) {
         .edit-tools {
-            top: 0;
             right: 0;
         }
     }

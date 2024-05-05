@@ -3,6 +3,8 @@
     import Favorite from "$lib/components/utils/Favorite.svelte";
     import { getToken, IMG_MIME_TYPE, fetchMultiple } from "$lib/scripts/utils";
     import { previewAndSetDropItems } from "$lib/scripts/image";
+    import { storeSnap } from "$lib/scripts/stores";
+    import { goto } from "$app/navigation";
 
     export let visible: Boolean;
     export let toolsVisible: Boolean;
@@ -11,6 +13,7 @@
     export let starred: Boolean;
     let draggedOver = false;
     let pics: FileResponse = [];
+    let hover = false;
 
     $: visible &&
         fetchMultiple(
@@ -30,11 +33,17 @@
             previewAndSetDropItems(files, id, name);
         }
     }
+
+    function dirNavigate(e: MouseEvent) {
+        storeSnap();
+        goto(`/${id}`);
+    }
 </script>
 
-<div
-    role="listitem"
+<button
     class="cover {draggedOver === true ? 'dragover' : ''}"
+    class:hover
+    on:click={dirNavigate}
     on:dragover|preventDefault|stopPropagation={() => (draggedOver = true)}
     on:dragenter|stopPropagation={() => (draggedOver = true)}
     on:dragleave={() => (draggedOver = false)}
@@ -65,7 +74,7 @@
             <Favorite {id} {starred} on:fav />
         </div>
     {/if}
-</div>
+</button>
 
 <style>
     .cover {
@@ -120,9 +129,13 @@
         grid-area: three;
     }
 
+    .hover {
+        filter: brightness(0.5);
+    }
+
     .favorite {
         position: absolute;
-        right: 1rem;
+        right: 1.5rem;
         bottom: 1rem;
     }
     .edit {
@@ -139,6 +152,8 @@
         transition: opacity 0.3s linear;
     }
 
+    .cover:focus .favorite,
+    .cover:focus .edit,
     .cover:hover .favorite,
     .cover:hover .edit {
         opacity: 1;
@@ -154,10 +169,11 @@
         .cover {
             border: 1px solid var(--color-file-border);
         }
-        .favorite,
+        /* .favorite,
         .edit {
             opacity: 1;
-        }
+        } */
+
         .cover .pic {
             filter: brightness(0.8);
         }
@@ -166,7 +182,7 @@
             top: 0rem;
         }
         .favorite {
-            right: 0.7rem;
+            right: 1rem;
             bottom: 0rem;
         }
     }

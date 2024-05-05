@@ -119,7 +119,7 @@
     }
     button {
         padding: 0.5rem;
-        width: 7rem;
+        width: 8rem;
         border: 1px solid var(--color-outline);
         border-radius: 0.5rem;
     }
