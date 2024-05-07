@@ -4,6 +4,7 @@
     import doneIcon from "$lib/assets/done.svg?raw";
     import toggleIcon from "$lib/assets/toggle.svg?raw";
     import doubleRightIcon from "$lib/assets/arrowRightDouble.svg?raw";
+    import expandIcon from "$lib/assets/expand.svg?raw";
     import { dropOkHandler } from "$lib/scripts/image";
     import { autosave, dropItems } from "$lib/scripts/stores";
 
@@ -34,6 +35,15 @@
         <button class="btn s-prime" title="close" on:click={dropCloseHandler}>
             {@html closeIcon}
         </button><button
+            class="btn s-prime expand"
+            title="minimize"
+            on:click={() => {
+                triggerDispatch("expand");
+            }}
+        >
+            {@html expandIcon}
+        </button>
+        <button
             class="btn s-prime"
             title="minimize"
             on:click={() => {
@@ -102,6 +112,9 @@
         }
         .drop-tools {
             padding: 1rem 0rem;
+        }
+        .expand {
+            display: none;
         }
     }
 </style>

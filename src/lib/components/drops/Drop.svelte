@@ -8,6 +8,7 @@
     import { navigating } from "$app/stores";
 
     let mini = false;
+    let expand = false;
     const unsubscribe = navigating.subscribe((data) => {
         data && (mini = true);
     });
@@ -18,25 +19,34 @@
 </script>
 
 {#if $dropItems.length !== 0}
-    {#if mini}
-        <button
-            class="drop-mini btn s-prime"
-            on:click={() => {
-                mini = !mini;
-            }}>{@html doubleLeftIcon}</button
-        >
-    {:else}
-        <div class="drop" transition:fade={{ duration: 200 }}>
-            <DropTools on:mini={() => (mini = true)} />
-            <div class="drop-items">
-                {#each $dropItems as item}
-                    {#key item.id}
-                        <DropItem {item} />
-                    {/key}
-                {/each}
-            </div>
+    <!-- {#if mini} -->
+    <button
+        class="drop-mini btn s-prime"
+        style:display={mini === true ? "initial" : "none"}
+        on:click={() => {
+            mini = !mini;
+        }}>{@html doubleLeftIcon}</button
+    >
+    <!-- {:else} -->
+    <div
+        class="drop"
+        class:expand
+        style:display={mini === true ? "none" : "initial"}
+        transition:fade={{ duration: 200 }}
+    >
+        <DropTools
+            on:mini={() => (mini = true)}
+            on:expand={() => (expand = !expand)}
+        />
+        <div class="drop-items">
+            {#each $dropItems as item}
+                {#key item.id}
+                    <DropItem {item} />
+                {/key}
+            {/each}
         </div>
-    {/if}
+    </div>
+    <!-- {/if} -->
 {/if}
 
 <style>
@@ -104,6 +114,17 @@
     }
     .drop :global(input:hover) {
         background-color: var(--bg-color-five);
+    }
+
+    .expand {
+        position: fixed;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        min-width: 100%;
+        max-width: 100%;
+        border-left: none;
     }
 
     @media (max-width: 800px) {
