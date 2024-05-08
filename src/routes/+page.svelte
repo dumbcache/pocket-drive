@@ -1,4 +1,5 @@
 <script>
+    import About from "$lib/components/About.svelte";
     import ColorScheme from "$lib/components/utils/ColorScheme.svelte";
     import LoginButton from "$lib/components/utils/LoginButton.svelte";
 </script>
@@ -14,6 +15,7 @@
             <p class="sub">A google drive based image & bookmark application</p>
         </section>
     </article>
+    <About />
 </main>
 
 <style>
