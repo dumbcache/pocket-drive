@@ -220,7 +220,7 @@
         border-radius: 1rem;
         display: flex;
         flex-flow: column;
-        max-width: fit-content;
+        width: 25rem;
         gap: 1rem;
     }
     button {
@@ -232,7 +232,7 @@
         filter: none;
         background-color: var(--bg-color-three);
         color: var(--color-three);
-        width: 25rem;
+        /* width: 25rem; */
         cursor: pointer;
         border-radius: 0.5rem;
     }
@@ -269,6 +269,17 @@
     }
     .list-item {
         padding: 0.8rem 1rem;
+        word-wrap: unset;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .selected {
+        word-wrap: unset;
+        white-space: nowrap;
+        overflow-x: hidden;
+        text-overflow: ellipsis;
+        padding-right: 3rem;
     }
     .list-item:hover {
         filter: none;
@@ -277,6 +288,9 @@
     @media (max-width: 600px) {
         .selected {
             width: 100%;
+        }
+        .selection {
+            max-width: 20rem;
         }
     }
 </style>
