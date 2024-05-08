@@ -108,5 +108,14 @@
     }
 
     @media (max-width: 600px) {
+        .list {
+            justify-content: space-evenly;
+        }
+    }
+
+    @media (orientation: landscape) {
+        .list {
+            justify-content: center;
+        }
     }
 </style>

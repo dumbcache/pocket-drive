@@ -241,7 +241,7 @@ a {
     }
 }
 
-@media (max-width: 500px) {
+@media (max-width: 600px) {
     :root {
         --content-padding: 2rem 0rem;
         --content-column-gap: 0.7rem;
