@@ -147,7 +147,9 @@
                     on:click|stopPropagation={() =>
                         (listVisible = !listVisible)}
                 >
-                    {selectedName}
+                    <div class="selected-text">
+                        {selectedName}
+                    </div>
                     <button
                         class="done-button btn s-prime"
                         disabled={selectedId === $activeParent.id}
@@ -262,8 +264,6 @@
         position: absolute;
         top: 4rem;
         left: 0rem;
-        display: flex;
-        flex-flow: column;
         overflow-x: hidden;
         overflow-y: scroll;
     }
@@ -274,7 +274,7 @@
         overflow: hidden;
         text-overflow: ellipsis;
     }
-    .selected {
+    .selected-text {
         word-wrap: unset;
         white-space: nowrap;
         overflow-x: hidden;
