@@ -81,6 +81,7 @@
         >
             <video
                 on:wheel|stopPropagation|preventDefault
+                on:keydown|stopPropagation
                 class="preview-video"
                 data-id={$activeImage.id}
                 src=""
