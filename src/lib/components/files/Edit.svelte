@@ -37,6 +37,7 @@
         let target = e.target as HTMLImageElement;
         if (target === container) return;
         target.localName !== "img" && (target = target.querySelector("img"));
+        if (!target) return;
         const { id } = target.dataset;
         if (id) {
             if (set.has(id)) {

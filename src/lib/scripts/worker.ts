@@ -1,5 +1,4 @@
-import { activeParent, progress } from "./stores";
-
+export const wait = (s: number) => new Promise((res) => setTimeout(res, s));
 const FILE_API = "https://www.googleapis.com/drive/v3/files";
 const FILE_API_UPLOAD = "https://www.googleapis.com/upload/drive/v3/files";
 
@@ -202,10 +201,16 @@ export const createImgMetadata = (
     });
 };
 
-export const deleteImgs = async (imgs: string[], token: string) => {
-    return new Promise((res) => {
+export const deleteImgs = async (set: Set<string>, token: string) => {
+    return new Promise(async (resolve) => {
         const proms = [];
-        for (let id of imgs) {
+        let s: string[] = [];
+        let imgs = Array.from(set);
+        for (let i = 0; i < imgs.length; i++) {
+            let id = imgs[i];
+            if (i % 50 === 0) {
+                await wait(1000);
+            }
             proms.push(
                 fetch(`${FILE_API}/${id}`, {
                     method: "DELETE",
@@ -220,6 +225,7 @@ export const deleteImgs = async (imgs: string[], token: string) => {
                             id,
                             status: 1,
                         });
+                        s.push(id);
                     } else {
                         postMessage({
                             context: "PROGRESS",
@@ -231,8 +237,9 @@ export const deleteImgs = async (imgs: string[], token: string) => {
                 })
             );
         }
+
         Promise.allSettled(proms).then(() => {
-            res("");
+            resolve(s);
         });
     });
 };
@@ -270,16 +277,28 @@ export const copySingle = async (
 
 export function copyMulitple(
     parent: string,
-    data: string[],
+    set: Set<string>,
     accessToken: string
 ) {
-    return new Promise((res) => {
+    return new Promise(async (res) => {
         let proms = [];
-        for (let id of data) {
-            proms.push(copySingle(parent, id, accessToken));
+        let s: string[] = [];
+        let data = Array.from(set);
+        for (let i = 0; i < data.length; i++) {
+            if (i % 50 === 0) {
+                await wait(1000);
+            }
+            let id = data[i];
+            proms.push(
+                copySingle(parent, id, accessToken).then((res) => {
+                    if (res === 200) {
+                        s.push(id);
+                    }
+                })
+            );
         }
         Promise.allSettled(proms).then(() => {
-            res("");
+            res(s);
         });
     });
 }
@@ -301,14 +320,18 @@ export const moveSingle = async (
     });
 };
 
-export function moveMulitple(
+export async function moveMulitple(
     parent: string,
     activeParent: string,
-    data: string[],
+    set: Set<string>,
     accessToken: string
 ) {
     let proms = [];
-    for (let id of data) {
+    let data = Array.from(set);
+    let s: string[] = [];
+    for (let i = 0; i < data.length; i++) {
+        if (i % 50 === 0) await wait(1000);
+        let id = data[i];
         proms.push(
             moveSingle(parent, id, accessToken).then((status) => {
                 if (status === 200) {
@@ -318,6 +341,7 @@ export function moveMulitple(
                         id,
                         status: 1,
                     });
+                    s.push(id);
                 } else {
                     postMessage({
                         context: "PROGRESS",
@@ -330,7 +354,7 @@ export function moveMulitple(
         );
     }
     Promise.allSettled(proms).then(() => {
-        postMessage({ context: "MOVE", parent, activeParent, set: data });
+        postMessage({ context: "MOVE", parent, activeParent, set: s });
     });
 }
 
@@ -348,18 +372,20 @@ export const updateSingle = async (
         body: JSON.stringify(imgMeta),
     });
     const res = await makeFetch(req);
-    let data = (await res.json()) as CreateResourceResponse;
-    return { status: res?.status, data };
+    return res?.status;
 };
 
-export function updateMultiple(
+export async function updateMultiple(
     parent: string,
     imgMeta: ImgMeta,
-    data: string[],
+    set: Set<string>,
     accessToken: string
 ) {
     let proms = [];
-    for (let id of data) {
+    let data = Array.from(set);
+    for (let i = 0; i < data.length; i++) {
+        if (i % 50 === 0) await wait(1000);
+        let id = data[i];
         proms.push(updateSingle(id, imgMeta, accessToken));
     }
     Promise.allSettled(proms).then(() => {
@@ -374,8 +400,9 @@ onmessage = ({ data }) => {
             checkForImgLocal(data.id, data.token);
             return;
         case "DELETE":
-            deleteImgs(files, token).then(() => {
-                postMessage({ context: "DELETE", set: files, activeParent });
+            deleteImgs(files, token).then((s) => {
+                console.log(s);
+                postMessage({ context: "DELETE", set: s, activeParent });
             });
             return;
         case "CLEAR_IMAGE_CACHE":
@@ -385,22 +412,22 @@ onmessage = ({ data }) => {
             moveMulitple(parent, activeParent, files, token);
             return;
         case "COPY":
-            copyMulitple(parent, files, token).then(() => {
+            copyMulitple(parent, files, token).then((s) => {
                 postMessage({
                     context: "COPY",
                     parent,
-                    set: files,
+                    set: s,
                 });
             });
             return;
         case "TOP":
-            copyMulitple(parent, files, token).then(() => {
+            copyMulitple(parent, files, token).then((s) => {
                 deleteImgs(data.files, data.token).then(() => {
                     postMessage({
                         context: "COPY",
                         parent,
                         activeParent,
-                        set: files,
+                        set: s,
                         top: true,
                     });
                 });
