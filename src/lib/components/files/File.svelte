@@ -114,8 +114,11 @@
         overflow: hidden;
         height: fit-content;
         max-width: var(--file-width);
+        max-height: var(--file-height);
         border: none;
         border: 1px solid var(--color-file-border);
+        object-fit: cover;
+        object-position: top;
     }
     .placeholder {
         width: var(--file-width);
