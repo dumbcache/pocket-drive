@@ -1,55 +1,68 @@
 <script lang="ts">
     import { activeImage } from "$lib/scripts/stores";
-    import { setActiveImage } from "$lib/scripts/utils";
-    import { onDestroy, onMount } from "svelte";
+    import { createEventDispatcher, onDestroy, onMount } from "svelte";
 
-    export let files: FileResponse;
-    let active: string | undefined = $activeImage.id;
-    let container: HTMLElement;
+    export let files: File[];
+    let active: string;
+    let navigation: HTMLElement;
+    const dispatch = createEventDispatcher();
 
     const unsubscribe = activeImage.subscribe((data) => {
-        if (data) {
+        if (data && data.id != active) {
             active = data.id;
+            if (navigation) {
+                let ele = navigation.querySelector(
+                    `[data-id="${data.id}"]`
+                ) as HTMLElement;
+                setTimeout(() => {
+                    ele?.scrollIntoView({
+                        behavior: "smooth",
+                        block: "center",
+                        inline: "center",
+                    });
+                });
+            }
         }
     });
+
     onMount(() => {
-        if (active) {
-            let ele = container.querySelector(
-                `[data-id="${active}"]`
-            ) as HTMLElement;
-            setTimeout(() => {
-                ele.scrollIntoView({
+        setTimeout(() => {
+            if ($activeImage) {
+                const ele = navigation.querySelector(
+                    `[data-id="${$activeImage.id}"]`
+                );
+                ele?.scrollIntoView({
                     behavior: "instant",
                     block: "center",
                     inline: "center",
                 });
-            });
-        }
+            }
+        }, 0);
     });
+
     onDestroy(() => {
         unsubscribe();
     });
 
     function thumbClick(e: MouseEvent) {
         let target = e.target as HTMLImageElement;
-        if (target === container) return;
+        if (target === navigation) return;
         target.localName !== "img" && (target = target.querySelector("img"));
         const { id } = target.dataset;
-        if (id) {
-            setActiveImage(id, target.src);
-            target.scrollIntoView({
-                behavior: "smooth",
-                block: "center",
-                inline: "center",
-            });
-        }
+        const [file] = files.filter((file) => file.id === id);
+        activeImage.set(file);
+        dispatch("change", { id });
     }
 </script>
 
 {#if files}
-    <nav class="thumbs" on:click={thumbClick} on:keydown bind:this={container}>
+    <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+    <nav class="thumbs" on:click={thumbClick} on:keydown bind:this={navigation}>
         {#each files as file}
-            <button class:active={file.id === active} data-id={file.id}>
+            <button
+                class:active={file.id === $activeImage?.id}
+                data-id={file.id}
+            >
                 <img
                     src={file.thumbnailLink}
                     alt=""
@@ -99,13 +112,13 @@
         height: 10rem;
         background-color: var(--color-file-background);
     }
-    @media (max-width: 600px) {
+
+    @media (max-width: 600px) and (orientation: portrait) {
         .thumbs {
             height: 100%;
             flex-flow: row nowrap;
             width: initial;
         }
-
         img {
             min-width: 5rem;
             max-height: 5rem;

@@ -47,7 +47,7 @@
     on:dragleave={() => (draggedOver = false)}
     on:drop|stopPropagation={imgDropHandler}
 >
-    {#if pics.length != 0}
+    {#if pics?.length != 0}
         {#each pics as pic}
             <div class="pic-wrapper pic">
                 <img

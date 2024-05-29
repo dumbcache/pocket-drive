@@ -1,25 +1,70 @@
 <script lang="ts">
-    import FileNav from "$lib/components/files/FileNav.svelte";
     import { onMount } from "svelte";
     import Dialog from "$lib/components/Dialog.svelte";
-    import { activeImage, mode, previewLoading } from "$lib/scripts/stores";
+    import {
+        activeImage,
+        imageCache,
+        imageFetchLog,
+        mode,
+        previewLoading,
+    } from "$lib/scripts/stores";
     import closeIcon from "$lib/assets/close.svg?raw";
     import infoIcon from "$lib/assets/arrowLeftDouble.svg?raw";
     import zoomInIcon from "$lib/assets/zoomIn.svg?raw";
     import zoomOutIcon from "$lib/assets/zoomOut.svg?raw";
     import urlIcon from "$lib/assets/url.svg?raw";
-    import { changeImage } from "$lib/scripts/utils";
+    import { fetchImgPreview } from "$lib/scripts/utils";
     import Info from "$lib/components/files/Info.svelte";
     import Spinner from "$lib/components/utils/Spinner.svelte";
+    import FileNav from "$lib/components/files/FileNav.svelte";
 
-    export let files: FileResponse;
+    export let files: File[];
     let dialog: Dialog;
     let infoVisible = false;
     let zoom = false;
+    let preview: HTMLElement, navigation: HTMLElement;
+    let isDragging = false;
+    let startX: number;
+    let scrollLeft: number;
+    let active = false;
+    let previewObserver: IntersectionObserver;
 
     onMount(() => {
+        setTimeout(() => {
+            previewInspection();
+        }, 2000);
+        setTimeout(() => {
+            if ($activeImage) {
+                const ele = preview.querySelector(
+                    `[data-id="${$activeImage.id}"]`
+                );
+                ele?.scrollIntoView({
+                    behavior: "instant",
+                    block: "center",
+                    inline: "center",
+                });
+            }
+        }, 0);
         dialog.show();
     });
+
+    function handlePointerDown(e: MouseEvent) {
+        isDragging = true;
+        startX = e.pageX - preview.offsetLeft;
+        scrollLeft = preview.scrollLeft;
+    }
+
+    function handlePointerMove(e: MouseEvent) {
+        if (!isDragging) return;
+        e.preventDefault();
+        const x = e.pageX - preview.offsetLeft;
+        const walk = (x - startX) * 4; // Adjust scroll speed multiplier as needed
+        preview.scrollLeft = scrollLeft - walk;
+    }
+
+    function handlePointerUp(e: MouseEvent) {
+        isDragging = false;
+    }
 
     function handleKeyDown(e: KeyboardEvent) {
         e.preventDefault();
@@ -30,11 +75,11 @@
                 return;
             case "ArrowRight":
             case "ArrowDown":
-                changeImage("NEXT");
+                preview.scrollBy({ left: 100, behavior: "instant" });
                 return;
             case "ArrowLeft":
             case "ArrowUp":
-                changeImage("PREV");
+                preview.scrollBy({ left: -100, behavior: "instant" });
                 return;
         }
     }
@@ -42,63 +87,149 @@
     function handleWheel(e: WheelEvent) {
         if (zoom) return;
         e.preventDefault();
-        e.deltaY > 0 ? changeImage("NEXT") : changeImage("PREV");
+        e.deltaY > 0
+            ? preview.scrollBy({ left: 100, behavior: "smooth" })
+            : preview.scrollBy({ left: -100, behavior: "smooth" });
     }
-
     function handleClick(e: PointerEvent) {
         if (zoom) return;
         if (e.button != 0) return;
         const target = e.target as HTMLImageElement;
-        const half = target.offsetWidth / 2;
-        const clickx = e.clientX - target.getBoundingClientRect().left;
-        clickx > half ? changeImage("NEXT") : changeImage("PREV");
+        if (target) {
+            if (target.localName === "video") return;
+            const half = target.offsetWidth / 2;
+            const clickx = e.clientX - target.getBoundingClientRect().left;
+            clickx > half
+                ? preview.scrollBy({ left: 100, behavior: "instant" })
+                : preview.scrollBy({ left: -100, behavior: "instant" });
+        }
     }
 
     function handleViewClose() {
         $mode = "";
         dialog.close();
+        imageCache.clear();
+    }
+
+    function changeHandler(e: CustomEvent) {
+        let id = e.detail.id;
+        const ele = preview.querySelector(`[data-id="${id}"]`);
+        ele?.scrollIntoView({
+            behavior: "instant",
+            block: "center",
+            inline: "center",
+        });
+    }
+
+    function previewInspection() {
+        previewObserver = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        let target = entry.target as HTMLImageElement;
+                        let { id } = target.dataset;
+                        if (id) {
+                            if ($activeImage.id !== id) {
+                                const [file] = files.filter(
+                                    (file) => file.id === id
+                                );
+                                activeImage.set(file);
+                            }
+                            if (!imageCache.has(id)) {
+                                if (!imageFetchLog.has(id)) {
+                                    $previewLoading = true;
+                                    fetchImgPreview(id);
+                                    imageFetchLog.add(id);
+                                    return;
+                                }
+                            } else {
+                                if (!target.src.startsWith("blob:")) {
+                                    target.src = imageCache.get(id);
+                                }
+                            }
+                        }
+                    }
+                });
+            },
+            { root: preview, threshold: 0.5 }
+        );
+        files?.forEach((item) => {
+            let id = item.id;
+            let li = preview?.querySelector(`[data-id="${id}"]`);
+            li && previewObserver.observe(li);
+        });
     }
 </script>
 
 <Dialog bind:this={dialog}>
     <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
+    <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
     <artcle
         tabindex="0"
         id="view"
+        role="dialog"
         on:keydown={handleKeyDown}
         on:dragstart|preventDefault
         on:wheel={(e) => {
             zoom || e.preventDefault();
         }}
     >
-        <section class="one" on:wheel|stopPropagation>
-            <FileNav {files} />
+        <section
+            class="one nav"
+            bind:this={navigation}
+            on:wheel|stopPropagation
+        >
+            <FileNav {files} on:change={changeHandler} />
         </section>
         <section
             class="two preview"
+            role="dialog"
             on:scroll|preventDefault
             on:wheel={handleWheel}
+            on:mousedown={handleClick}
+            on:keydown
+            on:mouseleave={handlePointerUp}
+            on:mouseup={handlePointerUp}
+            on:mousedown={handlePointerDown}
+            on:mousemove={handlePointerMove}
+            bind:this={preview}
         >
-            <video
-                on:wheel|stopPropagation|preventDefault
-                on:keydown|stopPropagation
-                class="preview-video"
-                data-id={$activeImage.id}
-                src=""
-                muted
-                controls
-                loop
-                playsinline
-            ></video>
-
-            <img
-                on:pointerup={handleClick}
-                class="preview-img"
-                class:zoom
-                data-id={$activeImage.id}
-                src={$activeImage.thumbnailLink}
-                alt=""
-            />
+            {#each files as file}
+                <div class="file">
+                    {#if file.mimeType.match("image/")}
+                        <img
+                            class:zoom
+                            class:active
+                            class="img"
+                            src={file.thumbnailLink}
+                            alt=""
+                            data-id={file.id}
+                            data-src={file.thumbnailLink}
+                        />
+                    {:else}
+                        <!-- <img
+                            class:zoom
+                            class="img"
+                            src={file.thumbnailLink}
+                            alt=""
+                            data-id={$activeImage.id}
+                        /> -->
+                        <video
+                            on:wheel|preventDefault
+                            on:keydown|stopPropagation
+                            class="video"
+                            data-id={file.id}
+                            data-src={file.thumbnailLink}
+                            src=""
+                            poster={file.thumbnailLink}
+                            muted
+                            controls
+                            loop
+                            playsinline
+                        ></video>
+                    {/if}
+                </div>
+            {/each}
         </section>
         {#if infoVisible}
             <section class="three">
@@ -123,7 +254,7 @@
                 >{@html infoIcon}</button
             >
         {/if}
-        {#if $activeImage.description}
+        {#if $activeImage?.description}
             <a
                 title="go to website"
                 href={$activeImage.description}
@@ -150,7 +281,7 @@
         height: 100%;
     }
     .one {
-        min-width: 10rem;
+        min-width: 15rem;
         max-width: 20rem;
         overflow: auto;
         scroll-behavior: smooth;
@@ -160,24 +291,36 @@
         margin: auto;
         max-width: 100%;
         min-width: 50%;
-        overflow: auto;
+        overflow-y: hidden;
+        overflow-x: scroll;
+        display: flex;
+        gap: 5rem;
+        flex-flow: row nowrap;
+        scroll-snap-type: x mandatory;
+        scroll-behavior: smooth;
     }
-
+    .two::-webkit-scrollbar,
+    .file::-webkit-scrollbar {
+        display: none;
+    }
     .three {
         min-width: 40rem;
     }
+    .file {
+        width: 100%;
+        flex: none;
+        overflow: auto;
+        scroll-snap-align: center;
+    }
 
-    .preview-img,
-    .preview-video {
+    .img,
+    .video {
         display: block;
         width: auto;
         height: 100%;
         margin: auto;
         object-fit: contain;
         object-position: center;
-    }
-    .preview-video {
-        display: none;
     }
     .zoom {
         width: 100vw;
@@ -209,7 +352,7 @@
         gap: 1rem;
     }
 
-    @media (max-width: 600px) {
+    @media (max-width: 600px) and (orientation: portrait) {
         #view {
             flex-flow: column-reverse;
             padding: 0rem;
@@ -240,14 +383,15 @@
             z-index: 11;
         }
 
-        .preview-img,
-        .preview-video {
+        .img,
+        .video {
             object-position: center;
         }
 
         .zoom {
             width: unset;
             max-width: 170%;
+            height: 150%;
         }
         .action {
             bottom: 8rem;
@@ -264,6 +408,21 @@
         .spinner {
             top: 0.5rem;
             right: 0.5rem;
+        }
+        .one::-webkit-scrollbar {
+            display: none;
+        }
+    }
+    @media (orientation: landscape) {
+        #view {
+            padding: 2.5rem;
+        }
+        .one {
+            min-width: 10rem;
+        }
+        .zoom {
+            width: unset;
+            max-width: 120%;
         }
     }
 </style>

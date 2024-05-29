@@ -2,10 +2,10 @@
     import { onDestroy } from "svelte";
     import { fileStore, mode } from "$lib/scripts/stores";
     import File from "$lib/components/files/File.svelte";
-    import View from "$lib/components/files/View.svelte";
     import Edit from "$lib/components/files/Edit.svelte";
     import { navigating } from "$app/stores";
-    import { handleImageClick } from "$lib/scripts/handlers";
+    import { handleImageClick } from "$lib/scripts/utils";
+    import View from "./View.svelte";
 
     export let view: string;
     export let observer: IntersectionObserver;

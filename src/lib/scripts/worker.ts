@@ -401,7 +401,6 @@ onmessage = ({ data }) => {
             return;
         case "DELETE":
             deleteImgs(files, token).then((s) => {
-                console.log(s);
                 postMessage({ context: "DELETE", set: s, activeParent });
             });
             return;

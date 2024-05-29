@@ -15,6 +15,8 @@ import {
     previewLoading,
     editProgress,
     pocketStore,
+    imageCache,
+    imageFetchLog,
 } from "$lib/scripts/stores";
 import ChildWorker from "$lib/scripts/worker.ts?worker";
 import { clearDropItems } from "$lib/scripts/image";
@@ -181,37 +183,24 @@ export function fetchImgPreview(id: string) {
     });
 }
 
-export function setActiveImage(id: string, src: string) {
-    let url = "";
-    let img = document.querySelector(".preview-img") as HTMLImageElement;
-    if (img && img.dataset.id === id) return;
-    fetchImgPreview(id);
-    previewLoading.set(true);
-    if (img) {
-        url = img.src;
-        img.src = src;
-        URL.revokeObjectURL(url);
+export function handleImageClick(e) {
+    switch (get(mode)) {
+        case "edit":
+            return;
+        case "":
+        default:
+            let eles = e.composedPath();
+            let [target] = eles.filter((ele) => ele.localName === "li");
+            if (!target) return;
+            let { id } = target?.dataset;
+            if (!id) return;
+            const [file] = get(fileStore)?.files.filter(
+                (file) => file.id === id
+            );
+            activeImage.set(file);
+            mode.set("view");
+            return;
     }
-    const [file] = get(fileStore)?.files.filter((file) => file.id === id);
-    activeImage.set(file);
-}
-
-export function changeImage(direction: "PREV" | "NEXT") {
-    const thumbs = document.querySelector(".thumbs");
-    if (!thumbs) return;
-    const active = thumbs.querySelector(`[data-id="${get(activeImage).id}"]`);
-    const ele = (
-        direction === "PREV"
-            ? active?.previousSibling?.firstChild
-            : active?.nextSibling?.firstChild
-    ) as HTMLImageElement;
-    if (!ele) return;
-    setActiveImage(ele.dataset.id!, ele.src);
-    ele.scrollIntoView({
-        behavior: "smooth",
-        block: "center",
-        inline: "center",
-    });
 }
 
 /******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
@@ -521,6 +510,22 @@ export async function afterFolderAction(parent: string, accessToken: string) {
 
 /******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 
+export function setPreviewFile(id: string, url: string) {
+    let preview = document.querySelector(".preview");
+    let ele = preview?.querySelector(`[data-id="${id}"]`) as
+        | HTMLImageElement
+        | HTMLVideoElement;
+    if (!ele) return;
+    if (ele.localName === "img") {
+        ele.src = url;
+    } else if (ele.localName === "video") {
+        setTimeout(() => {
+            ele.src = url;
+        }, 1000);
+    }
+    previewLoading.set(false);
+}
+
 if (browser) {
     childWorker = new ChildWorker();
     childWorker.onerror = (e) => console.warn(e);
@@ -529,34 +534,14 @@ if (browser) {
         switch (data.context) {
             case "IMG_PREVIEW":
                 const { id, blob } = data;
-                const img = document.querySelector(
-                    `.preview-img`
-                ) as HTMLImageElement;
-                const video = document.querySelector(
-                    `.preview-video`
-                ) as HTMLVideoElement;
-                if (img && img.dataset.id !== id) return;
-                let active = get(activeImage);
-                if (blob.type.match("video/")) {
-                    let url = video.src;
-                    video.style.display = "block";
-                    img.style.display = "none";
-                    setTimeout(() => {
-                        video.src = URL.createObjectURL(blob);
-                    }, 0);
-                    video.poster = active.thumbnailLink;
-                    URL.revokeObjectURL(url);
-                    previewLoading.set(false);
-                    return;
-                }
 
                 let url = URL.createObjectURL(blob);
-                if (img) {
-                    img.style.display = "block";
-                    img.src = url;
+                setPreviewFile(id, url);
+                if (!imageCache.has(id)) {
+                    imageCache.set(id, url);
                 }
-                video && (video.style.display = "none");
-                previewLoading.set(false);
+                imageFetchLog.delete(id);
+
                 return;
 
             case "EDIT":

@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset
       xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+       xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
             http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
             
-<url>
-  <loc>https://www.pocketdrive.in/</loc>
-  <lastmod>2024-05-28T00:01:00+00:00</lastmod>
-</url>
+  <url>
+    <loc>https://www.pocketdrive.in/</loc>
+    <lastmod>2024-06-01T00:01:00+00:00</lastmod>
+    <image:image>
+        <image:loc>https://www.pocketdrive.in/favicon.svg</image:loc>
+    </image:image>
+  </url>
 
 </urlset>
