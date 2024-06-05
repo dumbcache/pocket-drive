@@ -12,11 +12,26 @@
 
 <article class="article-1 article">
     <section class="gallery">
-        <img src={article1} class="img img11" alt="UI desktop" />
-        <img src={article12} class="img img12" alt="UI mobile" />
-        <img src={article14} class="img img14" alt="View mode mobile" />
-        <img src={article13} class="img img13" alt="View mode desktop" />
-        <img src={article15} class="img img15" alt="Edit mode desktop" />
+        <img src={article1} class="img img11" alt="UI desktop" data-nosnippet />
+        <img src={article12} class="img img12" alt="UI mobile" data-nosnippet />
+        <img
+            src={article14}
+            class="img img14"
+            alt="View mode mobile"
+            data-nosnippet
+        />
+        <img
+            src={article13}
+            class="img img13"
+            alt="View mode desktop"
+            data-nosnippet
+        />
+        <img
+            src={article15}
+            class="img img15"
+            alt="Edit mode desktop"
+            data-nosnippet
+        />
     </section>
     <!-- <div class="section">
         <div>
@@ -101,9 +116,6 @@
         display: inline-block;
     }
 
-    small {
-        font-size: xx-small;
-    }
     a,
     a:hover {
         color: var(--color-focus);
