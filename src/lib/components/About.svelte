@@ -51,8 +51,9 @@
 
 <footer class="footer-wrapper developer-info section">
     <p class="alt">
-        Develped by <a href="https://www.linkedin.com/in/dumbcache/">Yesu G</a>
-        <small>(MySelf)</small>
+        Develped by <a href="https://www.linkedin.com/in/dumbcache/"
+            >dumbcache</a
+        >
         using
         <a href="https://kit.svelte.dev/" title="svelte kit" class="svelte-icon"
             >{@html svelteIcon}</a
