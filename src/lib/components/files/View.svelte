@@ -205,6 +205,9 @@
                             alt=""
                             data-id={file.id}
                             data-src={file.thumbnailLink}
+                            on:error={(e) => {
+                                e.target.src = file.thumbnailLink;
+                            }}
                         />
                     {:else}
                         <!-- <img
