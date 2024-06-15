@@ -252,6 +252,7 @@
         padding: 3rem;
         gap: 1rem;
         border-radius: 1rem;
+        z-index: 1;
     }
     input {
         background: unset;

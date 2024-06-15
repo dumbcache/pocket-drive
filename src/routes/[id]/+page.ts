@@ -52,6 +52,7 @@ export const load = (async ({ params, fetch }) => {
             id = window.localStorage.getItem("root");
             if (!id) id = await getRootFolder(getToken());
             activeParent.set({ name: "#Pocket_Drive", id });
+            pocketState.set(id);
             return loadContent(id);
         }
         let data = await fetchSingle(id, "FOLDER", getToken());

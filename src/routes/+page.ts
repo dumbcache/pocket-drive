@@ -7,7 +7,10 @@ import { pocketState } from "$lib/scripts/stores";
 export const load = async () => {
     if (browser) {
         if (checkLoginStatus()) {
-            let state = get(pocketState) || "r";
+            let state =
+                get(pocketState) ||
+                window.localStorage.getItem("pocketState") ||
+                "r";
             throw redirect(302, `/${state}`);
         }
     }

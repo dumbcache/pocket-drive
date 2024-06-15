@@ -1,12 +1,19 @@
 <script lang="ts">
     import { navigating } from "$app/stores";
     import Spinner from "$lib/components/utils/Spinner.svelte";
-    import { progress, refresh } from "$lib/scripts/stores";
+    import { pocketState, progress, refresh } from "$lib/scripts/stores";
     import { onMount } from "svelte";
     import "./app.css";
+    import { browser } from "$app/environment";
 
     let homeButton = "";
     let overlay: HTMLDivElement;
+
+    if (browser) {
+        pocketState.subscribe((val) => {
+            window.localStorage.setItem("pocketState", val);
+        });
+    }
 
     onMount(async () => {
         const response = await fetch("/favicon.svg");

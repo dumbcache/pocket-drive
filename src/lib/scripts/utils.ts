@@ -17,6 +17,7 @@ import {
     pocketStore,
     imageCache,
     imageFetchLog,
+    pocketState,
 } from "$lib/scripts/stores";
 import ChildWorker from "$lib/scripts/worker.ts?worker";
 import { clearDropItems } from "$lib/scripts/image";
@@ -91,11 +92,11 @@ export function signUserOutPartial() {
     let theme = window.localStorage.getItem("theme");
     window.localStorage.clear();
     window.localStorage.setItem("theme", theme);
-    window.localStorage.removeItem("refreshTime");
 }
 
 export async function signUserOut() {
     await clearFiles();
+    pocketState.set(null);
     console.info("logging user out");
 }
 
