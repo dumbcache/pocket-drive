@@ -101,6 +101,9 @@
     .img-link {
         display: inline-block;
         top: 0.5rem;
+        background-color: #0003;
+        border-radius: 50%;
+        box-shadow: 0 0 10px 1px #0005;
     }
     .img-link:hover :global(svg) {
         fill: red;
