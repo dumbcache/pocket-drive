@@ -116,6 +116,7 @@
 <style>
     .content {
         padding: var(--content-padding);
+        padding-top: 0rem;
     }
     footer {
         display: flex;

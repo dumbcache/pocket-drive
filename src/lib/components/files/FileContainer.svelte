@@ -1,11 +1,11 @@
 <script lang="ts">
     import { onDestroy } from "svelte";
-    import { fileStore, mode } from "$lib/scripts/stores";
+    import { activeImage, fileStore, mode } from "$lib/scripts/stores";
     import File from "$lib/components/files/File.svelte";
     import Edit from "$lib/components/files/Edit.svelte";
     import { navigating } from "$app/stores";
-    import { handleImageClick } from "$lib/scripts/utils";
     import View from "./View.svelte";
+    import { get } from "svelte/store";
 
     export let view: string;
     export let observer: IntersectionObserver;
@@ -16,6 +16,10 @@
 
     let foot: HTMLElement;
     let container: HTMLElement;
+
+    let allSelected = false;
+    let set = new Set<string>();
+    let count = 0;
 
     $: foot && observer?.observe(foot);
 
@@ -39,6 +43,55 @@
         navUnsubscribe();
         childObserver?.disconnect();
     });
+
+    function editCloseAction() {
+        allSelected = false;
+        count = 0;
+        set.clear();
+        const eles = document.querySelectorAll(".select");
+        eles.forEach((ele) => ele.classList.remove("select"));
+    }
+
+    function selectAllAction() {
+        allSelected = !allSelected;
+        if (allSelected) {
+            files?.forEach((file) => set.add(file.id));
+            count = set.size;
+            return;
+        }
+        set.clear();
+        count = set.size;
+    }
+
+    export function handleImageClick(e) {
+        let eles = e.composedPath();
+        let [target] = eles.filter((ele) => ele.localName === "li");
+        if (!target) return;
+        let { id } = target?.dataset;
+        if (!id) return;
+        switch (get(mode)) {
+            case "edit":
+                if (set.has(id)) {
+                    set.delete(id);
+                    count--;
+                    target.classList.toggle("select");
+                    return;
+                }
+                set.add(id);
+                count++;
+                target.classList.toggle("select");
+                return;
+
+            case "":
+            default:
+                const [file] = get(fileStore)?.files.filter(
+                    (file) => file.id === id
+                );
+                activeImage.set(file);
+                mode.set("view");
+                return;
+        }
+    }
 
     function childInspection(items: FileResponse | undefined) {
         childObserver = new IntersectionObserver(
@@ -67,6 +120,14 @@
     class="file-container"
     style:display={view === "FILE" ? "initial" : "none"}
 >
+    {#if $mode === "edit"}
+        <Edit
+            {set}
+            {count}
+            on:close={editCloseAction}
+            on:selectAll={selectAllAction}
+        />
+    {/if}
     {#if files && files.length > 0}
         <ol
             class="list"
@@ -76,7 +137,7 @@
         >
             {#each files as file}
                 {#key file.id}
-                    <li data-id={file.id}>
+                    <li data-id={file.id} class:select={allSelected}>
                         <File {file} visible={inspectionLog[file.id]} />
                     </li>
                 {/key}
@@ -90,17 +151,28 @@
     <View {files} />
 {/if}
 
-{#if $mode === "edit"}
-    <Edit {files} />
-{/if}
-
 <style>
     .list {
         display: flex;
+        padding-top: var(--vertical-padding);
         flex-flow: row wrap;
         align-items: flex-start;
         justify-content: center;
         gap: var(--content-gap);
+    }
+
+    .select :global(.card) {
+        box-shadow: 0 0 5px 1px #fff5;
+        filter: brightness(0.3);
+    }
+
+    .select {
+        border-bottom: 5px solid var(--color-light-blue);
+        border-radius: 1rem;
+    }
+    .select:hover :global(.card) {
+        filter: none;
+        filter: brightness(0.3);
     }
 
     @media (max-width: 600px) {

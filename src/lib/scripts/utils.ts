@@ -183,26 +183,6 @@ export function fetchImgPreview(id: string) {
     });
 }
 
-export function handleImageClick(e) {
-    switch (get(mode)) {
-        case "edit":
-            return;
-        case "":
-        default:
-            let eles = e.composedPath();
-            let [target] = eles.filter((ele) => ele.localName === "li");
-            if (!target) return;
-            let { id } = target?.dataset;
-            if (!id) return;
-            const [file] = get(fileStore)?.files.filter(
-                (file) => file.id === id
-            );
-            activeImage.set(file);
-            mode.set("view");
-            return;
-    }
-}
-
 /******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 
 export const FOLDER_MIME_TYPE = "application/vnd.google-apps.folder";

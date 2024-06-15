@@ -15,7 +15,7 @@
     class="card"
     title={file.name}
     class:select={selected}
-    class:edit-mode={""}
+    class:edit-mode={$mode === "edit"}
 >
     {#if visible}
         <img

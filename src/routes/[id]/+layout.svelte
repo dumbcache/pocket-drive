@@ -8,7 +8,12 @@
         setSessionTimeout,
     } from "$lib/scripts/utils";
     import { onMount } from "svelte";
-    import { dropItems, isLoggedin, sessionTimeout } from "$lib/scripts/stores";
+    import {
+        dropItems,
+        isLoggedin,
+        mode,
+        sessionTimeout,
+    } from "$lib/scripts/stores";
     import { googleClient } from "$lib/scripts/login";
     import { goto } from "$app/navigation";
     import { previewAndSetDropItems } from "$lib/scripts/image";
@@ -74,7 +79,9 @@
     }}
     on:drop={imgDropHandler}
 >
-    <Header />
+    {#if $mode !== "edit"}
+        <Header />
+    {/if}
     <slot />
     {#if $dropItems.length > 0}
         <Drop />

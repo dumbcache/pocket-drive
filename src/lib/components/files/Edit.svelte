@@ -1,14 +1,6 @@
 <script lang="ts">
-    import Dialog from "$lib/components/Dialog.svelte";
-    import {
-        activeParent,
-        editProgress,
-        mode,
-        progress,
-    } from "$lib/scripts/stores";
-    import { onDestroy, onMount } from "svelte";
+    import { activeParent, editProgress, mode } from "$lib/scripts/stores";
     import closeIcon from "$lib/assets/close.svg?raw";
-    import playIcon from "$lib/assets/play.svg?raw";
     import deleteIcon from "$lib/assets/delete.svg?raw";
     import moveIcon from "$lib/assets/move.svg?raw";
     import copyIcon from "$lib/assets/copy.svg?raw";
@@ -18,13 +10,10 @@
     import Count from "$lib/components/utils/Count.svelte";
     import FolderSelect from "$lib/components/folders/FolderSelect.svelte";
     import { childWorker, getToken, isValidUrl } from "$lib/scripts/utils";
+    import { createEventDispatcher } from "svelte";
 
-    export let files: FileResponse;
-    let dialog: Dialog;
-    let container: HTMLElement;
-    let set = new Set<string>();
-    let allSelected = false;
-    let count = 0;
+    export let set: Set, count: Number;
+
     let action = "";
     let folderSelectVisible = false;
     let selectedParent = "";
@@ -33,36 +22,11 @@
     let description: string;
     let invalid = false;
 
-    function thumbClick(e: MouseEvent) {
-        let target = e.target as HTMLImageElement;
-        if (target === container) return;
-        target.localName !== "img" && (target = target.querySelector("img"));
-        if (!target) return;
-        const { id } = target.dataset;
-        if (id) {
-            if (set.has(id)) {
-                set.delete(id);
-                count--;
-                target.classList.toggle("select");
-                return;
-            }
-            set.add(id);
-            count++;
-            target.classList.toggle("select");
-        }
-    }
+    const dispatch = createEventDispatcher();
 
-    onMount(() => {
-        dialog.show();
-        container.scrollTo(0, window.scrollY);
-    });
-    onDestroy(() => {
+    function close() {
         $mode = "";
-    });
-
-    function handleViewClose() {
-        $mode = "";
-        dialog.close();
+        dispatch("close");
     }
 
     function deleteAction() {
@@ -72,20 +36,9 @@
             token: getToken(),
             activeParent: $activeParent.id,
         });
-        dialog.close();
         confirm = false;
         $editProgress = true;
-    }
-
-    function selectAllAction() {
-        allSelected = !allSelected;
-        if (allSelected) {
-            files.forEach((file) => set.add(file.id));
-            count = set.size;
-            return;
-        }
-        set.clear();
-        count = set.size;
+        close();
     }
 
     function moveToTop() {
@@ -98,12 +51,12 @@
             token: getToken(),
         });
         action = "";
+        close();
     }
 
     function folderSelectOk(e) {
         selectedParent = e.detail.id;
         folderSelectVisible = false;
-        dialog.close();
         $editProgress = true;
         childWorker.postMessage({
             context: action,
@@ -113,6 +66,7 @@
             token: getToken(),
         });
         action = "";
+        close();
     }
     function folderSelectClose() {
         folderSelectVisible = false;
@@ -129,8 +83,8 @@
             detail: { name, description },
             token: getToken(),
         });
-        dialog.close();
         $editProgress = true;
+        close();
     }
 
     function handleChange(e) {
@@ -151,197 +105,119 @@
     }
 </script>
 
-<Dialog bind:this={dialog}>
-    {#if files}
-        <div class="edit-buttons">
-            {#if confirm}
-                <button class="cancel action" on:click={() => (confirm = false)}
-                    >cancel</button
-                >
-                <button class="confirm action" on:click={deleteAction}
-                    >confirm</button
-                >
-            {:else}
-                <button
-                    class="btn s-prime"
-                    title="select all"
-                    on:click={selectAllAction}>{@html selectallIcon}</button
-                >
-                <button
-                    class="btn s-prime"
-                    title="edit"
-                    disabled={count === 0}
-                    on:click={() => (action = "EDIT")}>{@html editIcon}</button
-                >
-                <button
-                    class="btn s-prime"
-                    title="move to start"
-                    disabled={count === 0}
-                    on:click={() => moveToTop()}>{@html startIcon}</button
-                >
-                <button
-                    class="btn s-prime"
-                    title="move"
-                    disabled={count === 0}
-                    on:click={() => {
-                        action = "MOVE";
-                        folderSelectVisible = true;
-                    }}>{@html moveIcon}</button
-                >
-                <button
-                    class="btn s-prime"
-                    title="copy"
-                    disabled={count === 0}
-                    on:click={() => {
-                        action = "COPY";
-                        folderSelectVisible = true;
-                    }}>{@html copyIcon}</button
-                >
-                <button
-                    class="btn s-prime"
-                    title="delete"
-                    disabled={count === 0}
-                    on:click={() => (confirm = true)}>{@html deleteIcon}</button
-                >
-            {/if}
-            <Count {count} />
-            <button class="btn s-prime" on:click={handleViewClose}
-                >{@html closeIcon}</button
-            >
-        </div>
-        <div
-            class="wrapper"
-            on:click={thumbClick}
-            on:keydown
-            on:dragstart|preventDefault
-            bind:this={container}
+<div class="edit-buttons">
+    {#if confirm}
+        <button class="cancel action" on:click={() => (confirm = false)}
+            >cancel</button
         >
-            {#each files as file}
-                <div class="img">
-                    <img
-                        src={file.thumbnailLink}
-                        alt=""
-                        height="150"
-                        width="200"
-                        data-id={file.id}
-                        class:select={allSelected}
-                    />
-                    {#if file.mimeType.match("video/")}
-                        <div class="play">{@html playIcon}</div>
-                    {/if}
-                </div>
-            {/each}
-        </div>
-    {/if}
-    {#if folderSelectVisible}
-        <FolderSelect
-            type="FILE"
-            {set}
-            on:close={folderSelectClose}
-            on:ok={folderSelectOk}
-        />
-    {/if}
-    {#if action === "EDIT"}
-        <div
-            class="edit-form-wrapper"
-            on:keydown
-            on:click={() => (action = "")}
+        <button class="confirm action" on:click={deleteAction}>confirm</button>
+    {:else}
+        <button
+            class="btn s-prime"
+            title="select all"
+            on:click={() => {
+                dispatch("selectAll");
+            }}>{@html selectallIcon}</button
         >
-            <form
-                class="edit-form"
-                on:keydown|stopPropagation
-                on:click|stopPropagation
-                on:submit|preventDefault={handleSave}
-            >
-                <p>Enter either values</p>
-                <input
-                    type="text"
-                    name="name"
-                    placeholder="Name"
-                    bind:value={name}
-                    on:change={handleChange}
-                    autocomplete="off"
-                />
-                <input
-                    type="url"
-                    name="url"
-                    class:invalid
-                    placeholder="URL"
-                    bind:value={description}
-                    on:change={handleChange}
-                    autocomplete="off"
-                />
+        <button
+            class="btn s-prime"
+            title="edit"
+            disabled={count === 0}
+            on:click={() => (action = "EDIT")}>{@html editIcon}</button
+        >
+        <button
+            class="btn s-prime"
+            title="move to start"
+            disabled={count === 0}
+            on:click={() => moveToTop()}>{@html startIcon}</button
+        >
+        <button
+            class="btn s-prime"
+            title="move"
+            disabled={count === 0}
+            on:click={() => {
+                action = "MOVE";
+                folderSelectVisible = true;
+            }}>{@html moveIcon}</button
+        >
+        <button
+            class="btn s-prime"
+            title="copy"
+            disabled={count === 0}
+            on:click={() => {
+                action = "COPY";
+                folderSelectVisible = true;
+            }}>{@html copyIcon}</button
+        >
+        <button
+            class="btn s-prime"
+            title="delete"
+            disabled={count === 0}
+            on:click={() => (confirm = true)}>{@html deleteIcon}</button
+        >
+    {/if}
+    <Count {count} />
+    <button class="btn s-prime" on:click={close}>{@html closeIcon}</button>
+</div>
 
-                {#if invalid}
-                    <p class="alert">Enter valid url</p>
-                {/if}
-                <div class="button-wrapper">
-                    <button
-                        class="cancel action"
-                        type="reset"
-                        on:click={() => (action = "")}>cancel</button
-                    >
-                    <button
-                        class="save action"
-                        type="submit"
-                        on:click={handleSave}>save</button
-                    >
-                </div>
-            </form>
-        </div>
-    {/if}
-</Dialog>
+{#if folderSelectVisible}
+    <FolderSelect
+        type="FILE"
+        {set}
+        on:close={folderSelectClose}
+        on:ok={folderSelectOk}
+    />
+{/if}
+{#if action === "EDIT"}
+    <div class="edit-form-wrapper" on:keydown on:click={() => (action = "")}>
+        <form
+            class="edit-form"
+            on:keydown|stopPropagation
+            on:click|stopPropagation
+            on:submit|preventDefault={handleSave}
+        >
+            <p>Enter either values</p>
+            <input
+                type="text"
+                name="name"
+                placeholder="Name"
+                bind:value={name}
+                on:change={handleChange}
+                autocomplete="off"
+            />
+            <input
+                type="url"
+                name="url"
+                class:invalid
+                placeholder="URL"
+                bind:value={description}
+                on:change={handleChange}
+                autocomplete="off"
+            />
+
+            {#if invalid}
+                <p class="alert">Enter valid url</p>
+            {/if}
+            <div class="button-wrapper">
+                <button
+                    class="cancel action"
+                    type="reset"
+                    on:click={() => (action = "")}>cancel</button
+                >
+                <button class="save action" type="submit" on:click={handleSave}
+                    >save</button
+                >
+            </div>
+        </form>
+    </div>
+{/if}
 
 <style>
-    .wrapper {
-        display: flex;
-        flex-flow: row wrap;
-        align-items: flex-start;
-        justify-content: center;
-        gap: var(--content-gap);
-        padding: 2rem 0rem;
-        height: 84%;
-        overflow-y: auto;
-    }
-    .img {
-        position: relative;
-    }
-
-    img {
-        display: block;
-        overflow: hidden;
-        height: fit-content;
-        max-width: var(--file-width);
-        border-radius: 1rem;
-        transition: transform 0.1s ease-in-out;
-    }
-
-    img:hover {
-        cursor: pointer;
-        filter: brightness(0.8);
-        transform: scale(1.02);
-    }
-    .select {
-        /* filter: none; */
-        box-shadow: 0 0 5px 1px #fff5;
-        filter: brightness(0.3);
-    }
-
-    .img:has(.select) {
-        border-bottom: 5px solid var(--color-light-blue);
-        border-radius: 1rem;
-    }
-    .select:hover {
-        filter: none;
-        filter: brightness(0.3);
-    }
-
     .edit-buttons {
         position: sticky;
         top: 0rem;
         z-index: 1;
-        backdrop-filter: blur(5px);
-        -webkit-backdrop-filter: blur(5px);
+        background: var(--primary-bg-color);
         padding: 2rem 0rem;
         display: flex;
         flex-flow: row nowrap;
@@ -401,7 +277,7 @@
     }
 
     .action {
-        width: 5rem;
+        width: 7rem;
         padding: 0.5rem;
         border: 1px solid var(--color-file-border);
         text-align: center;
@@ -419,21 +295,6 @@
         color: #aaa;
         font-size: 1.2rem;
     }
-    .play {
-        width: 4rem;
-        height: 4rem;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background-color: #0007;
-        box-shadow: 0 0 20px 5px #fff;
-        border-radius: 50%;
-        backdrop-filter: blur(10px);
-    }
-    .play :global(svg) {
-        fill: #fff;
-    }
 
     @media (max-width: 900px) {
         input {
@@ -443,20 +304,12 @@
             border-top-left-radius: 0.5rem;
             border-top-right-radius: 0.5rem;
         }
-        .play {
-            width: 2rem;
-            height: 2rem;
-        }
     }
     @media (max-width: 500px) {
         .edit-buttons {
             padding: 1rem 0rem;
             gap: 1rem;
             justify-content: space-evenly;
-        }
-
-        img {
-            max-width: calc(var(--file-width) - 1.3rem);
         }
     }
 </style>

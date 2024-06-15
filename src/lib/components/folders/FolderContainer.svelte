@@ -100,6 +100,7 @@
 
 <style>
     .list {
+        padding-top: var(--vertical-padding);
         display: flex;
         flex-flow: row wrap;
         align-items: flex-start;

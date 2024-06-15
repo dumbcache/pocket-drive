@@ -91,13 +91,41 @@
 <svelte:window on:keydown={handleKeyDown} />
 
 <section class="wrapper" style:display="">
-    <nav class="nav">
-        <BackButton />
-        <div class="tool-wrapper">
-            <Tools />
-        </div>
+    {#if $mode !== "edit"}
+        <nav class="nav">
+            <BackButton />
+            <div class="tool-wrapper">
+                <Tools />
+            </div>
 
-        <h2 class="folder-name one">
+            <h2 class="folder-name one">
+                {#if $activeParent.id !== getRoot() && $activeParent.parents}
+                    <a
+                        class="title-sub"
+                        title="go to parent"
+                        href={$activeParent.parents[0]}>./</a
+                    >
+                {/if}
+                {$activeParent.name}
+            </h2>
+
+            {#if $editProgress}
+                <div class="loading" on:wheel|preventDefault>
+                    <Spinner
+                        width={"2rem"}
+                        height={"2rem"}
+                        borderWidth={"2px"}
+                    />
+                </div>
+            {/if}
+            <Count
+                count={view === "FOLDER"
+                    ? $folderStore?.files.length
+                    : $fileStore?.files.length}
+            />
+        </nav>
+
+        <h2 class="folder-name two">
             {#if $activeParent.id !== getRoot() && $activeParent.parents}
                 <a
                     class="title-sub"
@@ -107,73 +135,51 @@
             {/if}
             {$activeParent.name}
         </h2>
-
-        {#if $editProgress}
-            <div class="loading" on:wheel|preventDefault>
-                <Spinner width={"2rem"} height={"2rem"} borderWidth={"2px"} />
+        {#if $mode === "search"}
+            <div class="search-wrapper" on:keydown|stopPropagation>
+                <button
+                    title="global"
+                    role="switch"
+                    aria-checked="false"
+                    class="global"
+                    class:active={global}
+                    on:click={() => {
+                        global = !global;
+                        searchElement.focus();
+                    }}>/R</button
+                >
+                <input
+                    type="search"
+                    name="search"
+                    id="search"
+                    autocomplete="off"
+                    autofocus
+                    placeholder="search"
+                    bind:this={searchElement}
+                    bind:value={search}
+                    on:input={handleSearch}
+                    on:change={handleChange}
+                />
             </div>
-        {/if}
-        <Count
-            count={view === "FOLDER"
-                ? $folderStore?.files.length
-                : $fileStore?.files.length}
-        />
-    </nav>
 
-    <h2 class="folder-name two">
-        {#if $activeParent.id !== getRoot() && $activeParent.parents}
-            <a
-                class="title-sub"
-                title="go to parent"
-                href={$activeParent.parents[0]}>./</a
-            >
+            <section class="folder-container">
+                {#if folders && folders.length > 0}
+                    <ol class="list">
+                        {#each folders as folder}
+                            {#key folder.id}
+                                <li data-id={folder.id}>
+                                    <Folder
+                                        {folder}
+                                        toolsVisible={false}
+                                        visible={true}
+                                    />
+                                </li>
+                            {/key}
+                        {/each}
+                    </ol>
+                {/if}
+            </section>
         {/if}
-        {$activeParent.name}
-    </h2>
-    {#if $mode === "search"}
-        <div class="search-wrapper" on:keydown|stopPropagation>
-            <button
-                title="global"
-                role="switch"
-                aria-checked="false"
-                class="global"
-                class:active={global}
-                on:click={() => {
-                    global = !global;
-                    searchElement.focus();
-                }}>/R</button
-            >
-            <input
-                type="search"
-                name="search"
-                id="search"
-                autocomplete="off"
-                autofocus
-                placeholder="search"
-                bind:this={searchElement}
-                bind:value={search}
-                on:input={handleSearch}
-                on:change={handleChange}
-            />
-        </div>
-
-        <section class="folder-container">
-            {#if folders && folders.length > 0}
-                <ol class="list">
-                    {#each folders as folder}
-                        {#key folder.id}
-                            <li data-id={folder.id}>
-                                <Folder
-                                    {folder}
-                                    toolsVisible={false}
-                                    visible={true}
-                                />
-                            </li>
-                        {/key}
-                    {/each}
-                </ol>
-            {/if}
-        </section>
     {/if}
     <main class="main" style:display={$mode === "search" ? "none" : "initial"}>
         <Content

@@ -64,7 +64,9 @@
     --content-column-gap: 2rem;
     --content-row-gap: 2rem;
     --content-gap: var(--content-row-gap) var(--content-column-gap);
-    --content-padding: 3rem 5rem;
+    --vertical-padding: 3rem;
+    --horizontal-padding: 5rem;
+    --content-padding: var(--vertical-padding) var(--horizontal-padding);
 }
 .dark {
     --title-background: linear-gradient(120deg, #bd34fe, #41d1ff, #473aff);
@@ -237,7 +239,7 @@ a {
         --secondary-icon-size: var(--size-small);
         --content-column-gap: 1rem;
         --content-row-gap: 2rem;
-        --content-padding: 3rem 3rem;
+        --horizontal-padding: 3rem;
         --cover-height: 17rem;
         --folder-width: 25rem;
         --file-width: 15rem;
