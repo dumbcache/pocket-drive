@@ -10,7 +10,12 @@
     function favStatus() {
         updateSingle(id, { starred: !starred }, getToken()).then(
             ({ status }) => {
-                if (status === 200) dispatch("fav");
+                if (status === 200) {
+                    dispatch("fav");
+                    // const ele = document.querySelector(`[data-id="${id}"]`);
+                    // let { starred } = ele.dataset;
+                    // ele.dataset.starred = starred === "true" ? "false" : "true";
+                }
             }
         );
     }

@@ -17,6 +17,7 @@
     }
     @media (max-width: 600px) {
         .count {
+            min-width: 4rem;
             border-left-width: 2px;
         }
     }

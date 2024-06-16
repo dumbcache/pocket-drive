@@ -10,6 +10,7 @@
         folderAction,
         folderStore,
         refresh,
+        starred,
     } from "$lib/scripts/stores";
     import editIcon from "$lib/assets/editMode.svg?raw";
     import { mode } from "$lib/scripts/stores";
@@ -17,6 +18,7 @@
     import fileIcon from "$lib/assets/file.svg?raw";
     import searchIcon from "$lib/assets/search.svg?raw";
     import refreshIcon from "$lib/assets/refresh.svg?raw";
+    import favoriteIcon from "$lib/assets/favoriteOutlined.svg?raw";
 
     import {
         FOLDER_MIME_TYPE,
@@ -24,8 +26,17 @@
         IMG_MIME_TYPE,
         getToken,
     } from "$lib/scripts/utils";
+    import { navigating } from "$app/stores";
+    import { onDestroy } from "svelte";
 
     let view: "FILE" | "FOLDER";
+
+    const unsubscribeNavigation = navigating.subscribe((val) => {
+        if (!val) {
+            $starred = false;
+        }
+    });
+
     function imgPickerHandler(e: InputEvent) {
         e.preventDefault();
         const target = e.target as HTMLInputElement;
@@ -36,6 +47,7 @@
     function folderActionClose() {
         folderACtion = undefined;
     }
+
     async function refreshHandler() {
         $refresh = true;
         fileStore.set(
@@ -60,7 +72,11 @@
 
         $refresh = false;
     }
-    activeView.subscribe((data) => (view = data));
+    const unsubscribeView = activeView.subscribe((data) => (view = data));
+    onDestroy(() => {
+        unsubscribeView();
+        unsubscribeNavigation();
+    });
 </script>
 
 <div class="tools">
@@ -128,6 +144,14 @@
     <button
         class="btn s-prime"
         title="refresh folder"
+        class:favorites={$starred}
+        on:click={() => ($starred = !$starred)}
+    >
+        {@html favoriteIcon}
+    </button>
+    <button
+        class="btn s-prime"
+        title="refresh folder"
         on:click={refreshHandler}
     >
         {@html refreshIcon}
@@ -180,9 +204,14 @@
         top: 0;
         left: -0.5rem;
     }
+
+    .favorites :global(svg) {
+        fill: red;
+    }
     @media (max-width: 600px) {
         .tools {
             flex-flow: row nowrap;
+            gap: 0.6rem;
         }
         .active::before {
             width: 100%;

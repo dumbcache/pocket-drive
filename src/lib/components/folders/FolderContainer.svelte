@@ -1,6 +1,6 @@
 <script lang="ts">
     import { onDestroy } from "svelte";
-    import { folderStore, folderAction } from "$lib/scripts/stores";
+    import { folderStore, folderAction, starred } from "$lib/scripts/stores";
     import Folder from "$lib/components/folders/Folder.svelte";
     import { navigating } from "$app/stores";
     import ActionForm from "$lib/components/folders/ActionForm.svelte";
@@ -80,7 +80,13 @@
         <ol class="list" bind:this={container}>
             {#each folders as folder}
                 {#key folder.id}
-                    <li data-id={folder.id}>
+                    <li
+                        data-id={folder.id}
+                        style:display={$starred === true &&
+                        folder.starred === false
+                            ? "none"
+                            : "initial"}
+                    >
                         <Folder {folder} visible={inspectionLog[folder.id]} />
                     </li>
                 {/key}

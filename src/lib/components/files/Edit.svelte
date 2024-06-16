@@ -134,12 +134,6 @@
         >
         <button
             class="btn s-prime"
-            title="move to start"
-            disabled={count === 0}
-            on:click={() => moveToTop()}>{@html startIcon}</button
-        >
-        <button
-            class="btn s-prime"
             title="move"
             disabled={count === 0}
             on:click={() => {
@@ -155,6 +149,12 @@
                 action = "COPY";
                 folderSelectVisible = true;
             }}>{@html copyIcon}</button
+        >
+        <button
+            class="btn s-prime"
+            title="move to start"
+            disabled={count === 0}
+            on:click={() => moveToTop()}>{@html startIcon}</button
         >
         <button
             class="btn s-prime"

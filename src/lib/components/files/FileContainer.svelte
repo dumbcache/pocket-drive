@@ -1,6 +1,6 @@
 <script lang="ts">
     import { onDestroy } from "svelte";
-    import { activeImage, fileStore, mode } from "$lib/scripts/stores";
+    import { activeImage, fileStore, mode, starred } from "$lib/scripts/stores";
     import File from "$lib/components/files/File.svelte";
     import Edit from "$lib/components/files/Edit.svelte";
     import { navigating } from "$app/stores";
@@ -156,8 +156,13 @@
                     <li
                         data-id={file.id}
                         data-size={file.size}
+                        data-starred={file.starred}
                         class:select={allSelected}
                         class:selected={false}
+                        style:display={$starred === true &&
+                        file.starred === false
+                            ? "none"
+                            : "initial"}
                     >
                         <File {file} visible={inspectionLog[file.id]} />
                     </li>
