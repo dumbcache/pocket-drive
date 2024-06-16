@@ -48,7 +48,8 @@
         const eles = document.querySelectorAll(".select");
         eles.forEach((ele) => {
             ele.classList.remove("select");
-            if (e.detail.type === "delete") {
+            let detail = e.detail.type;
+            if (detail === "DELETE" || detail === "MOVE") {
                 ele.style.display = "none";
             }
         });

@@ -38,7 +38,7 @@
         });
         confirm = false;
         $editProgress = true;
-        close("delete");
+        close("DELETE");
     }
 
     function moveToTop() {
@@ -65,8 +65,8 @@
             files: set,
             token: getToken(),
         });
+        close(action);
         action = "";
-        close();
     }
     function folderSelectClose() {
         folderSelectVisible = false;

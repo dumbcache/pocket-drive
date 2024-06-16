@@ -557,7 +557,7 @@ if (browser) {
                 aParent = data.activeParent;
                 set = new Set(data?.set);
                 if (aParent === get(activeParent).id) {
-                    fileStore.update((prev) => ({
+                    tempFileStore.update((prev) => ({
                         nextPageToken: prev?.nextPageToken,
                         files: prev?.files.filter((file) => !set.has(file.id)),
                     }));
