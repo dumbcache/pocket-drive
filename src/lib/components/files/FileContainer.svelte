@@ -20,6 +20,7 @@
     let allSelected = false;
     let set = new Set<string>();
     let count = 0;
+    let memory = 0;
 
     $: foot && observer?.observe(foot);
 
@@ -55,13 +56,18 @@
         });
         allSelected = false;
         count = 0;
+        memory = 0;
         set.clear();
     }
 
     function selectAllAction() {
         allSelected = !allSelected;
+        memory = 0;
         if (allSelected) {
-            files?.forEach((file) => set.add(file.id));
+            files?.forEach((file) => {
+                set.add(file.id);
+                memory += Number(file.size);
+            });
             count = set.size;
             return;
         }
@@ -73,18 +79,20 @@
         let eles = e.composedPath();
         let [target] = eles.filter((ele) => ele.localName === "li");
         if (!target) return;
-        let { id } = target?.dataset;
+        let { id, size } = target?.dataset;
         if (!id) return;
         switch (get(mode)) {
             case "edit":
                 if (set.has(id)) {
                     set.delete(id);
                     count--;
+                    size && (memory -= Number(size));
                     target.classList.toggle("select");
                     return;
                 }
                 set.add(id);
                 count++;
+                size && (memory += Number(size));
                 target.classList.toggle("select");
                 return;
 
@@ -131,6 +139,7 @@
             {set}
             {count}
             on:close={editCloseAction}
+            {memory}
             on:selectAll={selectAllAction}
         />
     {/if}
@@ -146,6 +155,7 @@
                 {#key file.id}
                     <li
                         data-id={file.id}
+                        data-size={file.size}
                         class:select={allSelected}
                         class:selected={false}
                     >

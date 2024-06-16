@@ -25,10 +25,7 @@
             description = data.description;
             id = data.id;
             size = data.size;
-            size =
-                size > 1024 * 1024
-                    ? `${(size / (1024 * 1024)).toFixed()} MB`
-                    : `${(size / 1024).toFixed()} KB`;
+            size = `${(size / (1024 * 1024)).toFixed(2)} MB`;
             invalid = false;
             changes = false;
         });

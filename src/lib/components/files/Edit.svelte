@@ -12,7 +12,9 @@
     import { childWorker, getToken, isValidUrl } from "$lib/scripts/utils";
     import { createEventDispatcher } from "svelte";
 
-    export let set: Set, count: Number;
+    export let set: Set,
+        count: Number,
+        memory: Number = 0;
 
     let action = "";
     let folderSelectVisible = false;
@@ -107,6 +109,11 @@
 
 <div class="edit-buttons">
     {#if confirm}
+        <p class="memory">
+            Size: <span>
+                {(memory / (1024 * 1024)).toFixed(2)} MB
+            </span>
+        </p>
         <button class="cancel action" on:click={() => (confirm = false)}
             >cancel</button
         >
@@ -279,6 +286,20 @@
         border-bottom: 2px solid #f00;
     }
 
+    .memory {
+        font-size: 1.3rem;
+        color: var(--bg-color);
+        word-wrap: nowrap;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 100%;
+    }
+
+    .memory span {
+        /* color: #0f0; */
+    }
+
     .action {
         width: 7rem;
         padding: 0.5rem;
@@ -313,6 +334,12 @@
             padding: 1rem 0rem;
             gap: 1rem;
             justify-content: space-evenly;
+        }
+
+        .action {
+            padding: 0.3rem;
+            font-size: 1.4rem;
+            width: fit-content;
         }
     }
 </style>
