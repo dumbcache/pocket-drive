@@ -2,7 +2,6 @@
     import { goto } from "$app/navigation";
     import FolderCover from "$lib/components/folders/FolderCover.svelte";
     import { IMG_MIME_TYPE, fetchMultiple, getToken } from "$lib/scripts/utils";
-    import { storeSnap, pocketStore } from "$lib/scripts/stores";
     import Favorite from "../utils/Favorite.svelte";
 
     export let visible: Boolean;

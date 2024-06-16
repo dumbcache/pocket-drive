@@ -658,12 +658,12 @@ if (browser) {
 
             case "PROGRESS":
                 if (data.type === "DELETE" || data.type === "MOVE") {
+                    let ele = document.querySelector(`[data-id="${data.id}"]`);
                     if (data.status === 1) {
-                        document
-                            .querySelector(`[data-id="${data.id}"]`)
-                            ?.remove();
+                        ele?.remove();
                         return;
                     }
+                    ele.style.display = "initial";
                 }
                 if (data.type === "DROP") {
                     let dropItem = document.querySelector(

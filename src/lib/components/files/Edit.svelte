@@ -24,9 +24,9 @@
 
     const dispatch = createEventDispatcher();
 
-    function close() {
+    function close(type?: string) {
         $mode = "";
-        dispatch("close");
+        dispatch("close", { type });
     }
 
     function deleteAction() {
@@ -38,7 +38,7 @@
         });
         confirm = false;
         $editProgress = true;
-        close();
+        close("delete");
     }
 
     function moveToTop() {
@@ -91,7 +91,7 @@
         e.target.name = "url" && checkValid();
     }
     function checkValid() {
-        if (description.trim() === "") {
+        if (description?.trim() === "") {
             invalid = false;
             return;
         }
@@ -241,6 +241,7 @@
         place-content: center;
         backdrop-filter: blur(1rem);
         -webkit-backdrop-filter: blur(1rem);
+        z-index: 1;
     }
 
     .edit-form {
@@ -252,7 +253,6 @@
         padding: 3rem;
         gap: 1rem;
         border-radius: 1rem;
-        z-index: 1;
     }
     input {
         background: unset;

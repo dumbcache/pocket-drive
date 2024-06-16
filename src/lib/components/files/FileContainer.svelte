@@ -44,12 +44,17 @@
         childObserver?.disconnect();
     });
 
-    function editCloseAction() {
+    function editCloseAction(e) {
+        const eles = document.querySelectorAll(".select");
+        eles.forEach((ele) => {
+            ele.classList.remove("select");
+            if (e.detail.type === "delete") {
+                ele.style.display = "none";
+            }
+        });
         allSelected = false;
         count = 0;
         set.clear();
-        const eles = document.querySelectorAll(".select");
-        eles.forEach((ele) => ele.classList.remove("select"));
     }
 
     function selectAllAction() {
@@ -137,7 +142,11 @@
         >
             {#each files as file}
                 {#key file.id}
-                    <li data-id={file.id} class:select={allSelected}>
+                    <li
+                        data-id={file.id}
+                        class:select={allSelected}
+                        class:selected={false}
+                    >
                         <File {file} visible={inspectionLog[file.id]} />
                     </li>
                 {/key}
@@ -165,6 +174,10 @@
         box-shadow: 0 0 5px 1px #fff5;
         filter: brightness(0.3);
     }
+    /* .selected :global(.card) {
+        box-shadow: 0 0 5px 1px #fff5;
+        filter: brightness(0.3);
+    } */
 
     .select {
         border-bottom: 5px solid var(--color-light-blue);

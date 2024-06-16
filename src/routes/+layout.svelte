@@ -25,7 +25,11 @@
 </script>
 
 {#if $navigating || $progress || $refresh}
-    <div class="loading" on:wheel|preventDefault>
+    <div
+        class="loading"
+        on:wheel|preventDefault|stopPropagation
+        on:scroll|preventDefault|stopPropagation
+    >
         <Spinner />
     </div>
 {/if}
