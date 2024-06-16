@@ -307,7 +307,7 @@
         display: none;
     }
     .three {
-        min-width: 40rem;
+        min-width: 30rem;
     }
     .file {
         width: 100%;
@@ -416,7 +416,7 @@
             display: none;
         }
     }
-    @media (orientation: landscape) {
+    @media (max-width: 600px) and (orientation: landscape) {
         #view {
             padding: 2.5rem;
         }
