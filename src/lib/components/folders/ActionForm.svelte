@@ -116,6 +116,7 @@
     });
 </script>
 
+<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 <form
     class="create"
     on:click={() => progress || close()}
@@ -123,6 +124,7 @@
     on:submit|preventDefault={applyAction}
     on:wheel|preventDefault
 >
+    <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
     <label
         class="wrapper"
         for="dir-name"

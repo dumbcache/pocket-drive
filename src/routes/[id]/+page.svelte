@@ -136,7 +136,8 @@
             {$activeParent.name}
         </h2>
         {#if $mode === "search"}
-            <div class="search-wrapper" on:keydown|stopPropagation>
+            <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+            <div class="search-wrapper" role="form" on:keydown|stopPropagation>
                 <button
                     title="global"
                     role="switch"
@@ -148,6 +149,7 @@
                         searchElement.focus();
                     }}>/R</button
                 >
+                <!-- svelte-ignore a11y-autofocus -->
                 <input
                     type="search"
                     name="search"

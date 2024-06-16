@@ -18,6 +18,7 @@
     onDestroy(() => {});
 </script>
 
+<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 <dialog id="dialog" bind:this={dialog} on:keydown={handleKeyDown}>
     <slot />
 </dialog>

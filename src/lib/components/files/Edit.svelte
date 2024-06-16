@@ -169,7 +169,9 @@
     />
 {/if}
 {#if action === "EDIT"}
+    <!-- svelte-ignore a11y-no-static-element-interactions -->
     <div class="edit-form-wrapper" on:keydown on:click={() => (action = "")}>
+        <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
         <form
             class="edit-form"
             on:keydown|stopPropagation

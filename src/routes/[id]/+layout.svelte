@@ -66,6 +66,7 @@
 />
 
 <div
+    role="group"
     class="layout {draggedOver === true ? 'dragover' : ''}"
     on:dragstart|preventDefault
     on:dragover|preventDefault={(e) => {

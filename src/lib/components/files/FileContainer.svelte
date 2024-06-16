@@ -134,6 +134,7 @@
         />
     {/if}
     {#if files && files.length > 0}
+        <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
         <ol
             class="list"
             bind:this={container}

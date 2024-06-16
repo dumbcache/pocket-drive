@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { createEventDispatcher, onMount } from "svelte";
+    import { createEventDispatcher } from "svelte";
     import doneIcon from "$lib/assets/done.svg?raw";
     import beforeIcon from "$lib/assets/beforeNavigate.svg?raw";
     import {
@@ -109,6 +109,7 @@
     }
 </script>
 
+<!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
     class="move"
     on:keydown|stopPropagation
@@ -118,6 +119,7 @@
     }}
 >
     {#if !$progress}
+        <!-- svelte-ignore a11y-no-static-element-interactions -->
         <div
             class="wrapper"
             on:click|stopPropagation={() => (listVisible = false)}
@@ -156,6 +158,7 @@
                         on:click={okHandler}>{@html doneIcon}</button
                     >
                     {#if listVisible}
+                        <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
                         <ol
                             class="list"
                             on:keydown
