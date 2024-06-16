@@ -12,7 +12,6 @@ import {
     activeParent,
     recentStore,
     dropItems,
-    previewLoading,
     editProgress,
     pocketStore,
     imageCache,
@@ -504,7 +503,7 @@ export function setPreviewFile(id: string, url: string) {
             ele.src = url;
         }, 1000);
     }
-    previewLoading.set(false);
+    ele.nextElementSibling.style.display = "none";
 }
 
 if (browser) {

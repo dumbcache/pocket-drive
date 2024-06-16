@@ -6,7 +6,6 @@
         imageCache,
         imageFetchLog,
         mode,
-        previewLoading,
     } from "$lib/scripts/stores";
     import closeIcon from "$lib/assets/close.svg?raw";
     import infoIcon from "$lib/assets/arrowLeftDouble.svg?raw";
@@ -137,7 +136,9 @@
                             }
                             if (!imageCache.has(id)) {
                                 if (!imageFetchLog.has(id)) {
-                                    $previewLoading = true;
+                                    // $previewLoading = true;
+                                    target.nextElementSibling.style.display =
+                                        "initial";
                                     fetchImgPreview(id);
                                     imageFetchLog.add(id);
                                     return;
@@ -231,6 +232,9 @@
                             playsinline
                         ></video>
                     {/if}
+                    <div class="spinner">
+                        <Spinner borderWidth="2px" width="1rem" height="1rem" />
+                    </div>
                 </div>
             {/each}
         </section>
@@ -243,11 +247,11 @@
     <button class="btn s-prime close" on:click={handleViewClose}
         >{@html closeIcon}</button
     >
-    {#if $previewLoading}
+    <!-- {#if $previewLoading}
         <div class="spinner">
             <Spinner borderWidth="2px" width="1rem" height="1rem" />
         </div>
-    {/if}
+    {/if} -->
     <div class="action">
         {#if !infoVisible}
             <button
@@ -343,6 +347,7 @@
         z-index: 10;
         top: 2.7rem;
         right: 13rem;
+        display: none;
     }
 
     .action {
