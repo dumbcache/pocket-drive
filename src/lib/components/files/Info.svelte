@@ -15,6 +15,8 @@
     let id: string = $activeImage.id;
     let name: string = $activeImage.name;
     let description: string = $activeImage.description;
+    let size: number = $activeImage.size;
+
     let invalid = false;
     let changes = true;
     onMount(() => {
@@ -22,6 +24,11 @@
             name = data.name;
             description = data.description;
             id = data.id;
+            size = data.size;
+            size =
+                size > 1024 * 1024
+                    ? `${(size / (1024 * 1024)).toFixed()} MB`
+                    : `${(size / 1024).toFixed()} KB`;
             invalid = false;
             changes = false;
         });
@@ -87,8 +94,11 @@
             >{@html closeIcon}</button
         >
     </header>
-    <p class="id" title="id">{id}</p>
 
+    <p class="id" title="id">{id}</p>
+    <p class="size" title="size">
+        {size}
+    </p>
     <input
         type="text"
         name="name"
@@ -164,7 +174,8 @@
     .invalid:focus {
         border-bottom: 2px solid #f00;
     }
-    .id {
+    .id,
+    .size {
         color: var(--bg-color-five);
         word-wrap: nowrap;
         white-space: nowrap;
