@@ -42,9 +42,24 @@
 
     async function fetchChildren(id: string) {
         tempFolderStore = await fetchMultiple(
-            { parent: id, mimeType: FOLDER_MIME_TYPE, pageSize: 1000 },
+            { parent: id, mimeType: FOLDER_MIME_TYPE, pageSize: 500 },
             accessToken
         );
+        while (tempFolderStore.nextPageToken) {
+            let f = await fetchMultiple(
+                {
+                    parent: id,
+                    mimeType: FOLDER_MIME_TYPE,
+                    pageSize: 500,
+                    pageToken: tempFolderStore.nextPageToken,
+                },
+                accessToken
+            );
+            tempFolderStore = {
+                files: [...tempFolderStore.files, ...f.files],
+                nextPageToken: f.nextPageToken,
+            };
+        }
         if (type === "FOLDER") {
             if (selectedId === $activeParent.id) {
                 tempFolderStore.files = tempFolderStore.files?.filter(
