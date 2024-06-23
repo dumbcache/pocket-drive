@@ -133,7 +133,7 @@
             gap: 0.5rem;
         }
         .title {
-            /* writing-mode: initial; */
+            writing-mode: initial;
             display: initial;
         }
         .title-wrapper :global(.back-button) {

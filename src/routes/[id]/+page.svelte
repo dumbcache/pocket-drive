@@ -17,6 +17,7 @@
     import { getRoot, getToken, searchHandler } from "$lib/scripts/utils";
     import Spinner from "$lib/components/utils/Spinner.svelte";
     import BackButton from "$lib/components/utils/BackButton.svelte";
+    import scrollDown from "$lib/assets/arrowLeftDouble.svg?raw";
 
     let view = $activeView;
     let global = false;
@@ -24,7 +25,11 @@
     let folders: Folder[] = [];
     let searchElement: HTMLInputElement;
     let token = getToken();
+    let isScrolling = false;
     let searchTimeout;
+    let scrollTimeout;
+    let scrollPosition = window.scrollY;
+    let delta = 0;
     const unsubscribeNavigation = navigating.subscribe((val) => {
         $mode = "";
         if (!val) {
@@ -87,9 +92,19 @@
                 return;
         }
     }
+    function handleScroll(e) {
+        let currentScrollPosition = window.scrollY;
+        delta = currentScrollPosition - scrollPosition;
+        scrollPosition = currentScrollPosition;
+        isScrolling = true;
+        clearTimeout(scrollTimeout);
+        scrollTimeout = setTimeout(() => {
+            isScrolling = false;
+        }, 1500);
+    }
 </script>
 
-<svelte:window on:keydown={handleKeyDown} />
+<svelte:window on:keydown={handleKeyDown} on:scroll={handleScroll} />
 
 <section class="wrapper" style:display="">
     {#if $mode !== "edit"}
@@ -192,6 +207,23 @@
                 : $fileStore?.files.length}
         />
     </main>
+    <button
+        class="scroll btn s-prime"
+        class:up={delta < 0}
+        class:down={delta > 0}
+        style:display={isScrolling ? "initial" : "none"}
+        on:click={() => {
+            delta > 0
+                ? window.scrollTo({
+                      top: document.body.scrollHeight,
+                      behavior: "instant",
+                  })
+                : window.scrollTo({
+                      top: 0,
+                      behavior: "instant",
+                  });
+        }}>{@html scrollDown}</button
+    >
 </section>
 
 <style>
@@ -270,6 +302,21 @@
         color: #f00;
         /* background-color: var(--bg-color-three); */
     }
+
+    .down {
+        rotate: -90deg;
+    }
+    .up {
+        rotate: 90deg;
+    }
+    .scroll {
+        position: fixed;
+        bottom: 5rem;
+        right: 5rem;
+        background-color: var(--primary-bg-color);
+        border-radius: 50%;
+        box-shadow: 0 0 1px 1px var(--primary-color);
+    }
     #search {
         width: 100%;
         max-width: 30rem;
@@ -329,6 +376,11 @@
 
         .folder-name {
             padding: 0.5rem;
+        }
+
+        .scroll {
+            right: 2rem;
+            bottom: 2rem;
         }
     }
 </style>
