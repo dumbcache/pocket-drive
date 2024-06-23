@@ -67,6 +67,7 @@
     .title {
         writing-mode: vertical-lr;
         font-family: var(--font-lato);
+        /* display: none; */
     }
 
     .title-wrapper :global(.back-button) {
@@ -83,7 +84,7 @@
         border-right: 1px solid var(--color-file-border);
         width: fit-content;
         height: 100vh;
-        padding: 1rem 2.5rem;
+        padding: 1rem 4rem;
     }
     .wrapper {
         display: flex;
@@ -132,7 +133,8 @@
             gap: 0.5rem;
         }
         .title {
-            writing-mode: initial;
+            /* writing-mode: initial; */
+            display: initial;
         }
         .title-wrapper :global(.back-button) {
             display: initial;
