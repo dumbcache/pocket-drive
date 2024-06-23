@@ -80,7 +80,7 @@
         width: var(--folder-width);
         height: var(--cover-height);
         grid-template-rows: 60% 40%;
-        grid-template-columns: 70% 30%;
+        grid-template-columns: 65% 35%;
         grid-template-areas:
             "one two"
             "one three";

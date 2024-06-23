@@ -58,12 +58,7 @@
     }
 </script>
 
-<svelte:window
-    on:offline={() => {
-        window.alert("You're offline");
-    }}
-    on:keydown
-/>
+<svelte:window on:keydown />
 
 <div
     role="group"
