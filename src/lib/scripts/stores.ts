@@ -103,4 +103,4 @@ export class LRUCache {
     }
 }
 
-export let imageCache = new LRUCache(20);
+export let imageCache = new LRUCache(50);
