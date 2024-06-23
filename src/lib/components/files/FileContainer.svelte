@@ -112,9 +112,13 @@
             (entries) => {
                 entries.forEach((entry) => {
                     if (entry.isIntersecting) {
-                        let { id } = entry.target.dataset;
-                        inspectionLog[id] = true;
-                        childObserver.unobserve(entry.target);
+                        entry.target.timeoutid = setTimeout(() => {
+                            let { id } = entry.target.dataset;
+                            inspectionLog[id] = true;
+                            childObserver.unobserve(entry.target);
+                        }, 1000);
+                    } else {
+                        clearTimeout(entry.target.timeoutid);
                     }
                 });
             },
