@@ -116,7 +116,7 @@
                             let { id } = entry.target.dataset;
                             inspectionLog[id] = true;
                             childObserver.unobserve(entry.target);
-                        }, 1000);
+                        }, 700);
                     } else {
                         clearTimeout(entry.target.timeoutid);
                     }

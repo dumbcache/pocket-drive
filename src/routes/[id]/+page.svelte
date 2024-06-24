@@ -313,9 +313,15 @@
         position: fixed;
         bottom: 5rem;
         right: 5rem;
-        background-color: var(--primary-bg-color);
+        border-radius: 50%;
+        /* box-shadow: 0 0 1px 1px var(--primary-color); */
+        box-sizing: content-box;
+        padding: 1rem;
+    }
+    .scroll :global(svg) {
         border-radius: 50%;
         box-shadow: 0 0 1px 1px var(--primary-color);
+        background-color: var(--primary-bg-color);
     }
     #search {
         width: 100%;
