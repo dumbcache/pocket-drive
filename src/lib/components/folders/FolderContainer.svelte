@@ -82,18 +82,15 @@
 >
     {#if folders && folders.length > 0}
         <ol class="list" bind:this={container}>
-            {#each folders as folder}
-                {#key folder.id}
-                    <li
-                        data-id={folder.id}
-                        style:display={$starred === true &&
-                        folder.starred === false
-                            ? "none"
-                            : "initial"}
-                    >
-                        <Folder {folder} visible={inspectionLog[folder.id]} />
-                    </li>
-                {/key}
+            {#each folders as folder (folder.id)}
+                <li
+                    data-id={folder.id}
+                    style:display={$starred === true && folder.starred === false
+                        ? "none"
+                        : "initial"}
+                >
+                    <Folder {folder} visible={inspectionLog[folder.id]} />
+                </li>
             {/each}
         </ol>
         <div id="folder-foot" bind:this={foot}></div>

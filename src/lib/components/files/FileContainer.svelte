@@ -155,22 +155,19 @@
             on:click={handleImageClick}
             on:keydown
         >
-            {#each files as file}
-                {#key file.id}
-                    <li
-                        data-id={file.id}
-                        data-size={file.size}
-                        data-starred={file.starred}
-                        class:select={allSelected}
-                        class:selected={false}
-                        style:display={$starred === true &&
-                        file.starred === false
-                            ? "none"
-                            : "initial"}
-                    >
-                        <File {file} visible={inspectionLog[file.id]} />
-                    </li>
-                {/key}
+            {#each files as file (file.id)}
+                <li
+                    data-id={file.id}
+                    data-size={file.size}
+                    data-starred={file.starred}
+                    class:select={allSelected}
+                    class:selected={false}
+                    style:display={$starred === true && file.starred === false
+                        ? "none"
+                        : "initial"}
+                >
+                    <File {file} visible={inspectionLog[file.id]} />
+                </li>
             {/each}
         </ol>
         <div id="file-foot" bind:this={foot}></div>

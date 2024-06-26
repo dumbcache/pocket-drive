@@ -44,10 +44,11 @@
     });
     const unsubscribeView = activeView.subscribe((data) => (view = data));
     const unsubscribeMode = mode.subscribe((data) => {
-        data === "search" && (folders = [...$folderStore?.files]);
+        // data === "search" && (folders = [...$folderStore?.files]);
         if (data === "") {
             search = "";
             global = false;
+            folders = [];
         }
     });
     onDestroy(() => {
@@ -57,25 +58,28 @@
     });
     async function handleChange() {
         if (search.trim() === "") {
-            folders = [...$folderStore?.files];
+            // folders = [...$folderStore?.files];
+            folders = [];
             return;
         }
     }
     function handleSearch() {
-        if (search.trim() === "") {
-            folders = [...$folderStore?.files];
-            return;
-        }
-        if (global) {
-            clearTimeout(searchTimeout);
-            searchTimeout = setTimeout(async () => {
-                folders = await searchHandler(token, search.trim());
-            }, 500);
-            return;
-        }
-        folders = $folderStore?.files.filter((folder) =>
-            folder.name.toLowerCase().includes(search.toLowerCase())
-        );
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(async () => {
+            let val = search.trim();
+            if (val === "") {
+                // folders = [...$folderStore?.files];
+                folders = [];
+                return;
+            }
+            if (global) {
+                folders = await searchHandler(token, val);
+                return;
+            }
+            folders = $folderStore?.files.filter((folder) =>
+                folder.name.toLowerCase().includes(val.toLowerCase())
+            );
+        }, 500);
     }
 
     function handleKeyDown(e: KeyboardEvent) {
@@ -163,6 +167,7 @@
                     on:click={() => {
                         global = !global;
                         searchElement.focus();
+                        handleSearch();
                     }}>/R</button
                 >
                 <!-- svelte-ignore a11y-autofocus -->
@@ -172,7 +177,7 @@
                     id="search"
                     autocomplete="off"
                     autofocus
-                    placeholder="search"
+                    placeholder="search folders"
                     bind:this={searchElement}
                     bind:value={search}
                     on:input={handleSearch}
@@ -183,18 +188,18 @@
             <section class="folder-container">
                 {#if folders && folders.length > 0}
                     <ol class="list">
-                        {#each folders as folder}
-                            {#key folder.id}
-                                <li data-id={folder.id}>
-                                    <Folder
-                                        {folder}
-                                        toolsVisible={false}
-                                        visible={true}
-                                    />
-                                </li>
-                            {/key}
+                        {#each folders as folder (folder.id)}
+                            <li data-id={folder.id}>
+                                <Folder
+                                    {folder}
+                                    toolsVisible={false}
+                                    visible={true}
+                                />
+                            </li>
                         {/each}
                     </ol>
+                {:else}
+                    <p class="no-content">No Content</p>
                 {/if}
             </section>
         {/if}
@@ -348,6 +353,19 @@
         padding: 2rem 0rem;
     }
 
+    .no-content {
+        display: flex;
+        flex-flow: column nowrap;
+        gap: 0.5rem;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: #555;
+        text-align: center;
+        user-select: none;
+    }
+
     @media (max-width: 600px) {
         .wrapper {
             padding: 0rem 0.5rem;
@@ -378,6 +396,7 @@
         #search,
         .global {
             padding: 0.7rem;
+            width: fit-content;
         }
 
         .folder-name {
@@ -387,6 +406,9 @@
         .scroll {
             right: 2rem;
             bottom: 2rem;
+        }
+        .no-content {
+            font-size: smaller;
         }
     }
 </style>

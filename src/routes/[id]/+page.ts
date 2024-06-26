@@ -55,11 +55,12 @@ export const load = (async ({ params, fetch }) => {
             pocketState.set(id);
             return loadContent(id);
         }
-        let data = await fetchSingle(id, "FOLDER", getToken());
-        activeParent.set({
-            id: data.id,
-            name: data.name,
-            parents: data.parents,
+        fetchSingle(id, "FOLDER", getToken()).then((data) => {
+            activeParent.set({
+                id: data.id,
+                name: data.name,
+                parents: data.parents,
+            });
         });
         pocketState.set(id);
         return loadContent(id);
