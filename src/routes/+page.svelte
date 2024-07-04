@@ -44,7 +44,7 @@
         width: fit-content;
         margin: auto;
         font-size: 8rem;
-        font-weight: 900;
+        /* font-weight: 900; */
         font-family: var(--font-lato);
         background: var(--title-background);
         background-clip: text;
@@ -69,7 +69,7 @@
         }
 
         .title {
-            font-size: 12vw;
+            font-size: 15vw;
         }
         .sub {
             font-size: 1.3rem;
