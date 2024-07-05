@@ -18,25 +18,25 @@
     <button
         class="btn s-second action"
         title="edit folder"
-        on:click|stopPropagation={() => handler("EDIT")}
+        on:click|stopPropagation|preventDefault={() => handler("EDIT")}
     >
         {@html editIcon}
     </button>
     <button
         class="btn s-second action"
         title="move folder"
-        on:click|stopPropagation={() => handler("MOVE")}
+        on:click|stopPropagation|preventDefault={() => handler("MOVE")}
     >
         {@html moveIcon}
     </button>
     <button
         class="btn s-second action"
         title="delete folder"
-        on:click|stopPropagation={() => handler("DELETE")}
+        on:click|stopPropagation|preventDefault={() => handler("DELETE")}
     >
         {@html deleteIcon}
     </button>
-    <button class="btn s-second expand" on:click|stopPropagation>
+    <button class="btn s-second expand" on:click|stopPropagation|preventDefault>
         {@html expandIcon}
     </button>
 </div>
