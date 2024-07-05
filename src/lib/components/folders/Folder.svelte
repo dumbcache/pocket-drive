@@ -15,13 +15,7 @@
 >
     <!-- on:mouseleave={closePeak}
     on:mouseenter={displayPeak} -->
-    <FolderCover
-        id={folder.id}
-        name={folder.name}
-        starred={folder.starred}
-        {toolsVisible}
-        {visible}
-    />
+    <FolderCover id={folder.id} name={folder.name} {toolsVisible} {visible} />
     <div class="title-wrapper">
         <h2 class="folder-title" title={folder.name}>{folder.name}</h2>
         <div class="favorite">

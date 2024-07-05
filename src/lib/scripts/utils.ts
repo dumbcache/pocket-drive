@@ -5,7 +5,6 @@ import {
     activeTimeout,
     dataCacheName,
     sessionTimeout,
-    activeImage,
     mode,
     activeView,
     fileStore,
@@ -234,7 +233,7 @@ export function constructRequest(
         `&orderBy=` +
         (mimeType === FOLDER_MIME_TYPE ? "name" : "createdTime desc");
     let t = Boolean(pageToken) === true ? `&pageToken=${pageToken}` : "";
-    let url = `${FILE_API}?${q}${f}${p}${o}${t}`;
+    let url = `${FILE_API}?${q}${f}${o}${t}${p}`;
 
     const req = new Request(url, {
         method: "GET",

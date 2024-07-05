@@ -31,11 +31,6 @@
             previewAndSetDropItems(files, id, name);
         }
     }
-
-    function dirNavigate(e: MouseEvent) {
-        storeSnap();
-        goto(`/${id}`);
-    }
 </script>
 
 <a
@@ -66,7 +61,7 @@
     {/if}
     {#if toolsVisible}
         <div class="edit">
-            <ActionButtons type="dir" {id} {name} />
+            <ActionButtons {id} {name} />
         </div>
     {/if}
 </a>

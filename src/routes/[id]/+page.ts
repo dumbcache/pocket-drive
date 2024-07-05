@@ -10,9 +10,6 @@ import {
 } from "$lib/scripts/utils";
 import { goto } from "$app/navigation";
 import {
-    activeParent,
-    fileStore,
-    folderStore,
     isLoggedin,
     sessionTimeout,
     pocketStore,
@@ -23,15 +20,15 @@ import { get } from "svelte/store";
 
 async function loadContent(parent: string) {
     if (pocketStore.has(parent)) {
-        const { folders, files } = pocketStore.get(parent);
-        folderStore.set(folders);
-        fileStore.set(files);
-        return;
+        const data = pocketStore.get(parent);
+        return { ...data, parent };
     }
     const [folders, files] = await loadAll(parent, getToken());
-    folderStore.set(folders);
-    fileStore.set(files);
-    return;
+    pocketStore.set(parent, {
+        folders,
+        files,
+    });
+    return { folders, files, parent };
 }
 
 export const load = (async ({ params, fetch }) => {
@@ -52,18 +49,8 @@ export const load = (async ({ params, fetch }) => {
         if (id === HOME_PATH) {
             id = window.localStorage.getItem("root");
             if (!id) id = await getRootFolder(getToken());
-            activeParent.set({ name: "#Pocket_Drive", id });
-            pocketState.set(id);
-            return loadContent(id);
         }
-        fetchSingle(id, "FOLDER", getToken()).then((data) => {
-            activeParent.set({
-                id: data.id,
-                name: data.name,
-                parents: data.parents,
-            });
-        });
-        pocketState.set(id);
+        fetchSingle(id, "FOLDER", getToken());
         return loadContent(id);
     }
 }) satisfies PageLoad;

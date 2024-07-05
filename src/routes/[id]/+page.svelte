@@ -1,6 +1,7 @@
 <script lang="ts">
     import { onDestroy } from "svelte";
     import { navigating } from "$app/stores";
+    import { afterNavigate, beforeNavigate } from "$app/navigation";
     import {
         activeParent,
         activeView,
@@ -8,24 +9,35 @@
         fileStore,
         folderStore,
         mode,
+        pocketState,
+        storeSnap,
         tempFileStore,
     } from "$lib/scripts/stores";
     import Content from "$lib/components/Content.svelte";
     import Tools from "$lib/components/Tools.svelte";
     import Count from "$lib/components/utils/Count.svelte";
     import Folder from "$lib/components/folders/Folder.svelte";
-    import { getRoot, getToken, searchHandler } from "$lib/scripts/utils";
+    import {
+        fetchSingle,
+        getRoot,
+        getToken,
+        searchHandler,
+    } from "$lib/scripts/utils";
     import Spinner from "$lib/components/utils/Spinner.svelte";
     import BackButton from "$lib/components/utils/BackButton.svelte";
     import scrollDown from "$lib/assets/arrowLeftDouble.svg?raw";
 
-    export let data;
-    $: console.log(data);
-
+    export let data: {
+        folders: GoogleFileResponse;
+        files: GoogleFileResponse;
+        parent: string;
+    };
+    $: folderStore.set(data.folders);
+    $: fileStore.set(data.files);
     let view = $activeView;
     let global = false;
     let search = "";
-    let folders: Folder[] = [];
+    let searchFolders: Folder[] = [];
     let searchElement: HTMLInputElement;
     let token = getToken();
     let isScrolling = false;
@@ -51,18 +63,13 @@
         if (data === "") {
             search = "";
             global = false;
-            folders = [];
+            searchFolders = [];
         }
-    });
-    onDestroy(() => {
-        unsubscribeView();
-        unsubscribeNavigation();
-        unsubscribeMode();
     });
     async function handleChange() {
         if (search.trim() === "") {
             // folders = [...$folderStore?.files];
-            folders = [];
+            searchFolders = [];
             return;
         }
     }
@@ -72,14 +79,14 @@
             let val = search.trim();
             if (val === "") {
                 // folders = [...$folderStore?.files];
-                folders = [];
+                searchFolders = [];
                 return;
             }
             if (global) {
-                folders = await searchHandler(token, val);
+                searchFolders = await searchHandler(token, val);
                 return;
             }
-            folders = $folderStore?.files.filter((folder) =>
+            searchFolders = $folderStore?.files.filter((folder) =>
                 folder.name.toLowerCase().includes(val.toLowerCase())
             );
         }, 500);
@@ -109,6 +116,28 @@
             isScrolling = false;
         }, 1500);
     }
+
+    afterNavigate(async () => {
+        let parent = data.parent;
+        fetchSingle(parent, "FOLDER", getToken()).then((data) => {
+            activeParent.set({
+                id: data.id,
+                name: data.name,
+                parents: data.parents,
+            });
+        });
+        pocketState.set(parent);
+    });
+
+    beforeNavigate(() => {
+        storeSnap();
+    });
+
+    onDestroy(() => {
+        unsubscribeView();
+        unsubscribeNavigation();
+        unsubscribeMode();
+    });
 </script>
 
 <svelte:window on:keydown={handleKeyDown} on:scroll={handleScroll} />
@@ -122,14 +151,14 @@
             </div>
 
             <h2 class="folder-name one">
-                {#if $activeParent.id !== getRoot() && $activeParent.parents}
+                {#if $activeParent?.id !== getRoot() && $activeParent?.parents}
                     <a
                         class="title-sub"
                         title="go to parent"
-                        href={$activeParent.parents[0]}>./</a
+                        href={$activeParent?.parents[0]}>./</a
                     >
                 {/if}
-                {$activeParent.name}
+                {$activeParent?.name}
             </h2>
 
             {#if $editProgress}
@@ -149,14 +178,14 @@
         </nav>
 
         <h2 class="folder-name two">
-            {#if $activeParent.id !== getRoot() && $activeParent.parents}
+            {#if $activeParent?.id !== getRoot() && $activeParent?.parents}
                 <a
                     class="title-sub"
                     title="go to parent"
-                    href={$activeParent.parents[0]}>./</a
+                    href={$activeParent?.parents[0]}>./</a
                 >
             {/if}
-            {$activeParent.name}
+            {$activeParent?.name}
         </h2>
         {#if $mode === "search"}
             <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
@@ -189,9 +218,9 @@
             </div>
 
             <section class="folder-container">
-                {#if folders && folders.length > 0}
+                {#if searchFolders && searchFolders.length > 0}
                     <ol class="list">
-                        {#each folders as folder (folder.id)}
+                        {#each searchFolders as folder (folder.id)}
                             <li data-id={folder.id}>
                                 <Folder
                                     {folder}

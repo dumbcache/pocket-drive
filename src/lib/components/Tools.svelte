@@ -157,7 +157,7 @@
         {@html refreshIcon}
     </button>
     <a
-        href={`https://drive.google.com/drive/folders/${$activeParent.id}`}
+        href={`https://drive.google.com/drive/folders/${$activeParent?.id}`}
         referrerpolicy="no-referrer"
         rel="external noopener noreferrer nofollow"
         class="btn s-prime"

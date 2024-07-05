@@ -1,9 +1,7 @@
 <script>
-    import { goto } from "$app/navigation";
     import ColorScheme from "$lib/components/utils/ColorScheme.svelte";
     import LogoutButton from "$lib/components/utils/LogoutButton.svelte";
-    import { HOME_PATH, storeSnap } from "$lib/scripts/stores";
-    import { page } from "$app/stores";
+    import { HOME_PATH } from "$lib/scripts/stores";
     import Tools from "$lib/components/Tools.svelte";
     import { onMount } from "svelte";
     import BackButton from "./utils/BackButton.svelte";
@@ -14,13 +12,6 @@
         const response = await fetch("/favicon.svg");
         homeButton = await response.text();
     });
-
-    function goHome() {
-        if ($page.params?.id === "r") return;
-        storeSnap();
-        // $activeView = "FOLDER";
-        goto("/r");
-    }
 </script>
 
 <header class="header">
