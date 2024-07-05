@@ -19,6 +19,9 @@
     import BackButton from "$lib/components/utils/BackButton.svelte";
     import scrollDown from "$lib/assets/arrowLeftDouble.svg?raw";
 
+    export let data;
+    $: console.log(data);
+
     let view = $activeView;
     let global = false;
     let search = "";

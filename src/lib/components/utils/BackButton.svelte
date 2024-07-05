@@ -4,7 +4,7 @@
     import { getRoot } from "$lib/scripts/utils";
 </script>
 
-{#if $activeParent.id !== getRoot()}
+{#if window.history.length > 1 && $activeParent?.id !== getRoot()}
     <button
         class="back-button btn s-prime"
         title="go back"

@@ -38,10 +38,10 @@
     }
 </script>
 
-<button
+<a
+    href={id}
     class="cover {draggedOver === true ? 'dragover' : ''}"
     class:hover
-    on:click={dirNavigate}
     on:dragover|preventDefault|stopPropagation={() => (draggedOver = true)}
     on:dragenter|stopPropagation={() => (draggedOver = true)}
     on:dragleave={() => (draggedOver = false)}
@@ -69,7 +69,7 @@
             <ActionButtons type="dir" {id} {name} />
         </div>
     {/if}
-</button>
+</a>
 
 <style>
     .cover {

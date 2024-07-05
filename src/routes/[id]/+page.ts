@@ -17,6 +17,7 @@ import {
     sessionTimeout,
     pocketStore,
     pocketState,
+    HOME_PATH,
 } from "$lib/scripts/stores";
 import { get } from "svelte/store";
 
@@ -48,7 +49,7 @@ export const load = (async ({ params, fetch }) => {
         }
         isLoggedin.set(true);
         let id = params.id;
-        if (id === "r") {
+        if (id === HOME_PATH) {
             id = window.localStorage.getItem("root");
             if (!id) id = await getRootFolder(getToken());
             activeParent.set({ name: "#Pocket_Drive", id });

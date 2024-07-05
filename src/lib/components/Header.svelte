@@ -2,14 +2,11 @@
     import { goto } from "$app/navigation";
     import ColorScheme from "$lib/components/utils/ColorScheme.svelte";
     import LogoutButton from "$lib/components/utils/LogoutButton.svelte";
-    // import helpButton from "$lib/assets/help.svg?raw";
-    // import homeButton from "$lib/assets/home.svg?raw";
-    import { activeParent, storeSnap } from "$lib/scripts/stores";
+    import { HOME_PATH, storeSnap } from "$lib/scripts/stores";
     import { page } from "$app/stores";
     import Tools from "$lib/components/Tools.svelte";
     import { onMount } from "svelte";
     import BackButton from "./utils/BackButton.svelte";
-    import { getRoot } from "$lib/scripts/utils";
 
     let homeButton = "";
 
@@ -29,12 +26,12 @@
 <header class="header">
     <div class="title-wrapper">
         <BackButton />
-        <button class="title-button" on:click={goHome}>
+        <a href={HOME_PATH} class="title-button">
             <span class="btn s-prime home" title="home">
                 {@html homeButton}
             </span>
             <h1 class="title">Pocket Drive</h1>
-        </button>
+        </a>
     </div>
     <div class="tool-wrapper">
         <Tools />

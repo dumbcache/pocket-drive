@@ -1,4 +1,9 @@
-import { activeTimeout, isLoggedin, pocketState } from "$lib/scripts/stores";
+import {
+    activeTimeout,
+    HOME_PATH,
+    isLoggedin,
+    pocketState,
+} from "$lib/scripts/stores";
 import { get } from "svelte/store";
 import { PUBLIC_KRAB_CLIENT_ID } from "$env/static/public";
 import {
@@ -34,7 +39,7 @@ export let googleClient = (() => {
         }
         if (get(isLoggedin)) return;
         isLoggedin.set(true);
-        let state = get(pocketState) || "r";
+        let state = get(pocketState) || HOME_PATH;
         goto(`/${state}`);
     }
 

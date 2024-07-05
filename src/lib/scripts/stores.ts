@@ -1,5 +1,6 @@
 import { get, writable } from "svelte/store";
 
+export const HOME_PATH = "home";
 export const pocketStore = new Map();
 export let pocketState = writable(null);
 export const imageFetchLog = new Set();
