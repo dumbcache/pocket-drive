@@ -1,9 +1,9 @@
 <script lang="ts">
-    import article1 from "$lib/assets/about/article1.png";
-    import article12 from "$lib/assets/about/article12.png";
-    import article13 from "$lib/assets/about/article13.png";
-    import article14 from "$lib/assets/about/article14.png";
-    import article15 from "$lib/assets/about/article15.png";
+    import article1 from "$lib/assets/about/article1.webp";
+    import article12 from "$lib/assets/about/article12.webp";
+    import article13 from "$lib/assets/about/article13.webp";
+    import article14 from "$lib/assets/about/article14.webp";
+    import article15 from "$lib/assets/about/article15.webp";
     import svelteIcon from "$lib/assets/svelteIcon.svg?raw";
     import githubIcon from "$lib/assets/githubIcon.svg?raw";
     import linkedinIcon from "$lib/assets/linkedinIcon.svg?raw";
