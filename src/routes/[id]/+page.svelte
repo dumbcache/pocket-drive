@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { onDestroy } from "svelte";
+    import { onDestroy, onMount } from "svelte";
     import { navigating } from "$app/stores";
     import { afterNavigate, beforeNavigate } from "$app/navigation";
     import {
@@ -157,6 +157,14 @@
         storeSnap();
     });
 
+    onMount(() => {
+        if (
+            $folderStore?.files.length === 0 &&
+            $fileStore?.files.length !== 0
+        ) {
+            $activeView = "FILE";
+        }
+    });
     onDestroy(() => {
         unsubscribeView();
         unsubscribeNavigation();

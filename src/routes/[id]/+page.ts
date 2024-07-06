@@ -8,7 +8,6 @@ import {
     getRootFolder,
     fetchSingle,
 } from "$lib/scripts/utils";
-import { goto } from "$app/navigation";
 import {
     isLoggedin,
     sessionTimeout,
