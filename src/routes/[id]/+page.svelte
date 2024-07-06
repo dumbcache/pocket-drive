@@ -17,14 +17,18 @@
     import Count from "$lib/components/utils/Count.svelte";
     import Folder from "$lib/components/folders/Folder.svelte";
     import {
+        fetchMultiple,
         fetchSingle,
+        FOLDER_MIME_TYPE,
         getRoot,
         getToken,
+        IMG_MIME_TYPE,
         searchHandler,
     } from "$lib/scripts/utils";
     import Spinner from "$lib/components/utils/Spinner.svelte";
     import BackButton from "$lib/components/utils/BackButton.svelte";
-    import scrollDown from "$lib/assets/arrowLeftDouble.svg?raw";
+    import scrollDownIcon from "$lib/assets/arrowLeftDouble.svg?raw";
+    import fetchAllIcon from "$lib/assets/fetchAll.svg?raw";
 
     export let data: {
         folders: GoogleFileResponse;
@@ -42,21 +46,29 @@
     let isScrolling = false;
     let searchTimeout;
     let scrollTimeout;
+    let fetchAll = false;
+    let foldersFetching = false;
+    let filesFetching = false;
     let scrollPosition = window.scrollY;
     let delta = 0;
     let pageX = 0;
 
+    function checks() {
+        $activeView = "FOLDER";
+        if (
+            $folderStore?.files.length === 0 &&
+            $fileStore?.files.length !== 0
+        ) {
+            $activeView = "FILE";
+        }
+        if ($folderStore?.nextPageToken || $fileStore?.nextPageToken) {
+            fetchAll = true;
+        }
+    }
+
     const unsubscribeNavigation = navigating.subscribe((val) => {
         $mode = "";
-        if (!val) {
-            $activeView = "FOLDER";
-            if (
-                $folderStore?.files.length === 0 &&
-                $fileStore?.files.length !== 0
-            ) {
-                $activeView = "FILE";
-            }
-        }
+        if (!val) checks();
     });
     const unsubscribeView = activeView.subscribe((data) => (view = data));
     const unsubscribeMode = mode.subscribe((data) => {
@@ -135,6 +147,56 @@
         }
     }
 
+    async function fetchFolders(accessToken: string) {
+        let pToken = $folderStore?.nextPageToken;
+        if (!pToken) {
+            foldersFetching = false;
+            return;
+        }
+        foldersFetching = true;
+        let temp = await fetchMultiple(
+            {
+                parent: data.parent,
+                mimeType: FOLDER_MIME_TYPE,
+                pageToken: pToken,
+            },
+            accessToken
+        );
+        folderStore.update((prev) => {
+            return {
+                nextPageToken: temp.nextPageToken,
+                files: [...prev?.files, ...temp.files],
+            };
+        });
+        fetchFolders(accessToken);
+    }
+    async function fetchFiles(accessToken: string) {
+        let pToken = $fileStore?.nextPageToken;
+        if (!pToken) {
+            filesFetching = false;
+            return;
+        }
+        filesFetching = true;
+        let temp = await fetchMultiple(
+            { parent: data.parent, mimeType: IMG_MIME_TYPE, pageToken: pToken },
+            accessToken
+        );
+        fileStore.update((prev) => {
+            return {
+                nextPageToken: temp.nextPageToken,
+                files: [...prev?.files, ...temp.files],
+            };
+        });
+        fetchFiles(accessToken);
+    }
+
+    async function fetchAllAtOnce() {
+        let accessToken = getToken();
+        fetchFolders(accessToken);
+        fetchFiles(accessToken);
+        fetchAll = false;
+    }
+
     afterNavigate(async () => {
         try {
             let parent = data?.parent;
@@ -158,12 +220,7 @@
     });
 
     onMount(() => {
-        if (
-            $folderStore?.files.length === 0 &&
-            $fileStore?.files.length !== 0
-        ) {
-            $activeView = "FILE";
-        }
+        checks();
     });
     onDestroy(() => {
         unsubscribeView();
@@ -193,7 +250,7 @@
                 {$activeParent?.name}
             </h2>
 
-            {#if $editProgress}
+            {#if $editProgress || foldersFetching || filesFetching}
                 <div class="loading" on:wheel|preventDefault>
                     <Spinner
                         width={"2rem"}
@@ -201,6 +258,13 @@
                         borderWidth={"2px"}
                     />
                 </div>
+            {/if}
+            {#if fetchAll}
+                <button
+                    class="btn s-prime fetch-all"
+                    title="load all"
+                    on:click={fetchAllAtOnce}>{@html fetchAllIcon}</button
+                >
             {/if}
             <Count
                 count={view === "FOLDER"
@@ -296,7 +360,7 @@
                       top: 0,
                       behavior: "instant",
                   });
-        }}>{@html scrollDown}</button
+        }}>{@html scrollDownIcon}</button
     >
 </section>
 
@@ -480,6 +544,11 @@
         }
         .no-content {
             font-size: smaller;
+        }
+
+        .fetch-all {
+            position: absolute;
+            top: 5rem;
         }
     }
 </style>

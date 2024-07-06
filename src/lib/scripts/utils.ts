@@ -192,7 +192,7 @@ export const FIELDS_IMG =
     "id,name,description,thumbnailLink,starred,mimeType,size";
 export const FIELDS_FOLDER = "id,name,starred,parents";
 export const FIELDS_SINGLE = "id,name,parents";
-export const DEFAULT_PAGESIZE = 1000;
+// export const DEFAULT_PAGESIZE = 1000;
 export const PAGESIZE = 100;
 
 export const wait = (s: number) => new Promise((res) => setTimeout(res, s));
