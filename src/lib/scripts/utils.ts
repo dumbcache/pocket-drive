@@ -16,7 +16,6 @@ import {
     imageCache,
     imageFetchLog,
     pocketState,
-    tempFileStore,
 } from "$lib/scripts/stores";
 import ChildWorker from "$lib/scripts/worker.ts?worker";
 import { clearDropItems } from "$lib/scripts/image";
@@ -557,7 +556,7 @@ if (browser) {
                 aParent = data.activeParent;
                 set = new Set(data?.set);
                 if (aParent === get(activeParent).id) {
-                    tempFileStore.update((prev) => ({
+                    fileStore.update((prev) => ({
                         nextPageToken: prev?.nextPageToken,
                         files: prev?.files.filter((file) => !set.has(file.id)),
                     }));
@@ -599,7 +598,7 @@ if (browser) {
                 aParent = data.activeParent;
                 set = new Set(data.set);
                 if (aParent === get(activeParent).id) {
-                    tempFileStore.update((prev) => ({
+                    fileStore.update((prev) => ({
                         nextPageToken: prev?.nextPageToken,
                         files: prev?.files.filter((file) => !set.has(file.id)),
                     }));

@@ -11,7 +11,6 @@
         mode,
         pocketState,
         storeSnap,
-        tempFileStore,
     } from "$lib/scripts/stores";
     import Content from "$lib/components/Content.svelte";
     import Tools from "$lib/components/Tools.svelte";
@@ -198,7 +197,7 @@
             <Count
                 count={view === "FOLDER"
                     ? $folderStore?.files.length
-                    : $tempFileStore?.files.length}
+                    : $fileStore?.files.length}
             />
         </nav>
 

@@ -7,7 +7,6 @@ export const imageFetchLog = new Set();
 
 export let folderStore = writable<GoogleFileResponse | undefined>();
 export let fileStore = writable<GoogleFileResponse | undefined>();
-export let tempFileStore = writable<GoogleFileResponse | undefined>();
 export let recentStore = writable<{ name: string; id: string }[]>([]);
 export let searchItems = writable<GoogleFile[] | undefined>();
 
@@ -49,7 +48,7 @@ export function storeSnap(
     try {
         parent ?? (parent = get(activeParent).id);
         folders ?? (folders = get(folderStore));
-        files ?? (files = get(tempFileStore));
+        files ?? (files = get(fileStore));
         pocketStore.set(parent, {
             folders,
             files,
