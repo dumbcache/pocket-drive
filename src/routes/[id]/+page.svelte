@@ -137,15 +137,21 @@
     }
 
     afterNavigate(async () => {
-        let parent = data.parent;
-        fetchSingle(parent, "FOLDER", getToken()).then((data) => {
-            activeParent.set({
-                id: data.id,
-                name: data.name,
-                parents: data.parents,
-            });
-        });
-        pocketState.set(parent);
+        try {
+            let parent = data?.parent;
+            fetchSingle(parent, "FOLDER", getToken())
+                .then((data) => {
+                    activeParent.set({
+                        id: data.id,
+                        name: data.name,
+                        parents: data.parents,
+                    });
+                })
+                .catch(console.warn);
+            pocketState.set(parent);
+        } catch (error) {
+            console.warn("afterNavigate function error", error);
+        }
     });
 
     beforeNavigate(() => {
@@ -426,6 +432,7 @@
         .wrapper {
             padding: 0rem 0.5rem;
         }
+
         .tool-wrapper {
             display: initial;
         }
@@ -456,6 +463,7 @@
         }
 
         .folder-name {
+            flex-shrink: 0;
             padding: 0.5rem;
         }
 

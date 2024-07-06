@@ -2,7 +2,6 @@
     import Header from "$lib/components/Header.svelte";
     import Drop from "$lib/components/drops/Drop.svelte";
     import {
-        // setRefreshTimeout,
         signUserOut,
         updateRecents,
         setSessionTimeout,
@@ -40,25 +39,32 @@
             previewAndSetDropItems(files);
         }
     }
-    onMount(() => {
-        try {
-            updateRecents();
-            setSessionTimeout();
-            // setRefreshTimeout();
-            googleClient.loadGSIScript();
-        } catch (error) {
-            console.warn(error);
-        }
-    });
 
     function signoutHandler() {
         isLoggedin.set(false);
         signUserOut();
         goto("/");
     }
+
+    function handleUnload(e) {
+        if ($dropItems.length > 0) {
+            e.preventDefault();
+        }
+        return true;
+    }
+
+    onMount(() => {
+        try {
+            updateRecents();
+            setSessionTimeout();
+            googleClient.loadGSIScript();
+        } catch (error) {
+            console.warn(error);
+        }
+    });
 </script>
 
-<svelte:window on:keydown />
+<svelte:window on:keydown on:beforeunload={handleUnload} />
 
 <div
     role="group"

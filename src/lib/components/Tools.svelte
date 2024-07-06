@@ -101,7 +101,7 @@
     {#if $activeView === "FILE"}
         <button
             class="btn s-prime"
-            title="edit mode"
+            title="edit"
             on:click={() => {
                 $mode = "edit";
             }}
@@ -143,17 +143,13 @@
     {/if}
     <button
         class="btn s-prime"
-        title="refresh folder"
+        title="favorites"
         class:favorites={$starred}
         on:click={() => ($starred = !$starred)}
     >
         {@html favoriteIcon}
     </button>
-    <button
-        class="btn s-prime"
-        title="refresh folder"
-        on:click={refreshHandler}
-    >
+    <button class="btn s-prime" title="refresh" on:click={refreshHandler}>
         {@html refreshIcon}
     </button>
     <a

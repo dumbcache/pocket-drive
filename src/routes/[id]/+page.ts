@@ -32,25 +32,29 @@ async function loadContent(parent: string) {
 }
 
 export const load = (async ({ params, fetch }) => {
-    if (browser) {
-        if (!checkLoginStatus()) {
-            if (!get(isLoggedin)) {
-                isLoggedin.set(false);
-                signUserOutPartial();
-                pocketState.set(params.id);
-                goto("/");
+    try {
+        if (browser) {
+            if (!checkLoginStatus()) {
+                if (!get(isLoggedin)) {
+                    isLoggedin.set(false);
+                    signUserOutPartial();
+                    pocketState.set(params.id);
+                    goto("/");
+                    return;
+                }
+                sessionTimeout.set(true);
                 return;
             }
-            sessionTimeout.set(true);
-            return;
+            isLoggedin.set(true);
+            let id = params.id;
+            if (id === HOME_PATH) {
+                id = window.localStorage.getItem("root");
+                if (!id) id = await getRootFolder(getToken());
+            }
+            fetchSingle(id, "FOLDER", getToken());
+            return loadContent(id);
         }
-        isLoggedin.set(true);
-        let id = params.id;
-        if (id === HOME_PATH) {
-            id = window.localStorage.getItem("root");
-            if (!id) id = await getRootFolder(getToken());
-        }
-        fetchSingle(id, "FOLDER", getToken());
-        return loadContent(id);
+    } catch (error) {
+        console.warn(error);
     }
 }) satisfies PageLoad;

@@ -6,14 +6,18 @@ export const ssr = false;
 export const prerender = false;
 
 export const load = () => {
-    if (browser) {
-        if (checkLoginStatus()) {
-            isLoggedin.set(true);
-            window.localStorage.getItem("refreshTime") ??
-                window.localStorage.setItem(
-                    "refreshTime",
-                    String(Date.now() + 1 * 60 * 60 * 1000)
-                );
+    try {
+        if (browser) {
+            if (checkLoginStatus()) {
+                isLoggedin.set(true);
+                window.localStorage.getItem("refreshTime") ??
+                    window.localStorage.setItem(
+                        "refreshTime",
+                        String(Date.now() + 1 * 60 * 60 * 1000)
+                    );
+            }
         }
+    } catch (error) {
+        console.warn(error);
     }
 };

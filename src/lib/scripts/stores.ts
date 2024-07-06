@@ -2,7 +2,7 @@ import { get, writable } from "svelte/store";
 
 export const HOME_PATH = "home";
 export const pocketStore = new Map();
-export let pocketState = writable(null);
+export let pocketState = writable<null | string>(null);
 export const imageFetchLog = new Set();
 
 export let folderStore = writable<GoogleFileResponse | undefined>();
@@ -46,13 +46,17 @@ export function storeSnap(
     files?: GoogleFileResponse,
     folders?: GoogleFileResponse
 ) {
-    parent ?? (parent = get(activeParent).id);
-    folders ?? (folders = get(folderStore));
-    files ?? (files = get(tempFileStore));
-    pocketStore.set(parent, {
-        folders,
-        files,
-    });
+    try {
+        parent ?? (parent = get(activeParent).id);
+        folders ?? (folders = get(folderStore));
+        files ?? (files = get(tempFileStore));
+        pocketStore.set(parent, {
+            folders,
+            files,
+        });
+    } catch (error) {
+        console.warn("storeSnap function error", error);
+    }
 }
 
 export class LRUCache {
