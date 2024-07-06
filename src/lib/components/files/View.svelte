@@ -11,6 +11,7 @@
     import infoIcon from "$lib/assets/arrowLeftDouble.svg?raw";
     import zoomInIcon from "$lib/assets/zoomIn.svg?raw";
     import zoomOutIcon from "$lib/assets/zoomOut.svg?raw";
+    import expandIcon from "$lib/assets/expand.svg?raw";
     import urlIcon from "$lib/assets/url.svg?raw";
     import { fetchImgPreview } from "$lib/scripts/utils";
     import Info from "$lib/components/files/Info.svelte";
@@ -21,6 +22,7 @@
     let dialog: Dialog;
     let infoVisible = false;
     let zoom = false;
+    let expand = false;
     let preview: HTMLElement, navigation: HTMLElement;
     let isDragging = false;
     let startX: number;
@@ -177,6 +179,7 @@
     >
         <section
             class="one nav"
+            style:display={expand ? "none" : "initial"}
             bind:this={navigation}
             on:wheel|stopPropagation
         >
@@ -187,12 +190,12 @@
             role="dialog"
             on:scroll|preventDefault
             on:wheel={handleWheel}
-            on:mousedown={handleClick}
+            on:mousedown|stopPropagation={handleClick}
             on:keydown
             on:mouseleave={handlePointerUp}
             on:mouseup={handlePointerUp}
             on:mousedown={handlePointerDown}
-            on:mousemove={handlePointerMove}
+            on:mousemove|stopPropagation={handlePointerMove}
             bind:this={preview}
         >
             {#each files as file}
@@ -252,7 +255,7 @@
             <Spinner borderWidth="2px" width="1rem" height="1rem" />
         </div>
     {/if} -->
-    <div class="action">
+    <div class="action" class:expand>
         {#if !infoVisible}
             <button
                 class="btn s-prime info"
@@ -270,6 +273,11 @@
         {/if}
         <button class="btn s-prime" title="zoom" on:click={() => (zoom = !zoom)}
             >{@html zoom ? zoomOutIcon : zoomInIcon}</button
+        >
+        <button
+            class="btn s-prime expand"
+            title="info"
+            on:click={() => (expand = !expand)}>{@html expandIcon}</button
         >
     </div>
 </Dialog>
@@ -338,8 +346,8 @@
     .close {
         position: absolute;
         top: 2rem;
-        z-index: 10;
         left: 2rem;
+        z-index: 10;
     }
 
     .spinner {
@@ -356,8 +364,8 @@
         align-items: center;
         position: fixed;
         top: 2rem;
-        right: 2rem;
-        gap: 1rem;
+        right: 6rem;
+        gap: 1.5rem;
     }
 
     @media (max-width: 600px) and (orientation: portrait) {
@@ -404,8 +412,12 @@
         .action {
             bottom: 8rem;
             top: unset;
+            right: 2rem;
         }
 
+        .expand {
+            bottom: 1rem;
+        }
         .info {
             rotate: 90deg;
         }
@@ -413,6 +425,7 @@
             top: 0.5rem;
             left: 0.5rem;
         }
+
         .spinner {
             top: 0.5rem;
             right: 0.5rem;
