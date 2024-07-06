@@ -11,6 +11,7 @@
         dropItems,
         isLoggedin,
         mode,
+        pocketStore,
         sessionTimeout,
     } from "$lib/scripts/stores";
     import { googleClient } from "$lib/scripts/login";
@@ -50,6 +51,10 @@
         if ($dropItems.length > 0) {
             e.preventDefault();
         }
+        window.sessionStorage.setItem(
+            "pocketStore",
+            JSON.stringify(Array.from(pocketStore))
+        );
         return true;
     }
 

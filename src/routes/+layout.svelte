@@ -1,11 +1,15 @@
 <script lang="ts">
     import { navigating } from "$app/stores";
     import Spinner from "$lib/components/utils/Spinner.svelte";
-    import { pocketState, progress, refresh } from "$lib/scripts/stores";
+    import {
+        pocketState,
+        pocketStore,
+        progress,
+        refresh,
+    } from "$lib/scripts/stores";
     import { onMount } from "svelte";
     import "./app.css";
     import { browser } from "$app/environment";
-    import { get } from "svelte/store";
 
     let homeButton = "";
     let overlay: HTMLDivElement;

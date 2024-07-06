@@ -1,5 +1,5 @@
 import { browser } from "$app/environment";
-import { isLoggedin } from "$lib/scripts/stores";
+import { isLoggedin, pocketStore } from "$lib/scripts/stores";
 import { checkLoginStatus } from "$lib/scripts/utils";
 
 export const ssr = false;
@@ -15,6 +15,13 @@ export const load = () => {
                         "refreshTime",
                         String(Date.now() + 1 * 60 * 60 * 1000)
                     );
+                let state = sessionStorage.getItem("pocketStore");
+                if (state) {
+                    const data = JSON.parse(state);
+                    for (let [key, val] of data) {
+                        pocketStore.set(key, val);
+                    }
+                }
             }
         }
     } catch (error) {
