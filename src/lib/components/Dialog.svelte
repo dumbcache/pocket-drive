@@ -19,7 +19,14 @@
 </script>
 
 <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
-<dialog id="dialog" bind:this={dialog} on:keydown={handleKeyDown}>
+<dialog
+    id="dialog"
+    bind:this={dialog}
+    on:keydown={handleKeyDown}
+    on:pointermove|stopPropagation
+    on:pointerdown|stopPropagation
+    on:pointerup|stopPropagation
+>
     <slot />
 </dialog>
 

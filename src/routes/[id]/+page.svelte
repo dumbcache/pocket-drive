@@ -45,6 +45,8 @@
     let scrollTimeout;
     let scrollPosition = window.scrollY;
     let delta = 0;
+    let pageX = 0;
+
     const unsubscribeNavigation = navigating.subscribe((val) => {
         $mode = "";
         if (!val) {
@@ -115,6 +117,23 @@
         scrollTimeout = setTimeout(() => {
             isScrolling = false;
         }, 1500);
+    }
+
+    function handlePointerDown(e: PointerEvent) {
+        if (e.pointerType === "touch") pageX = e.pageX;
+    }
+
+    function handlePointerUp(e: PointerEvent) {
+        if (e.pointerType === "touch") {
+            let diff = pageX - e.pageX;
+            if (diff > 50) {
+                $activeView !== "FILE" && ($activeView = "FILE");
+                return;
+            }
+            if (diff < -50) {
+                $activeView !== "FOLDER" && ($activeView = "FOLDER");
+            }
+        }
     }
 
     afterNavigate(async () => {
@@ -236,7 +255,12 @@
             </section>
         {/if}
     {/if}
-    <main class="main" style:display={$mode === "search" ? "none" : "initial"}>
+    <main
+        class="main"
+        style:display={$mode === "search" ? "none" : "initial"}
+        on:pointerdown={handlePointerDown}
+        on:pointerup={handlePointerUp}
+    >
         <Content
             {view}
             count={view === "FOLDER"
