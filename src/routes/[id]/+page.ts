@@ -17,6 +17,7 @@ import {
     HOME_PATH,
 } from "$lib/scripts/stores";
 import { get } from "svelte/store";
+import { redirect } from "@sveltejs/kit";
 
 async function loadContent(parent: string) {
     if (pocketStore.has(parent)) {
@@ -32,29 +33,25 @@ async function loadContent(parent: string) {
 }
 
 export const load = (async ({ params, fetch }) => {
-    try {
-        if (browser) {
-            if (!checkLoginStatus()) {
-                if (!get(isLoggedin)) {
-                    isLoggedin.set(false);
-                    signUserOutPartial();
-                    pocketState.set(params.id);
-                    goto("/");
-                    return;
-                }
-                sessionTimeout.set(true);
-                return;
+    if (browser) {
+        if (!checkLoginStatus()) {
+            if (!get(isLoggedin)) {
+                isLoggedin.set(false);
+                signUserOutPartial();
+                pocketState.set(params.id);
+                // goto("/")
+                throw redirect(302, "/");
             }
-            isLoggedin.set(true);
-            let id = params.id;
-            if (id === HOME_PATH) {
-                id = window.localStorage.getItem("root");
-                if (!id) id = await getRootFolder(getToken());
-            }
-            fetchSingle(id, "FOLDER", getToken());
-            return loadContent(id);
+            sessionTimeout.set(true);
+            return;
         }
-    } catch (error) {
-        console.warn(error);
+        isLoggedin.set(true);
+        let id = params.id;
+        if (id === HOME_PATH) {
+            id = window.localStorage.getItem("root");
+            if (!id) id = await getRootFolder(getToken());
+        }
+        fetchSingle(id, "FOLDER", getToken());
+        return loadContent(id);
     }
 }) satisfies PageLoad;
