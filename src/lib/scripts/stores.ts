@@ -4,6 +4,7 @@ export const HOME_PATH = "home";
 export const pocketStore = new Map();
 export let pocketState = writable<null | string>(null);
 export const imageFetchLog = new Set();
+export const progressStore = { edit: 0, delete: 0, move: 0, copy: 0 };
 
 export let folderStore = writable<GoogleFileResponse | undefined>();
 export let fileStore = writable<GoogleFileResponse | undefined>();

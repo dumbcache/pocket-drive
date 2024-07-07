@@ -52,6 +52,7 @@
     let scrollPosition = window.scrollY;
     let delta = 0;
     let pageX = 0;
+    let mask = false;
 
     function checks() {
         $activeView = "FOLDER";
@@ -117,6 +118,9 @@
                 $mode = "search";
                 global = true;
                 return;
+            case "a":
+            case "A":
+                mask = !mask;
         }
     }
     function handleScroll(e) {
@@ -344,6 +348,9 @@
                 ? $folderStore?.files.length
                 : $fileStore?.files.length}
         />
+        {#if mask}
+            <div class="mask"></div>
+        {/if}
     </main>
     <button
         class="scroll btn s-prime"
@@ -499,6 +506,21 @@
         user-select: none;
     }
 
+    .main {
+        position: relative;
+    }
+    .mask {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #5555;
+        backdrop-filter: blur(5rem);
+        z-index: 10000;
+    }
     @media (max-width: 600px) {
         .wrapper {
             padding: 0rem 0.5rem;
