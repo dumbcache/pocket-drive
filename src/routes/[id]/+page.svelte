@@ -5,7 +5,6 @@
     import {
         activeParent,
         activeView,
-        editProgress,
         fileStore,
         folderStore,
         mode,
@@ -254,7 +253,7 @@
                 {$activeParent?.name}
             </h2>
 
-            {#if $editProgress || foldersFetching || filesFetching}
+            {#if  foldersFetching || filesFetching}
                 <div class="loading" on:wheel|preventDefault>
                     <Spinner
                         width={"2rem"}

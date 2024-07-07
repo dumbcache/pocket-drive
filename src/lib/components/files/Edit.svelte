@@ -1,5 +1,9 @@
 <script lang="ts">
-    import { activeParent, editProgress, mode } from "$lib/scripts/stores";
+    import {
+        activeParent,
+        mode,
+        updateProgressStore,
+    } from "$lib/scripts/stores";
     import closeIcon from "$lib/assets/close.svg?raw";
     import deleteIcon from "$lib/assets/delete.svg?raw";
     import moveIcon from "$lib/assets/move.svg?raw";
@@ -32,6 +36,7 @@
     }
 
     function deleteAction() {
+        updateProgressStore(set.size);
         childWorker.postMessage({
             context: "DELETE",
             files: set,
@@ -39,13 +44,12 @@
             activeParent: $activeParent.id,
         });
         confirm = false;
-        $editProgress = true;
         close("DELETE");
     }
 
     function moveToTop() {
-        $editProgress = true;
         $mode = "";
+        updateProgressStore(set.size);
         childWorker.postMessage({
             context: "TOP",
             parent: $activeParent.id,
@@ -59,7 +63,7 @@
     function folderSelectOk(e) {
         selectedParent = e.detail.id;
         folderSelectVisible = false;
-        $editProgress = true;
+        updateProgressStore(set.size);
         childWorker.postMessage({
             context: action,
             parent: selectedParent,
@@ -78,6 +82,7 @@
         if (description) {
             if (!checkValid()) return;
         }
+        updateProgressStore(set.size);
         childWorker.postMessage({
             parent: $activeParent.id,
             context: "EDIT",
@@ -85,7 +90,6 @@
             detail: { name, description },
             token: getToken(),
         });
-        $editProgress = true;
         close();
     }
 
@@ -170,7 +174,6 @@
 {#if folderSelectVisible}
     <FolderSelect
         type="FILE"
-        {set}
         on:close={folderSelectClose}
         on:ok={folderSelectOk}
     />

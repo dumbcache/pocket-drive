@@ -184,7 +184,7 @@
                             on:keydown
                             on:click|stopPropagation={selectFolder}
                         >
-                            {#if tempFolderStore.files}
+                            {#if tempFolderStore?.files}
                                 {#if tempFolderStore.files.length > 0}
                                     {#each tempFolderStore.files as file}
                                         <li class="list-item" data-id={file.id}>

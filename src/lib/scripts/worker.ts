@@ -201,7 +201,11 @@ export const createImgMetadata = (
     });
 };
 
-export const deleteImgs = async (set: Set<string>, token: string) => {
+export const deleteImgs = async (
+    set: Set<string>,
+    token: string,
+    top?: Boolean
+) => {
     return new Promise(async (resolve) => {
         const proms = [];
         let s: string[] = [];
@@ -219,20 +223,24 @@ export const deleteImgs = async (set: Set<string>, token: string) => {
                     },
                 }).then((res) => {
                     if (res.status === 204) {
-                        postMessage({
-                            context: "PROGRESS",
-                            type: "DELETE",
-                            id,
-                            status: 1,
-                        });
+                        if (!top) {
+                            postMessage({
+                                context: "PROGRESS",
+                                type: "DELETE",
+                                id,
+                                status: 1,
+                            });
+                        }
                         s.push(id);
                     } else {
-                        postMessage({
-                            context: "PROGRESS",
-                            type: "DELETE",
-                            id,
-                            status: 0,
-                        });
+                        if (!top) {
+                            postMessage({
+                                context: "PROGRESS",
+                                type: "DELETE",
+                                id,
+                                status: 0,
+                            });
+                        }
                     }
                 })
             );
@@ -290,9 +298,22 @@ export function copyMulitple(
             }
             let id = data[i];
             proms.push(
-                copySingle(parent, id, accessToken).then((res) => {
-                    if (res === 200) {
+                copySingle(parent, id, accessToken).then((status) => {
+                    if (status === 200) {
+                        postMessage({
+                            context: "PROGRESS",
+                            type: "COPY",
+                            id,
+                            status: 1,
+                        });
                         s.push(id);
+                    } else {
+                        postMessage({
+                            context: "PROGRESS",
+                            type: "COPY",
+                            id,
+                            status: 0,
+                        });
                     }
                 })
             );
@@ -383,13 +404,33 @@ export async function updateMultiple(
 ) {
     let proms = [];
     let data = Array.from(set);
+    let s = [];
     for (let i = 0; i < data.length; i++) {
         if (i % 50 === 0) await wait(1000);
         let id = data[i];
-        proms.push(updateSingle(id, imgMeta, accessToken));
+        proms.push(
+            updateSingle(id, imgMeta, accessToken).then((status) => {
+                if (status === 200) {
+                    postMessage({
+                        context: "PROGRESS",
+                        type: "EDIT",
+                        id,
+                        status: 1,
+                    });
+                    s.push([id, imgMeta]);
+                } else {
+                    postMessage({
+                        context: "PROGRESS",
+                        type: "EDIT",
+                        id,
+                        status: 0,
+                    });
+                }
+            })
+        );
     }
     Promise.allSettled(proms).then(() => {
-        postMessage({ context: "EDIT", parent });
+        postMessage({ context: "EDIT", parent, set: s });
     });
 }
 
@@ -421,7 +462,7 @@ onmessage = ({ data }) => {
             return;
         case "TOP":
             copyMulitple(parent, files, token).then((s) => {
-                deleteImgs(data.files, data.token).then(() => {
+                deleteImgs(data.files, data.token, true).then(() => {
                     postMessage({
                         context: "COPY",
                         parent,

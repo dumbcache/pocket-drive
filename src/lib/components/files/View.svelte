@@ -354,7 +354,7 @@
         position: absolute;
         z-index: 10;
         top: 2.7rem;
-        right: 13rem;
+        right: 25rem;
         display: none;
     }
 

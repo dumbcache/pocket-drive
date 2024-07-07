@@ -17,6 +17,7 @@
     import { googleClient } from "$lib/scripts/login";
     import { goto } from "$app/navigation";
     import { previewAndSetDropItems } from "$lib/scripts/image";
+    import ProgressBar from "$lib/components/utils/ProgressBar.svelte";
 
     let draggedOver = false;
 
@@ -93,6 +94,7 @@
     {#if $dropItems.length > 0}
         <Drop />
     {/if}
+    <ProgressBar />
     {#if $sessionTimeout}
         <div class="session-notify" on:wheel|preventDefault>
             <div class="session-wrapper">

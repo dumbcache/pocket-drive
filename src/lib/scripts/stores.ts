@@ -1,10 +1,25 @@
+import { fail } from "@sveltejs/kit";
 import { get, writable } from "svelte/store";
 
 export const HOME_PATH = "home";
 export const pocketStore = new Map();
 export let pocketState = writable<null | string>(null);
 export const imageFetchLog = new Set();
-export const progressStore = { edit: 0, delete: 0, move: 0, copy: 0 };
+export const progressStore = writable({
+    total: 0,
+    success: 0,
+    fail: 0,
+});
+
+export function updateProgressStore(t = 0, s = 0, f = 0) {
+    progressStore.update((val) => {
+        return {
+            total: val.total + t,
+            success: val.success + s,
+            fail: val.fail + f,
+        };
+    });
+}
 
 export let folderStore = writable<GoogleFileResponse | undefined>();
 export let fileStore = writable<GoogleFileResponse | undefined>();
@@ -25,7 +40,6 @@ export let starred = writable(false);
 export let autosave = writable(false);
 export let refresh = writable(false);
 export let progress = writable(false);
-export let editProgress = writable(false);
 export let mode = writable("");
 export let activeParent = writable<{
     id: string;

@@ -11,11 +11,11 @@ import {
     activeParent,
     recentStore,
     dropItems,
-    editProgress,
     pocketStore,
     imageCache,
     imageFetchLog,
     pocketState,
+    updateProgressStore,
 } from "$lib/scripts/stores";
 import ChildWorker from "$lib/scripts/worker.ts?worker";
 import { clearDropItems } from "$lib/scripts/image";
@@ -525,14 +525,28 @@ if (browser) {
                 return;
 
             case "EDIT":
-                fileStore.set(
-                    await fetchMultiple(
-                        { parent: data.parent, mimeType: IMG_MIME_TYPE },
-                        getToken(),
-                        true
-                    )
+                parent = data.parent;
+                set = new Map(data.set);
+                if (parent === get(activeParent).id) {
+                    fileStore.update((prev) => ({
+                        nextPageToken: prev?.nextPageToken,
+                        files: prev?.files.map((file) => {
+                            if (set.has(file.id)) {
+                                let d = set.get(file.id);
+                                d.name && (file.name = d.name);
+                                d.description &&
+                                    (file.description = d.description);
+                            }
+                            return file;
+                        }),
+                    }));
+                }
+                fetchMultiple(
+                    { parent, mimeType: IMG_MIME_TYPE },
+                    getToken(),
+                    true
                 );
-                editProgress.set(false);
+
                 return;
 
             case "COPY":
@@ -542,14 +556,19 @@ if (browser) {
                     getToken(),
                     true
                 ).then((files) => {
-                    data.top && fileStore.set(files);
+                    data?.top && fileStore.set(files);
+                    if (pocketStore.has(parent)) {
+                        pocketStore.set(parent, {
+                            ...pocketStore.get(parent),
+                            files: files,
+                        });
+                    }
                 });
                 fetchMultiple(
                     { parent, mimeType: IMG_MIME_TYPE, pageSize: 3 },
                     getToken(),
                     true
                 );
-                editProgress.set(false);
                 return;
             case "MOVE":
                 parent = data.parent;
@@ -567,12 +586,18 @@ if (browser) {
                     );
                     pocketStore.set(aParent, { files, folders });
                 }
-                editProgress.set(false);
                 fetchMultiple(
                     { parent, mimeType: IMG_MIME_TYPE },
                     getToken(),
                     true
-                );
+                ).then((data) => {
+                    if (pocketStore.has(parent)) {
+                        pocketStore.set(parent, {
+                            ...pocketStore.get(parent),
+                            files: data,
+                        });
+                    }
+                });
                 fetchMultiple(
                     { parent, mimeType: IMG_MIME_TYPE, pageSize: 3 },
                     getToken(),
@@ -609,7 +634,6 @@ if (browser) {
                     );
                     pocketStore.set(aParent, { files, folders });
                 }
-                editProgress.set(false);
                 fetchMultiple(
                     { parent: aParent, mimeType: IMG_MIME_TYPE },
                     getToken(),
@@ -660,9 +684,20 @@ if (browser) {
                     let ele = document.querySelector(`[data-id="${data.id}"]`);
                     if (data.status === 1) {
                         ele?.remove();
+                        updateProgressStore(0, 1, 0);
                         return;
                     }
+                    updateProgressStore(0, 0, 1);
                     ele.style.display = "initial";
+                    return;
+                }
+                if (data.type === "COPY" || data.type === "EDIT") {
+                    if (data.status === 1) {
+                        updateProgressStore(0, 1, 0);
+                        return;
+                    }
+                    updateProgressStore(0, 0, 1);
+                    return;
                 }
                 if (data.type === "DROP") {
                     let dropItem = document.querySelector(
