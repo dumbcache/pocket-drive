@@ -111,6 +111,7 @@
 <style>
     .layout {
         display: flex;
+        background: inherit;
     }
 
     .session-notify {

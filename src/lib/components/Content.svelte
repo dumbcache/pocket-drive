@@ -128,7 +128,7 @@
         display: flex;
         flex-flow: column nowrap;
         gap: 0.5rem;
-        position: absolute;
+        position: fixed;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
