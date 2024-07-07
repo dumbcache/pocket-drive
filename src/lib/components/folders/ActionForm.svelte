@@ -14,6 +14,8 @@
         createFolder,
         deleteFolder,
         updateFolder,
+        fetchMultiple,
+        FOLDER_MIME_TYPE,
     } from "$lib/scripts/utils";
     import Spinner from "$lib/components/utils/Spinner.svelte";
 
@@ -63,6 +65,11 @@
                     nextPageToken: prev?.nextPageToken,
                 };
             });
+            fetchMultiple(
+                { parent, mimeType: FOLDER_MIME_TYPE, pageSize: 500 },
+                token,
+                true
+            );
             afterFolderAction(parent, token);
             close();
         }

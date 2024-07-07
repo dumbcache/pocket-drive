@@ -36,9 +36,9 @@ export let activeRefreshTimeout = writable(0);
 export let refreshTimeout = writable(false);
 export let dataCacheName = writable("");
 
+export let refresh = writable(false);
 export let starred = writable(false);
 export let autosave = writable(false);
-export let refresh = writable(false);
 export let progress = writable(false);
 export let mode = writable("");
 export let activeParent = writable<{

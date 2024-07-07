@@ -9,6 +9,7 @@
         folderStore,
         mode,
         pocketState,
+        refresh,
         storeSnap,
     } from "$lib/scripts/stores";
     import Content from "$lib/components/Content.svelte";
@@ -219,6 +220,8 @@
     });
 
     beforeNavigate(() => {
+        if ($refresh) return;
+        fetchAll = false;
         storeSnap();
     });
 

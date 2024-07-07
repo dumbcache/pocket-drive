@@ -2,8 +2,6 @@
     import ActionButtons from "$lib/components/folders/ActionButtons.svelte";
     import { getToken, IMG_MIME_TYPE, fetchMultiple } from "$lib/scripts/utils";
     import { previewAndSetDropItems } from "$lib/scripts/image";
-    import { storeSnap } from "$lib/scripts/stores";
-    import { goto } from "$app/navigation";
 
     export let visible: Boolean;
     export let toolsVisible: Boolean;

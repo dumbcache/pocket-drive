@@ -104,6 +104,7 @@ export async function clearFiles() {
     let theme = window.localStorage.getItem("theme");
     window.localStorage.clear();
     window.localStorage.setItem("theme", theme);
+    window.sessionStorage.clear();
 }
 
 export async function setCache(refresh: Boolean) {
@@ -377,12 +378,17 @@ export async function searchHandler(token: string, search: string) {
 export async function fetchMultiple(
     params: ParamsObject,
     accessToken: string,
-    updateCache: Boolean = false
+    updateCache: Boolean = false,
+    stopNewReq: Boolean = false
 ): Promise<GoogleFileResponse> {
     return new Promise(async (resolve, reject) => {
         const req = constructRequest(params, accessToken);
         try {
             if (updateCache) await (await caches.open("pd-data")).delete(req);
+            if (stopNewReq) {
+                resolve();
+                return;
+            }
         } catch (error) {
             console.log(error);
         }

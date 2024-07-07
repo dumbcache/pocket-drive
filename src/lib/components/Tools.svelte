@@ -6,9 +6,9 @@
     import {
         activeParent,
         activeView,
-        fileStore,
         folderAction,
         folderStore,
+        pocketStore,
         refresh,
         starred,
     } from "$lib/scripts/stores";
@@ -50,27 +50,44 @@
 
     async function refreshHandler() {
         $refresh = true;
-        fileStore.set(
-            await fetchMultiple(
-                { parent: $activeParent.id, mimeType: IMG_MIME_TYPE },
-                getToken(),
+        const token = getToken();
+        const parent = $activeParent.id;
+        $folderStore?.files.forEach((file) =>
+            fetchMultiple(
+                { parent: file.id, mimeType: IMG_MIME_TYPE, pageSize: 3 },
+                token,
+                true,
                 true
             )
         );
-        folderStore.set(
-            await fetchMultiple(
-                { parent: $activeParent.id, mimeType: FOLDER_MIME_TYPE },
-                getToken(),
-                true
-            )
-        );
-        fetchMultiple(
-            { parent: $activeParent.id, mimeType: IMG_MIME_TYPE, pageSize: 3 },
-            getToken(),
+        await fetchMultiple(
+            { parent, mimeType: IMG_MIME_TYPE },
+            token,
+            true,
             true
         );
 
-        $refresh = false;
+        await fetchMultiple(
+            { parent, mimeType: FOLDER_MIME_TYPE },
+            token,
+            true,
+            true
+        );
+
+        fetchMultiple(
+            { parent, mimeType: IMG_MIME_TYPE, pageSize: 3 },
+            token,
+            true,
+            true
+        );
+        fetchMultiple(
+            { parent, mimeType: FOLDER_MIME_TYPE, pageSize: 500 },
+            token,
+            true,
+            true
+        );
+        pocketStore.delete(parent);
+        window.location.reload();
     }
     const unsubscribeView = activeView.subscribe((data) => (view = data));
     onDestroy(() => {

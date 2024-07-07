@@ -25,18 +25,6 @@
         e.preventDefault();
         draggedOver = false;
         let files = e.dataTransfer?.files;
-        let items = e.dataTransfer?.items;
-        for (let i of items) {
-            if (
-                i.kind === "other" &&
-                i.type === "application/x-moz-nativeimage"
-            ) {
-                const mozUrl = e.dataTransfer.getData(
-                    "application/x-moz-file-promise-url"
-                );
-                console.log(mozUrl);
-            }
-        }
         if (files) {
             previewAndSetDropItems(files);
         }
