@@ -137,10 +137,10 @@
         display: inline-block;
         width: 4rem;
     }
-    :global(svg) {
+    footer :global(svg) {
         fill: var(--primary-color);
     }
-    :global(svg):hover {
+    footer :global(svg):hover {
         fill: var(--color-focus);
     }
 
