@@ -22,14 +22,10 @@
     <div class="items">
         <!-- <button class="close btn s-second">{@html closeButton}</button> -->
         {#if success + fail !== total}
-            <div class="loading item" on:wheel|preventDefault>
-                <Spinner
-                    width={"1.5rem"}
-                    height={"1.5rem"}
-                    borderWidth={"2px"}
-                />
-                <span class="total item">{total}</span>
-            </div>
+            <span class="loading item">
+                <Spinner width={"2rem"} height={"2rem"} borderWidth={"2px"} />
+                {total}
+            </span>
         {/if}
         <div class="success item">
             <span class="s-second">{@html successIcon}</span>{success}
@@ -66,11 +62,14 @@
         display: flex;
         flex-flow: row nowrap;
         align-items: center;
+        gap: 0.5rem;
     }
     span {
         display: flex;
         align-items: center;
-        padding: 0.3rem;
+    }
+    span :global(svg) {
+        filter: none;
     }
 
     @media (max-width: 600px) {

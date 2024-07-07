@@ -253,7 +253,7 @@
                 {$activeParent?.name}
             </h2>
 
-            {#if  foldersFetching || filesFetching}
+            {#if foldersFetching || filesFetching}
                 <div class="loading" on:wheel|preventDefault>
                     <Spinner
                         width={"2rem"}
@@ -264,7 +264,7 @@
             {/if}
             {#if fetchAll}
                 <button
-                    class="btn s-prime fetch-all"
+                    class="btn s-second fetch-all"
                     title="load all"
                     on:click={fetchAllAtOnce}>{@html fetchAllIcon}</button
                 >
