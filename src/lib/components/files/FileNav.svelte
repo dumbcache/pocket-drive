@@ -3,9 +3,12 @@
     import { createEventDispatcher, onDestroy, onMount } from "svelte";
 
     export let files: File[];
+    export let preview: HTMLElement;
     let active: string;
     let navigation: HTMLElement;
     const dispatch = createEventDispatcher();
+    let observer: IntersectionObserver;
+    let inspectionLog = {};
 
     const unsubscribe = activeImage.subscribe((data) => {
         if (data && data.id != active) {
@@ -25,6 +28,44 @@
         }
     });
 
+    function childInspection(items: FileResponse | undefined) {
+        observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        entry.target.timeoutid = setTimeout(() => {
+                            let { id } = entry.target.dataset;
+                            if (!inspectionLog[id]) {
+                                // viewCache.update((val) => ({
+                                //     ...val,
+                                //     [id]: true,
+                                // }));
+                                let li = preview?.querySelector(
+                                    `[data-id="${id}"]`
+                                ) as HTMLImageElement;
+                                if (!li.src.startsWith("blob://")) {
+                                    li.src = li.dataset.src;
+                                }
+                                inspectionLog[id] = true;
+                            }
+                            observer.unobserve(entry.target);
+                        }, 700);
+                    } else {
+                        clearTimeout(entry.target.timeoutid);
+                    }
+                });
+            },
+            { threshold: 0 }
+        );
+        items?.forEach((item) => {
+            let id = item.id;
+            if (id) {
+                let li = navigation?.querySelector(`[data-id="${id}"]`);
+                li && observer.observe(li);
+            }
+        });
+    }
+
     onMount(() => {
         setTimeout(() => {
             if ($activeImage) {
@@ -37,7 +78,10 @@
                     inline: "center",
                 });
             }
-        }, 0);
+        }, 0.1);
+        setTimeout(() => {
+            childInspection(files);
+        }, 1000);
     });
 
     onDestroy(() => {
@@ -64,7 +108,7 @@
                 data-id={file.id}
             >
                 <img
-                    src={file.thumbnailLink}
+                    src={inspectionLog[file.id] ? file.thumbnailLink : ""}
                     alt=""
                     class:no={!file.thumbnailLink}
                     height="150"

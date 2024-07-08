@@ -29,7 +29,7 @@
     let memory = 0;
     let showFileNames = false;
 
-    $: foot && observer?.observe(foot);
+    // $: foot && observer?.observe(foot);
 
     let unsubscribe = fileStore.subscribe((data) => {
         if (data) {
@@ -47,7 +47,7 @@
     });
 
     let preferencesUnsubscribe = preferences.subscribe((val) => {
-        showFileNames = val.showFileNames;
+        showFileNames = val?.showFileNames;
     });
     onDestroy(() => {
         unsubscribe();

@@ -1,4 +1,3 @@
-import { fail } from "@sveltejs/kit";
 import { get, writable } from "svelte/store";
 
 export const HOME_PATH = "home";

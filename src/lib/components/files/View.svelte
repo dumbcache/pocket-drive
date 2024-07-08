@@ -183,7 +183,7 @@
             bind:this={navigation}
             on:wheel|stopPropagation
         >
-            <FileNav {files} on:change={changeHandler} />
+            <FileNav {files} {preview} on:change={changeHandler} />
         </section>
         <section
             class="two preview"
@@ -205,7 +205,7 @@
                             class:zoom
                             class:active
                             class="img"
-                            src={file.thumbnailLink}
+                            src=""
                             alt=""
                             data-id={file.id}
                             data-src={file.thumbnailLink}
