@@ -49,6 +49,7 @@ export let refresh = writable(false);
 export let starred = writable(false);
 export let autosave = writable(false);
 export let progress = writable(false);
+export let mask = writable(false);
 export let mode = writable("");
 export let activeParent = writable<{
     id: string;

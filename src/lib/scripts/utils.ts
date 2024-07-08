@@ -16,6 +16,8 @@ import {
     imageFetchLog,
     pocketState,
     updateProgressStore,
+    starred,
+    mask,
 } from "$lib/scripts/stores";
 import ChildWorker from "$lib/scripts/worker.ts?worker";
 import { clearDropItems } from "$lib/scripts/image";
@@ -731,11 +733,31 @@ if (browser) {
             case "Escape":
                 mode.set("");
                 return;
+
             case "e":
                 activeView.update((prev) =>
                     prev === "FOLDER" ? "FILE" : "FOLDER"
                 );
                 return;
+
+            case "E":
+                activeView.set("FILE");
+                mode.set("edit");
+                return;
+
+            case "s":
+            case "S":
+                mode.set("search");
+                return;
+
+            case "d":
+            case "D":
+                starred.set(!get(starred));
+                return;
+
+            case "a":
+            case "A":
+                mask.set(!get(mask));
         }
     });
 }

@@ -10,12 +10,12 @@
         mode,
         pocketState,
         refresh,
+        mask,
         storeSnap,
     } from "$lib/scripts/stores";
     import Content from "$lib/components/Content.svelte";
     import Tools from "$lib/components/Tools.svelte";
     import Count from "$lib/components/utils/Count.svelte";
-    import Folder from "$lib/components/folders/Folder.svelte";
     import {
         fetchMultiple,
         fetchSingle,
@@ -23,12 +23,13 @@
         getRoot,
         getToken,
         IMG_MIME_TYPE,
-        searchHandler,
     } from "$lib/scripts/utils";
     import Spinner from "$lib/components/utils/Spinner.svelte";
     import BackButton from "$lib/components/utils/BackButton.svelte";
-    import scrollDownIcon from "$lib/assets/arrowLeftDouble.svg?raw";
+
     import fetchAllIcon from "$lib/assets/fetchAll.svg?raw";
+    import Search from "$lib/components/utils/Search.svelte";
+    import ScrollButton from "$lib/components/utils/ScrollButton.svelte";
 
     export let data: {
         folders: GoogleFileResponse;
@@ -38,21 +39,11 @@
     $: folderStore.set(data.folders);
     $: fileStore.set(data.files);
     let view = $activeView;
-    let global = false;
-    let search = "";
-    let searchFolders: Folder[] = [];
-    let searchElement: HTMLInputElement;
-    let token = getToken();
-    let isScrolling = false;
-    let searchTimeout;
-    let scrollTimeout;
+
     let fetchAll = false;
     let foldersFetching = false;
     let filesFetching = false;
-    let scrollPosition = window.scrollY;
-    let delta = 0;
     let pageX = 0;
-    let mask = false;
 
     function checks() {
         $activeView = "FOLDER";
@@ -72,67 +63,6 @@
         if (!val) checks();
     });
     const unsubscribeView = activeView.subscribe((data) => (view = data));
-    const unsubscribeMode = mode.subscribe((data) => {
-        // data === "search" && (folders = [...$folderStore?.files]);
-        if (data === "") {
-            search = "";
-            global = false;
-            searchFolders = [];
-        }
-    });
-    async function handleChange() {
-        if (search.trim() === "") {
-            // folders = [...$folderStore?.files];
-            searchFolders = [];
-            return;
-        }
-    }
-    function handleSearch() {
-        clearTimeout(searchTimeout);
-        searchTimeout = setTimeout(async () => {
-            let val = search.trim();
-            if (val === "") {
-                // folders = [...$folderStore?.files];
-                searchFolders = [];
-                return;
-            }
-            if (global) {
-                searchFolders = await searchHandler(token, val);
-                return;
-            }
-            searchFolders = $folderStore?.files.filter((folder) =>
-                folder.name.toLowerCase().includes(val.toLowerCase())
-            );
-        }, 500);
-    }
-
-    function handleKeyDown(e: KeyboardEvent) {
-        switch (e.key) {
-            case "E":
-                $mode = "edit";
-                return;
-            case "s":
-                $mode = "search";
-                return;
-            case "S":
-                $mode = "search";
-                global = true;
-                return;
-            case "a":
-            case "A":
-                mask = !mask;
-        }
-    }
-    function handleScroll(e) {
-        let currentScrollPosition = window.scrollY;
-        delta = currentScrollPosition - scrollPosition;
-        scrollPosition = currentScrollPosition;
-        isScrolling = true;
-        clearTimeout(scrollTimeout);
-        scrollTimeout = setTimeout(() => {
-            isScrolling = false;
-        }, 1500);
-    }
 
     function handlePointerDown(e: PointerEvent) {
         if (e.pointerType === "touch") pageX = e.pageX;
@@ -231,11 +161,8 @@
     onDestroy(() => {
         unsubscribeView();
         unsubscribeNavigation();
-        unsubscribeMode();
     });
 </script>
-
-<svelte:window on:keydown={handleKeyDown} on:scroll={handleScroll} />
 
 <section class="wrapper" style:display="">
     {#if $mode !== "edit"}
@@ -290,52 +217,7 @@
             {$activeParent?.name}
         </h2>
         {#if $mode === "search"}
-            <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
-            <div class="search-wrapper" role="form" on:keydown|stopPropagation>
-                <button
-                    title="global"
-                    role="switch"
-                    aria-checked="false"
-                    class="global"
-                    class:active={global}
-                    on:click={() => {
-                        global = !global;
-                        searchElement.focus();
-                        handleSearch();
-                    }}>/R</button
-                >
-                <!-- svelte-ignore a11y-autofocus -->
-                <input
-                    type="search"
-                    name="search"
-                    id="search"
-                    autocomplete="off"
-                    autofocus
-                    placeholder="search folders"
-                    bind:this={searchElement}
-                    bind:value={search}
-                    on:input={handleSearch}
-                    on:change={handleChange}
-                />
-            </div>
-
-            <section class="folder-container">
-                {#if searchFolders && searchFolders.length > 0}
-                    <ol class="list">
-                        {#each searchFolders as folder (folder.id)}
-                            <li data-id={folder.id}>
-                                <Folder
-                                    {folder}
-                                    toolsVisible={false}
-                                    visible={true}
-                                />
-                            </li>
-                        {/each}
-                    </ol>
-                {:else}
-                    <p class="no-content">No Content</p>
-                {/if}
-            </section>
+            <Search />
         {/if}
     {/if}
     <main
@@ -350,27 +232,12 @@
                 ? $folderStore?.files.length
                 : $fileStore?.files.length}
         />
-        {#if mask}
+        {#if $mask}
             <div class="mask"></div>
         {/if}
     </main>
-    <button
-        class="scroll btn s-prime"
-        class:up={delta < 0}
-        class:down={delta > 0}
-        style:display={isScrolling ? "initial" : "none"}
-        on:click={() => {
-            delta > 0
-                ? window.scrollTo({
-                      top: document.body.scrollHeight,
-                      behavior: "instant",
-                  })
-                : window.scrollTo({
-                      top: 0,
-                      behavior: "instant",
-                  });
-        }}>{@html scrollDownIcon}</button
-    >
+
+    <ScrollButton />
 </section>
 
 <style>
@@ -437,87 +304,6 @@
     .two {
         display: none;
     }
-    .search-wrapper {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 1rem;
-        width: 100%;
-        color: var(--color-three);
-        position: sticky;
-        top: 5rem;
-        z-index: 1;
-        /* box-shadow: 0 0 5px 1px var(--color-file-border); */
-        background-color: var(--primary-bg-color);
-    }
-    .global {
-        padding: 1rem;
-        border: 1px solid var(--color-file-border);
-        border-top-left-radius: 0.5rem;
-        border-bottom-left-radius: 0.5rem;
-    }
-    .global.active {
-        color: #f00;
-        /* background-color: var(--bg-color-three); */
-    }
-
-    .down {
-        rotate: -90deg;
-    }
-    .up {
-        rotate: 90deg;
-    }
-    .scroll {
-        position: fixed;
-        bottom: 5rem;
-        right: 5rem;
-        border-radius: 50%;
-        /* box-shadow: 0 0 1px 1px var(--primary-color); */
-        box-sizing: content-box;
-        padding: 1rem;
-    }
-    .scroll :global(svg) {
-        border-radius: 50%;
-        box-shadow: 0 0 1px 1px var(--primary-color);
-        background-color: var(--primary-bg-color);
-    }
-    #search {
-        width: 100%;
-        max-width: 30rem;
-        padding: 1rem;
-        display: block;
-        outline: none;
-        border: none;
-        border-top-right-radius: 0.5rem;
-        border-bottom-right-radius: 0.5rem;
-        border-bottom: 2px solid var(--color-file-border);
-        background-color: var(--bg-color-two);
-    }
-    #search:focus {
-        background-color: var(--bg-color-three);
-    }
-
-    .list {
-        display: flex;
-        flex-flow: row wrap;
-        align-items: flex-start;
-        justify-content: center;
-        gap: var(--content-gap);
-        padding: 2rem 0rem;
-    }
-
-    .no-content {
-        display: flex;
-        flex-flow: column nowrap;
-        gap: 0.5rem;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        color: #555;
-        text-align: center;
-        user-select: none;
-    }
 
     @media (max-width: 600px) {
         .wrapper {
@@ -543,27 +329,10 @@
             font-size: initial;
             max-width: 80%;
         }
-        .search-wrapper {
-            padding: 1rem;
-            top: 3.5rem;
-        }
-        #search,
-        .global {
-            padding: 0.7rem;
-            width: fit-content;
-        }
 
         .folder-name {
             flex-shrink: 0;
             padding: 0.5rem;
-        }
-
-        .scroll {
-            right: 2rem;
-            bottom: 2rem;
-        }
-        .no-content {
-            font-size: smaller;
         }
 
         .fetch-all {

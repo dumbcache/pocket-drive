@@ -74,8 +74,7 @@
 
     @media (max-width: 600px) {
         .progress-bar {
-            top: unset;
-            bottom: 7rem;
+            top: 14rem;
         }
     }
 </style>
