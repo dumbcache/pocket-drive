@@ -1,6 +1,12 @@
 <script lang="ts">
     import { onDestroy } from "svelte";
-    import { activeImage, fileStore, mode, starred } from "$lib/scripts/stores";
+    import {
+        activeImage,
+        fileStore,
+        mode,
+        preferences,
+        starred,
+    } from "$lib/scripts/stores";
     import File from "$lib/components/files/File.svelte";
     import Edit from "$lib/components/files/Edit.svelte";
     import { navigating } from "$app/stores";
@@ -21,6 +27,7 @@
     let set = new Set<string>();
     let count = 0;
     let memory = 0;
+    let showFileNames = false;
 
     $: foot && observer?.observe(foot);
 
@@ -39,9 +46,13 @@
         }
     });
 
+    let preferencesUnsubscribe = preferences.subscribe((val) => {
+        showFileNames = val.showFileNames;
+    });
     onDestroy(() => {
         unsubscribe();
         navUnsubscribe();
+        preferencesUnsubscribe();
         childObserver?.disconnect();
     });
 
@@ -166,7 +177,11 @@
                         ? "none"
                         : "initial"}
                 >
-                    <File {file} visible={inspectionLog[file.id]} />
+                    <File
+                        {file}
+                        visible={inspectionLog[file.id]}
+                        {showFileNames}
+                    />
                 </li>
             {/each}
         </ol>

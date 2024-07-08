@@ -85,10 +85,14 @@ export function checkLoginStatus() {
     }
 }
 
+export function savePartial() {}
+
 export function signUserOutPartial() {
     childWorker.postMessage({ context: "CLEAR_IMAGE_CACHE" });
     let theme = window.localStorage.getItem("theme");
+    let preferences = window.localStorage.getItem("preferences");
     window.localStorage.clear();
+    window.localStorage.setItem("preferences", preferences);
     window.localStorage.setItem("theme", theme);
 }
 
@@ -102,8 +106,10 @@ export async function clearFiles() {
     childWorker.postMessage({ context: "CLEAR_IMAGE_CACHE" });
     await caches.delete("pd-data");
     let theme = window.localStorage.getItem("theme");
+    let preferences = window.localStorage.getItem("preferences");
     window.localStorage.clear();
     window.localStorage.setItem("theme", theme);
+    window.localStorage.setItem("preferences", preferences);
     window.sessionStorage.clear();
 }
 

@@ -6,9 +6,6 @@
     let theme = "";
     onMount(() => {
         theme = window.localStorage.getItem("theme") ?? "";
-        const root = document.documentElement;
-        theme &&
-            (root.classList.contains("dark") || root.classList.toggle("dark"));
     });
     function toggleTheme() {
         theme = theme === "" ? "dark" : "";

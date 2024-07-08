@@ -21,6 +21,10 @@
         setTimeout(() => {
             overlay.style.display = "none";
         }, 2000);
+        const theme = window.localStorage.getItem("theme") ?? "";
+        const root = document.documentElement;
+        theme &&
+            (root.classList.contains("dark") || root.classList.toggle("dark"));
     });
 </script>
 
@@ -28,7 +32,7 @@
     <div
         class="loading"
         on:wheel|preventDefault|stopPropagation
-        on:scroll|preventDefault|stopPropagation
+        on:touchmove|stopPropagation|preventDefault
     >
         <Spinner />
     </div>

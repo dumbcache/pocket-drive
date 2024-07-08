@@ -13,11 +13,13 @@
         mode,
         pocketStore,
         sessionTimeout,
+        profile,
     } from "$lib/scripts/stores";
     import { googleClient } from "$lib/scripts/login";
     import { goto } from "$app/navigation";
     import { previewAndSetDropItems } from "$lib/scripts/image";
     import ProgressBar from "$lib/components/utils/ProgressBar.svelte";
+    import Profile from "$lib/components/utils/Profile.svelte";
 
     let draggedOver = false;
 
@@ -81,6 +83,9 @@
     <slot />
     {#if $dropItems.length > 0}
         <Drop />
+    {/if}
+    {#if $profile}
+        <Profile />
     {/if}
     <ProgressBar />
     {#if $sessionTimeout}

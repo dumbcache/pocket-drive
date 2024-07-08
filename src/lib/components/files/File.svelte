@@ -7,7 +7,7 @@
 
     export let visible: Boolean;
     export let file: File;
-
+    export let showFileNames = false;
     let selected = "";
 </script>
 
@@ -59,6 +59,9 @@
         <div class="placeholder"></div>
     {/if}
 </div>
+{#if showFileNames}
+    <p class="name">{file.name}</p>
+{/if}
 
 <style>
     .card {
@@ -160,6 +163,25 @@
     .play :global(svg) {
         fill: #fff;
     }
+
+    .name {
+        max-width: var(--file-width);
+        padding: 0.5rem 0rem;
+        font-size: smaller;
+        word-wrap: unset;
+        white-space: nowrap;
+        overflow-x: hidden;
+        text-overflow: ellipsis;
+        max-height: calc(2 * 1.5em);
+        @supports (-webkit-line-clamp: 2) {
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+            overflow: hidden;
+            white-space: wrap;
+        }
+    }
+
     @media (max-width: 600px) {
         .img-link,
         .favorite {

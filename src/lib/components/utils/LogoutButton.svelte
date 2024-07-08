@@ -11,13 +11,18 @@
     }
 </script>
 
-<button
-    class="button__signout btn s-prime"
-    on:click={signoutHandler}
-    title="logout"
->
-    {@html logoutIcon}
+<button class="signout" title="logout" on:click={signoutHandler}>
+    <span>Logout</span>
+    <!-- <span class="btn s-second">
+        {@html logoutIcon}
+    </span> -->
 </button>
 
 <style>
+    .signout {
+        display: flex;
+    }
+    .signout:hover {
+        color: var(--color-focus);
+    }
 </style>

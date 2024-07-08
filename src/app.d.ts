@@ -122,6 +122,10 @@ declare global {
         id: string;
         name: string;
     }
+
+    interface Preferences {
+        showFileNames?: Boolean;
+    }
 }
 
 export {};

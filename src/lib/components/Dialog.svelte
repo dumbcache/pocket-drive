@@ -23,9 +23,8 @@
     id="dialog"
     bind:this={dialog}
     on:keydown={handleKeyDown}
-    on:pointermove|stopPropagation
-    on:pointerdown|stopPropagation
-    on:pointerup|stopPropagation
+    on:touchmove|stopPropagation|preventDefault
+    on:wheel|stopPropagation|preventDefault
 >
     <slot />
 </dialog>

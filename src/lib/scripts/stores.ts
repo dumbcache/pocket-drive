@@ -20,6 +20,16 @@ export function updateProgressStore(t = 0, s = 0, f = 0) {
         };
     });
 }
+export let profile = writable(false);
+export let preferences = writable<Preferences>({ showFileNames: false });
+export function updatePreferences(p: Preferences) {
+    preferences.update((val) => {
+        return {
+            ...val,
+            ...p,
+        };
+    });
+}
 
 export let folderStore = writable<GoogleFileResponse | undefined>();
 export let fileStore = writable<GoogleFileResponse | undefined>();

@@ -1,11 +1,9 @@
 <script>
-    import ColorScheme from "$lib/components/utils/ColorScheme.svelte";
-    import LogoutButton from "$lib/components/utils/LogoutButton.svelte";
-    import { HOME_PATH } from "$lib/scripts/stores";
+    import { HOME_PATH, profile } from "$lib/scripts/stores";
     import Tools from "$lib/components/Tools.svelte";
     import { onMount } from "svelte";
     import BackButton from "./utils/BackButton.svelte";
-    import settingsIcon from "$lib/assets/settings.svg?raw";
+    import profileIcon from "$lib/assets/profile.svg?raw";
 
     let homeButton = "";
 
@@ -35,10 +33,8 @@
         <button
             class="btn s-prime settings"
             title="settings"
-            on:click={() => {}}>{@html settingsIcon}</button
+            on:click={() => ($profile = true)}>{@html profileIcon}</button
         >
-        <ColorScheme />
-        <LogoutButton />
     </div>
 </header>
 
