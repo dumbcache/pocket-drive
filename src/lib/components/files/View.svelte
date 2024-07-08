@@ -154,7 +154,7 @@
                     }
                 });
             },
-            { root: preview, threshold: 0.5 }
+            { root: preview, threshold: 0.1 }
         );
         files?.forEach((item) => {
             let id = item.id;
