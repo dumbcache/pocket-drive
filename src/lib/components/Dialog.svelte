@@ -23,7 +23,6 @@
     id="dialog"
     bind:this={dialog}
     on:keydown={handleKeyDown}
-    on:touchmove|stopPropagation|preventDefault
     on:wheel|stopPropagation|preventDefault
 >
     <slot />
