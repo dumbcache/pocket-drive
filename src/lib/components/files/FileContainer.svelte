@@ -109,12 +109,11 @@
 
             case "":
             default:
-                activeImage.set({ id });
-                mode.set("view");
                 const [file] = get(fileStore)?.files.filter(
                     (file) => file.id === id
                 );
                 activeImage.set(file);
+                mode.set("view");
                 return;
         }
     }

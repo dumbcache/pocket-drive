@@ -434,11 +434,6 @@
         padding: 1rem;
     }
 
-    .loading {
-        position: absolute;
-        top: 5rem;
-        right: 1rem;
-    }
     .two {
         display: none;
     }
@@ -574,6 +569,11 @@
         .fetch-all {
             position: absolute;
             top: 5rem;
+        }
+        .loading {
+            position: absolute;
+            top: 5rem;
+            right: 1rem;
         }
     }
 </style>
