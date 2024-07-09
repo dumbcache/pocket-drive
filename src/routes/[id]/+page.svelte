@@ -12,6 +12,7 @@
         refresh,
         mask,
         storeSnap,
+        fetchAll,
     } from "$lib/scripts/stores";
     import Content from "$lib/components/Content.svelte";
     import Tools from "$lib/components/Tools.svelte";
@@ -40,7 +41,7 @@
     $: fileStore.set(data.files);
     let view = $activeView;
 
-    let fetchAll = false;
+    let renderAll = false;
     let foldersFetching = false;
     let filesFetching = false;
     let pageX = 0;
@@ -54,9 +55,12 @@
             $activeView = "FILE";
         }
         if ($folderStore?.nextPageToken || $fileStore?.nextPageToken) {
-            fetchAll = true;
+            renderAll = true;
         }
     }
+    const unsubscribeFetchAll = fetchAll.subscribe((data) => {
+        renderAll = data;
+    });
 
     const unsubscribeNavigation = navigating.subscribe((val) => {
         $mode = "";
@@ -81,7 +85,7 @@
         }
     }
 
-    async function fetchFolders(accessToken: string) {
+    async function fetchFolders(accessToken: string, parent: string) {
         let pToken = $folderStore?.nextPageToken;
         if (!pToken) {
             foldersFetching = false;
@@ -90,21 +94,25 @@
         foldersFetching = true;
         let temp = await fetchMultiple(
             {
-                parent: data.parent,
+                parent: parent,
                 mimeType: FOLDER_MIME_TYPE,
                 pageToken: pToken,
             },
             accessToken
         );
+        if (parent !== data.parent) {
+            foldersFetching = false;
+            return;
+        }
         folderStore.update((prev) => {
             return {
                 nextPageToken: temp.nextPageToken,
                 files: [...prev?.files, ...temp.files],
             };
         });
-        fetchFolders(accessToken);
+        return fetchFolders(accessToken, parent);
     }
-    async function fetchFiles(accessToken: string) {
+    async function fetchFiles(accessToken: string, parent: string) {
         let pToken = $fileStore?.nextPageToken;
         if (!pToken) {
             filesFetching = false;
@@ -112,23 +120,28 @@
         }
         filesFetching = true;
         let temp = await fetchMultiple(
-            { parent: data.parent, mimeType: IMG_MIME_TYPE, pageToken: pToken },
+            { parent: parent, mimeType: IMG_MIME_TYPE, pageToken: pToken },
             accessToken
         );
+        if (parent !== data.parent) {
+            filesFetching = false;
+            return;
+        }
         fileStore.update((prev) => {
             return {
                 nextPageToken: temp.nextPageToken,
                 files: [...prev?.files, ...temp.files],
             };
         });
-        fetchFiles(accessToken);
+        return fetchFiles(accessToken, parent);
     }
 
     async function fetchAllAtOnce() {
+        let parent = data.parent;
         let accessToken = getToken();
-        fetchFolders(accessToken);
-        fetchFiles(accessToken);
-        fetchAll = false;
+        fetchFolders(accessToken, parent);
+        fetchFiles(accessToken, parent);
+        renderAll = false;
     }
 
     afterNavigate(async () => {
@@ -151,7 +164,7 @@
 
     beforeNavigate(() => {
         if ($refresh) return;
-        fetchAll = false;
+        renderAll = false;
         storeSnap();
     });
 
@@ -192,7 +205,7 @@
                     />
                 </div>
             {/if}
-            {#if fetchAll}
+            {#if renderAll}
                 <button
                     class="btn s-second fetch-all"
                     title="load all"

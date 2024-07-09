@@ -18,6 +18,7 @@ import {
     updateProgressStore,
     starred,
     mask,
+    fetchAll,
 } from "$lib/scripts/stores";
 import ChildWorker from "$lib/scripts/worker.ts?worker";
 import { clearDropItems } from "$lib/scripts/image";
@@ -570,7 +571,11 @@ if (browser) {
                     getToken(),
                     true
                 ).then((files) => {
-                    data?.top && fileStore.set(files);
+                    if (data?.top) {
+                        fileStore.set(files);
+                        files.nextPageToken && fetchAll.set(true);
+                    }
+
                     if (pocketStore.has(parent)) {
                         pocketStore.set(parent, {
                             ...pocketStore.get(parent),

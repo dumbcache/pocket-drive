@@ -7,7 +7,6 @@
     let scrollTimeout: number;
 
     function handleScroll(e) {
-        console.log("ls");
         let currentScrollPosition = window.scrollY;
         delta = currentScrollPosition - scrollPosition;
         scrollPosition = currentScrollPosition;

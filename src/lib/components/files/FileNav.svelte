@@ -77,6 +77,13 @@
                     block: "center",
                     inline: "center",
                 });
+                let fc = document.querySelector(".file-container");
+                const ele2 = fc.querySelector(`[data-id="${$activeImage.id}"]`);
+                ele2?.scrollIntoView({
+                    behavior: "instant",
+                    block: "center",
+                    inline: "center",
+                });
             }
         }, 0.1);
         setTimeout(() => {
@@ -137,7 +144,8 @@
         height: auto;
         object-fit: contain;
         filter: brightness(0.5);
-        width: 80%;
+        width: 10rem;
+        max-height: 10rem;
         border-radius: 0.5rem;
     }
     button:hover img {
