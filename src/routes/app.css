@@ -71,8 +71,8 @@
     --primary-icon-size: var(--size-large);
     --secondary-icon-size: var(--size-medium);
     --cover-height: 20rem;
-    --content-column-gap: 2rem;
-    --content-row-gap: 2rem;
+    --content-column-gap: 3rem;
+    --content-row-gap: 3rem;
     --content-gap: var(--content-row-gap) var(--content-column-gap);
     --vertical-padding: 3rem;
     --horizontal-padding: 5rem;
@@ -234,7 +234,7 @@ a {
         --title-size: var(--size-small);
         --primary-icon-size: var(--size-medium);
         --secondary-icon-size: var(--size-small);
-        --content-column-gap: 1rem;
+        --content-column-gap: 2rem;
         --content-row-gap: 2rem;
         --horizontal-padding: 3rem;
         --cover-height: 17rem;
@@ -247,6 +247,7 @@ a {
     :root {
         --content-padding: 2rem 0rem;
         --content-column-gap: 0.7rem;
+        --content-row-gap: 2rem;
         --cover-height: 11rem;
         --folder-width: 15rem;
         --file-width: 15rem;

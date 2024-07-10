@@ -333,7 +333,7 @@
             display: none;
         }
         .nav {
-            padding: 1rem 0.5rem;
+            padding: 1.5rem 0.5rem;
             gap: 2rem;
             margin-bottom: 0rem;
         }

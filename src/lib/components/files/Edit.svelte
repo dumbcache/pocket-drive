@@ -34,7 +34,10 @@
         $mode = "";
         dispatch("close", { type });
     }
-
+    function confirmAction() {
+        if (action === "DELETE") deleteAction();
+        if (action === "TOP") moveToTop();
+    }
     function deleteAction() {
         updateProgressStore(set.size);
         childWorker.postMessage({
@@ -121,7 +124,7 @@
         <button class="cancel action" on:click={() => (confirm = false)}
             >cancel</button
         >
-        <button class="confirm action" on:click={deleteAction}>confirm</button>
+        <button class="confirm action" on:click={confirmAction}>confirm</button>
     {:else}
         <button
             class="btn s-prime"
@@ -158,13 +161,20 @@
             class="btn s-prime"
             title="move to start"
             disabled={count === 0}
+            on:click={() => {
+                action = "TOP";
+                confirm = true;
+            }}
             on:click={() => moveToTop()}>{@html startIcon}</button
         >
         <button
             class="btn s-prime"
             title="delete"
             disabled={count === 0}
-            on:click={() => (confirm = true)}>{@html deleteIcon}</button
+            on:click={() => {
+                action = "DELETE";
+                confirm = true;
+            }}>{@html deleteIcon}</button
         >
     {/if}
     <Count {count} />
@@ -242,6 +252,7 @@
         align-items: center;
         gap: 2rem;
         justify-content: flex-end;
+        font-size: var(--size-smaller);
     }
     button:disabled {
         cursor: not-allowed;
@@ -316,6 +327,10 @@
     .action:disabled {
         background-color: var(--color-bg-three);
     }
+    .cancel,
+    .confirm {
+        background-color: var(--color-bg-one);
+    }
     .button-wrapper {
         display: flex;
         /* justify-content: center; */
@@ -337,11 +352,14 @@
     }
     @media (max-width: 500px) {
         .edit-buttons {
-            padding: 1rem 0rem;
+            padding: 1.5rem 0rem;
             gap: 1rem;
             justify-content: space-evenly;
         }
 
+        .memory {
+            font-size: 1.3rem;
+        }
         .action {
             width: 6rem;
         }
