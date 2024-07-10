@@ -83,13 +83,13 @@
         width: 40rem;
         height: 50%;
         /* margin: 0 auto; */
-        /* background-color: var(--primary-bg-color); */
+        /* background-color: var(--bg-color); */
         /* border: 1px solid var(--color-outline); */
         border-radius: 0.5rem;
         /* padding: 1rem; */
         /* box-shadow: 0 0 100px 5px #000; */
         box-shadow: 0 0 50px -10px #000;
-        background-color: var(--bg-color-three);
+        background-color: var(--bg-color-one);
     }
     ul {
         display: flex;

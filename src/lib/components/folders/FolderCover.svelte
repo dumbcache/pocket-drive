@@ -68,7 +68,7 @@
     .cover {
         display: grid;
         position: relative;
-        border: 1px solid var(--color-file-border);
+        border: 1px solid var(--color-border);
         background-color: var(--color-file-background);
         width: var(--folder-width);
         height: var(--cover-height);
@@ -95,12 +95,12 @@
 
     .cover .pic-wrapper:nth-child(1) {
         grid-area: one;
-        border-right: 1px solid var(--color-file-border);
+        border-right: 1px solid var(--color-border);
         height: 100%;
     }
     .cover .pic-wrapper:nth-child(2) {
         grid-area: two;
-        border-bottom: 1px solid var(--color-file-border);
+        border-bottom: 1px solid var(--color-border);
         height: 100%;
     }
     .cover .pic-wrapper:nth-child(3) {

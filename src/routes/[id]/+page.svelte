@@ -286,7 +286,7 @@
         padding: 1rem 0rem;
         position: sticky;
         top: 0;
-        background-color: var(--primary-bg-color);
+        background-color: var(--bg-color);
         z-index: 1;
         gap: 5rem;
     }

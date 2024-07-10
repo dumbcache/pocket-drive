@@ -25,20 +25,16 @@
     --color-white-one: #ebebef;
     --color-white-two: #d0d1d7;
     --color-white-three: #c0c1c7;
-    --color-white-light: #fff5;
-    --color-black-light: #0005;
+    --color-white-light: #fff2;
+    --color-black-light: #0002;
 
     --title-background: linear-gradient(120deg, #0ac0ee, #d00bc3, #473aff);
     --color-link: var(--color-blue);
     --color-focus: var(--color-light-blue);
     --color-outline: #bbb;
-    --primary-bg-color: var(--color-white);
-    --primary-color: var(--color-black-one);
     --primary-backdrop-color: #1115;
     --svg-fill: var(--color-black-two);
-    --bg-color-one: var(--color-white-one);
     --bg-color-two: var(--color-white-two);
-    --bg-color-three: var(--color-white-three);
     --bg-color-four: #bbb;
     --bg-color-five: #aaa;
     --bg-color-six: #888;
@@ -48,8 +44,12 @@
     --color-four: #444;
     --color-five: #555;
     --color-file-background: var(--color-white-one);
-    --color-file-border: var(--color-black-light);
     --color-file-hover: var(--color-white-three);
+
+    --bg-color: var(--color-white);
+    --bg-color-one: var(--color-white-one);
+    --color: var(--color-black-one);
+    --color-border: var(--color-black-light);
 
     --cover-height: 20rem;
     --folder-width: 30rem;
@@ -72,13 +72,9 @@
     --color-link: var(--color-pink);
     --color-focus: var(--color-pink);
     --color-outline: #666;
-    --primary-bg-color: var(--color-black-one);
-    --primary-color: var(--color-white-one);
     --primary-backdrop-color: #111a;
     --svg-fill: var(--color-white-two);
-    --bg-color-one: var(--color-black-one);
     --bg-color-two: var(--color-black-two);
-    --bg-color-three: var(--color-black-three);
     --bg-color-four: #444;
     --bg-color-five: #555;
     --color-one: var(--color-white-one);
@@ -87,8 +83,12 @@
     --color-four: #bbb;
     --color-five: #aaa;
     --color-file-background: var(--color-black-two);
-    --color-file-border: var(--color-white-light);
     --color-file-hover: var(--color-black-one);
+
+    --bg-color: var(--color-black-one);
+    --bg-color-one: var(--color-black-three);
+    --color: var(--color-white-one);
+    --color-border: var(--color-white-light);
 }
 
 :root {
@@ -98,8 +98,8 @@
     min-height: 100%;
 
     color-scheme: light dark;
-    background-color: var(--primary-bg-color);
-    color: var(--primary-color);
+    background-color: var(--bg-color);
+    color: var(--color);
 
     font-synthesis: none;
     text-rendering: optimizeLegibility;
@@ -173,7 +173,7 @@ button:disabled svg,
 button:disabled svg:hover,
 .btn:disabled svg,
 .btn:disabled svg:hover {
-    fill: var(--primary-color);
+    fill: var(--color);
     filter: opacity(0.2);
     cursor: not-allowed;
 }
@@ -223,7 +223,7 @@ a {
 }
 
 ::-webkit-scrollbar-thumb {
-    background: var(--primary-color);
+    background: var(--color);
     border-radius: 0.5rem;
 }
 

@@ -200,7 +200,7 @@
         width: 100%;
         border: none;
         height: 1px;
-        background-color: var(--color-file-border);
+        background-color: var(--color-border);
     }
 
     .active :global(svg) {

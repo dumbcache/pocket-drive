@@ -47,7 +47,7 @@
         border-bottom-left-radius: 0.5rem;
         border: 1px solid var(--color-outline);
         border-right: none;
-        background-color: var(--primary-bg-color);
+        background-color: var(--bg-color);
         font-size: smaller;
     }
 

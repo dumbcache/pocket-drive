@@ -98,7 +98,7 @@
         max-width: 100%;
         max-height: 40rem;
         object-fit: contain;
-        border: 1px solid var(--color-file-border);
+        border: 1px solid var(--color-border);
     }
 
     .developer-info {
@@ -108,7 +108,7 @@
         justify-content: center;
         padding: 3rem 0rem;
         gap: 1rem;
-        border-top: 1px solid var(--color-file-border);
+        border-top: 1px solid var(--color-border);
         text-align: center;
         font-size: 1.5rem;
     }
@@ -138,7 +138,7 @@
         width: 4rem;
     }
     footer :global(svg) {
-        fill: var(--primary-color);
+        fill: var(--color);
     }
     footer :global(svg):hover {
         fill: var(--color-focus);

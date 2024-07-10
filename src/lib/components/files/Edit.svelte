@@ -229,7 +229,7 @@
         position: sticky;
         top: 0rem;
         z-index: 1;
-        background: var(--primary-bg-color);
+        background: var(--bg-color);
         padding: 2rem 0rem;
         display: flex;
         flex-flow: row nowrap;
@@ -258,7 +258,7 @@
 
     .edit-form {
         color: var(--color-three);
-        background-color: var(--primary-bg-color);
+        background-color: var(--bg-color);
         box-shadow: 0 0 1px 2px var(--color-focus);
         display: flex;
         flex-flow: column nowrap;
@@ -306,7 +306,7 @@
     .action {
         width: 7rem;
         padding: 0.5rem;
-        border: 1px solid var(--color-file-border);
+        border: 1px solid var(--color-border);
         text-align: center;
         border-radius: 0.5rem;
     }

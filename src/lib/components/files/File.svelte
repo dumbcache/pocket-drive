@@ -122,14 +122,14 @@
         max-width: var(--file-width);
         max-height: var(--file-height);
         border: none;
-        border: 1px solid var(--color-file-border);
+        border: 1px solid var(--color-border);
         object-fit: cover;
         object-position: top;
     }
     .placeholder {
         width: var(--file-width);
         height: var(--file-width);
-        border: 1px solid var(--color-file-border);
+        border: 1px solid var(--color-border);
         background-color: var(--color-file-background);
     }
     .delete:hover {

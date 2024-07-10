@@ -73,7 +73,7 @@
         flex-flow: column nowrap;
         justify-content: space-between;
         align-items: center;
-        border-right: 1px solid var(--color-file-border);
+        border-right: 1px solid var(--color-border);
         width: fit-content;
         height: 100vh;
         padding: 1rem 4rem;
@@ -106,7 +106,7 @@
             flex-flow: row nowrap;
             padding: 1rem 1rem;
             border-right: none;
-            border-bottom: 1px solid var(--color-file-border);
+            border-bottom: 1px solid var(--color-border);
         }
         .wrapper {
             flex-flow: row nowrap;

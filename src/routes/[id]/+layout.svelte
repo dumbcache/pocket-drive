@@ -129,7 +129,7 @@
         padding: 5rem;
         border-radius: 1rem;
         box-shadow: 0 0 50px -10px #000;
-        background-color: var(--bg-color-three);
+        background-color: var(--bg-color-one);
     }
 
     p {

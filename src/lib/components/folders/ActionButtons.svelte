@@ -56,23 +56,25 @@
         overflow: hidden;
     }
     .edit-tools:hover {
-        background-color: var(--color-black-light);
+        /* background-color: var(--color-black-light); */
+        /* outline: 1px solid var(--color-focus); */
+        background-color: var(--bg-color-one);
+        outline: 1px solid var(--color-border);
         border-radius: 5rem;
-        outline: 1px solid var(--color-focus);
         backdrop-filter: blur(2px);
         -webkit-backdrop-filter: blur(2px);
     }
 
-    .btn :global(svg) {
+    .expand :global(svg) {
         fill: var(--color-white);
     }
     .btn:hover :global(svg) {
-        fill: var(--color-focus);
+        fill: var(--color-light-blue);
     }
     .edit-tools:hover .expand :global(svg) {
         /* display: none; */
         /* visibility: hidden; */
-        fill: var(--color-focus);
+        fill: var(--color-pink);
     }
     .edit-tools:hover .action {
         /* visibility: initial;

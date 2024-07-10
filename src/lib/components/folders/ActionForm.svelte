@@ -194,7 +194,7 @@
         max-width: 35rem;
         padding: 5rem 4rem;
         color: var(--color-three);
-        background-color: var(--primary-bg-color);
+        background-color: var(--bg-color);
         border-radius: 1rem;
         display: flex;
         flex-flow: row wrap;
@@ -216,7 +216,7 @@
     }
     input:active,
     input:focus {
-        background-color: var(--bg-color-three);
+        background-color: var(--bg-color-one);
         outline: none;
     }
 

@@ -144,12 +144,12 @@
         justify-content: start;
         gap: 2rem;
         color: var(--color-three);
-        background-color: var(--primary-bg-color);
+        background-color: var(--bg-color);
         height: 100%;
         width: 100%;
         position: relative;
         border-radius: 1rem;
-        border: 1px solid var(--color-file-border);
+        border: 1px solid var(--color-border);
     }
     input {
         background: unset;
@@ -192,7 +192,7 @@
     .action {
         width: 10rem;
         padding: 0.5rem;
-        border: 1px solid var(--color-file-border);
+        border: 1px solid var(--color-border);
         border-radius: 0.5rem;
     }
     .action:hover {

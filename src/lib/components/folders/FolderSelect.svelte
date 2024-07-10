@@ -228,7 +228,7 @@
         fill: red;
     }
     .wrapper {
-        background-color: var(--primary-bg-color);
+        background-color: var(--bg-color);
         outline: 2px solid var(--color-focus);
         padding: 2rem;
         border-radius: 1rem;
@@ -255,7 +255,7 @@
     .selected,
     .list {
         filter: none;
-        background-color: var(--bg-color-three);
+        background-color: var(--bg-color-one);
         color: var(--color-three);
         /* width: 25rem; */
         cursor: pointer;

@@ -67,7 +67,7 @@
         position: sticky;
         top: 0;
         background-color: inherit;
-        border-left: 1px solid var(--primary-color);
+        border-left: 1px solid var(--color);
         overflow-y: scroll;
         padding: 1rem;
         padding-top: 0rem;
@@ -100,7 +100,7 @@
         border-bottom-right-radius: 0.5rem;
         padding: 0.5rem;
         font-size: 1.6rem;
-        color: var(--primary-color);
+        color: var(--color);
         background-color: var(--bg-color-four);
         border-bottom: 2px solid var(--color-black);
         padding-left: 0.5rem;
@@ -108,7 +108,7 @@
 
     .drop :global(input:disabled:hover),
     .drop :global(input:disabled) {
-        background-color: var(--primary-bg-color);
+        background-color: var(--bg-color);
         color: #666;
         cursor: not-allowed;
     }
