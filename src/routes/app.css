@@ -8,14 +8,16 @@
     --font-default: var(--font-system);
     --size-system: 62.5%;
     --size-default: 1.6rem;
+    --size-smaller: 1.5rem;
     --size-small: 2rem;
     --size-medium: 2.4rem;
     --size-large: 2.8rem;
 
     --color-blue: #0af;
     --color-pink: #f0a;
-    --color-red: #f55;
     --color-green: #5f5;
+    --color-red: #f55;
+    --color-red-dark: #f00;
 
     --color-black: #000;
     --color-black-light: #0002;
@@ -41,6 +43,7 @@
 
     --color: var(--color-black-one);
     --color-one: var(--color-black-three);
+    --color-two: var(--color-black-four);
 
     --color-bg: var(--color-white);
     --color-bg-one: var(--color-white-one);
@@ -79,7 +82,8 @@
     --title-background: linear-gradient(120deg, #bd34fe, #41d1ff, #473aff);
 
     --color: var(--color-white-one);
-    --color-one: var(--color-white-three);
+    --color-one: var(--color-white-two);
+    --color-two: var(--color-white-three);
 
     --color-bg: var(--color-black-one);
     --color-bg-one: var(--color-black-three);

@@ -24,8 +24,8 @@
     let folderSelectVisible = false;
     let selectedParent = "";
     let confirm = false;
-    let name: string;
-    let description: string;
+    let name: string = "";
+    let description: string = "";
     let invalid = false;
 
     const dispatch = createEventDispatcher();
@@ -210,14 +210,20 @@
             {#if invalid}
                 <p class="alert">Enter valid url</p>
             {/if}
+
             <div class="button-wrapper">
                 <button
                     class="cancel action"
                     type="reset"
                     on:click={() => (action = "")}>cancel</button
                 >
-                <button class="save action" type="submit" on:click={handleSave}
-                    >save</button
+                <button
+                    class="save action"
+                    type="submit"
+                    disabled={name?.trim().length <= 0 &&
+                        description?.trim().length <= 0 &&
+                        true}
+                    on:click={handleSave}>save</button
                 >
             </div>
         </form>
@@ -251,15 +257,17 @@
         width: 100%;
         display: grid;
         place-content: center;
-        backdrop-filter: blur(1rem);
-        -webkit-backdrop-filter: blur(1rem);
+        background-color: var(--color-backdrop);
+        backdrop-filter: blur(0.1rem);
+        -webkit-backdrop-filter: blur(0.1rem);
         z-index: 1;
+        font-size: var(--size-smaller);
     }
 
     .edit-form {
-        color: var(--color-one);
-        background-color: var(--color-bg);
-        box-shadow: 0 0 1px 2px var(--color-focus);
+        /* color: var(--color-two); */
+        background-color: var(--color-bg-one);
+        /* box-shadow: 0 0 1px 2px var(--color-focus); */
         display: flex;
         flex-flow: column nowrap;
         padding: 3rem;
@@ -271,47 +279,42 @@
         padding: 0.5rem;
         border: none;
         /* border-bottom: 1px solid var(--color-focus); */
-        background-color: var(--color-bg-four);
+        background-color: var(--color-bg-two);
         padding: 1rem;
         border-top-left-radius: 0.5rem;
         border-top-right-radius: 0.5rem;
     }
     input:active,
     input:focus {
-        background-color: var(--color-bg-five);
+        background-color: var(--color-bg-three);
         border-bottom: 2px solid var(--color-focus);
         outline: none;
     }
     .invalid {
-        border-bottom: 2px solid #f00;
+        border-bottom: 2px solid var(--color-red);
     }
     .invalid:hover {
-        border-bottom: 2px solid #f00;
+        border-bottom: 2px solid var(--color-red);
     }
 
-    .memory {
-        font-size: 1.3rem;
-        color: var(--color-bg);
-        word-wrap: nowrap;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        max-width: 100%;
+    .button-wrapper {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
     }
-
-    .memory span {
-        /* color: #0f0; */
-    }
-
     .action {
-        width: 7rem;
         padding: 0.5rem;
-        border: 1px solid var(--color-border);
-        text-align: center;
+        width: 8rem;
         border-radius: 0.5rem;
+        background-color: var(--color-bg-three);
     }
+
     .action:hover {
-        background-color: var(--color-bg-four);
+        background-color: var(--color-bg-two);
+    }
+
+    .action:disabled {
+        background-color: var(--color-bg-three);
     }
     .button-wrapper {
         display: flex;
@@ -325,11 +328,11 @@
 
     @media (max-width: 900px) {
         input {
-            font-size: 1.5rem;
-            padding: 0.5rem;
-            border: 1px solid #fff3;
-            border-top-left-radius: 0.5rem;
-            border-top-right-radius: 0.5rem;
+            font-size: var(--size-smaller);
+            padding: 0.7rem;
+            /* border: 1px solid #fff3; */
+            /* border-top-left-radius: 0.5rem;
+            border-top-right-radius: 0.5rem; */
         }
     }
     @media (max-width: 500px) {
@@ -340,9 +343,7 @@
         }
 
         .action {
-            padding: 0.3rem;
-            font-size: 1.4rem;
-            width: fit-content;
+            width: 6rem;
         }
     }
 </style>

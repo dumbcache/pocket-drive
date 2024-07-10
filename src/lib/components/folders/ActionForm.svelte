@@ -143,6 +143,10 @@
                 All files and subfolders will be deleted and cannot be restored,
                 Type ' <span class="h">confirm</span> ' if you want to continue.
             </p>
+        {:else if type === "CREATE"}
+            <p class="label">Create folder</p>
+        {:else}
+            <p class="label">Rename folder</p>
         {/if}
         <input
             type="text"
@@ -178,50 +182,56 @@
         display: grid;
         place-content: center;
         background-color: var(--color-backdrop);
-        backdrop-filter: blur(0.5rem);
-        -webkit-backdrop-filter: blur(0.5rem);
+        box-shadow: 0 0 50px -10px #0005;
+        backdrop-filter: blur(0.1rem);
+        -webkit-backdrop-filter: blur(0.1rem);
         z-index: 2;
     }
     .btn:disabled {
         cursor: not-allowed;
     }
     .btn:disabled :global(svg) {
-        fill: var(--color-one);
+        fill: var(--color-two);
         cursor: not-allowed;
     }
     .wrapper {
-        outline: 2px solid var(--color-focus);
         max-width: 35rem;
         padding: 5rem 4rem;
-        color: var(--color-one);
-        background-color: var(--color-bg);
         border-radius: 1rem;
         display: flex;
         flex-flow: row wrap;
-        gap: 1rem;
+        gap: 1.5rem 1rem;
         justify-content: space-evenly;
         align-items: center;
         text-align: center;
+        /* border: 1px solid var(--color-border); */
+        box-shadow: 0 0 50px -10px #0005;
+        background-color: var(--color-bg-one);
     }
     .h {
-        color: #0f0;
+        color: var(--color-green);
+    }
+    .label {
+        margin-right: auto;
+        margin-left: 0.5rem;
+        color: var(--color-one);
     }
     input {
-        padding: 0.5rem;
+        padding: 1rem;
         max-width: 80%;
         border-radius: 0.5rem;
         border: none;
         outline: none;
-        background-color: var(--color-bg-four);
+        background-color: var(--color-bg-two);
     }
     input:active,
     input:focus {
-        background-color: var(--color-bg-one);
+        background-color: var(--color-bg-three);
         outline: none;
     }
 
     .btn :global(svg) {
-        fill: #0f0;
+        fill: var(--color-green);
         min-width: var(--primary-icon-size);
     }
 
@@ -229,10 +239,11 @@
         .wrapper {
             max-width: 85%;
             margin: auto;
-            padding: 3rem;
+            padding: 4rem 2rem;
         }
         input {
             max-width: 80%;
+            padding: 0.7rem;
         }
     }
 </style>

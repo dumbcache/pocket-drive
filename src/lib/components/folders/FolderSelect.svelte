@@ -214,43 +214,46 @@
         display: grid;
         place-content: center;
         background-color: var(--color-backdrop);
-        /* backdrop-filter: blur(0.5rem);
-        -webkit-backdrop-filter: blur(0.5rem); */
+        backdrop-filter: blur(0.1rem);
+        -webkit-backdrop-filter: blur(0.1rem);
         z-index: 3;
         user-select: none;
-        font-size: 1.5rem;
+        font-size: var(--size-smaller);
     }
     .nav {
         display: flex;
         flex-flow: column;
         gap: 1rem;
+        align-items: center;
+        min-width: 2.8rem;
     }
     .root {
-        color: red;
+        color: var(--color-red-dark);
     }
     .prev :global(svg) {
-        fill: red;
+        fill: var(--color-red-dark);
     }
     .wrapper {
         /* outline: 2px solid var(--color-focus); */
-        padding: 2rem;
+        padding: 4rem 2rem;
         border-radius: 1rem;
         display: flex;
         align-items: center;
         box-shadow: 0 0 50px -10px #0005;
         background-color: var(--color-bg-one);
+        gap: 2rem;
     }
     .label {
         text-align: start;
+        color: var(--color-one);
     }
     .selection {
         position: relative;
-        padding: 1rem;
         border-radius: 1rem;
         display: flex;
         flex-flow: column;
         width: 25rem;
-        gap: 1rem;
+        gap: 2rem;
     }
     button {
         text-align: start;
@@ -300,6 +303,10 @@
         overflow: hidden;
         text-overflow: ellipsis;
     }
+    .list-item:not(:last-child) {
+        /* border-bottom: 1px solid var(--color-border); */
+        /* border-bottom: 1px solid var(--color); */
+    }
     .selected-text {
         word-wrap: unset;
         white-space: nowrap;
@@ -312,11 +319,15 @@
         background-color: var(--color-bg-four);
     }
     @media (max-width: 600px) {
+        .wrapper {
+            gap: 1rem;
+        }
         .selected {
             width: 100%;
         }
         .selection {
             max-width: 20rem;
+            gap: 1rem;
         }
     }
 </style>

@@ -119,8 +119,10 @@
         display: grid;
         place-content: center;
         z-index: 100;
-        font-size: 1.5rem;
+        font-size: var(--size-smaller);
         background-color: var(--color-backdrop);
+        backdrop-filter: blur(0.1rem);
+        -webkit-backdrop-filter: blur(0.1rem);
     }
     .session-wrapper {
         display: flex;
@@ -174,7 +176,7 @@
             display: initial;
         }
         button {
-            width: 5rem;
+            width: 6rem;
         }
         .session-wrapper {
             padding: 3rem;

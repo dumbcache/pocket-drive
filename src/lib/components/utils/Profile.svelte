@@ -63,7 +63,7 @@
 
 <style>
     .profile {
-        font-size: 1.5rem;
+        font-size: var(--size-smaller);
         position: fixed;
         margin: auto;
         width: 100%;
@@ -115,10 +115,10 @@
     .logout {
         width: 100%;
         padding: 1rem;
-        background-color: var(--color-bg-four);
+        background-color: var(--color-bg-two);
     }
     .logout:hover {
-        background-color: var(--color-bg-five);
+        background-color: var(--color-bg-three);
     }
 
     h2 {

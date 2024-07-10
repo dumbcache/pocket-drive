@@ -143,27 +143,27 @@
         flex-flow: column;
         justify-content: start;
         gap: 2rem;
-        color: var(--color-one);
-        background-color: var(--color-bg);
+        color: var(--color-two);
+        background-color: var(--color-bg-one);
         height: 100%;
         width: 100%;
         position: relative;
         border-radius: 1rem;
-        border: 1px solid var(--color-border);
+        /* border: 1px solid var(--color-border); */
     }
     input {
         background: unset;
         padding: 0.5rem;
         border: none;
         /* border-bottom: 1px solid var(--color-focus); */
-        background-color: var(--color-bg-four);
+        background-color: var(--color-bg-two);
         padding: 1rem;
         border-top-left-radius: 0.5rem;
         border-top-right-radius: 0.5rem;
     }
     input:active,
     input:focus {
-        background-color: var(--color-bg-five);
+        background-color: var(--color-bg-three);
         border-bottom: 2px solid var(--color-focus);
         outline: none;
     }
@@ -192,11 +192,12 @@
     .action {
         width: 10rem;
         padding: 0.5rem;
-        border: 1px solid var(--color-border);
+        /* border: 1px solid var(--color-border); */
+        background-color: var(--color-bg-two);
         border-radius: 0.5rem;
     }
     .action:hover {
-        background-color: var(--color-bg-four);
+        background-color: var(--color-bg-three);
     }
     .alert {
         color: #aaa;

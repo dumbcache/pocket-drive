@@ -74,7 +74,7 @@
     .edit-tools:hover .expand :global(svg) {
         /* display: none; */
         /* visibility: hidden; */
-        fill: var(--color-pink);
+        fill: var(--color-focus);
     }
     .edit-tools:hover .action {
         /* visibility: initial;

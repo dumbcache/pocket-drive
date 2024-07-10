@@ -118,7 +118,7 @@
         padding: 1rem;
         max-width: 40rem;
         margin: auto;
-        color: var(--color-one);
+        color: var(--color-two);
         position: sticky;
         top: 5rem;
         z-index: 1;

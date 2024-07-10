@@ -110,7 +110,7 @@
         gap: 1rem;
         border-top: 1px solid var(--color-border);
         text-align: center;
-        font-size: 1.5rem;
+        font-size: var(--size-smaller);
     }
     .alt * {
         display: inline-block;
