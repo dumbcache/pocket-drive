@@ -3,6 +3,7 @@
     import Tools from "$lib/components/Tools.svelte";
     import { onMount } from "svelte";
     import BackButton from "./utils/BackButton.svelte";
+    import ColorScheme from "$lib/components/utils/ColorScheme.svelte";
     import profileIcon from "$lib/assets/profile.svg?raw";
 
     let homeButton = "";
@@ -30,6 +31,7 @@
         <!-- <button class="btn help" title="shortcuts" on:click={() => {}}
             >{@html helpButton}</button
         > -->
+        <ColorScheme />
         <button
             class="btn s-prime settings"
             title="settings"

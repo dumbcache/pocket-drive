@@ -5,7 +5,7 @@
     /* --font-system: ui-sans-serif, -apple-system, system-ui, Segoe UI, Roboto,
         Ubuntu, Cantarell, Noto Sans, sans-serif, Helvetica, Apple Color Emoji,
         Arial, Segoe UI Emoji, Segoe UI Symbol; */
-    --font-default: var(--font-poppins);
+    --font-default: var(--font-system);
     --size-system: 62.5%;
     --size-default: 1.6rem;
     --size-small: 2rem;
@@ -34,7 +34,7 @@
     --color-outline: #bbb;
     --primary-bg-color: var(--color-white);
     --primary-color: var(--color-black-one);
-    --primary-backdrop-color: #111a;
+    --primary-backdrop-color: #1115;
     --svg-fill: var(--color-black-two);
     --bg-color-one: var(--color-white-one);
     --bg-color-two: var(--color-white-two);
@@ -74,7 +74,7 @@
     --color-outline: #666;
     --primary-bg-color: var(--color-black-one);
     --primary-color: var(--color-white-one);
-    --primary-backdrop-color: unset;
+    --primary-backdrop-color: #111a;
     --svg-fill: var(--color-white-two);
     --bg-color-one: var(--color-black-one);
     --bg-color-two: var(--color-black-two);
@@ -92,7 +92,7 @@
 }
 
 :root {
-    font-family: var(--font-lato);
+    font-family: var(--font-default);
     font-size: var(--size-system);
     line-height: var(--line-height-default);
     min-height: 100%;

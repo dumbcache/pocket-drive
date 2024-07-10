@@ -2,15 +2,15 @@
     export let bool = false;
 </script>
 
-<div class="toggle">
-    <span class="off s-second" class:hidden={bool}></span>
-    <span class="on s-second" class:hidden={!bool}></span>
+<div class="toggle" class:on={bool}>
+    <span class="s-second" class:hidden={bool}></span>
+    <span class="s-second" class:hidden={!bool}></span>
 </div>
 
 <style>
     .toggle {
         width: fit-content;
-        background-color: var(--bg-color-four);
+        background-color: var(--bg-color-six);
         display: flex;
         padding: 0.1rem;
         justify-content: space-between;
@@ -23,14 +23,9 @@
     span {
         display: inline-block;
         border-radius: 50%;
-    }
-    .on {
-        background-color: #f00;
-    }
-    .off {
         background-color: #fff;
     }
-    .off:hover {
-        background-color: var(--color-focus);
+    .on {
+        background-color: var(--color-light-blue);
     }
 </style>

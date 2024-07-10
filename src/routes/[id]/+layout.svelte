@@ -91,11 +91,13 @@
     {#if $sessionTimeout}
         <div class="session-notify" on:wheel|preventDefault>
             <div class="session-wrapper">
-                <p>Session expired</p>
+                <p>Your session has been expired. Click login to continue</p>
                 <div class="button-wrapper">
-                    <button on:click={signoutHandler}>logout</button>
-                    <button on:click={googleClient.requestToken}
-                        >continue</button
+                    <button class="cancel" on:click={signoutHandler}
+                        >cancel</button
+                    >
+                    <button class="login" on:click={googleClient.requestToken}
+                        >login</button
                     >
                 </div>
             </div>
@@ -116,19 +118,18 @@
         top: 0;
         display: grid;
         place-content: center;
-        backdrop-filter: blur(2px);
-        -webkit-backdrop-filter: blur(2px);
         z-index: 100;
+        font-size: 1.5rem;
+        background-color: var(--primary-backdrop-color);
     }
     .session-wrapper {
         display: flex;
         flex-flow: column;
-        gap: 1rem;
-        border: 1px solid var(--color-outline);
+        gap: 2rem;
         padding: 5rem;
         border-radius: 1rem;
-        box-shadow: 0 0 10px 5px var(--color-focus);
-        background-color: var(--primary-bg-color);
+        box-shadow: 0 0 50px -10px #000;
+        background-color: var(--bg-color-three);
     }
 
     p {
@@ -138,15 +139,31 @@
     .button-wrapper {
         display: flex;
         gap: 1rem;
+        justify-content: end;
     }
     button {
         padding: 0.5rem;
         width: 8rem;
-        border: 1px solid var(--color-outline);
         border-radius: 0.5rem;
+        background-color: var(--bg-color-four);
+        color: var(--color-white-one);
     }
+
     button:hover {
-        background-color: var(--bg-color-two);
+        background-color: var(--bg-color-five);
+    }
+
+    .login {
+        background-color: #151;
+    }
+    .login:hover {
+        background-color: #141;
+    }
+    .cancel {
+        background-color: #711;
+    }
+    .cancel:hover {
+        background-color: #611;
     }
     .dragover {
         background-color: #55f5;
@@ -155,6 +172,14 @@
         .layout {
             height: initial;
             display: initial;
+        }
+        button {
+            width: 5rem;
+        }
+        .session-wrapper {
+            padding: 3rem;
+            width: 90%;
+            margin: auto;
         }
     }
 </style>
