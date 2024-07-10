@@ -83,13 +83,13 @@
         width: 40rem;
         height: 50%;
         /* margin: 0 auto; */
-        /* background-color: var(--bg-color); */
+        /* background-color: var(--color-bg); */
         /* border: 1px solid var(--color-outline); */
         border-radius: 0.5rem;
         /* padding: 1rem; */
         /* box-shadow: 0 0 100px 5px #000; */
         box-shadow: 0 0 50px -10px #000;
-        background-color: var(--bg-color-one);
+        background-color: var(--color-bg-one);
     }
     ul {
         display: flex;
@@ -122,11 +122,11 @@
     .logout {
         width: 100%;
         padding: 1rem;
-        background-color: var(--bg-color-four);
+        background-color: var(--color-bg-four);
     }
     .logout:hover {
         /* color: var(--color-focus); */
-        background-color: var(--bg-color-five);
+        background-color: var(--color-bg-five);
     }
 
     h2 {

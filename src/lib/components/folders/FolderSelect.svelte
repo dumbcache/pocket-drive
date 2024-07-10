@@ -228,7 +228,7 @@
         fill: red;
     }
     .wrapper {
-        background-color: var(--bg-color);
+        background-color: var(--color-bg);
         outline: 2px solid var(--color-focus);
         padding: 2rem;
         border-radius: 1rem;
@@ -255,7 +255,7 @@
     .selected,
     .list {
         filter: none;
-        background-color: var(--bg-color-one);
+        background-color: var(--color-bg-one);
         color: var(--color-three);
         /* width: 25rem; */
         cursor: pointer;
@@ -306,7 +306,7 @@
     }
     .list-item:hover {
         filter: none;
-        background-color: var(--bg-color-five);
+        background-color: var(--color-bg-five);
     }
     @media (max-width: 600px) {
         .selected {

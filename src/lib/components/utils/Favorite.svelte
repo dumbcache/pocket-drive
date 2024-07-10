@@ -30,19 +30,17 @@
 
 <style>
     .btn :global(svg) {
-        fill: var(--color-white-two);
+        fill: var(--color-svg-one);
     }
-    .btn:hover :global(svg) {
-        fill: var(--color-focus);
-    }
+
     .btn:active :global(svg) {
-        fill: red;
+        fill: var(--color-red);
     }
     .starred :global(svg) {
-        fill: red;
+        fill: var(--color-red);
     }
     .starred:hover :global(svg) {
-        fill: red;
+        fill: var(--color-red);
     }
     @media (max-width: 600px) {
     }

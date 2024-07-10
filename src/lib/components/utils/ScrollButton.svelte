@@ -56,7 +56,7 @@
     .scroll :global(svg) {
         border-radius: 50%;
         box-shadow: 0 0 1px 1px var(--color-white-light);
-        background-color: var(--bg-color-one);
+        background-color: var(--color-bg-one);
         outline: 1px solid var(--color-border);
     }
     @media (max-width: 600px) {

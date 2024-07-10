@@ -213,7 +213,7 @@
     } */
 
     .select {
-        border-bottom: 5px solid var(--color-light-blue);
+        border-bottom: 5px solid var(--color-blue);
         border-radius: 1rem;
     }
     .select:hover :global(.card) {

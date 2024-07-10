@@ -10,7 +10,7 @@
 <style>
     .toggle {
         width: fit-content;
-        background-color: var(--bg-color-six);
+        background-color: var(--color-bg-six);
         display: flex;
         padding: 0.1rem;
         justify-content: space-between;
@@ -26,6 +26,6 @@
         background-color: #fff;
     }
     .on {
-        background-color: var(--color-light-blue);
+        background-color: var(--color-blue);
     }
 </style>

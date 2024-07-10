@@ -229,7 +229,7 @@
         position: sticky;
         top: 0rem;
         z-index: 1;
-        background: var(--bg-color);
+        background: var(--color-bg);
         padding: 2rem 0rem;
         display: flex;
         flex-flow: row nowrap;
@@ -258,7 +258,7 @@
 
     .edit-form {
         color: var(--color-three);
-        background-color: var(--bg-color);
+        background-color: var(--color-bg);
         box-shadow: 0 0 1px 2px var(--color-focus);
         display: flex;
         flex-flow: column nowrap;
@@ -271,14 +271,14 @@
         padding: 0.5rem;
         border: none;
         /* border-bottom: 1px solid var(--color-focus); */
-        background-color: var(--bg-color-four);
+        background-color: var(--color-bg-four);
         padding: 1rem;
         border-top-left-radius: 0.5rem;
         border-top-right-radius: 0.5rem;
     }
     input:active,
     input:focus {
-        background-color: var(--bg-color-five);
+        background-color: var(--color-bg-five);
         border-bottom: 2px solid var(--color-focus);
         outline: none;
     }
@@ -291,7 +291,7 @@
 
     .memory {
         font-size: 1.3rem;
-        color: var(--bg-color);
+        color: var(--color-bg);
         word-wrap: nowrap;
         white-space: nowrap;
         overflow: hidden;
@@ -311,7 +311,7 @@
         border-radius: 0.5rem;
     }
     .action:hover {
-        background-color: var(--bg-color-four);
+        background-color: var(--color-bg-four);
     }
     .button-wrapper {
         display: flex;

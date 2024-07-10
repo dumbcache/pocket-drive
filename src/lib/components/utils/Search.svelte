@@ -123,7 +123,7 @@
         top: 5rem;
         z-index: 1;
         /* box-shadow: 0 0 5px 1px var(--color-border); */
-        background-color: var(--bg-color);
+        background-color: var(--color-bg);
     }
     .global {
         padding: 1rem;
@@ -133,7 +133,7 @@
     }
     .global.active {
         color: #f00;
-        /* background-color: var(--bg-color-one); */
+        /* background-color: var(--color-bg-one); */
     }
     #search {
         width: 100%;
@@ -145,10 +145,10 @@
         border-top-right-radius: 0.5rem;
         border-bottom-right-radius: 0.5rem;
         border-bottom: 2px solid var(--color-border);
-        background-color: var(--bg-color-two);
+        background-color: var(--color-bg-two);
     }
     #search:focus {
-        background-color: var(--bg-color-one);
+        background-color: var(--color-bg-one);
     }
 
     .list {

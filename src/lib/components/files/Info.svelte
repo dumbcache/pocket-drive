@@ -144,7 +144,7 @@
         justify-content: start;
         gap: 2rem;
         color: var(--color-three);
-        background-color: var(--bg-color);
+        background-color: var(--color-bg);
         height: 100%;
         width: 100%;
         position: relative;
@@ -156,14 +156,14 @@
         padding: 0.5rem;
         border: none;
         /* border-bottom: 1px solid var(--color-focus); */
-        background-color: var(--bg-color-four);
+        background-color: var(--color-bg-four);
         padding: 1rem;
         border-top-left-radius: 0.5rem;
         border-top-right-radius: 0.5rem;
     }
     input:active,
     input:focus {
-        background-color: var(--bg-color-five);
+        background-color: var(--color-bg-five);
         border-bottom: 2px solid var(--color-focus);
         outline: none;
     }
@@ -173,7 +173,7 @@
     }
     .id,
     .size {
-        color: var(--bg-color-five);
+        color: var(--color-bg-five);
         word-wrap: nowrap;
         white-space: nowrap;
         overflow: hidden;
@@ -196,7 +196,7 @@
         border-radius: 0.5rem;
     }
     .action:hover {
-        background-color: var(--bg-color-four);
+        background-color: var(--color-bg-four);
     }
     .alert {
         color: #aaa;

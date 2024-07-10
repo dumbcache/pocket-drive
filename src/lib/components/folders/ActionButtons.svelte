@@ -58,7 +58,7 @@
     .edit-tools:hover {
         /* background-color: var(--color-black-light); */
         /* outline: 1px solid var(--color-focus); */
-        background-color: var(--bg-color-one);
+        background-color: var(--color-bg-one);
         outline: 1px solid var(--color-border);
         border-radius: 5rem;
         backdrop-filter: blur(2px);
@@ -69,7 +69,7 @@
         fill: var(--color-white);
     }
     .btn:hover :global(svg) {
-        fill: var(--color-light-blue);
+        fill: var(--color-blue);
     }
     .edit-tools:hover .expand :global(svg) {
         /* display: none; */

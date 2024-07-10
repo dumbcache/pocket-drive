@@ -27,12 +27,16 @@
                 {total}
             </span>
         {/if}
-        <div class="success item">
-            <span class="s-second">{@html successIcon}</span>{success}
-        </div>
-        <div class="fail item">
-            <span class="s-second">{@html failIcon}</span>{fail}
-        </div>
+        {#if success > 0}
+            <div class="success item">
+                <span class="s-second">{@html successIcon}</span>{success}
+            </div>
+        {/if}
+        {#if fail > 0}
+            <div class="fail item">
+                <span class="s-second">{@html failIcon}</span>{fail}
+            </div>
+        {/if}
     </div>
 </div>
 
@@ -45,10 +49,12 @@
         padding: 0.5rem;
         border-top-left-radius: 0.5rem;
         border-bottom-left-radius: 0.5rem;
-        border: 1px solid var(--color-outline);
+        border: 1px solid var(--color-border);
         border-right: none;
-        background-color: var(--bg-color);
+        background-color: var(--color-bg);
         font-size: smaller;
+        box-shadow: 0 0 1px 1px var(--color-white-light);
+        background-color: var(--color-bg-one);
     }
 
     .items {

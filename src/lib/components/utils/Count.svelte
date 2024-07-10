@@ -11,7 +11,7 @@
         font-size: 1.3rem;
         min-width: 5rem;
         border: 1px solid var(--color-border);
-        border-left: 5px solid var(--color-light-blue);
+        border-left: 5px solid var(--color-focus);
         padding: 0.2rem 0.5rem;
         box-sizing: border-box;
     }

@@ -286,7 +286,7 @@
         padding: 1rem 0rem;
         position: sticky;
         top: 0;
-        background-color: var(--bg-color);
+        background-color: var(--color-bg);
         z-index: 1;
         gap: 5rem;
     }
@@ -299,8 +299,8 @@
     }
 
     .title-sub {
-        color: var(--color-light-blue);
-        color: #f00;
+        /* color: var(--color-blue); */
+        color: var(--color-focus);
     }
     .folder-name {
         font-size: 2rem;
@@ -316,6 +316,9 @@
 
     .two {
         display: none;
+    }
+    .fetch-all :global(svg) {
+        fill: var(--color-svg-one);
     }
 
     @media (max-width: 600px) {

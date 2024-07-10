@@ -53,7 +53,7 @@
         justify-content: space-between;
         gap: 1rem;
         padding: 0.5rem;
-        background-color: var(--bg-color-one);
+        background-color: var(--color-bg-one);
         border-bottom-left-radius: 1rem;
         border-bottom-right-radius: 1rem;
         /* border: 1px solid var(--color-border); */

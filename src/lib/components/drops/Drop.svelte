@@ -101,19 +101,19 @@
         padding: 0.5rem;
         font-size: 1.6rem;
         color: var(--color);
-        background-color: var(--bg-color-four);
+        background-color: var(--color-bg-four);
         border-bottom: 2px solid var(--color-black);
         padding-left: 0.5rem;
     }
 
     .drop :global(input:disabled:hover),
     .drop :global(input:disabled) {
-        background-color: var(--bg-color);
+        background-color: var(--color-bg);
         color: #666;
         cursor: not-allowed;
     }
     .drop :global(input:hover) {
-        background-color: var(--bg-color-five);
+        background-color: var(--color-bg-five);
     }
 
     .expand {

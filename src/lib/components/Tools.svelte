@@ -212,14 +212,15 @@
     .active::before {
         content: " ";
         height: 100%;
-        border: 2px solid red;
+        border: 2px solid var(--color-focus);
         position: absolute;
         top: 0;
         left: -0.5rem;
+        background-color: var(--color-focus);
     }
 
     .favorites :global(svg) {
-        fill: red;
+        fill: var(--color-red);
     }
     @media (max-width: 600px) {
         .tools {
@@ -229,7 +230,7 @@
         .active::before {
             width: 100%;
             height: 10%;
-            border: 1px solid red;
+            border-width: 1px;
             top: unset;
             bottom: 0;
             left: 0;

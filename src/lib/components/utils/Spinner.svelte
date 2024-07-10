@@ -21,7 +21,7 @@
         width: 5rem;
         height: 5rem;
         border: 5px solid var(--color-white-two);
-        border-top: 5px solid var(--color-light-blue);
+        border-top: 5px solid var(--color-blue);
         border-radius: 50%;
         animation: spin 1s linear infinite;
     }

@@ -129,7 +129,7 @@
         padding: 5rem;
         border-radius: 1rem;
         box-shadow: 0 0 50px -10px #000;
-        background-color: var(--bg-color-one);
+        background-color: var(--color-bg-one);
     }
 
     p {
@@ -145,12 +145,12 @@
         padding: 0.5rem;
         width: 8rem;
         border-radius: 0.5rem;
-        background-color: var(--bg-color-four);
+        background-color: var(--color-bg-four);
         color: var(--color-white-one);
     }
 
     button:hover {
-        background-color: var(--bg-color-five);
+        background-color: var(--color-bg-five);
     }
 
     .login {
