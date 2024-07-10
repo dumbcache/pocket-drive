@@ -257,7 +257,7 @@
     }
 
     .edit-form {
-        color: var(--color-three);
+        color: var(--color-one);
         background-color: var(--color-bg);
         box-shadow: 0 0 1px 2px var(--color-focus);
         display: flex;

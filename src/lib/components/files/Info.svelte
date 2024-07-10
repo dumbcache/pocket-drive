@@ -143,7 +143,7 @@
         flex-flow: column;
         justify-content: start;
         gap: 2rem;
-        color: var(--color-three);
+        color: var(--color-one);
         background-color: var(--color-bg);
         height: 100%;
         width: 100%;

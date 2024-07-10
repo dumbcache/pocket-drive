@@ -177,7 +177,7 @@
         left: 0;
         display: grid;
         place-content: center;
-        background-color: var(--primary-backdrop-color);
+        background-color: var(--color-backdrop);
         backdrop-filter: blur(0.5rem);
         -webkit-backdrop-filter: blur(0.5rem);
         z-index: 2;
@@ -186,14 +186,14 @@
         cursor: not-allowed;
     }
     .btn:disabled :global(svg) {
-        fill: var(--color-three);
+        fill: var(--color-one);
         cursor: not-allowed;
     }
     .wrapper {
         outline: 2px solid var(--color-focus);
         max-width: 35rem;
         padding: 5rem 4rem;
-        color: var(--color-three);
+        color: var(--color-one);
         background-color: var(--color-bg);
         border-radius: 1rem;
         display: flex;

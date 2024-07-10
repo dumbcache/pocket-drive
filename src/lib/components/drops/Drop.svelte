@@ -58,7 +58,7 @@
         z-index: 1;
         border-top-left-radius: 1rem;
         border-bottom-left-radius: 1rem;
-        outline: 1px solid var(--color-five);
+        outline: 1px solid var(--color-border);
     }
     .drop-mini :global(svg) {
         fill: var(--color-white);

@@ -120,7 +120,7 @@
         place-content: center;
         z-index: 100;
         font-size: 1.5rem;
-        background-color: var(--primary-backdrop-color);
+        background-color: var(--color-backdrop);
     }
     .session-wrapper {
         display: flex;

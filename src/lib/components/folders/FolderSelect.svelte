@@ -133,6 +133,7 @@
 <div
     class="move"
     on:keydown|stopPropagation
+    on:wheel|preventDefault
     on:click={() => {
         dispatchClose();
         $folderAction = undefined;
@@ -144,6 +145,7 @@
             class="wrapper"
             on:click|stopPropagation={() => (listVisible = false)}
             on:keydown
+            on:wheel|preventDefault
         >
             <div class="nav">
                 <button
@@ -183,6 +185,7 @@
                             class="list"
                             on:keydown
                             on:click|stopPropagation={selectFolder}
+                            on:wheel|stopPropagation
                         >
                             {#if tempFolderStore?.files}
                                 {#if tempFolderStore.files.length > 0}
@@ -210,11 +213,12 @@
         right: 0;
         display: grid;
         place-content: center;
-        background-color: var(--primary-backdrop-color);
-        backdrop-filter: blur(0.5rem);
-        -webkit-backdrop-filter: blur(0.5rem);
+        background-color: var(--color-backdrop);
+        /* backdrop-filter: blur(0.5rem);
+        -webkit-backdrop-filter: blur(0.5rem); */
         z-index: 3;
         user-select: none;
+        font-size: 1.5rem;
     }
     .nav {
         display: flex;
@@ -228,16 +232,16 @@
         fill: red;
     }
     .wrapper {
-        background-color: var(--color-bg);
-        outline: 2px solid var(--color-focus);
+        /* outline: 2px solid var(--color-focus); */
         padding: 2rem;
         border-radius: 1rem;
         display: flex;
         align-items: center;
+        box-shadow: 0 0 50px -10px #0005;
+        background-color: var(--color-bg-one);
     }
     .label {
         text-align: start;
-        color: var(--color-five);
     }
     .selection {
         position: relative;
@@ -255,9 +259,6 @@
     .selected,
     .list {
         filter: none;
-        background-color: var(--color-bg-one);
-        color: var(--color-three);
-        /* width: 25rem; */
         cursor: pointer;
         border-radius: 0.5rem;
     }
@@ -269,19 +270,21 @@
         filter: none;
     }
     .done-button:disabled :global(svg) {
-        fill: initial;
+        /* fill: #ddd; */
     }
-    .done-button:hover :global(svg) {
-        fill: #3af;
-    }
+    /* .done-button:hover :global(svg) {
+        fill: #var;
+    } */
     .done-button :global(svg) {
-        fill: #0ff;
+        fill: var(--color-green);
     }
     .selected {
         padding: 1rem;
         position: relative;
+        background-color: var(--color-bg-three);
     }
     .list {
+        background-color: var(--color-bg-two);
         max-height: 21rem;
         width: 100%;
         position: absolute;
@@ -306,7 +309,7 @@
     }
     .list-item:hover {
         filter: none;
-        background-color: var(--color-bg-five);
+        background-color: var(--color-bg-four);
     }
     @media (max-width: 600px) {
         .selected {

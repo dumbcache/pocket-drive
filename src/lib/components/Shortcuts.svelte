@@ -66,12 +66,12 @@
         left: 0;
         width: 100%;
         z-index: 5;
-        background-color: var(--primary-backdrop-color);
+        background-color: var(--color-backdrop);
         backdrop-filter: blur(1rem);
         -webkit-backdrop-filter: blur(1rem);
     }
     ul {
-        background-color: var(--primary-backdrop-color);
+        background-color: var(--color-backdrop);
         width: max-content;
         padding: 3rem;
     }

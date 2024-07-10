@@ -15,43 +15,49 @@
     --color-blue: #0af;
     --color-pink: #f0a;
     --color-red: #f55;
-    --color-bluegrey: #145;
-    --color-lightgreen: #052;
+    --color-green: #5f5;
+
     --color-black: #000;
+    --color-black-light: #0002;
     --color-black-one: #1b1b1f;
     --color-black-two: #202127;
     --color-black-three: #303137;
+    --color-black-four: #444;
+    --color-black-five: #555;
+    --color-black-six: #666;
     --color-black-seven: #777;
+    --color-black-eight: #888;
+
     --color-white: #fff;
+    --color-white-light: #fff2;
     --color-white-one: #ebebef;
     --color-white-two: #d0d1d7;
     --color-white-three: #c0c1c7;
-    --color-white-light: #fff2;
-    --color-black-light: #0002;
+    --color-white-four: #bbb;
+    --color-white-five: #aaa;
+    --color-white-six: #999;
 
     --title-background: linear-gradient(120deg, #0ac0ee, #d00bc3, #473aff);
-    --color-link: var(--color-blue);
-    --color-outline: #bbb;
-    --primary-backdrop-color: #1115;
-    --color-bg-two: var(--color-white-two);
-    --color-bg-four: #bbb;
-    --color-bg-five: #aaa;
-    --color-bg-six: #888;
-    --color-one: var(--color-black-one);
-    --color-two: var(--color-black-two);
-    --color-three: var(--color-black-three);
-    --color-four: #444;
-    --color-five: #555;
-    --color-file-background: var(--color-white-one);
-    --color-file-hover: var(--color-white-three);
+
+    --color: var(--color-black-one);
+    --color-one: var(--color-black-three);
 
     --color-bg: var(--color-white);
     --color-bg-one: var(--color-white-one);
-    --color: var(--color-black-one);
+    --color-bg-two: var(--color-white-two);
+    --color-bg-three: var(--color-white-three);
+    --color-bg-four: var(--color-white-four);
+    --color-bg-five: var(--color-white-five);
+    --color-bg-six: var(--color-white-six);
+
+    --color-focus: var(--color-pink);
     --color-border: var(--color-black-light);
+    --color-link: var(--color-blue);
+    --color-file-background: var(--color-white-one);
+    --color-file-hover: var(--color-white-three);
     --color-svg: var(--color-black-two);
     --color-svg-one: var(--color-white-three);
-    --color-focus: var(--color-pink);
+    --color-backdrop: #1115;
 
     --cover-height: 20rem;
     --folder-width: 30rem;
@@ -71,27 +77,26 @@
 }
 .dark {
     --title-background: linear-gradient(120deg, #bd34fe, #41d1ff, #473aff);
-    --color-link: var(--color-pink);
-    --color-outline: #666;
-    --primary-backdrop-color: #111a;
-    --color-bg-two: var(--color-black-two);
-    --color-bg-four: #444;
-    --color-bg-five: #555;
-    --color-one: var(--color-white-one);
-    --color-two: var(--color-white-two);
-    --color-three: var(--color-white-three);
-    --color-four: #bbb;
-    --color-five: #aaa;
-    --color-file-background: var(--color-black-two);
-    --color-file-hover: var(--color-black-one);
+
+    --color: var(--color-white-one);
+    --color-one: var(--color-white-three);
 
     --color-bg: var(--color-black-one);
     --color-bg-one: var(--color-black-three);
-    --color: var(--color-white-one);
+    --color-bg-two: var(--color-black-four);
+    --color-bg-three: var(--color-black-five);
+    --color-bg-four: var(--color-black-six);
+    --color-bg-five: var(--color-black-seven);
+    --color-bg-six: var(--color-black-eight);
+
+    --color-focus: var(--color-blue);
     --color-border: var(--color-white-light);
+    --color-link: var(--color-pink);
+    --color-file-background: var(--color-black-two);
+    --color-file-hover: var(--color-black-one);
     --color-svg: var(--color-white-two);
     --color-svg-one: var(--color-black-seven);
-    --color-focus: var(--color-blue);
+    --color-backdrop: #111a;
 }
 
 :root {
@@ -218,20 +223,6 @@ a {
 
 ::-webkit-scrollbar {
     width: 0.5rem;
-}
-
-::-webkit-scrollbar-track {
-    background: var(--color-black-light);
-    backdrop-filter: blur(1rem);
-}
-
-::-webkit-scrollbar-thumb {
-    background: var(--color);
-    border-radius: 0.5rem;
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background: var(--color-lightgreen);
 }
 
 @media (max-width: 900px) {
