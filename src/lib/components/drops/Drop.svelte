@@ -66,8 +66,8 @@
     .drop {
         position: sticky;
         top: 0;
-        background-color: inherit;
-        border-left: 1px solid var(--color);
+        background-color: var(--color-bg-one);
+        /* border-left: 1px solid var(--color); */
         overflow-y: scroll;
         padding: 1rem;
         padding-top: 0rem;
@@ -75,8 +75,8 @@
         z-index: 1;
         min-width: 40%;
         height: 100vh;
-        backdrop-filter: blur(1rem);
-        -webkit-backdrop-filter: blur(1rem);
+        /* backdrop-filter: blur(1rem);
+        -webkit-backdrop-filter: blur(1rem); */
     }
 
     .drop-items {
@@ -101,16 +101,17 @@
         padding: 0.5rem;
         font-size: 1.6rem;
         color: var(--color);
-        background-color: var(--color-bg-four);
-        border-bottom: 2px solid var(--color-black);
+        background-color: var(--color-bg-two);
+        /* border-bottom: 2px solid var(--color-black); */
         padding-left: 0.5rem;
     }
 
     .drop :global(input:disabled:hover),
     .drop :global(input:disabled) {
-        background-color: var(--color-bg);
+        background-color: var(--color-bg-one);
         color: #666;
         cursor: not-allowed;
+        border-bottom: none;
     }
     .drop :global(input:hover) {
         background-color: var(--color-bg-five);

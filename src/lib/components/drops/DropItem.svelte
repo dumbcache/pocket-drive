@@ -79,7 +79,7 @@
         max-width: 20rem;
         border-bottom: none;
         border: 1px solid var(--color-border);
-        border-bottom: none;
+        /* border-bottom: none; */
         overflow: hidden;
     }
     .img-wrapper {
@@ -114,6 +114,10 @@
     }
     .btn:hover :global(svg) {
         fill: var(--color-focus);
+    }
+
+    .parent {
+        background-color: var(--color-bg-two);
     }
     .progress {
         border-radius: 1rem;
