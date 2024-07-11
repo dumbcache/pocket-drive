@@ -178,7 +178,7 @@
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
-        max-width: 100%;
+        width: 35rem;
     }
     footer {
         position: absolute;

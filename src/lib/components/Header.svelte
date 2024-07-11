@@ -77,6 +77,7 @@
         width: fit-content;
         height: 100vh;
         padding: 1rem 4rem;
+        background-color: var(--color-bg);
     }
     .wrapper {
         display: flex;

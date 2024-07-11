@@ -86,7 +86,7 @@
         margin: auto;
     }
     .drop-img {
-        max-height: 30rem;
+        max-height: 20rem;
         max-width: 100%;
         object-fit: contain;
         object-position: top;
@@ -97,6 +97,7 @@
     .drop-item:hover .drop-img {
         filter: brightness(0.5);
     }
+
     .btn {
         position: absolute;
         top: 0.5rem;
@@ -117,6 +118,9 @@
 
     .parent {
         background-color: var(--color-bg-two);
+    }
+    .name {
+        border-bottom: 1px solid var(--color-border);
     }
     .progress {
         border-radius: 1rem;

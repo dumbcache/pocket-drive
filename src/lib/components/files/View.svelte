@@ -1,6 +1,5 @@
 <script lang="ts">
     import { onMount } from "svelte";
-    import Dialog from "$lib/components/Dialog.svelte";
     import {
         activeImage,
         imageCache,
@@ -19,14 +18,10 @@
     import FileNav from "$lib/components/files/FileNav.svelte";
 
     export let files: File[];
-    let dialog: Dialog;
     let infoVisible = false;
     let zoom = false;
     let expand = false;
     let preview: HTMLElement, navigation: HTMLElement;
-    let isDragging = false;
-    let startX: number;
-    let scrollLeft: number;
     let active = false;
     let previewObserver: IntersectionObserver;
 
@@ -46,41 +41,29 @@
                 });
             }
         }, 0);
-        dialog.show();
     });
-
-    function handlePointerDown(e: MouseEvent) {
-        isDragging = true;
-        startX = e.pageX - preview.offsetLeft;
-        scrollLeft = preview.scrollLeft;
-    }
-
-    function handlePointerMove(e: MouseEvent) {
-        if (!isDragging) return;
-        e.preventDefault();
-        const x = e.pageX - preview.offsetLeft;
-        const walk = (x - startX) * 4; // Adjust scroll speed multiplier as needed
-        preview.scrollLeft = scrollLeft - walk;
-    }
-
-    function handlePointerUp(e: MouseEvent) {
-        isDragging = false;
-    }
 
     function handleKeyDown(e: KeyboardEvent) {
         e.preventDefault();
         e.stopPropagation();
+        const target = e.target as HTMLImageElement;
         switch (e.key) {
             case "Escape":
                 $mode = "";
                 return;
             case "ArrowRight":
             case "ArrowDown":
-                preview.scrollBy({ left: 100, behavior: "instant" });
+                preview.scrollBy({
+                    left: target.offsetWidth,
+                    behavior: "instant",
+                });
                 return;
             case "ArrowLeft":
             case "ArrowUp":
-                preview.scrollBy({ left: -100, behavior: "instant" });
+                preview.scrollBy({
+                    left: -target.offsetWidth,
+                    behavior: "instant",
+                });
                 return;
         }
     }
@@ -88,10 +71,15 @@
     function handleWheel(e: WheelEvent) {
         if (zoom) return;
         e.preventDefault();
+        const target = e.target as HTMLImageElement;
         e.deltaY > 0
-            ? preview.scrollBy({ left: 100, behavior: "smooth" })
-            : preview.scrollBy({ left: -100, behavior: "smooth" });
+            ? preview.scrollBy({ left: target.offsetWidth, behavior: "smooth" })
+            : preview.scrollBy({
+                  left: -target.offsetWidth,
+                  behavior: "smooth",
+              });
     }
+
     function handleClick(e: PointerEvent) {
         if (zoom) return;
         if (e.button != 0) return;
@@ -101,14 +89,19 @@
             const half = target.offsetWidth / 2;
             const clickx = e.clientX - target.getBoundingClientRect().left;
             clickx > half
-                ? preview.scrollBy({ left: 100, behavior: "instant" })
-                : preview.scrollBy({ left: -100, behavior: "instant" });
+                ? preview.scrollBy({
+                      left: target.offsetWidth,
+                      behavior: "instant",
+                  })
+                : preview.scrollBy({
+                      left: -target.offsetWidth,
+                      behavior: "instant",
+                  });
         }
     }
 
     function handleViewClose() {
         $mode = "";
-        dialog.close();
         imageCache.clear();
     }
 
@@ -128,27 +121,27 @@
                 entries.forEach((entry) => {
                     if (entry.isIntersecting) {
                         let target = entry.target as HTMLImageElement;
-                        let { id } = target.dataset;
-                        if (id) {
-                            if ($activeImage.id !== id) {
-                                const [file] = files.filter(
-                                    (file) => file.id === id
-                                );
-                                activeImage.set(file);
+                        let { id, src } = target.dataset;
+                        if (!id) return;
+                        if (!target.src && src) target.src = src;
+                        if ($activeImage.id !== id) {
+                            const [file] = files.filter(
+                                (file) => file.id === id
+                            );
+                            activeImage.set(file);
+                        }
+                        if (!imageCache.has(id)) {
+                            if (!imageFetchLog.has(id)) {
+                                // $previewLoading = true;
+                                target.nextElementSibling.style.display =
+                                    "initial";
+                                fetchImgPreview(id);
+                                imageFetchLog.add(id);
+                                return;
                             }
-                            if (!imageCache.has(id)) {
-                                if (!imageFetchLog.has(id)) {
-                                    // $previewLoading = true;
-                                    target.nextElementSibling.style.display =
-                                        "initial";
-                                    fetchImgPreview(id);
-                                    imageFetchLog.add(id);
-                                    return;
-                                }
-                            } else {
-                                if (!target.src.startsWith("blob:")) {
-                                    target.src = imageCache.get(id);
-                                }
+                        } else {
+                            if (!target.src.startsWith("blob:")) {
+                                target.src = imageCache.get(id);
                             }
                         }
                     }
@@ -164,7 +157,7 @@
     }
 </script>
 
-<Dialog bind:this={dialog}>
+<div class="view-container" on:wheel|preventDefault>
     <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
     <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
     <artcle
@@ -189,13 +182,9 @@
             class="two preview"
             role="dialog"
             on:scroll|preventDefault
-            on:wheel={handleWheel}
-            on:mousedown|stopPropagation={handleClick}
+            on:wheel|stopPropagation={handleWheel}
+            on:click|stopPropagation={handleClick}
             on:keydown
-            on:mouseleave={handlePointerUp}
-            on:mouseup={handlePointerUp}
-            on:mousedown={handlePointerDown}
-            on:mousemove|stopPropagation={handlePointerMove}
             bind:this={preview}
         >
             {#each files as file}
@@ -260,8 +249,8 @@
             <button
                 class="btn s-prime info"
                 title="info"
-                on:click={() => (infoVisible = !infoVisible)}
-                >{@html infoIcon}</button
+                on:click|stopPropagation|preventDefault={() =>
+                    (infoVisible = !infoVisible)}>{@html infoIcon}</button
             >
         {/if}
         {#if $activeImage?.description}
@@ -271,18 +260,35 @@
                 class="btn s-second url">{@html urlIcon}</a
             >
         {/if}
-        <button class="btn s-prime" title="zoom" on:click={() => (zoom = !zoom)}
+        <button
+            class="btn s-prime"
+            title="zoom"
+            on:click|stopPropagation|preventDefault={() => (zoom = !zoom)}
             >{@html zoom ? zoomOutIcon : zoomInIcon}</button
         >
         <button
             class="btn s-prime expand"
-            title="info"
-            on:click={() => (expand = !expand)}>{@html expandIcon}</button
+            title="expand"
+            on:click|stopPropagation|preventDefault={() => (expand = !expand)}
+            >{@html expandIcon}</button
         >
     </div>
-</Dialog>
+</div>
 
 <style>
+    .view-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        z-index: 5;
+        background-color: #12121205;
+        backdrop-filter: blur(50px);
+        -webkit-backdrop-filter: blur(50px);
+        /* background-color: var(--color-backdrop); */
+    }
+
     #view {
         box-sizing: border-box;
         height: 100%;
@@ -319,7 +325,11 @@
         display: none;
     }
     .three {
+        position: absolute;
         min-width: 30rem;
+        right: 0;
+        top: 0;
+        z-index: 1;
     }
     .file {
         width: 100%;
@@ -368,18 +378,23 @@
         gap: 1.5rem;
     }
 
+    .expand {
+        display: none;
+    }
     @media (max-width: 600px) and (orientation: portrait) {
         #view {
             flex-flow: column-reverse;
             padding: 0rem;
-            gap: 2rem;
+            padding-bottom: 0.5rem;
+            gap: 1rem;
         }
         .one {
             max-width: 100%;
-            margin: auto;
+            /* margin: auto; */
             min-height: 10%;
             max-height: 10%;
-            padding: 1rem 0rem;
+            padding: 0.5rem 1rem;
+            overflow: hidden;
         }
 
         .two {
@@ -398,6 +413,12 @@
             position: absolute;
             z-index: 11;
         }
+        .file {
+            width: 100vw;
+        }
+        .img {
+            width: 100%;
+        }
 
         .img,
         .video {
@@ -410,20 +431,23 @@
             height: 150%;
         }
         .action {
-            bottom: 8rem;
+            bottom: 6rem;
             top: unset;
             right: 2rem;
         }
 
         .expand {
+            display: flex;
             bottom: 1rem;
         }
         .info {
             rotate: 90deg;
         }
         .close {
-            top: 0.5rem;
-            left: 0.5rem;
+            top: 0rem;
+            left: 0rem;
+            box-sizing: content-box;
+            padding: 0.5rem;
         }
 
         .spinner {

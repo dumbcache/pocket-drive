@@ -103,7 +103,7 @@
     }
     function checkDisabled() {
         if (type === "DELETE") {
-            placeholder.trim() !== "confirm"
+            placeholder.trim().toLowerCase() !== "confirm"
                 ? (submitDisabled = true)
                 : (submitDisabled = false);
         } else {

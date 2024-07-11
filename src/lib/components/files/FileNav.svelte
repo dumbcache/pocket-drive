@@ -158,7 +158,6 @@
     }
     .active img {
         filter: none;
-        width: 100%;
     }
     .no {
         height: 10rem;
@@ -169,17 +168,16 @@
         .thumbs {
             height: 100%;
             flex-flow: row nowrap;
-            width: initial;
+            width: 100%;
+            overflow-x: scroll;
         }
+        .active img,
         img {
-            min-width: 5rem;
-            max-height: 5rem;
-            width: 5rem;
-        }
-        .active img {
             min-width: 4rem;
+            max-height: 4rem;
             width: 4rem;
         }
+
         .no {
             width: 5rem;
         }

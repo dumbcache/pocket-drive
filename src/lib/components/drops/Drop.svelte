@@ -111,7 +111,7 @@
         border-bottom: none;
     }
     .drop :global(input:hover) {
-        background-color: var(--color-bg-five);
+        background-color: var(--color-bg-three);
     }
 
     .expand {
