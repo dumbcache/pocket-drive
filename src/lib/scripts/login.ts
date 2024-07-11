@@ -21,7 +21,6 @@ export let googleClient = (() => {
         window.localStorage.setItem("token", accessToken);
         clearTimeout(get(activeTimeout));
         setSessionTimeout(tokenResponse.expires_in);
-        // setRefreshTimeout();
         if (!window.localStorage.getItem("root")) {
             const res = await fetch(
                 `https://www.googleapis.com/drive/v3/files?&pageSize=1&fields=files(id,name)&orderBy=createdTime`,

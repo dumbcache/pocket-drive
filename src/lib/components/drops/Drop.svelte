@@ -75,8 +75,6 @@
         z-index: 1;
         min-width: 40%;
         height: 100vh;
-        /* backdrop-filter: blur(1rem);
-        -webkit-backdrop-filter: blur(1rem); */
     }
 
     .drop-items {
@@ -102,7 +100,6 @@
         font-size: 1.6rem;
         color: var(--color);
         background-color: var(--color-bg-two);
-        /* border-bottom: 2px solid var(--color-black); */
         padding-left: 0.5rem;
     }
 

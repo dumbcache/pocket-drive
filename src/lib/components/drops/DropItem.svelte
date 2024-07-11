@@ -79,7 +79,6 @@
         max-width: 20rem;
         border-bottom: none;
         border: 1px solid var(--color-border);
-        /* border-bottom: none; */
         overflow: hidden;
     }
     .img-wrapper {

@@ -49,6 +49,16 @@
         return true;
     }
 
+    function handleSession(e) {
+        if (e.key === "token") {
+            if (e.newValue) {
+                sessionTimeout.set(false);
+            } else {
+                sessionTimeout.set(true);
+            }
+        }
+    }
+
     onMount(() => {
         try {
             updateRecents();
@@ -60,7 +70,11 @@
     });
 </script>
 
-<svelte:window on:keydown on:beforeunload={handleUnload} />
+<svelte:window
+    on:keydown
+    on:beforeunload={handleUnload}
+    on:storage={handleSession}
+/>
 
 <div
     role="group"
