@@ -98,9 +98,9 @@
 <section class="folder-container">
     {#if searchFolders && searchFolders.length > 0}
         <ol class="list">
-            {#each searchFolders as folder (folder.id)}
-                <li data-id={folder.id}>
-                    <Folder {folder} toolsVisible={false} visible={true} />
+            {#each searchFolders as file (file.id)}
+                <li data-id={file.id}>
+                    <Folder {file} visible={true} />
                 </li>
             {/each}
         </ol>

@@ -68,7 +68,7 @@
         if (type === "FOLDER") {
             if (selectedId === $activeParent.id) {
                 tempFolderStore.files = tempFolderStore.files?.filter(
-                    (file) => file.id !== $folderActionDetail.id
+                    (file) => file.id !== $folderActionDetail?.id
                 );
             }
         }
@@ -108,7 +108,7 @@
         folderStore.update((prev) => {
             return {
                 files: prev?.files.filter(
-                    (file) => file.id !== $folderActionDetail.id
+                    (file) => file.id !== $folderActionDetail?.id
                 ),
                 nextPageToken: prev?.nextPageToken,
             };

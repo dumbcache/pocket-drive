@@ -1,28 +1,39 @@
 <script lang="ts">
     import { onDestroy } from "svelte";
-    import { folderStore, folderAction, starred } from "$lib/scripts/stores";
+    import {
+        folderStore,
+        folderAction,
+        starred,
+        mode,
+    } from "$lib/scripts/stores";
     import Folder from "$lib/components/folders/Folder.svelte";
     import { navigating } from "$app/stores";
     import ActionForm from "$lib/components/folders/ActionForm.svelte";
     import FolderSelect from "$lib/components/folders/FolderSelect.svelte";
+    import Edit from "$lib/components/files/Edit.svelte";
+    import { get } from "svelte/store";
 
     export let view: string;
     export let observer: IntersectionObserver;
 
-    let folders: FileResponse | undefined;
+    let files: FileResponse | undefined;
     let childObserver: IntersectionObserver;
     let inspectionLog = {};
 
     let foot: HTMLElement;
     let container: HTMLElement;
 
+    let allSelected = false;
+    let set = new Set<string>();
+    let count = 0;
+
     $: foot && observer?.observe(foot);
 
     let unsubscribe = folderStore.subscribe((data) => {
         if (data) {
-            folders = data?.files;
+            files = data?.files;
             setTimeout(() => {
-                childInspection(folders);
+                childInspection(files);
             }, 1000);
         }
     });
@@ -32,6 +43,52 @@
             inspectionLog = {};
         }
     });
+
+    function editCloseAction(e) {
+        const eles = document.querySelectorAll(".select");
+        eles.forEach((ele) => {
+            ele.classList.remove("select");
+            let detail = e.detail.type;
+            if (detail === "DELETE" || detail === "MOVE") {
+                ele.style.display = "none";
+            }
+        });
+        allSelected = false;
+        count = 0;
+        set.clear();
+    }
+
+    function selectAllAction() {
+        allSelected = !allSelected;
+        if (allSelected) {
+            files?.forEach((file) => {
+                set.add(file.id);
+            });
+            count = set.size;
+            return;
+        }
+        set.clear();
+        count = set.size;
+    }
+
+    export function handleImageClick(e) {
+        if (get(mode) !== "edit") return;
+        let eles = e.composedPath();
+        let [target] = eles.filter((ele) => ele.localName === "li");
+        if (!target) return;
+        let { id } = target?.dataset;
+        if (!id) return;
+        if (set.has(id)) {
+            set.delete(id);
+            count--;
+            target.classList.toggle("select");
+            return;
+        }
+        set.add(id);
+        count++;
+        target.classList.toggle("select");
+        return;
+    }
 
     function childInspection(items: FileResponse | undefined) {
         childObserver = new IntersectionObserver(
@@ -80,16 +137,33 @@
     class="folder-container"
     style:display={view === "FOLDER" ? "initial" : "none"}
 >
-    {#if folders && folders.length > 0}
-        <ol class="list" bind:this={container}>
-            {#each folders as folder (folder.id)}
+    {#if $mode === "edit" && view === "FOLDER"}
+        <Edit
+            {view}
+            {set}
+            {count}
+            on:close={editCloseAction}
+            on:selectAll={selectAllAction}
+        />
+    {/if}
+    {#if files && files.length > 0}
+        <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+        <ol
+            class="list"
+            bind:this={container}
+            on:click={handleImageClick}
+            on:keydown
+        >
+            {#each files as file (file.id)}
                 <li
-                    data-id={folder.id}
-                    style:display={$starred === true && folder.starred === false
+                    data-id={file.id}
+                    data-starred={file.starred}
+                    class:select={allSelected}
+                    style:display={$starred === true && file.starred === false
                         ? "none"
                         : "initial"}
                 >
-                    <Folder {folder} visible={inspectionLog[folder.id]} />
+                    <Folder {file} visible={inspectionLog[file.id]} />
                 </li>
             {/each}
         </ol>
@@ -115,6 +189,23 @@
         gap: var(--content-gap);
     }
 
+    .select :global(.card) {
+        box-shadow: 0 0 5px 1px #fff5;
+        filter: brightness(0.3);
+    }
+    /* .selected :global(.card) {
+        box-shadow: 0 0 5px 1px #fff5;
+        filter: brightness(0.3);
+    } */
+
+    .select {
+        border-bottom: 5px solid var(--color-focus);
+        border-radius: 1rem;
+    }
+    .select:hover :global(.card) {
+        filter: none;
+        filter: brightness(0.3);
+    }
     @media (max-width: 600px) {
     }
 

@@ -2,6 +2,7 @@
     import ActionButtons from "$lib/components/folders/ActionButtons.svelte";
     import { getToken, IMG_MIME_TYPE, fetchMultiple } from "$lib/scripts/utils";
     import { previewAndSetDropItems } from "$lib/scripts/image";
+    import { mode } from "$lib/scripts/stores";
 
     export let visible: Boolean;
     export let toolsVisible: Boolean;
@@ -57,7 +58,7 @@
         <div class="pic-wrapper placeholder" />
         <div class="pic-wrapper placeholder" />
     {/if}
-    {#if toolsVisible}
+    {#if $mode !== "edit"}
         <div class="edit">
             <ActionButtons {id} {name} />
         </div>

@@ -107,7 +107,6 @@
                 target.classList.toggle("select");
                 return;
 
-            case "":
             default:
                 const [file] = get(fileStore)?.files.filter(
                     (file) => file.id === id
@@ -149,8 +148,9 @@
     class="file-container"
     style:display={view === "FILE" ? "initial" : "none"}
 >
-    {#if $mode === "edit"}
+    {#if $mode === "edit" && view === "FILE"}
         <Edit
+            {view}
             {set}
             {count}
             on:close={editCloseAction}
@@ -172,7 +172,6 @@
                     data-size={file.size}
                     data-starred={file.starred}
                     class:select={allSelected}
-                    class:selected={false}
                     style:display={$starred === true && file.starred === false
                         ? "none"
                         : "initial"}
@@ -213,7 +212,7 @@
     } */
 
     .select {
-        border-bottom: 5px solid var(--color-blue);
+        border-bottom: 5px solid var(--color-focus);
         border-radius: 1rem;
     }
     .select:hover :global(.card) {

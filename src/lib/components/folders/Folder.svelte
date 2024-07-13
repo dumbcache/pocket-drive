@@ -1,36 +1,43 @@
 <script lang="ts">
     import FolderCover from "$lib/components/folders/FolderCover.svelte";
+    import { mode } from "$lib/scripts/stores";
     import Favorite from "../utils/Favorite.svelte";
 
     export let visible: Boolean;
     export let toolsVisible: Boolean = true;
-    export let folder: Folder;
+    export let file: Folder;
 </script>
 
 <div
     class="card"
+    class:edit-mode={$mode === "edit"}
     role="listitem"
     on:dragstart|preventDefault
-    data-id={folder.id}
+    data-id={file.id}
 >
     <!-- on:mouseleave={closePeak}
     on:mouseenter={displayPeak} -->
-    <FolderCover id={folder.id} name={folder.name} {toolsVisible} {visible} />
+    <FolderCover id={file.id} name={file.name} {toolsVisible} {visible} />
     <div class="title-wrapper">
-        <h2 class="folder-title" title={folder.name}>{folder.name}</h2>
+        <h2 class="folder-title" title={file.name}>{file.name}</h2>
         <div class="favorite">
             <Favorite
-                id={folder.id}
-                starred={folder.starred}
-                on:fav={() => (folder.starred = !folder.starred)}
+                id={file.id}
+                starred={file.starred}
+                on:fav={() => (file.starred = !file.starred)}
             />
         </div>
     </div>
+    {#if $mode === "edit"}
+        <div class="mask"></div>
+    {/if}
 </div>
 
 <style>
     .card {
         position: relative;
+        border-radius: 1rem;
+        overflow: hidden;
     }
     .card:hover {
         /* box-shadow: 0 0 2px 2px var(--color-focus); */
@@ -39,6 +46,9 @@
 
     .card {
         width: var(--folder-width);
+    }
+    .edit-mode {
+        cursor: pointer;
     }
     .folder-title {
         word-wrap: unset;
@@ -63,6 +73,15 @@
     .favorite {
         margin-right: 1rem;
         height: var(--secondary-icon-size);
+    }
+
+    .mask {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        border-radius: 1rem;
     }
 
     @media (max-width: 900px) {

@@ -17,6 +17,7 @@
     import { createEventDispatcher } from "svelte";
 
     export let set: Set,
+        view: "FILE" | "FOLDER",
         count: Number,
         memory: Number = 0;
 
@@ -45,6 +46,7 @@
             files: set,
             token: getToken(),
             activeParent: $activeParent.id,
+            view,
         });
         confirm = false;
         close("DELETE");
@@ -73,6 +75,7 @@
             activeParent: $activeParent.id,
             files: set,
             token: getToken(),
+            view,
         });
         close(action);
         action = "";
@@ -116,11 +119,13 @@
 
 <div class="edit-buttons">
     {#if confirm}
-        <p class="memory">
-            Size: <span>
-                {(memory / (1024 * 1024)).toFixed(2)} MB
-            </span>
-        </p>
+        {#if view === "FILE"}
+            <p class="memory">
+                Size: <span>
+                    {(memory / (1024 * 1024)).toFixed(2)} MB
+                </span>
+            </p>
+        {/if}
         <button class="cancel action" on:click={() => (confirm = false)}
             >cancel</button
         >
@@ -135,12 +140,6 @@
         >
         <button
             class="btn s-prime"
-            title="edit"
-            disabled={count === 0}
-            on:click={() => (action = "EDIT")}>{@html editIcon}</button
-        >
-        <button
-            class="btn s-prime"
             title="move"
             disabled={count === 0}
             on:click={() => {
@@ -148,25 +147,33 @@
                 folderSelectVisible = true;
             }}>{@html moveIcon}</button
         >
-        <button
-            class="btn s-prime"
-            title="copy"
-            disabled={count === 0}
-            on:click={() => {
-                action = "COPY";
-                folderSelectVisible = true;
-            }}>{@html copyIcon}</button
-        >
-        <button
-            class="btn s-prime"
-            title="move to start"
-            disabled={count === 0}
-            on:click={() => {
-                action = "TOP";
-                confirm = true;
-            }}
-            on:click={() => moveToTop()}>{@html startIcon}</button
-        >
+        {#if view === "FILE"}
+            <button
+                class="btn s-prime"
+                title="copy"
+                disabled={count === 0}
+                on:click={() => {
+                    action = "COPY";
+                    folderSelectVisible = true;
+                }}>{@html copyIcon}</button
+            >
+            <button
+                class="btn s-prime"
+                title="edit"
+                disabled={count === 0}
+                on:click={() => (action = "EDIT")}>{@html editIcon}</button
+            >
+            <button
+                class="btn s-prime"
+                title="move to start"
+                disabled={count === 0}
+                on:click={() => {
+                    action = "TOP";
+                    confirm = true;
+                }}
+                on:click={() => moveToTop()}>{@html startIcon}</button
+            >
+        {/if}
         <button
             class="btn s-prime"
             title="delete"

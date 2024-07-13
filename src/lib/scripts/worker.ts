@@ -345,7 +345,8 @@ export async function moveMulitple(
     parent: string,
     activeParent: string,
     set: Set<string>,
-    accessToken: string
+    accessToken: string,
+    view: string
 ) {
     let proms = [];
     let data = Array.from(set);
@@ -375,7 +376,7 @@ export async function moveMulitple(
         );
     }
     Promise.allSettled(proms).then(() => {
-        postMessage({ context: "MOVE", parent, activeParent, set: s });
+        postMessage({ context: "MOVE", parent, activeParent, set: s, view });
     });
 }
 
@@ -435,21 +436,21 @@ export async function updateMultiple(
 }
 
 onmessage = ({ data }) => {
-    let { parent, activeParent, files, token } = data;
+    let { parent, activeParent, files, token, view } = data;
     switch (data.context) {
         case "IMG_PREVIEW":
             checkForImgLocal(data.id, data.token);
             return;
         case "DELETE":
             deleteImgs(files, token).then((s) => {
-                postMessage({ context: "DELETE", set: s, activeParent });
+                postMessage({ context: "DELETE", set: s, activeParent, view });
             });
             return;
         case "CLEAR_IMAGE_CACHE":
             clearImageCache();
             return;
         case "MOVE":
-            moveMulitple(parent, activeParent, files, token);
+            moveMulitple(parent, activeParent, files, token, view);
             return;
         case "COPY":
             copyMulitple(parent, files, token).then((s) => {

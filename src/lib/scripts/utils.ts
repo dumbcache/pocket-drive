@@ -19,6 +19,7 @@ import {
     starred,
     mask,
     fetchAll,
+    folderStore,
 } from "$lib/scripts/stores";
 import ChildWorker from "$lib/scripts/worker.ts?worker";
 import { clearDropItems } from "$lib/scripts/image";
@@ -525,7 +526,10 @@ if (browser) {
     childWorker = new ChildWorker();
     childWorker.onerror = (e) => console.warn(e);
     childWorker.onmessage = async ({ data }) => {
-        let parent: string, aParent: string, set: Set;
+        let parent: string,
+            aParent: string,
+            set: Set<string>,
+            view: "FILE" | "FOLDER";
         switch (data.context) {
             case "IMG_PREVIEW":
                 const { id, blob } = data;
@@ -590,84 +594,102 @@ if (browser) {
                 );
                 return;
             case "MOVE":
+            case "DELETE":
                 parent = data.parent;
                 aParent = data.activeParent;
+                view = data.view;
                 set = new Set(data?.set);
-                if (aParent === get(activeParent).id) {
-                    fileStore.update((prev) => ({
-                        nextPageToken: prev?.nextPageToken,
-                        files: prev?.files.filter((file) => !set.has(file.id)),
-                    }));
-                } else {
-                    const { files, folders } = pocketStore.get(aParent);
-                    files.files = files.files.filter(
-                        (element) => !set.has(element.id)
-                    );
-                    pocketStore.set(aParent, { files, folders });
-                }
-                fetchMultiple(
-                    { parent, mimeType: IMG_MIME_TYPE },
-                    getToken(),
-                    true
-                ).then((data) => {
-                    if (pocketStore.has(parent)) {
-                        pocketStore.set(parent, {
-                            ...pocketStore.get(parent),
-                            files: data,
-                        });
+                let currentActiveParent = get(activeParent).id;
+                if (aParent === currentActiveParent) {
+                    if (view === "FILE") {
+                        fileStore.update((prev) => ({
+                            nextPageToken: prev?.nextPageToken,
+                            files: prev?.files.filter(
+                                (file) => !set.has(file.id)
+                            ),
+                        }));
+                    } else {
+                        folderStore.update((prev) => ({
+                            nextPageToken: prev?.nextPageToken,
+                            files: prev?.files.filter(
+                                (file) => !set.has(file.id)
+                            ),
+                        }));
                     }
-                });
-                fetchMultiple(
-                    { parent, mimeType: IMG_MIME_TYPE, pageSize: 3 },
-                    getToken(),
-                    true
-                );
-                fetchMultiple(
-                    { parent: aParent, mimeType: IMG_MIME_TYPE },
-                    getToken(),
-                    true
-                );
-                fetchMultiple(
-                    {
-                        parent: aParent,
-                        mimeType: IMG_MIME_TYPE,
-                        pageSize: 3,
-                    },
-                    getToken(),
-                    true
-                );
+                } else {
+                    pocketStore.delete(aParent);
+                }
+                parent && pocketStore.delete(parent);
+
+                if (view === "FILE") {
+                    fetchMultiple(
+                        { parent: aParent, mimeType: IMG_MIME_TYPE },
+                        getToken(),
+                        true
+                    );
+                    fetchMultiple(
+                        {
+                            parent: aParent,
+                            mimeType: IMG_MIME_TYPE,
+                            pageSize: 3,
+                        },
+                        getToken(),
+                        true
+                    );
+                    if (parent) {
+                        fetchMultiple(
+                            { parent, mimeType: IMG_MIME_TYPE },
+                            getToken(),
+                            true
+                        );
+                        fetchMultiple(
+                            { parent, mimeType: IMG_MIME_TYPE, pageSize: 3 },
+                            getToken(),
+                            true
+                        );
+                    }
+                } else {
+                    fetchMultiple(
+                        { parent: aParent, mimeType: FOLDER_MIME_TYPE },
+                        getToken(),
+                        true
+                    );
+                    if (parent) {
+                        fetchMultiple(
+                            { parent, mimeType: FOLDER_MIME_TYPE },
+                            getToken(),
+                            true
+                        );
+                    }
+                }
+
                 return;
 
-            case "DELETE":
-                aParent = data.activeParent;
-                set = new Set(data.set);
-                if (aParent === get(activeParent).id) {
-                    fileStore.update((prev) => ({
-                        nextPageToken: prev?.nextPageToken,
-                        files: prev?.files.filter((file) => !set.has(file.id)),
-                    }));
-                } else {
-                    const { files, folders } = pocketStore.get(aParent);
-                    files.files = files.files.filter(
-                        (element) => !set.has(element.id)
-                    );
-                    pocketStore.set(aParent, { files, folders });
-                }
-                fetchMultiple(
-                    { parent: aParent, mimeType: IMG_MIME_TYPE },
-                    getToken(),
-                    true
-                );
-                fetchMultiple(
-                    {
-                        parent: aParent,
-                        mimeType: IMG_MIME_TYPE,
-                        pageSize: 3,
-                    },
-                    getToken(),
-                    true
-                );
-                return;
+            //     const { files, folders } = pocketStore.get(aParent);
+            //     if (view === "FILE") {
+            //         files.files = files.files.filter(
+            //             (element) => !set.has(element.id)
+            //         );
+            //     } else if (view === "FOLDER") {
+            //         folders.files = folders.files.filter(
+            //             (element) => !set.has(element.id)
+            //         );
+            //     }
+            //     pocketStore.set(aParent, { files, folders });
+
+            // fetchMultiple(
+            //     { parent, mimeType: IMG_MIME_TYPE },
+            //     getToken(),
+            //     true
+            // ).then((data) => {
+            //     if (pocketStore.has(parent)) {
+            //         pocketStore.set(parent, {
+            //             ...pocketStore.get(parent),
+            //             files: data,
+            //         });
+            //     }
+            // });
+
             case "DROP_SAVE":
                 clearDropItems();
                 parent = data.parent;
