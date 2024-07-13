@@ -1,6 +1,6 @@
 <script lang="ts">
     import imgCreate from "$lib/assets/imgCreate.svg?raw";
-    import goToDrive from "$lib/assets/drive.svg?raw";
+    // import goToDrive from "$lib/assets/drive.svg?raw";
     import folderCreate from "$lib/assets/folderCreate.svg?raw";
     import { previewAndSetDropItems } from "$lib/scripts/image";
     import {
@@ -116,15 +116,6 @@
     <hr class="hr" />
 
     {#if $activeView === "FILE"}
-        <button
-            class="btn s-prime"
-            title="edit"
-            on:click={() => {
-                $mode = "edit";
-            }}
-        >
-            {@html editIcon}
-        </button>
         <button class="img-picker btn s-prime">
             <label
                 for="img-picker"
@@ -145,19 +136,28 @@
     {:else}
         <button
             class="btn s-prime"
-            title="search folders"
-            on:click={() => ($mode = $mode === "" ? "search" : "")}
-        >
-            {@html searchIcon}
-        </button>
-        <button
-            class="btn s-prime"
             title="create folder"
             on:click={() => ($folderAction = "CREATE")}
         >
             {@html folderCreate}
         </button>
     {/if}
+    <button
+        class="btn s-prime"
+        title="edit"
+        on:click={() => {
+            $mode = "edit";
+        }}
+    >
+        {@html editIcon}
+    </button>
+    <button
+        class="btn s-prime"
+        title="search folders"
+        on:click={() => ($mode = $mode === "" ? "search" : "")}
+    >
+        {@html searchIcon}
+    </button>
     <button
         class="btn s-prime"
         title="favorites"
@@ -169,7 +169,7 @@
     <button class="btn s-prime" title="refresh" on:click={refreshHandler}>
         {@html refreshIcon}
     </button>
-    <a
+    <!-- <a
         href={`https://drive.google.com/drive/folders/${$activeParent?.id}`}
         referrerpolicy="no-referrer"
         rel="external noopener noreferrer nofollow"
@@ -178,7 +178,7 @@
         target="_blank"
     >
         {@html goToDrive}
-    </a>
+    </a> -->
 </div>
 
 <style>

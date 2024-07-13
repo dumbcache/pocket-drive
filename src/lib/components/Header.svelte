@@ -1,10 +1,11 @@
 <script>
-    import { HOME_PATH, profile } from "$lib/scripts/stores";
+    import { activeParent, HOME_PATH, profile } from "$lib/scripts/stores";
     import Tools from "$lib/components/Tools.svelte";
     import { onMount } from "svelte";
     import BackButton from "./utils/BackButton.svelte";
     import ColorScheme from "$lib/components/utils/ColorScheme.svelte";
     import profileIcon from "$lib/assets/profile.svg?raw";
+    import goToDrive from "$lib/assets/drive.svg?raw";
 
     let homeButton = "";
 
@@ -31,6 +32,16 @@
         <!-- <button class="btn help" title="shortcuts" on:click={() => {}}
             >{@html helpButton}</button
         > -->
+        <a
+            href={`https://drive.google.com/drive/folders/${$activeParent?.id}`}
+            referrerpolicy="no-referrer"
+            rel="external noopener noreferrer nofollow"
+            class="btn s-prime"
+            title="open in google drive"
+            target="_blank"
+        >
+            {@html goToDrive}
+        </a>
         <ColorScheme />
         <button
             class="btn s-prime settings"
@@ -97,9 +108,6 @@
         height: 5rem;
     }
     @media (max-width: 600px) {
-        .title-wrapper {
-            flex-flow: row nowrap;
-        }
         .header {
             position: relative;
             height: initial;
@@ -112,14 +120,15 @@
         .wrapper {
             flex-flow: row nowrap;
             justify-content: end;
-            gap: 2rem;
+            gap: 1rem;
         }
         .tool-wrapper {
             display: none;
         }
 
         .title-wrapper {
-            gap: 3rem;
+            flex-flow: row nowrap;
+            gap: 1.5rem;
         }
         .title-button {
             flex-flow: row wrap;
