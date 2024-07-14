@@ -12,7 +12,6 @@
         width: fit-content;
         background-color: var(--color-bg-six);
         display: flex;
-        padding: 0.1rem;
         justify-content: space-between;
         align-items: center;
         border-radius: 5rem;
@@ -26,6 +25,6 @@
         background-color: #fff;
     }
     .on {
-        background-color: var(--color-blue);
+        background-color: var(--color-focus);
     }
 </style>

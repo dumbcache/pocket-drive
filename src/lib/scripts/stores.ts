@@ -38,6 +38,7 @@ export let searchItems = writable<GoogleFile[] | undefined>();
 export let isLoggedin = writable(false);
 export let activeView = writable<"FILE" | "FOLDER">("FOLDER");
 export let preview = writable<"IMAGE" | "VIDEO">("IMAGE");
+export let theme = writable<"dark" | "">("");
 
 export let activeTimeout = writable(0);
 export let sessionTimeout = writable(false);

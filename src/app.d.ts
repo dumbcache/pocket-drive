@@ -126,6 +126,35 @@ declare global {
     interface Preferences {
         showFileNames?: Boolean;
     }
+
+    type Action =
+        | "EDIT"
+        | "DELETE"
+        | "COPY"
+        | "MOVE"
+        | "TOP"
+        | "DROP"
+        | "IMG_PREVIEW"
+        | "CLEAR_IMAGE_CACHE"
+        | "IDB_RELOAD_REQUIRED"
+        | "IMG_PREVIEW_FAILED"
+        | "PROGRESS";
+
+    interface WorkerMessage {
+        context: Action;
+        token?: string;
+        activeParent?: parent;
+        parent?: string;
+        view?: "FILE" | "FOLDER";
+        ids?: set<string>;
+        success?: set<string>;
+        dropItem?: DropItem;
+        imgMeta?: ImgMeta;
+        blob?: Blob;
+        progressType?: Action;
+        id?: string;
+        status?: 1 | 0;
+    }
 }
 
 export {};

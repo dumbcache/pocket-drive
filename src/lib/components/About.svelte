@@ -3,33 +3,41 @@
     import article12 from "$lib/assets/about/article12.webp";
     import article13 from "$lib/assets/about/article13.webp";
     import article14 from "$lib/assets/about/article14.webp";
-    import article15 from "$lib/assets/about/article15.webp";
+    import article1dark from "$lib/assets/about/article1dark.webp";
+    import article12dark from "$lib/assets/about/article12dark.webp";
+    import article13dark from "$lib/assets/about/article13dark.webp";
+    import article14dark from "$lib/assets/about/article14dark.webp";
     import svelteIcon from "$lib/assets/svelteIcon.svg?raw";
     import githubIcon from "$lib/assets/githubIcon.svg?raw";
     import linkedinIcon from "$lib/assets/linkedinIcon.svg?raw";
     import emailIcon from "$lib/assets/emailIcon.svg?raw";
+    import { theme } from "$lib/scripts/stores";
 </script>
 
 <article class="article-1 article">
     <section class="gallery">
-        <img src={article1} class="img img11" alt="UI desktop" data-nosnippet />
-        <img src={article12} class="img img12" alt="UI mobile" data-nosnippet />
         <img
-            src={article14}
-            class="img img14"
-            alt="View mode mobile"
+            src={$theme === "" ? article1 : article1dark}
+            class="img img11"
+            alt="UI desktop"
             data-nosnippet
         />
         <img
-            src={article13}
+            src={$theme === "" ? article12 : article12dark}
+            class="img img12"
+            alt="UI mobile"
+            data-nosnippet
+        />
+        <img
+            src={$theme === "" ? article13 : article13dark}
             class="img img13"
             alt="View mode desktop"
             data-nosnippet
         />
         <img
-            src={article15}
-            class="img img15"
-            alt="Edit mode desktop"
+            src={$theme === "" ? article14 : article14dark}
+            class="img img14"
+            alt="View mode mobile"
             data-nosnippet
         />
     </section>

@@ -1,25 +1,9 @@
 <script lang="ts">
     import lightModeIcon from "$lib/assets/lightMode.svg?raw";
     import darkModeIcon from "$lib/assets/darkMode.svg?raw";
-    import { onMount } from "svelte";
-
-    let theme = "";
-    onMount(() => {
-        theme = window.localStorage.getItem("theme") ?? "";
-    });
-    function toggleTheme() {
-        theme = theme === "" ? "dark" : "";
-        window.localStorage.setItem("theme", theme);
-        const root = document.documentElement;
-        root.classList.toggle("dark");
-    }
-
-    function handleKeyDown(e: KeyboardEvent) {
-        e.key === "c" && toggleTheme();
-    }
+    import { theme } from "$lib/scripts/stores";
+    import { toggleTheme } from "$lib/scripts/utils";
 </script>
-
-<svelte:window on:keydown={handleKeyDown} />
 
 <button
     type="button"
@@ -27,10 +11,10 @@
     title="toggle theme"
     role="switch"
     aria-label="Toggle dark mode"
-    aria-checked={theme === "" ? "false" : "true"}
+    aria-checked={$theme === "" ? "false" : "true"}
     on:click={toggleTheme}
 >
-    {#if theme === ""}
+    {#if $theme === ""}
         {@html lightModeIcon}
     {:else}
         {@html darkModeIcon}

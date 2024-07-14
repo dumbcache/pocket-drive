@@ -133,17 +133,19 @@
         gap: 1rem;
         display: flex;
         flex-flow: column;
+        height: fit-content;
+        /* justify-content: center; */
     }
 
     button {
-        display: inline-block;
+        display: inline-flex;
         border-radius: 0.5rem;
     }
 
     img {
         height: auto;
-        object-fit: contain;
-        filter: brightness(0.5);
+        object-fit: cover;
+        object-position: top;
         width: 10rem;
         max-height: 10rem;
         border-radius: 0.5rem;
@@ -156,9 +158,11 @@
         border: 2px solid var(--color-focus);
         box-shadow: 0 0 5px 1px var(--color-white-light);
     }
-    .active img {
-        filter: none;
+    .active img,
+    .active:hover img {
+        filter: brightness(0.5);
     }
+
     .no {
         height: 10rem;
         background-color: var(--color-file-background);

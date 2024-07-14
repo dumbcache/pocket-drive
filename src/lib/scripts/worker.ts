@@ -59,7 +59,7 @@ function checkForImgLocal(id: string, token: string) {
                 .catch((e) => {
                     postMessage({
                         context: "IMG_PREVIEW_FAILED",
-                        status: e.status,
+                        status: 0,
                     });
                     console.warn(e);
                 });
@@ -74,7 +74,7 @@ async function uploadFile(
     location: string,
     id: string
 ): Promise<number> {
-    const chunkSize = 20 * 256 * 1024; // 256 KB chunk size
+    const chunkSize = 20 * 256 * 1024; // 5 MB chunk size
     let offset = 0;
     let fileSize = file.size;
     while (offset < fileSize) {
@@ -134,7 +134,7 @@ async function dropSave(item: DropItem, token: string) {
             uploadFile(file, location, id)
                 .then((status) => {
                     postMessage({
-                        context: "DROP_SAVE",
+                        context: "DROP",
                         id,
                         parent,
                         status: status === 200 ? "success" : " failure",
@@ -142,7 +142,7 @@ async function dropSave(item: DropItem, token: string) {
                 })
                 .catch((e) => {
                     postMessage({
-                        context: "DROP_SAVE",
+                        context: "DROP",
                         id,
                         parent,
                         status: "failure",
@@ -151,7 +151,7 @@ async function dropSave(item: DropItem, token: string) {
         })
         .catch((e) => {
             postMessage({
-                context: "DROP_SAVE",
+                context: "DROP",
                 id,
                 parent,
                 status: "failure",
@@ -201,57 +201,6 @@ export const createImgMetadata = (
     });
 };
 
-export const deleteImgs = async (
-    set: Set<string>,
-    token: string,
-    top?: Boolean
-) => {
-    return new Promise(async (resolve) => {
-        const proms = [];
-        let s: string[] = [];
-        let imgs = Array.from(set);
-        for (let i = 0; i < imgs.length; i++) {
-            let id = imgs[i];
-            if (i % 50 === 0) {
-                await wait(1000);
-            }
-            proms.push(
-                fetch(`${FILE_API}/${id}`, {
-                    method: "DELETE",
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                }).then((res) => {
-                    if (res.status === 204) {
-                        if (!top) {
-                            postMessage({
-                                context: "PROGRESS",
-                                type: "DELETE",
-                                id,
-                                status: 1,
-                            });
-                        }
-                        s.push(id);
-                    } else {
-                        if (!top) {
-                            postMessage({
-                                context: "PROGRESS",
-                                type: "DELETE",
-                                id,
-                                status: 0,
-                            });
-                        }
-                    }
-                })
-            );
-        }
-
-        Promise.allSettled(proms).then(() => {
-            resolve(s);
-        });
-    });
-};
-
 async function makeFetch(request: Request) {
     try {
         const res = await fetch(request);
@@ -259,226 +208,156 @@ async function makeFetch(request: Request) {
             console.info(await res.text());
             return;
         }
-        return res;
+        return res.status;
     } catch (error) {
         console.log(error);
+        return 500;
     }
 }
 
-export const copySingle = async (
-    parent: string,
-    id: string,
-    accessToken: string
-): Promise<any> => {
-    return new Promise(async (resolve, reject) => {
-        let req = new Request(`${FILE_API}/${id}/copy`, {
-            method: "POST",
-            headers: {
-                Authorization: `Bearer ${accessToken}`,
-            },
-            body: JSON.stringify({ parents: [parent] }),
-        });
-        const res = await makeFetch(req);
-        resolve(res?.status);
-    });
-};
-
-export function copyMulitple(
-    parent: string,
-    set: Set<string>,
-    accessToken: string
-) {
-    return new Promise(async (res) => {
-        let proms = [];
-        let s: string[] = [];
-        let data = Array.from(set);
-        for (let i = 0; i < data.length; i++) {
-            if (i % 50 === 0) {
-                await wait(1000);
-            }
-            let id = data[i];
-            proms.push(
-                copySingle(parent, id, accessToken).then((status) => {
-                    if (status === 200) {
-                        postMessage({
-                            context: "PROGRESS",
-                            type: "COPY",
-                            id,
-                            status: 1,
-                        });
-                        s.push(id);
-                    } else {
-                        postMessage({
-                            context: "PROGRESS",
-                            type: "COPY",
-                            id,
-                            status: 0,
-                        });
-                    }
-                })
-            );
-        }
-        Promise.allSettled(proms).then(() => {
-            res(s);
-        });
+function deleteRequest({ id, token }: WorkerMessage) {
+    return new Request(`${FILE_API}/${id}`, {
+        method: "DELETE",
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
     });
 }
 
-export const moveSingle = async (
-    parent: string,
-    id: string,
-    accessToken: string
-): Promise<any> => {
-    return new Promise(async (resolve, reject) => {
-        let req = new Request(`${FILE_API}/${id}?addParents=${parent}`, {
-            method: "PATCH",
-            headers: {
-                Authorization: `Bearer ${accessToken}`,
-            },
-        });
-        const res = await makeFetch(req);
-        resolve(res?.status);
-    });
-};
-
-export async function moveMulitple(
-    parent: string,
-    activeParent: string,
-    set: Set<string>,
-    accessToken: string,
-    view: string
-) {
-    let proms = [];
-    let data = Array.from(set);
-    let s: string[] = [];
-    for (let i = 0; i < data.length; i++) {
-        if (i % 50 === 0) await wait(1000);
-        let id = data[i];
-        proms.push(
-            moveSingle(parent, id, accessToken).then((status) => {
-                if (status === 200) {
-                    postMessage({
-                        context: "PROGRESS",
-                        type: "MOVE",
-                        id,
-                        status: 1,
-                    });
-                    s.push(id);
-                } else {
-                    postMessage({
-                        context: "PROGRESS",
-                        type: "MOVE",
-                        id,
-                        status: 0,
-                    });
-                }
-            })
-        );
-    }
-    Promise.allSettled(proms).then(() => {
-        postMessage({ context: "MOVE", parent, activeParent, set: s, view });
+function moveRequest({ id, token, parent }: WorkerMessage) {
+    return new Request(`${FILE_API}/${id}?addParents=${parent}`, {
+        method: "PATCH",
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
     });
 }
 
-export const updateSingle = async (
-    id: string,
-    imgMeta: ImgMeta,
-    accessToken: string
-) => {
-    let req = new Request(`${FILE_API}/${id}`, {
+function copyRequest({ id, token, parent }: WorkerMessage) {
+    return new Request(`${FILE_API}/${id}/copy`, {
+        method: "POST",
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ parents: [parent] }),
+    });
+}
+
+function editRequest({ id, token, imgMeta }: WorkerMessage) {
+    return new Request(`${FILE_API}/${id}`, {
         method: "PATCH",
         headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${accessToken}`,
+            Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(imgMeta),
     });
-    const res = await makeFetch(req);
-    return res?.status;
-};
-
-export async function updateMultiple(
-    parent: string,
-    imgMeta: ImgMeta,
-    set: Set<string>,
-    accessToken: string
-) {
-    let proms = [];
-    let data = Array.from(set);
-    let s = [];
-    for (let i = 0; i < data.length; i++) {
-        if (i % 50 === 0) await wait(1000);
-        let id = data[i];
-        proms.push(
-            updateSingle(id, imgMeta, accessToken).then((status) => {
-                if (status === 200) {
-                    postMessage({
-                        context: "PROGRESS",
-                        type: "EDIT",
-                        id,
-                        status: 1,
-                    });
-                    s.push([id, imgMeta]);
-                } else {
-                    postMessage({
-                        context: "PROGRESS",
-                        type: "EDIT",
-                        id,
-                        status: 0,
-                    });
-                }
-            })
-        );
-    }
-    Promise.allSettled(proms).then(() => {
-        postMessage({ context: "EDIT", parent, set: s });
-    });
 }
 
-onmessage = ({ data }) => {
-    let { parent, activeParent, files, token, view } = data;
-    switch (data.context) {
-        case "IMG_PREVIEW":
-            checkForImgLocal(data.id, data.token);
-            return;
+async function performOperation(params: WorkerMessage) {
+    let { context, parent, activeParent, view, ids } = params;
+    let tempIds: Array<string> = Array.from(ids);
+    let success = new Set<string>();
+    let request: Function;
+    let offset = 0;
+    let count = 10;
+    switch (context) {
+        case "EDIT":
+            request = editRequest;
+            break;
         case "DELETE":
-            deleteImgs(files, token).then((s) => {
-                postMessage({ context: "DELETE", set: s, activeParent, view });
-            });
+            request = deleteRequest;
+            break;
+        case "MOVE":
+            request = moveRequest;
+            break;
+        case "COPY":
+        case "TOP":
+            request = copyRequest;
+            break;
+    }
+
+    for (let i = 0; i < Math.ceil(tempIds.length) / count; i++) {
+        let batch = tempIds.slice(offset, offset + count);
+        offset += count;
+        let proms = [];
+        batch.forEach((id: string) =>
+            proms.push(
+                new Promise((res) => {
+                    makeFetch(request({ ...params, id })).then((status) => {
+                        if (status === 200 || status === 204) {
+                            if (context === "TOP") {
+                                makeFetch(
+                                    deleteRequest({ ...params, id })
+                                ).then((status) => {
+                                    if (status === 200 || status === 204) {
+                                        postMessage({
+                                            context: "PROGRESS",
+                                            progressType: context,
+                                            id,
+                                            status: 1,
+                                        });
+                                        success.add(id);
+                                        res(true);
+                                    } else {
+                                        postMessage({
+                                            context: "PROGRESS",
+                                            progressType: context,
+                                            id,
+                                            status: 0,
+                                        });
+                                        res(true);
+                                    }
+                                });
+                                return;
+                            }
+                            postMessage({
+                                context: "PROGRESS",
+                                progressType: context,
+                                id,
+                                status: 1,
+                            });
+                            success.add(id);
+                            res(true);
+                        } else {
+                            postMessage({
+                                context: "PROGRESS",
+                                progressType: context,
+                                id,
+                                status: 0,
+                            });
+                            res(true);
+                        }
+                    });
+                })
+            )
+        );
+        await Promise.allSettled(proms);
+    }
+    postMessage({ ...params, success });
+}
+
+onmessage = ({ data }: { data: WorkerMessage }) => {
+    let { ids, token } = data;
+    switch (data.context) {
+        case "EDIT":
+        case "DELETE":
+        case "MOVE":
+        case "COPY":
+        case "TOP":
+            performOperation(data);
             return;
+
+        case "IMG_PREVIEW":
+            checkForImgLocal(ids[0], token);
+            return;
+
         case "CLEAR_IMAGE_CACHE":
             clearImageCache();
             return;
-        case "MOVE":
-            moveMulitple(parent, activeParent, files, token, view);
-            return;
-        case "COPY":
-            copyMulitple(parent, files, token).then((s) => {
-                postMessage({
-                    context: "COPY",
-                    parent,
-                    set: s,
-                });
-            });
-            return;
-        case "TOP":
-            copyMulitple(parent, files, token).then((s) => {
-                deleteImgs(data.files, data.token, true).then(() => {
-                    postMessage({
-                        context: "COPY",
-                        parent,
-                        activeParent,
-                        set: s,
-                        top: true,
-                    });
-                });
-            });
-            return;
-        case "EDIT":
-            updateMultiple(data.parent, data.detail, data.files, data.token);
-            return;
-        case "DROP_SAVE":
-            dropSave(data.item, data.token);
+
+        case "DROP":
+            dropSave(data?.dropItem, data.token);
             return;
     }
 };

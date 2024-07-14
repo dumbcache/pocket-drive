@@ -172,7 +172,7 @@
         white-space: nowrap;
         overflow-x: hidden;
         text-overflow: ellipsis;
-        max-height: calc(2 * 1.5em);
+        max-height: 3.6rem;
         @supports (-webkit-line-clamp: 2) {
             display: -webkit-box;
             -webkit-box-orient: vertical;

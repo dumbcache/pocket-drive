@@ -97,12 +97,13 @@ function autosaveItem(item: DropItem) {
     const { pathname } = window.location;
     const parent = pathname === "/" ? getRoot() : pathname.substring(1);
     const token = getToken();
-    childWorker.postMessage({
-        context: "DROP_SAVE",
-        item: single,
+    let WorkerMessage = {
+        context: "DROP",
+        dropItem: single,
         parent,
         token,
-    });
+    };
+    childWorker.postMessage(WorkerMessage);
 }
 
 export function setExtraInfo(items: DropItem[]) {
@@ -160,12 +161,13 @@ export function dropOkHandlerSingle(id: string) {
     const { pathname } = window.location;
     const parent = pathname === "/" ? getRoot() : pathname.substring(1);
     const token = getToken();
-    childWorker.postMessage({
-        context: "DROP_SAVE",
-        item: single,
+    let WorkerMessage = {
+        context: "DROP",
+        dropItem: single,
         parent,
         token,
-    });
+    };
+    childWorker.postMessage(WorkerMessage);
 }
 
 export function dropOkHandler() {
@@ -175,11 +177,12 @@ export function dropOkHandler() {
     const parent = pathname === "/" ? getRoot() : pathname.substring(1);
     const token = getToken();
     tempItems.forEach((item) => {
-        childWorker.postMessage({
-            context: "DROP_SAVE",
-            item,
+        let WorkerMessage = {
+            context: "DROP",
+            dropItem: item,
             parent,
             token,
-        });
+        };
+        childWorker.postMessage(WorkerMessage);
     });
 }

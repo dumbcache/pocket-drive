@@ -3,7 +3,6 @@
     import Tools from "$lib/components/Tools.svelte";
     import { onMount } from "svelte";
     import BackButton from "./utils/BackButton.svelte";
-    import ColorScheme from "$lib/components/utils/ColorScheme.svelte";
     import profileIcon from "$lib/assets/profile.svg?raw";
     import goToDrive from "$lib/assets/drive.svg?raw";
 
@@ -42,7 +41,6 @@
         >
             {@html goToDrive}
         </a>
-        <ColorScheme />
         <button
             class="btn s-prime settings"
             title="settings"

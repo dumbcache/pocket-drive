@@ -20,6 +20,8 @@ import {
     mask,
     fetchAll,
     folderStore,
+    theme,
+    profile,
 } from "$lib/scripts/stores";
 import ChildWorker from "$lib/scripts/worker.ts?worker";
 import { clearDropItems } from "$lib/scripts/image";
@@ -89,7 +91,12 @@ export function checkLoginStatus() {
     }
 }
 
-export function savePartial() {}
+export function toggleTheme() {
+    theme.update((prev) => (prev === "" ? "dark" : ""));
+    window.localStorage.setItem("theme", get(theme));
+    const root = document.documentElement;
+    root.classList.toggle("dark");
+}
 
 export function signUserOutPartial() {
     childWorker.postMessage({ context: "CLEAR_IMAGE_CACHE" });
@@ -188,7 +195,7 @@ export const updateRecents = (data?: { name: string; id: string }) => {
 export function fetchImgPreview(id: string) {
     childWorker.postMessage({
         context: "IMG_PREVIEW",
-        id,
+        ids: [id],
         token: getToken(),
     });
 }
@@ -445,20 +452,6 @@ export const moveSingle = async (
     });
 };
 
-export function moveMulitple(
-    parent: string,
-    data: string[],
-    accessToken: string
-) {
-    let proms = [];
-    for (let id of data) {
-        proms.push(moveSingle(parent, id, accessToken));
-    }
-    Promise.allSettled(proms).then(() => {
-        postMessage({ context: "MOVE", parent });
-    });
-}
-
 export const updateSingle = async (
     id: string,
     imgMeta: ImgMeta,
@@ -525,57 +518,51 @@ export function setPreviewFile(id: string, url: string) {
 if (browser) {
     childWorker = new ChildWorker();
     childWorker.onerror = (e) => console.warn(e);
-    childWorker.onmessage = async ({ data }) => {
-        let parent: string,
-            aParent: string,
-            set: Set<string>,
-            view: "FILE" | "FOLDER";
+    childWorker.onmessage = async ({ data }: { data: WorkerMessage }) => {
+        let { parent, success, activeParent: aParent, view } = data;
+
         switch (data.context) {
             case "IMG_PREVIEW":
-                const { id, blob } = data;
-
+                let { id, blob } = data;
                 let url = URL.createObjectURL(blob);
                 setPreviewFile(id, url);
                 if (!imageCache.has(id)) {
                     imageCache.set(id, url);
                 }
                 imageFetchLog.delete(id);
-
                 return;
 
             case "EDIT":
-                parent = data.parent;
-                set = new Map(data.set);
-                if (parent === get(activeParent).id) {
+                let imgMeta = data.imgMeta;
+                if (aParent === get(activeParent).id) {
                     fileStore.update((prev) => ({
                         nextPageToken: prev?.nextPageToken,
                         files: prev?.files.map((file) => {
-                            if (set.has(file.id)) {
-                                let d = set.get(file.id);
-                                d.name && (file.name = d.name);
-                                d.description &&
-                                    (file.description = d.description);
+                            if (success.has(file.id)) {
+                                imgMeta?.name && (file.name = imgMeta.name);
+                                imgMeta?.description &&
+                                    (file.description = imgMeta.description);
                             }
                             return file;
                         }),
                     }));
                 }
                 fetchMultiple(
-                    { parent, mimeType: IMG_MIME_TYPE },
+                    { parent: aParent, mimeType: IMG_MIME_TYPE },
                     getToken(),
                     true
                 );
 
                 return;
 
+            case "TOP":
             case "COPY":
-                parent = data.parent;
                 fetchMultiple(
                     { parent, mimeType: IMG_MIME_TYPE },
                     getToken(),
                     true
                 ).then((files) => {
-                    if (data?.top) {
+                    if (data?.context === "TOP") {
                         fileStore.set(files);
                         files.nextPageToken && fetchAll.set(true);
                     }
@@ -595,29 +582,26 @@ if (browser) {
                 return;
             case "MOVE":
             case "DELETE":
-                parent = data.parent;
-                aParent = data.activeParent;
-                view = data.view;
-                set = new Set(data?.set);
+                success = new Set(success);
                 let currentActiveParent = get(activeParent).id;
                 if (aParent === currentActiveParent) {
                     if (view === "FILE") {
                         fileStore.update((prev) => ({
                             nextPageToken: prev?.nextPageToken,
                             files: prev?.files.filter(
-                                (file) => !set.has(file.id)
+                                (file) => !success.has(file.id)
                             ),
                         }));
                     } else {
                         folderStore.update((prev) => ({
                             nextPageToken: prev?.nextPageToken,
                             files: prev?.files.filter(
-                                (file) => !set.has(file.id)
+                                (file) => !success.has(file.id)
                             ),
                         }));
                     }
                 } else {
-                    pocketStore.delete(aParent);
+                    pocketStore.delete(activeParent);
                 }
                 parent && pocketStore.delete(parent);
 
@@ -665,34 +649,8 @@ if (browser) {
 
                 return;
 
-            //     const { files, folders } = pocketStore.get(aParent);
-            //     if (view === "FILE") {
-            //         files.files = files.files.filter(
-            //             (element) => !set.has(element.id)
-            //         );
-            //     } else if (view === "FOLDER") {
-            //         folders.files = folders.files.filter(
-            //             (element) => !set.has(element.id)
-            //         );
-            //     }
-            //     pocketStore.set(aParent, { files, folders });
-
-            // fetchMultiple(
-            //     { parent, mimeType: IMG_MIME_TYPE },
-            //     getToken(),
-            //     true
-            // ).then((data) => {
-            //     if (pocketStore.has(parent)) {
-            //         pocketStore.set(parent, {
-            //             ...pocketStore.get(parent),
-            //             files: data,
-            //         });
-            //     }
-            // });
-
-            case "DROP_SAVE":
+            case "DROP":
                 clearDropItems();
-                parent = data.parent;
                 dropItems.set(
                     get(dropItems).map((item) => {
                         if (item.id === data.id) item.progress = data.status;
@@ -716,12 +674,15 @@ if (browser) {
                     );
                     if (parent === get(activeParent).id) {
                         fileStore.set(res);
+                    } else {
+                        pocketStore.delete(parent);
                     }
                 }, 2000);
                 return;
 
             case "PROGRESS":
-                if (data.type === "DELETE" || data.type === "MOVE") {
+                let type = data.progressType;
+                if (type === "DELETE" || type === "MOVE" || type === "TOP") {
                     let ele = document.querySelector(`[data-id="${data.id}"]`);
                     if (data.status === 1) {
                         ele?.remove();
@@ -732,7 +693,7 @@ if (browser) {
                     ele.style.display = "initial";
                     return;
                 }
-                if (data.type === "COPY" || data.type === "EDIT") {
+                if (type === "COPY" || type === "EDIT") {
                     if (data.status === 1) {
                         updateProgressStore(0, 1, 0);
                         return;
@@ -740,7 +701,7 @@ if (browser) {
                     updateProgressStore(0, 0, 1);
                     return;
                 }
-                if (data.type === "DROP") {
+                if (type === "DROP") {
                     let dropItem = document.querySelector(
                         `.drop-item[data-id="${data.id}"]`
                     );
@@ -759,6 +720,21 @@ if (browser) {
         switch (e.key) {
             case "Escape":
                 mode.set("");
+                profile.set(false);
+                return;
+
+            case "a":
+            case "A":
+                mask.set(!get(mask));
+
+            case "c":
+            case "C":
+                toggleTheme();
+                return;
+
+            case "d":
+            case "D":
+                starred.set(!get(starred));
                 return;
 
             case "e":
@@ -776,15 +752,6 @@ if (browser) {
             case "S":
                 mode.set("search");
                 return;
-
-            case "d":
-            case "D":
-                starred.set(!get(starred));
-                return;
-
-            case "a":
-            case "A":
-                mask.set(!get(mask));
         }
     });
 }

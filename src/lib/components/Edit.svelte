@@ -28,6 +28,7 @@
     let name: string = "";
     let description: string = "";
     let invalid = false;
+    let workerMessage: WorkerMessage;
 
     const dispatch = createEventDispatcher();
 
@@ -41,13 +42,14 @@
     }
     function deleteAction() {
         updateProgressStore(set.size);
-        childWorker.postMessage({
+        workerMessage = {
             context: "DELETE",
-            files: set,
+            ids: set,
             token: getToken(),
             activeParent: $activeParent.id,
             view,
-        });
+        };
+        childWorker.postMessage(workerMessage);
         confirm = false;
         close("DELETE");
     }
@@ -55,12 +57,13 @@
     function moveToTop() {
         $mode = "";
         updateProgressStore(set.size);
-        childWorker.postMessage({
+        workerMessage = {
             context: "TOP",
             parent: $activeParent.id,
-            files: set,
+            ids: set,
             token: getToken(),
-        });
+        };
+        childWorker.postMessage(workerMessage);
         action = "";
         close();
     }
@@ -69,14 +72,15 @@
         selectedParent = e.detail.id;
         folderSelectVisible = false;
         updateProgressStore(set.size);
-        childWorker.postMessage({
+        workerMessage = {
             context: action,
             parent: selectedParent,
             activeParent: $activeParent.id,
-            files: set,
+            ids: set,
             token: getToken(),
             view,
-        });
+        };
+        childWorker.postMessage(workerMessage);
         close(action);
         action = "";
     }
@@ -85,17 +89,20 @@
         action = "";
     }
     async function handleSave() {
-        if (description) {
+        if (description.trim()) {
             if (!checkValid()) return;
         }
         updateProgressStore(set.size);
-        childWorker.postMessage({
-            parent: $activeParent.id,
+        name?.trim() || (name = undefined);
+        description?.trim() || (description = undefined);
+        workerMessage = {
+            activeParent: $activeParent.id,
             context: "EDIT",
-            files: set,
-            detail: { name, description },
+            ids: set,
+            imgMeta: { name, description },
             token: getToken(),
-        });
+        };
+        childWorker.postMessage(workerMessage);
         close();
     }
 
@@ -205,34 +212,35 @@
             on:click|stopPropagation
             on:submit|preventDefault={handleSave}
         >
-            <p>Enter either values</p>
-            <input
-                type="text"
-                name="name"
-                placeholder="Name"
-                bind:value={name}
-                on:change={handleChange}
-                autocomplete="off"
-            />
-            <input
-                type="url"
-                name="url"
-                class:invalid
-                placeholder="URL"
-                bind:value={description}
-                on:change={handleChange}
-                autocomplete="off"
-            />
+            <div class="input-wrapper">
+                <p class="label">Enter either values</p>
+                <input
+                    type="text"
+                    name="name"
+                    placeholder="Name"
+                    bind:value={name}
+                    on:change={handleChange}
+                    autocomplete="off"
+                />
+                <input
+                    type="url"
+                    name="url"
+                    class:invalid
+                    placeholder="URL"
+                    bind:value={description}
+                    on:change={handleChange}
+                    autocomplete="off"
+                />
 
-            {#if invalid}
-                <p class="alert">Enter valid url</p>
-            {/if}
-
+                {#if invalid}
+                    <p class="alert">Enter valid url</p>
+                {/if}
+            </div>
             <div class="button-wrapper">
                 <button
                     class="cancel action"
                     type="reset"
-                    on:click={() => (action = "")}>cancel</button
+                    on:click={() => (action = "")}>Cancel</button
                 >
                 <button
                     class="save action"
@@ -240,7 +248,7 @@
                     disabled={name?.trim().length <= 0 &&
                         description?.trim().length <= 0 &&
                         true}
-                    on:click={handleSave}>save</button
+                    on:click={handleSave}>Save</button
                 >
             </div>
         </form>
@@ -288,23 +296,28 @@
         /* box-shadow: 0 0 1px 2px var(--color-focus); */
         display: flex;
         flex-flow: column nowrap;
-        padding: 3rem;
         gap: 1rem;
         border-radius: 1rem;
+        overflow: hidden;
+    }
+    .label {
+        padding-left: 0.7rem;
+        padding-bottom: 1rem;
     }
     input {
         background: unset;
         padding: 0.5rem;
         border: none;
         /* border-bottom: 1px solid var(--color-focus); */
-        background-color: var(--color-bg-two);
+        background-color: var(--color-bg-one);
         padding: 1rem;
         border-top-left-radius: 0.5rem;
         border-top-right-radius: 0.5rem;
+        border-bottom: 2px solid var(--color-border);
     }
     input:active,
     input:focus {
-        background-color: var(--color-bg-three);
+        background-color: var(--color-bg-two);
         border-bottom: 2px solid var(--color-focus);
         outline: none;
     }
@@ -315,39 +328,54 @@
         border-bottom: 2px solid var(--color-red);
     }
 
-    .button-wrapper {
+    .input-wrapper {
         display: flex;
+        flex-flow: column nowrap;
         gap: 1rem;
-        justify-content: center;
-    }
-    .action {
-        padding: 0.5rem;
-        width: 8rem;
-        border-radius: 0.5rem;
-        background-color: var(--color-bg-three);
+        padding: 3rem;
+        padding-bottom: 1rem;
     }
 
-    .action:hover {
-        background-color: var(--color-bg-two);
-    }
-
-    .action:disabled {
-        background-color: var(--color-bg-three);
+    ::placeholder {
+        font-size: smaller;
     }
     .cancel,
     .confirm {
         background-color: var(--color-bg-one);
     }
-    .button-wrapper {
-        display: flex;
-        /* justify-content: center; */
-        gap: 1rem;
-    }
+
     .alert {
         color: #aaa;
         font-size: 1.2rem;
     }
+    .action {
+        padding: 0.5rem;
+        width: 8rem;
+        border-radius: 0.5rem;
+        background-color: var(--color-bg-two);
+    }
 
+    .button-wrapper {
+        display: flex;
+        justify-content: center;
+        background-color: var(--color-bg-two);
+    }
+    .button-wrapper .action {
+        width: 50%;
+        padding: 1rem 0rem;
+        background-color: unset;
+        border-radius: unset;
+    }
+    .save {
+        border-left: 1px solid var(--color-border);
+    }
+
+    .action:hover {
+        background-color: var(--color-bg-three);
+    }
+    .action:disabled {
+        background-color: var(--color-bg-two);
+    }
     @media (max-width: 900px) {
         input {
             font-size: var(--size-smaller);

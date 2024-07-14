@@ -8,7 +8,7 @@
         starred,
     } from "$lib/scripts/stores";
     import File from "$lib/components/files/File.svelte";
-    import Edit from "$lib/components/files/Edit.svelte";
+    import Edit from "$lib/components/Edit.svelte";
     import { navigating } from "$app/stores";
     import View from "./View.svelte";
     import { get } from "svelte/store";
@@ -162,6 +162,7 @@
         <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
         <ol
             class="list"
+            class:edit-mode={$mode === "edit"}
             bind:this={container}
             on:click={handleImageClick}
             on:keydown
@@ -219,7 +220,12 @@
         filter: none;
         filter: brightness(0.3);
     }
-
+    .edit-mode {
+        padding: 0rem 5rem;
+    }
     @media (max-width: 600px) {
+        .edit-mode {
+            padding: unset;
+        }
     }
 </style>

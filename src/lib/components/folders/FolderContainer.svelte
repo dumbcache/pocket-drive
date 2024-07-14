@@ -10,7 +10,7 @@
     import { navigating } from "$app/stores";
     import ActionForm from "$lib/components/folders/ActionForm.svelte";
     import FolderSelect from "$lib/components/folders/FolderSelect.svelte";
-    import Edit from "$lib/components/files/Edit.svelte";
+    import Edit from "$lib/components/Edit.svelte";
     import { get } from "svelte/store";
 
     export let view: string;

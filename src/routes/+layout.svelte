@@ -1,7 +1,7 @@
 <script lang="ts">
     import { navigating } from "$app/stores";
     import Spinner from "$lib/components/utils/Spinner.svelte";
-    import { pocketState, progress } from "$lib/scripts/stores";
+    import { pocketState, progress, theme } from "$lib/scripts/stores";
     import { onMount } from "svelte";
     import "./app.css";
     import { browser } from "$app/environment";
@@ -21,9 +21,9 @@
         setTimeout(() => {
             overlay.style.display = "none";
         }, 2000);
-        const theme = window.localStorage.getItem("theme") ?? "";
+        $theme = window.localStorage.getItem("theme") ?? "";
         const root = document.documentElement;
-        theme &&
+        $theme &&
             (root.classList.contains("dark") || root.classList.toggle("dark"));
     });
 </script>

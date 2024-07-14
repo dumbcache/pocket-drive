@@ -283,7 +283,7 @@
         flex-flow: row nowrap;
         align-items: center;
         justify-content: flex-end;
-        padding: 1rem 0rem;
+        padding: 2rem 0rem;
         position: sticky;
         top: 0;
         background-color: var(--color-bg);
