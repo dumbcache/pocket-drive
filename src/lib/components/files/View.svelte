@@ -434,6 +434,7 @@
             bottom: 6rem;
             top: unset;
             right: 2rem;
+            flex-flow: row nowrap;
         }
 
         .expand {
