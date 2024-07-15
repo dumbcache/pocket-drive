@@ -146,8 +146,8 @@
         height: auto;
         object-fit: cover;
         object-position: top;
-        width: 10rem;
-        max-height: 10rem;
+        width: 12rem;
+        max-height: 15rem;
         border-radius: 0.5rem;
     }
     button:hover img {

@@ -292,7 +292,7 @@
     #view {
         box-sizing: border-box;
         height: 100%;
-        padding: 5rem;
+        padding: 3rem 6rem;
         outline: none;
         display: flex;
         flex-flow: row nowrap;
@@ -306,7 +306,6 @@
         max-width: 20rem;
         overflow: auto;
         scroll-behavior: smooth;
-        padding: 0rem 2rem;
     }
     .two {
         margin: auto;
@@ -363,18 +362,19 @@
     .spinner {
         position: absolute;
         z-index: 10;
-        top: 2.7rem;
-        right: 20rem;
+        top: 15rem;
+        right: 3rem;
         display: none;
     }
 
     .action {
         display: flex;
+        flex-flow: column nowrap;
         justify-content: center;
         align-items: center;
         position: fixed;
         top: 2rem;
-        right: 6rem;
+        right: 2rem;
         gap: 1.5rem;
     }
 
