@@ -6,6 +6,8 @@
     import {
         activeParent,
         activeView,
+        fetchAll,
+        fileStore,
         folderAction,
         folderStore,
         pocketStore,
@@ -49,45 +51,47 @@
     }
 
     async function refreshHandler() {
-        $refresh = true;
         const token = getToken();
         const parent = $activeParent.id;
-        $folderStore?.files.forEach((file) =>
-            fetchMultiple(
-                { parent: file.id, mimeType: IMG_MIME_TYPE, pageSize: 3 },
-                token,
-                true,
-                true
-            )
-        );
-        await fetchMultiple(
-            { parent, mimeType: IMG_MIME_TYPE },
-            token,
-            true,
-            true
-        );
-
-        await fetchMultiple(
-            { parent, mimeType: FOLDER_MIME_TYPE },
-            token,
-            true,
-            true
-        );
-
         fetchMultiple(
             { parent, mimeType: IMG_MIME_TYPE, pageSize: 3 },
             token,
-            true,
             true
         );
         fetchMultiple(
             { parent, mimeType: FOLDER_MIME_TYPE, pageSize: 500 },
             token,
-            true,
             true
         );
+
+        fileStore.set(
+            await fetchMultiple(
+                { parent, mimeType: IMG_MIME_TYPE },
+                token,
+                true
+            )
+        );
+
+        folderStore.set(
+            await fetchMultiple(
+                { parent, mimeType: FOLDER_MIME_TYPE },
+                token,
+                true
+            )
+        );
+        $refresh = !$refresh;
+        $folderStore?.files.forEach((file) => {
+            fetchMultiple(
+                { parent: file.id, mimeType: IMG_MIME_TYPE, pageSize: 3 },
+                token,
+                true,
+                true
+            );
+        });
+        if ($fileStore?.nextPageToken || $folderStore?.nextPageToken) {
+            fetchAll.set(true);
+        }
         pocketStore.delete(parent);
-        window.location.reload();
     }
     const unsubscribeView = activeView.subscribe((data) => (view = data));
     onDestroy(() => {

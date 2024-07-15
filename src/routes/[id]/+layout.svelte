@@ -14,6 +14,7 @@
         pocketStore,
         sessionTimeout,
         profile,
+        refresh,
     } from "$lib/scripts/stores";
     import { googleClient } from "$lib/scripts/login";
     import { goto } from "$app/navigation";

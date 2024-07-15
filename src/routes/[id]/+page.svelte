@@ -9,10 +9,10 @@
         folderStore,
         mode,
         pocketState,
-        refresh,
         mask,
         storeSnap,
         fetchAll,
+        refresh,
     } from "$lib/scripts/stores";
     import Content from "$lib/components/Content.svelte";
     import Tools from "$lib/components/Tools.svelte";
@@ -85,7 +85,11 @@
         }
     }
 
-    async function fetchFolders(accessToken: string, parent: string) {
+    async function fetchFolders(
+        accessToken: string,
+        parent: string,
+        ref: boolean
+    ) {
         let pToken = $folderStore?.nextPageToken;
         if (!pToken) {
             foldersFetching = false;
@@ -100,7 +104,7 @@
             },
             accessToken
         );
-        if (parent !== data.parent) {
+        if (parent !== data.parent || ref !== $refresh) {
             foldersFetching = false;
             return;
         }
@@ -112,7 +116,11 @@
         });
         return fetchFolders(accessToken, parent);
     }
-    async function fetchFiles(accessToken: string, parent: string) {
+    async function fetchFiles(
+        accessToken: string,
+        parent: string,
+        ref: Boolean
+    ) {
         let pToken = $fileStore?.nextPageToken;
         if (!pToken) {
             filesFetching = false;
@@ -123,7 +131,7 @@
             { parent: parent, mimeType: IMG_MIME_TYPE, pageToken: pToken },
             accessToken
         );
-        if (parent !== data.parent) {
+        if (parent !== data.parent || ref !== $refresh) {
             filesFetching = false;
             return;
         }
@@ -138,10 +146,11 @@
 
     async function fetchAllAtOnce() {
         let parent = data.parent;
+        let ref = $refresh;
         let accessToken = getToken();
-        fetchFolders(accessToken, parent);
-        fetchFiles(accessToken, parent);
-        renderAll = false;
+        fetchFolders(accessToken, parent, ref);
+        fetchFiles(accessToken, parent, ref);
+        $fetchAll = false;
     }
 
     afterNavigate(async () => {
@@ -163,7 +172,6 @@
     });
 
     beforeNavigate(() => {
-        if ($refresh) return;
         renderAll = false;
         storeSnap();
     });
