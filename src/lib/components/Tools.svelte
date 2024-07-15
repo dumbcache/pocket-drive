@@ -32,6 +32,7 @@
     import { onDestroy } from "svelte";
 
     let view: "FILE" | "FOLDER";
+    let refreshing = false;
 
     const unsubscribeNavigation = navigating.subscribe((val) => {
         if (!val) {
@@ -51,6 +52,7 @@
     }
 
     async function refreshHandler() {
+        refreshing = true;
         const token = getToken();
         const parent = $activeParent.id;
         fetchMultiple(
@@ -92,6 +94,7 @@
             fetchAll.set(true);
         }
         pocketStore.delete(parent);
+        refreshing = false;
     }
     const unsubscribeView = activeView.subscribe((data) => (view = data));
     onDestroy(() => {
@@ -170,7 +173,12 @@
     >
         {@html favoriteIcon}
     </button>
-    <button class="btn s-prime" title="refresh" on:click={refreshHandler}>
+    <button
+        class="btn s-prime"
+        class:refreshing
+        title="refresh"
+        on:click={refreshHandler}
+    >
         {@html refreshIcon}
     </button>
     <!-- <a
@@ -225,6 +233,16 @@
 
     .favorites :global(svg) {
         fill: var(--color-red);
+    }
+
+    @keyframes spin {
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+    .refreshing {
+        animation: spin 1s infinite linear;
+        -webkit-animation: spin 1s infinite linear;
     }
     @media (max-width: 600px) {
         .tools {

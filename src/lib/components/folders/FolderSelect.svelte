@@ -114,6 +114,7 @@
             selectedName = item.name;
             selectedParent = item.parents[0];
             tempFolderStore.files = temp;
+            listVisible = true;
         }
     }
 

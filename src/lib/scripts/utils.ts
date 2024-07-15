@@ -102,9 +102,11 @@ export function signUserOutPartial() {
     childWorker.postMessage({ context: "CLEAR_IMAGE_CACHE" });
     let theme = window.localStorage.getItem("theme");
     let preferences = window.localStorage.getItem("preferences");
+    let recents = window.localStorage.getItem("recents");
     window.localStorage.clear();
     window.localStorage.setItem("preferences", preferences);
     window.localStorage.setItem("theme", theme);
+    window.localStorage.setItem("recents", recents);
 }
 
 export async function signUserOut() {

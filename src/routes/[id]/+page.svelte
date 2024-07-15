@@ -150,7 +150,8 @@
         let accessToken = getToken();
         fetchFolders(accessToken, parent, ref);
         fetchFiles(accessToken, parent, ref);
-        $fetchAll = false;
+        renderAll = false;
+        fetchAll.set(false);
     }
 
     afterNavigate(async () => {
@@ -182,6 +183,7 @@
     onDestroy(() => {
         unsubscribeView();
         unsubscribeNavigation();
+        unsubscribeFetchAll();
     });
 </script>
 

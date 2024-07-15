@@ -86,6 +86,7 @@
     .card:hover .img {
         filter: brightness(0.8);
     }
+
     .card:hover .img-link,
     .card:hover .favorite {
         opacity: 1;
@@ -193,7 +194,9 @@
         .img-link {
             padding: 0rem;
         }
-
+        .edit-mode.card .img {
+            filter: none;
+        }
         .play {
             width: 2rem;
             height: 2rem;
