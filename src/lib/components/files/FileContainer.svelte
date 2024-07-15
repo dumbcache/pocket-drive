@@ -23,6 +23,7 @@
     let foot: HTMLElement;
     let container: HTMLElement;
 
+    let lastSelected = -1;
     let allSelected = false;
     let set = new Set<string>();
     let count = 0;
@@ -69,6 +70,7 @@
         count = 0;
         memory = 0;
         set.clear();
+        lastSelected = -1;
     }
 
     function selectAllAction() {
@@ -80,33 +82,66 @@
                 memory += Number(file.size);
             });
             count = set.size;
+            lastSelected = count;
             return;
         }
         set.clear();
         count = set.size;
+        lastSelected = -1;
+    }
+
+    function updateSelection(
+        index: string,
+        id: string,
+        size: string,
+        target: HTMLLIElement
+    ) {
+        if (set.has(id)) {
+            set.delete(id);
+            count--;
+            size && (memory -= Number(size));
+            target.classList.toggle("select");
+            return;
+        }
+        set.add(id);
+        count++;
+        size && (memory += Number(size));
+        target.classList.toggle("select");
+        lastSelected = Number(index);
     }
 
     export function handleImageClick(e) {
         let eles = e.composedPath();
         let [target] = eles.filter((ele) => ele.localName === "li");
         if (!target) return;
-        let { id, size } = target?.dataset;
+        let { id, index, size } = target?.dataset;
         if (!id) return;
         switch (get(mode)) {
             case "edit":
-                if (set.has(id)) {
-                    set.delete(id);
-                    count--;
-                    size && (memory -= Number(size));
-                    target.classList.toggle("select");
-                    return;
+                if (e.shiftKey) {
+                    index = Number(index);
+                    if (lastSelected < index) {
+                        for (let i = lastSelected + 1; i < index + 1; i++) {
+                            const ele = container.querySelector(
+                                `[data-index="${i}"]`
+                            );
+                            let { id, index, size } = ele?.dataset;
+                            updateSelection(index, id, size, ele);
+                        }
+                        return;
+                    } else {
+                        for (let i = lastSelected - 1; i > index - 1; i--) {
+                            const ele = container.querySelector(
+                                `[data-index="${i}"]`
+                            );
+                            let { id, index, size } = ele?.dataset;
+                            updateSelection(index, id, size, ele);
+                        }
+                        return;
+                    }
                 }
-                set.add(id);
-                count++;
-                size && (memory += Number(size));
-                target.classList.toggle("select");
+                updateSelection(index, id, size, target);
                 return;
-
             default:
                 const [file] = get(fileStore)?.files.filter(
                     (file) => file.id === id
@@ -167,8 +202,9 @@
             on:click={handleImageClick}
             on:keydown
         >
-            {#each files as file (file.id)}
+            {#each files as file, index (file.id)}
                 <li
+                    data-index={index}
                     data-id={file.id}
                     data-size={file.size}
                     data-starred={file.starred}

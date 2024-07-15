@@ -131,7 +131,7 @@
             { parent: parent, mimeType: IMG_MIME_TYPE, pageToken: pToken },
             accessToken
         );
-        if (parent !== data.parent || ref !== $refresh) {
+        if (parent !== data.parent) {
             filesFetching = false;
             return;
         }

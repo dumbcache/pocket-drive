@@ -23,6 +23,7 @@
     let foot: HTMLElement;
     let container: HTMLElement;
 
+    let lastSelected = -1;
     let allSelected = false;
     let set = new Set<string>();
     let count = 0;
@@ -56,6 +57,7 @@
         allSelected = false;
         count = 0;
         set.clear();
+        lastSelected = -1;
     }
 
     function selectAllAction() {
@@ -65,19 +67,15 @@
                 set.add(file.id);
             });
             count = set.size;
+            lastSelected = count;
             return;
         }
         set.clear();
         count = set.size;
+        lastSelected = -1;
     }
 
-    export function handleImageClick(e) {
-        if (get(mode) !== "edit") return;
-        let eles = e.composedPath();
-        let [target] = eles.filter((ele) => ele.localName === "li");
-        if (!target) return;
-        let { id } = target?.dataset;
-        if (!id) return;
+    function updateSelection(index: string, id: string, target: HTMLLIElement) {
         if (set.has(id)) {
             set.delete(id);
             count--;
@@ -87,6 +85,36 @@
         set.add(id);
         count++;
         target.classList.toggle("select");
+        lastSelected = Number(index);
+    }
+
+    export function handleImageClick(e) {
+        if (get(mode) !== "edit") return;
+        let eles = e.composedPath();
+        let [target] = eles.filter((ele) => ele.localName === "li");
+        if (!target) return;
+        let { id, index } = target?.dataset;
+        if (!id) return;
+        if (e.shiftKey) {
+            index = Number(index);
+            if (lastSelected < index) {
+                for (let i = lastSelected + 1; i < index + 1; i++) {
+                    const ele = container.querySelector(`[data-index="${i}"]`);
+                    let { id, index } = ele?.dataset;
+                    updateSelection(index, id, ele);
+                }
+                return;
+            } else {
+                for (let i = lastSelected - 1; i > index - 1; i--) {
+                    const ele = container.querySelector(`[data-index="${i}"]`);
+                    let { id, index } = ele?.dataset;
+                    updateSelection(index, id, ele);
+                }
+                return;
+            }
+        }
+        updateSelection(index, id, target);
+
         return;
     }
 
@@ -154,8 +182,9 @@
             on:click={handleImageClick}
             on:keydown
         >
-            {#each files as file (file.id)}
+            {#each files as file, index (file.id)}
                 <li
+                    data-index={index}
                     data-id={file.id}
                     data-starred={file.starred}
                     class:select={allSelected}

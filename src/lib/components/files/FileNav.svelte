@@ -130,7 +130,7 @@
 <style>
     .thumbs {
         align-items: center;
-        gap: 1rem;
+        gap: 2rem;
         display: flex;
         flex-flow: column;
         height: fit-content;
@@ -174,6 +174,7 @@
             flex-flow: row nowrap;
             width: 100%;
             overflow-x: scroll;
+            gap: 1rem;
         }
         .active img,
         img {
