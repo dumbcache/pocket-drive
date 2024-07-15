@@ -1,7 +1,8 @@
 <script lang="ts">
-    import { createEventDispatcher, onMount } from "svelte";
+    import { createEventDispatcher, onDestroy, onMount } from "svelte";
     import doneIcon from "$lib/assets/done.svg?raw";
     import beforeIcon from "$lib/assets/beforeNavigate.svg?raw";
+    import historyIcon from "$lib/assets/history.svg?raw";
     import {
         folderAction,
         folderActionDetail,
@@ -34,6 +35,7 @@
     let selectedId = $activeParent?.id;
     let selectedParent = $activeParent.parents && $activeParent.parents[0];
     let listVisible = false;
+    let recents = [];
     let accessToken = getToken();
     const root = getRoot();
 
@@ -96,8 +98,28 @@
         listVisible = true;
     }
 
+    function updateRecents() {
+        recents = recents.filter((file) => file?.id !== selectedId);
+        recents.unshift({
+            id: selectedId,
+            name: selectedName,
+            parents: [selectedParent],
+        });
+    }
+    function setRecents() {
+        let temp = [...recents];
+        if (recents.length > 0) {
+            let item = temp.shift();
+            selectedId = item.id;
+            selectedName = item.name;
+            selectedParent = item.parents[0];
+            tempFolderStore.files = temp;
+        }
+    }
+
     async function okHandler(e: MouseEvent) {
         e.stopPropagation();
+        updateRecents();
         listVisible = false;
         if (type === "FILE") {
             dispatchOk();
@@ -127,6 +149,15 @@
         $progress = false;
         return;
     }
+
+    onMount(() => {
+        let items = window.localStorage.getItem("recents");
+        recents = JSON.parse(items);
+        recents ?? (recents = []);
+    });
+    onDestroy(() => {
+        window.localStorage.setItem("recents", JSON.stringify(recents));
+    });
 </script>
 
 <!-- svelte-ignore a11y-no-static-element-interactions -->
@@ -179,6 +210,14 @@
                         disabled={selectedId === $activeParent.id}
                         on:click={okHandler}>{@html doneIcon}</button
                     >
+                    {#if recents?.length > 0}
+                        <button
+                            class="btn s-second history-button"
+                            title="history"
+                            on:click|stopPropagation={setRecents}
+                            >{@html historyIcon}</button
+                        >
+                    {/if}
                     {#if listVisible}
                         <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
                         <ol
@@ -265,19 +304,26 @@
         cursor: pointer;
         border-radius: 0.5rem;
     }
-    .done-button {
+    .done-button,
+    .history-button {
         position: absolute;
         right: 0.5rem;
         top: 50%;
         transform: translate(0%, -50%);
         filter: none;
     }
-    .done-button:disabled :global(svg) {
-        /* fill: #ddd; */
+
+    .history-button {
+        color: var(--color-two);
+        right: 3.5rem;
     }
-    /* .done-button:hover :global(svg) {
-        fill: #var;
-    } */
+    .history-button :global(svg) {
+        fill: var(--color-two);
+    }
+    .history-button:hover :global(svg) {
+        fill: var(--color-focus);
+    }
+
     .done-button :global(svg) {
         fill: var(--color-green);
     }
