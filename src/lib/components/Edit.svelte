@@ -124,6 +124,12 @@
     }
 </script>
 
+<svelte:window
+    on:keydown={(e) => {
+        e.key === "Escape" && close();
+    }}
+/>
+
 <div class="edit-buttons">
     {#if confirm}
         {#if view === "FILE"}

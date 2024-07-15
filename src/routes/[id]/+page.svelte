@@ -68,22 +68,22 @@
     });
     const unsubscribeView = activeView.subscribe((data) => (view = data));
 
-    function handlePointerDown(e: PointerEvent) {
-        if (e.pointerType === "touch") pageX = e.pageX;
-    }
+    // function handlePointerDown(e: PointerEvent) {
+    //     if (e.pointerType === "touch") pageX = e.pageX;
+    // }
 
-    function handlePointerUp(e: PointerEvent) {
-        if (e.pointerType === "touch") {
-            let diff = pageX - e.pageX;
-            if (diff > 50) {
-                $activeView !== "FILE" && ($activeView = "FILE");
-                return;
-            }
-            if (diff < -50) {
-                $activeView !== "FOLDER" && ($activeView = "FOLDER");
-            }
-        }
-    }
+    // function handlePointerUp(e: PointerEvent) {
+    //     if (e.pointerType === "touch") {
+    //         let diff = pageX - e.pageX;
+    //         if (diff > 50) {
+    //             $activeView !== "FILE" && ($activeView = "FILE");
+    //             return;
+    //         }
+    //         if (diff < -50) {
+    //             $activeView !== "FOLDER" && ($activeView = "FOLDER");
+    //         }
+    //     }
+    // }
 
     async function fetchFolders(
         accessToken: string,
@@ -241,12 +241,7 @@
             <Search />
         {/if}
     {/if}
-    <main
-        class="main"
-        style:display={$mode === "search" ? "none" : "initial"}
-        on:pointerdown={handlePointerDown}
-        on:pointerup={handlePointerUp}
-    >
+    <main class="main" style:display={$mode === "search" ? "none" : "initial"}>
         <Content
             {view}
             count={view === "FOLDER"

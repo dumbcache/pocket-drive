@@ -719,7 +719,6 @@ if (browser) {
     globalThis.addEventListener("keydown", (e: KeyboardEvent) => {
         switch (e.key) {
             case "Escape":
-                mode.set("");
                 profile.set(false);
                 return;
 
