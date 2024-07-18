@@ -146,6 +146,16 @@
             accessToken,
             true
         );
+        fetchMultiple(
+            {
+                parent: $activeParent?.id,
+                mimeType: FOLDER_MIME_TYPE,
+                pageSize: 500,
+            },
+            accessToken,
+            true,
+            true
+        );
         $folderAction = undefined;
         $progress = false;
         return;

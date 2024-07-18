@@ -640,6 +640,18 @@ if (browser) {
                         getToken(),
                         true
                     );
+                    if (data.context === "MOVE") {
+                        fetchMultiple(
+                            {
+                                parent: aParent,
+                                mimeType: FOLDER_MIME_TYPE,
+                                pageSize: 500,
+                            },
+                            getToken(),
+                            true,
+                            true
+                        );
+                    }
                     if (parent) {
                         fetchMultiple(
                             { parent, mimeType: FOLDER_MIME_TYPE },
