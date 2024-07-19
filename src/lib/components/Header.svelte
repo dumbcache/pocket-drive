@@ -1,8 +1,14 @@
 <script>
-    import { activeParent, HOME_PATH, profile } from "$lib/scripts/stores";
+    import {
+        activeParent,
+        HOME_PATH,
+        profile,
+        shortcuts,
+    } from "$lib/scripts/stores";
     import Tools from "$lib/components/Tools.svelte";
     import { onMount } from "svelte";
-    import BackButton from "./utils/BackButton.svelte";
+    import BackButton from "$lib/components/utils/BackButton.svelte";
+    import helpIcon from "$lib/assets/help.svg?raw";
     import profileIcon from "$lib/assets/profile.svg?raw";
     import goToDrive from "$lib/assets/drive.svg?raw";
 
@@ -31,6 +37,11 @@
         <!-- <button class="btn help" title="shortcuts" on:click={() => {}}
             >{@html helpButton}</button
         > -->
+        <button
+            class="btn s-prime shortcuts"
+            title="shortcuts"
+            on:click={() => ($shortcuts = true)}>{@html helpIcon}</button
+        >
         <a
             href={`https://drive.google.com/drive/folders/${$activeParent?.id}`}
             referrerpolicy="no-referrer"
@@ -141,6 +152,9 @@
         }
         .home :global(svg) {
             height: initial;
+        }
+        .shortcuts {
+            display: none;
         }
     }
 </style>

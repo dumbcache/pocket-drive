@@ -48,9 +48,6 @@
         e.stopPropagation();
         const target = e.target as HTMLImageElement;
         switch (e.key) {
-            case "Escape":
-                $mode = "";
-                return;
             case "ArrowRight":
             case "ArrowDown":
                 preview.scrollBy({

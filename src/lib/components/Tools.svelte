@@ -1,6 +1,5 @@
 <script lang="ts">
     import imgCreate from "$lib/assets/imgCreate.svg?raw";
-    // import goToDrive from "$lib/assets/drive.svg?raw";
     import folderCreate from "$lib/assets/folderCreate.svg?raw";
     import { previewAndSetDropItems } from "$lib/scripts/image";
     import {
@@ -46,9 +45,6 @@
         if (target.files) {
             previewAndSetDropItems(target.files);
         }
-    }
-    function folderActionClose() {
-        folderACtion = undefined;
     }
 
     async function refreshHandler() {
@@ -181,16 +177,6 @@
     >
         {@html refreshIcon}
     </button>
-    <!-- <a
-        href={`https://drive.google.com/drive/folders/${$activeParent?.id}`}
-        referrerpolicy="no-referrer"
-        rel="external noopener noreferrer nofollow"
-        class="btn s-prime"
-        title="open in google drive"
-        target="_blank"
-    >
-        {@html goToDrive}
-    </a> -->
 </div>
 
 <style>

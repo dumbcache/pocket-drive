@@ -56,6 +56,7 @@ export let progress = writable(false);
 export let mask = writable(false);
 export let fetchAll = writable(false);
 export let mode = writable("");
+export let shortcuts = writable(false);
 export let activeParent = writable<{
     id: string;
     name: string;

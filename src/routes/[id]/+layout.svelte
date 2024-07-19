@@ -16,12 +16,14 @@
         profile,
         refresh,
         preferences,
+        shortcuts,
     } from "$lib/scripts/stores";
     import { googleClient } from "$lib/scripts/login";
     import { goto } from "$app/navigation";
     import { previewAndSetDropItems } from "$lib/scripts/image";
     import ProgressBar from "$lib/components/utils/ProgressBar.svelte";
     import Profile from "$lib/components/utils/Profile.svelte";
+    import Shortcuts from "$lib/components/Shortcuts.svelte";
 
     let draggedOver = false;
 
@@ -110,6 +112,9 @@
     {/if}
     {#if $profile}
         <Profile />
+    {/if}
+    {#if $shortcuts}
+        <Shortcuts />
     {/if}
     <ProgressBar />
     {#if $sessionTimeout}

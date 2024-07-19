@@ -22,6 +22,8 @@ import {
     folderStore,
     theme,
     profile,
+    shortcuts,
+    refresh,
 } from "$lib/scripts/stores";
 import ChildWorker from "$lib/scripts/worker.ts?worker";
 import { clearDropItems } from "$lib/scripts/image";
@@ -733,12 +735,15 @@ if (browser) {
     globalThis.addEventListener("keydown", (e: KeyboardEvent) => {
         switch (e.key) {
             case "Escape":
+                if (get(mode) !== "edit") mode.set("");
                 profile.set(false);
+                shortcuts.set(false);
                 return;
 
             case "a":
             case "A":
                 mask.set(!get(mask));
+                return;
 
             case "c":
             case "C":
@@ -757,7 +762,6 @@ if (browser) {
                 return;
 
             case "E":
-                activeView.set("FILE");
                 mode.set("edit");
                 return;
 

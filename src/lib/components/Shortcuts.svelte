@@ -1,54 +1,34 @@
 <script>
+    import { shortcuts } from "$lib/scripts/stores";
 </script>
 
-<div class="shortcuts" on:click={() => {}} on:keydown>
+<!-- svelte-ignore a11y-no-static-element-interactions -->
+<div class="shortcuts" on:click={() => ($shortcuts = false)} on:keydown>
+    <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
     <ul on:keydown on:click|stopPropagation>
         <li>
-            <span class="l">s</span>:<span class="r"
-                >search in present folder</span
+            <span class="l">Escape</span>:<span class="r">Close popups</span>
+        </li>
+        <li>
+            <span class="l">E</span>:<span class="r">Toggle view</span>
+        </li>
+        <li>
+            <span class="l">S, Shift + S</span>:<span class="r"
+                >Search in present folder</span
             >
         </li>
+
         <li>
-            <span class="l">shift + s</span>:<span class="r"
-                >search globally</span
+            <span class="l">Shift + E</span>:<span class="r">Edit mode</span>
+        </li>
+        <li>
+            <span class="l">C, Shift + C</span>:<span class="r"
+                >Change theme</span
             >
         </li>
+
         <li>
-            <span class="l">e</span>:<span class="r">create folder</span>
-        </li>
-        <li>
-            <span class="l">e</span>:<span class="r">edit url (edit mode)</span>
-        </li>
-        <li>
-            <span class="l">c</span>:<span class="r"
-                >move images (edit mode)</span
-            >
-        </li>
-        <li>
-            <span class="l">shift + e</span>:<span class="r"
-                >toggle edit mode</span
-            >
-        </li>
-        <li>
-            <span class="l">a</span>:<span class="r"
-                >toggle drop mini (During upload)</span
-            >
-        </li>
-        <li>
-            <span class="l">delete</span>:<span class="r"
-                >delete images (Edit mode)</span
-            >
-        </li>
-        <li>
-            <span class="l">shift + r</span>:<span class="r"
-                >reverse the list</span
-            >
-        </li>
-        <li>
-            <span class="l">alt + r</span>:<span class="r">refresh cache</span>
-        </li>
-        <li>
-            <span class="l">shift + d</span>:<span class="r"
+            <span class="l">D, ShDft + d</span>:<span class="r"
                 >filter to Favourites</span
             >
         </li>
@@ -67,17 +47,17 @@
         width: 100%;
         z-index: 5;
         background-color: var(--color-backdrop);
-        backdrop-filter: blur(1rem);
-        -webkit-backdrop-filter: blur(1rem);
     }
     ul {
-        background-color: var(--color-backdrop);
+        background-color: var(--color-bg-one);
         width: max-content;
         padding: 3rem;
+        border-radius: 1rem;
+        box-shadow: 0 0 50px -10px #000;
     }
     li {
         list-style-type: none;
-        padding-bottom: 0.5rem;
+        padding-bottom: 1rem;
     }
     .l {
         display: inline-block;
