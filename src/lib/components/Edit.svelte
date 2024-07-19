@@ -290,16 +290,13 @@
         display: grid;
         place-content: center;
         background-color: var(--color-backdrop);
-        backdrop-filter: blur(0.1rem);
-        -webkit-backdrop-filter: blur(0.1rem);
         z-index: 1;
         font-size: var(--size-smaller);
     }
 
     .edit-form {
-        /* color: var(--color-two); */
         background-color: var(--color-bg-one);
-        /* box-shadow: 0 0 1px 2px var(--color-focus); */
+        box-shadow: 0 0 50px -10px var(--color-black);
         display: flex;
         flex-flow: column nowrap;
         gap: 1rem;

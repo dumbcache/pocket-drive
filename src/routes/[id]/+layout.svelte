@@ -150,8 +150,8 @@
         z-index: 100;
         font-size: var(--size-smaller);
         background-color: var(--color-backdrop);
-        backdrop-filter: blur(0.1rem);
-        -webkit-backdrop-filter: blur(0.1rem);
+        /* backdrop-filter: blur(0.1rem);
+        -webkit-backdrop-filter: blur(0.1rem); */
     }
     .session-wrapper {
         display: flex;
@@ -159,7 +159,7 @@
         gap: 2rem;
         padding: 5rem;
         border-radius: 1rem;
-        box-shadow: 0 0 50px -10px #000;
+        box-shadow: 0 0 50px -10px var(--color-black);
         background-color: var(--color-bg-one);
     }
 

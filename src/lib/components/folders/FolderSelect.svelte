@@ -264,8 +264,6 @@
         display: grid;
         place-content: center;
         background-color: var(--color-backdrop);
-        backdrop-filter: blur(0.1rem);
-        -webkit-backdrop-filter: blur(0.1rem);
         z-index: 3;
         user-select: none;
         font-size: var(--size-smaller);
@@ -289,7 +287,7 @@
         border-radius: 1rem;
         display: flex;
         align-items: center;
-        box-shadow: 0 0 50px -10px #0005;
+        box-shadow: 0 0 50px -10px var(--color-black);
         background-color: var(--color-bg-one);
         gap: 2rem;
     }

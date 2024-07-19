@@ -44,8 +44,11 @@
 
         $theme = window.localStorage.getItem("theme") ?? "";
         const root = document.documentElement;
-        theme &&
-            (root.classList.contains("dark") || root.classList.toggle("dark"));
+        if ($theme) {
+            root.classList.contains("dark") || root.classList.toggle("dark");
+        } else {
+            root.classList.contains("dark") && root.classList.toggle("dark");
+        }
     });
 
     onDestroy(() => {

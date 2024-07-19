@@ -51,11 +51,11 @@
         right: 5rem;
         border-radius: 50%;
         box-sizing: content-box;
+        background: none;
         padding: 1rem;
     }
     .scroll :global(svg) {
         border-radius: 50%;
-        box-shadow: 0 0 1px 1px var(--color-white-light);
         background-color: var(--color-bg-one);
     }
     @media (max-width: 600px) {

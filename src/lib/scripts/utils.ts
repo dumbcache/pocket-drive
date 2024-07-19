@@ -733,6 +733,7 @@ if (browser) {
     };
 
     globalThis.addEventListener("keydown", (e: KeyboardEvent) => {
+        if (e.ctrlKey) return;
         switch (e.key) {
             case "Escape":
                 if (get(mode) !== "edit") mode.set("");
@@ -763,6 +764,11 @@ if (browser) {
 
             case "E":
                 mode.set("edit");
+                return;
+
+            case "H":
+            case "H":
+                shortcuts.set(!get(shortcuts));
                 return;
 
             case "s":

@@ -10,7 +10,7 @@
     import File from "$lib/components/files/File.svelte";
     import Edit from "$lib/components/Edit.svelte";
     import { navigating } from "$app/stores";
-    import View from "./View.svelte";
+    import ViewMode from "./ViewMode.svelte";
     import { get } from "svelte/store";
 
     export let view: string;
@@ -226,7 +226,7 @@
 </section>
 
 {#if $mode === "view"}
-    <View {files} />
+    <ViewMode {files} />
 {/if}
 
 <style>

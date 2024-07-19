@@ -182,9 +182,6 @@
         display: grid;
         place-content: center;
         background-color: var(--color-backdrop);
-        box-shadow: 0 0 50px -10px #0005;
-        backdrop-filter: blur(0.1rem);
-        -webkit-backdrop-filter: blur(0.1rem);
         z-index: 2;
     }
     .btn:disabled {
@@ -204,8 +201,7 @@
         justify-content: space-evenly;
         align-items: center;
         text-align: center;
-        /* border: 1px solid var(--color-border); */
-        box-shadow: 0 0 50px -10px #0005;
+        box-shadow: 0 0 50px -10px var(--color-black);
         background-color: var(--color-bg-one);
     }
     .h {

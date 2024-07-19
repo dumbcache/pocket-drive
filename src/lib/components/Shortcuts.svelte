@@ -9,18 +9,7 @@
         <li>
             <span class="l">Escape</span>:<span class="r">Close popups</span>
         </li>
-        <li>
-            <span class="l">E</span>:<span class="r">Toggle view</span>
-        </li>
-        <li>
-            <span class="l">S, Shift + S</span>:<span class="r"
-                >Search in present folder</span
-            >
-        </li>
 
-        <li>
-            <span class="l">Shift + E</span>:<span class="r">Edit mode</span>
-        </li>
         <li>
             <span class="l">C, Shift + C</span>:<span class="r"
                 >Change theme</span
@@ -30,6 +19,20 @@
         <li>
             <span class="l">D, ShDft + d</span>:<span class="r"
                 >filter to Favourites</span
+            >
+        </li>
+        <li>
+            <span class="l">E</span>:<span class="r">Toggle view</span>
+        </li>
+        <li>
+            <span class="l">Shift + E</span>:<span class="r">Edit mode</span>
+        </li>
+        <li>
+            <span class="l">H, Shift + H</span>:<span class="r">Shortcuts</span>
+        </li>
+        <li>
+            <span class="l">S, Shift + S</span>:<span class="r"
+                >Search in present folder</span
             >
         </li>
     </ul>
@@ -53,7 +56,7 @@
         width: max-content;
         padding: 3rem;
         border-radius: 1rem;
-        box-shadow: 0 0 50px -10px #000;
+        box-shadow: 0 0 50px -10px var(--color-black);
     }
     li {
         list-style-type: none;
