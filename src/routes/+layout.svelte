@@ -1,73 +1,92 @@
 <script lang="ts">
     import { navigating } from "$app/stores";
+    import { browser } from "$app/environment";
     import Spinner from "$lib/components/utils/Spinner.svelte";
     import { pocketState, progress, theme } from "$lib/scripts/stores";
-    import { onMount } from "svelte";
+    import { onDestroy, onMount } from "svelte";
     import "./app.css";
-    import { browser } from "$app/environment";
+    import type { Unsubscriber } from "svelte/store";
 
-    let homeButton = "";
-    let overlay: HTMLDivElement;
+    let homeIcon = "";
+    let startup: HTMLDivElement;
+
+    let pocketStateUnsubscribe: Unsubscriber;
+    let navigatingUnsubscribe: Unsubscriber;
+    let progressUnsubscribe: Unsubscriber;
 
     if (browser) {
-        pocketState.subscribe((val) => {
+        pocketStateUnsubscribe = pocketState.subscribe((val) => {
             window.localStorage.setItem("pocketState", val);
+        });
+
+        navigatingUnsubscribe = navigating.subscribe((val) => {
+            document.body.style.overflow = val ? "hidden" : "auto";
+        });
+        progressUnsubscribe = progress.subscribe((val) => {
+            document.body.style.overflow = val ? "hidden" : "auto";
         });
     }
 
     onMount(async () => {
-        const response = await fetch("/favicon.svg");
-        homeButton = await response.text();
+        document.body.style.overflow = "hidden";
+
+        try {
+            const response = await fetch("/favicon.svg");
+            homeIcon = await response.text();
+        } catch (error) {
+            console.error("Failed to fetch favicon:", error);
+        }
+
         setTimeout(() => {
-            overlay.style.display = "none";
+            document.body.style.overflow = "auto";
+            startup.style.display = "none";
         }, 2000);
+
         $theme = window.localStorage.getItem("theme") ?? "";
         const root = document.documentElement;
-        $theme &&
+        theme &&
             (root.classList.contains("dark") || root.classList.toggle("dark"));
+    });
+
+    onDestroy(() => {
+        pocketStateUnsubscribe && pocketStateUnsubscribe();
+        navigatingUnsubscribe && navigatingUnsubscribe();
+        progressUnsubscribe && progressUnsubscribe();
     });
 </script>
 
 {#if $navigating || $progress}
-    <div
-        class="loading"
-        on:wheel|preventDefault|stopPropagation
-        on:touchmove|stopPropagation|preventDefault
-    >
+    <div class="loading">
         <Spinner />
     </div>
 {/if}
 
-<div class="overlay" bind:this={overlay}>
+<div class="startup" bind:this={startup}>
     <span class="icon">
-        {@html homeButton}
+        {@html homeIcon}
     </span>
 </div>
 
 <slot />
 
 <style>
-    .loading {
+    .loading,
+    .startup {
         position: fixed;
         top: 0;
         width: 100%;
         height: 100%;
         display: grid;
         place-content: center;
-        backdrop-filter: blur(0.5rem);
-        -webkit-backdrop-filter: blur(0.5rem);
-        z-index: 10;
+        z-index: 1000;
     }
 
-    .overlay {
-        position: fixed;
-        top: 0;
-        bottom: 0;
-        right: 0;
-        left: 0;
-        /* height: 100vh;
-        width: 100vw; */
-        z-index: 1000;
+    .loading {
+        backdrop-filter: blur(0.5rem);
+        -webkit-backdrop-filter: blur(0.5rem);
+    }
+
+    .startup {
         background: inherit;
     }
 
@@ -87,7 +106,7 @@
         transform: translate(-50%, -50%);
         display: block;
         width: 5rem;
-        -webkit-animation: zoom 1s alternate infinite;
-        animation: zoom 1s alternate infinite;
+        -webkit-animation: zoom 1s alternate linear infinite;
+        animation: zoom 1s alternate linear infinite;
     }
 </style>

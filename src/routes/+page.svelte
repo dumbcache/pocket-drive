@@ -1,78 +1,34 @@
 <script>
-    import About from "$lib/components/About.svelte";
-    import ColorScheme from "$lib/components/utils/ColorScheme.svelte";
-    import LoginButton from "$lib/components/utils/LoginButton.svelte";
+    import Info from "$lib/components/home/Info.svelte";
+    import Footer from "$lib/components/home/Footer.svelte";
+    import Title from "$lib/components/home/Title.svelte";
+    import Gallery from "$lib/components/home/Gallery.svelte";
 </script>
 
 <main class="start-page">
-    <article class="article one">
-        <header class="header">
-            <ColorScheme />
-            <LoginButton />
-        </header>
-        <section class="section">
-            <h1 class="title">Pocket Drive</h1>
-            <p class="sub">A google drive based image & bookmark application</p>
-        </section>
-    </article>
-    <About />
+    <Title />
+    <Gallery />
+    <Info />
+    <Footer />
 </main>
 
 <style>
     .start-page {
-        scroll-behavior: smooth;
-        overflow-y: auto;
+        /* scroll-behavior: smooth;
+        overflow-y: auto; */
+        padding: 0rem 5rem;
     }
 
-    .one {
-        height: 100vh;
-        position: relative;
-        display: grid;
-        place-content: center;
-        padding: 1rem;
-    }
-    .header {
-        position: absolute;
-        top: 10vh;
-        right: 15rem;
-        display: flex;
-        align-items: center;
-        gap: 3rem;
-    }
-
-    .title {
-        width: fit-content;
-        margin: auto;
-        font-size: 8rem;
-        /* font-weight: 900; */
-        font-family: var(--font-lato);
-        background: var(--title-background);
-        background-clip: text;
-        -webkit-text-fill-color: transparent;
-    }
-
-    .sub {
-        width: fit-content;
-        margin: auto;
-        font-size: 1.6rem;
-        font-family: var(--font-lato);
-        padding-top: 1rem;
-        background: var(--title-background);
-        background-clip: text;
-        -webkit-text-fill-color: transparent;
+    .start-page :global(article:not(:first-child)) {
+        padding-bottom: 5em;
     }
 
     @media (max-width: 600px) {
-        .header {
-            right: 2rem;
-            gap: 2rem;
+        .start-page {
+            padding: 0rem 1rem;
         }
-
-        .title {
-            font-size: 15vw;
-        }
-        .sub {
-            font-size: 1.3rem;
+        .start-page :global(article:not(:first-child)) {
+            padding-bottom: 3em;
         }
     }
 </style>

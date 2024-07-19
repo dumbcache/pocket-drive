@@ -133,7 +133,7 @@
     }
 
     h2 {
-        font-size: 2.5rem;
+        font-size: var(--size-medium);
         font-weight: 900;
     }
 

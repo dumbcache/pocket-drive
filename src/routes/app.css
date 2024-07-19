@@ -8,6 +8,7 @@
     --font-default: var(--font-system);
     --size-system: 62.5%;
     --size-default: 1.6rem;
+    --size-smallest: 1.3rem;
     --size-smaller: 1.5rem;
     --size-small: 2rem;
     --size-medium: 2.4rem;
@@ -162,16 +163,13 @@ select {
     display: inline-block;
 }
 
-button {
+button,
+.btn {
     color: inherit;
     background: inherit;
     border: none;
     cursor: pointer;
     display: inline-block;
-}
-
-.btn {
-    background: none;
 }
 
 .btn svg {
