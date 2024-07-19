@@ -125,6 +125,7 @@ declare global {
 
     interface Preferences {
         showFileNames?: Boolean;
+        disableWebp?: Boolean;
     }
 
     type Action =

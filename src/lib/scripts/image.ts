@@ -1,4 +1,9 @@
-import { activeParent, autosave, dropItems } from "$lib/scripts/stores";
+import {
+    activeParent,
+    autosave,
+    dropItems,
+    preferences,
+} from "$lib/scripts/stores";
 import { childWorker, getRoot, getToken } from "$lib/scripts/utils";
 import { get } from "svelte/store";
 
@@ -12,6 +17,7 @@ export function previewAndSetDropItems(
         const imgRef = URL.createObjectURL(file);
         if (file.type.match("image/")) {
             if (
+                get(preferences).disableWebp ||
                 file.type === "image/gif" ||
                 file.type === "image/avif" ||
                 file.type === "image/webp"

@@ -13,9 +13,11 @@
     import ColorScheme from "./ColorScheme.svelte";
 
     let showFileNames = false;
+    let disableWebp = false;
 
     const unsubscribePreferences = preferences.subscribe((val) => {
         showFileNames = val?.showFileNames;
+        disableWebp = val?.disableWebp;
     });
 
     async function signoutHandler() {
@@ -52,6 +54,17 @@
                             })}
                     >
                         <ToggleButton bool={showFileNames} />
+                    </button>
+                </li>
+                <li>
+                    <div>Disable WebP conversion</div>
+                    <button
+                        on:click={() =>
+                            updatePreferences({
+                                disableWebp: !disableWebp,
+                            })}
+                    >
+                        <ToggleButton bool={disableWebp} />
                     </button>
                 </li>
             </ul>

@@ -22,7 +22,7 @@
     span {
         display: inline-block;
         border-radius: 50%;
-        background-color: #fff;
+        background-color: var(--color-white);
     }
     .on {
         background-color: var(--color-focus);

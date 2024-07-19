@@ -15,6 +15,7 @@
         sessionTimeout,
         profile,
         refresh,
+        preferences,
     } from "$lib/scripts/stores";
     import { googleClient } from "$lib/scripts/login";
     import { goto } from "$app/navigation";
@@ -51,12 +52,20 @@
     }
 
     function handleSession(e) {
-        if (e.key === "token") {
-            if (e.newValue) {
-                sessionTimeout.set(false);
-            } else {
-                sessionTimeout.set(true);
+        try {
+            if (e.key === "token") {
+                if (e.newValue) {
+                    sessionTimeout.set(false);
+                } else {
+                    sessionTimeout.set(true);
+                }
+                return;
             }
+            if (e.key === "preferences") {
+                e.newValue && preferences.set(JSON.parse(e.newValue));
+            }
+        } catch (error) {
+            console.warn(error);
         }
     }
 

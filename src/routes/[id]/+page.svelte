@@ -44,10 +44,9 @@
     let renderAll = false;
     let foldersFetching = false;
     let filesFetching = false;
-    let pageX = 0;
 
     function checks() {
-        $activeView = "FOLDER";
+        // $activeView = "FOLDER";
         if (
             $folderStore?.files.length === 0 &&
             $fileStore?.files.length !== 0

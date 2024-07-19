@@ -20,7 +20,10 @@ export function updateProgressStore(t = 0, s = 0, f = 0) {
     });
 }
 export let profile = writable(false);
-export let preferences = writable<Preferences>({ showFileNames: false });
+export let preferences = writable<Preferences>({
+    showFileNames: false,
+    disableWebp: false,
+});
 export function updatePreferences(p: Preferences) {
     preferences.update((val) => {
         return {
