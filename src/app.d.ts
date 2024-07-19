@@ -10,6 +10,10 @@ declare global {
     interface Window {
         google: any;
     }
+
+    interface Element {
+        timeoutid?: number;
+    }
     interface GoogleSignInPayload {
         credential: string;
         select_by: string;
@@ -102,6 +106,7 @@ declare global {
         thumbnailLink: string;
         parents?: string[];
         mimeType: string;
+        size: string;
     }
     interface Folder {
         id: string;

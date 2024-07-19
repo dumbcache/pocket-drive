@@ -6,6 +6,7 @@
     export let visible: Boolean;
     export let toolsVisible: Boolean = true;
     export let file: Folder;
+    export const showFileNames: Boolean = false;
 </script>
 
 <div

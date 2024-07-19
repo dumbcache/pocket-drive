@@ -14,11 +14,11 @@
     import Count from "$lib/components/utils/Count.svelte";
     import FolderSelect from "$lib/components/folders/FolderSelect.svelte";
     import { childWorker, getToken, isValidUrl } from "$lib/scripts/utils";
-    import { createEventDispatcher } from "svelte";
+    import { createEventDispatcher, onDestroy, onMount } from "svelte";
 
-    export let set: Set,
+    export let set: Set<string>,
         view: "FILE" | "FOLDER",
-        count: Number,
+        count: Number = 0,
         memory: Number = 0;
 
     let action = "";

@@ -766,7 +766,7 @@ if (browser) {
                 mode.set("edit");
                 return;
 
-            case "H":
+            case "h":
             case "H":
                 shortcuts.set(!get(shortcuts));
                 return;
