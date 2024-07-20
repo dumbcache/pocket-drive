@@ -22,7 +22,7 @@
     import { goto } from "$app/navigation";
     import { previewAndSetDropItems } from "$lib/scripts/image";
     import ProgressBar from "$lib/components/utils/ProgressBar.svelte";
-    import Profile from "$lib/components/utils/Profile.svelte";
+    import Profile from "$lib/components/profile/Profile.svelte";
     import Shortcuts from "$lib/components/Shortcuts.svelte";
 
     let draggedOver = false;
@@ -71,8 +71,9 @@
         }
     }
 
-    onMount(() => {
+    onMount(async () => {
         try {
+            await fetch("https://jsonplaceholder.typicode.com");
             updateRecents();
             setSessionTimeout();
             googleClient.loadGSIScript();

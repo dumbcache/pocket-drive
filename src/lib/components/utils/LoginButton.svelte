@@ -2,18 +2,19 @@
     import { googleClient } from "$lib/scripts/login";
     import { onMount } from "svelte";
     import googleIcon from "$lib/assets/google.png";
+    import { checkNetworkError } from "$lib/scripts/utils";
 
-    onMount(() => {
+    onMount(async () => {
         try {
             googleClient.loadGSIScript();
         } catch (error) {
-            console.warn(error);
+            checkNetworkError(error);
         }
     });
 </script>
 
 <button
-    on:click={googleClient.requestToken}
+    on:click={googleClient?.requestToken}
     class="login"
     title="Sign in with Google"
     aria-label="Sign in with Google"
