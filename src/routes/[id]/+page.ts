@@ -38,7 +38,6 @@ export const load = (async ({ params, fetch }) => {
                 isLoggedin.set(false);
                 signUserOutPartial();
                 pocketState.set(params.id);
-                // goto("/")
                 throw redirect(302, "/");
             }
             sessionTimeout.set(true);
@@ -50,7 +49,6 @@ export const load = (async ({ params, fetch }) => {
             id = window.localStorage.getItem("root");
             if (!id) id = await getRootFolder(getToken());
         }
-        fetchSingle(id, "FOLDER", getToken());
         return loadContent(id);
     }
 }) satisfies PageLoad;

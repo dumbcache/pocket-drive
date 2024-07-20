@@ -11,7 +11,7 @@
     import Folder from "$lib/components/folders/Folder.svelte";
     import File from "$lib/components/files/File.svelte";
     import { get } from "svelte/store";
-    import { navigating } from "$app/stores";
+    import { beforeNavigate } from "$app/navigation";
 
     export let files: FileResponse | undefined;
     export let view: "FILE" | "FOLDER";
@@ -33,10 +33,13 @@
 
     $: foot && footObserver?.observe(foot);
 
-    navigating.subscribe((data) => {
-        if (data) {
+    beforeNavigate(({ from, to }) => {
+        try {
+            if (from?.url?.href === to?.url?.href) return;
             entryLog.clear();
             inspectionLog = {};
+        } catch (error) {
+            console.warn(error);
         }
     });
 

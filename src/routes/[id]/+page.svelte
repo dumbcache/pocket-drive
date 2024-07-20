@@ -153,8 +153,9 @@
         fetchAll.set(false);
     }
 
-    afterNavigate(async () => {
+    afterNavigate(async ({ from, to }) => {
         try {
+            if (from?.url?.href === to?.url?.href) return;
             let parent = data?.parent;
             fetchSingle(parent, "FOLDER", getToken())
                 .then((data) => {
@@ -171,9 +172,14 @@
         }
     });
 
-    beforeNavigate(() => {
-        renderAll = false;
-        storeSnap();
+    beforeNavigate(({ from, to }) => {
+        try {
+            if (from?.url?.href === to?.url?.href) return;
+            renderAll = false;
+            storeSnap();
+        } catch (error) {
+            console.warn(error);
+        }
     });
 
     onMount(() => {
