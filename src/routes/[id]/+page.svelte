@@ -22,9 +22,9 @@
         fetchSingle,
         FOLDER_MIME_TYPE,
         getRoot,
-        getToken,
         IMG_MIME_TYPE,
     } from "$lib/scripts/utils";
+    import { getToken } from "$lib/scripts/login";
     import Spinner from "$lib/components/utils/Spinner.svelte";
     import BackButton from "$lib/components/utils/BackButton.svelte";
 

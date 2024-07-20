@@ -2,7 +2,7 @@
     import { signUserOut } from "$lib/scripts/utils";
     import { goto } from "$app/navigation";
     import { isLoggedin, profile } from "$lib/scripts/stores";
-    import { googleClient } from "$lib/scripts/login";
+    import { requestToken } from "$lib/scripts/login";
 
     async function signoutHandler() {
         isLoggedin.set(false);
@@ -12,7 +12,7 @@
     }
 
     async function tokenHandler() {
-        googleClient?.requestToken();
+        requestToken();
         profile.set(false);
     }
 </script>

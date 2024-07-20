@@ -2,12 +2,12 @@ import { browser } from "$app/environment";
 import type { PageLoad } from "./$types";
 import {
     checkLoginStatus,
-    getToken,
     signUserOutPartial,
     loadAll,
     getRootFolder,
     fetchSingle,
 } from "$lib/scripts/utils";
+import { getToken } from "$lib/scripts/login";
 import {
     isLoggedin,
     sessionTimeout,

@@ -1,6 +1,7 @@
 <script lang="ts">
     import { folderStore, mode } from "$lib/scripts/stores";
-    import { getToken, searchHandler } from "$lib/scripts/utils";
+    import { searchHandler } from "$lib/scripts/utils";
+    import { getToken } from "$lib/scripts/login";
     import Folder from "$lib/components/folders/Folder.svelte";
     import { onDestroy, onMount } from "svelte";
     import Spinner from "$lib/components/utils/Spinner.svelte";

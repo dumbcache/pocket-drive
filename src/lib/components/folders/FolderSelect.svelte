@@ -16,8 +16,8 @@
         fetchSingle,
         moveSingle,
         getRoot,
-        getToken,
     } from "$lib/scripts/utils";
+    import { getToken } from "$lib/scripts/login";
 
     export let type: "FOLDER" | "FILE";
     // let tempFolderStore = { ...$folderStore };

@@ -18,7 +18,7 @@
         preferences,
         shortcuts,
     } from "$lib/scripts/stores";
-    import { googleClient } from "$lib/scripts/login";
+    import { loadGSIScript, requestToken } from "$lib/scripts/login";
     import { goto } from "$app/navigation";
     import { previewAndSetDropItems } from "$lib/scripts/image";
     import ProgressBar from "$lib/components/utils/ProgressBar.svelte";
@@ -76,7 +76,7 @@
             await fetch("https://jsonplaceholder.typicode.com");
             updateRecents();
             setSessionTimeout();
-            googleClient.loadGSIScript();
+            loadGSIScript();
         } catch (error) {
             console.warn(error);
         }
@@ -126,9 +126,7 @@
                     <button class="cancel" on:click={signoutHandler}
                         >cancel</button
                     >
-                    <button class="login" on:click={googleClient.requestToken}
-                        >login</button
-                    >
+                    <button class="login" on:click={requestToken}>login</button>
                 </div>
             </div>
         </div>

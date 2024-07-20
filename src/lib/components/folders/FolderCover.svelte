@@ -1,6 +1,7 @@
 <script lang="ts">
     import ActionButtons from "$lib/components/folders/ActionButtons.svelte";
-    import { getToken, IMG_MIME_TYPE, fetchMultiple } from "$lib/scripts/utils";
+    import { IMG_MIME_TYPE, fetchMultiple } from "$lib/scripts/utils";
+    import { getToken } from "$lib/scripts/login";
     import { previewAndSetDropItems } from "$lib/scripts/image";
     import { mode } from "$lib/scripts/stores";
 

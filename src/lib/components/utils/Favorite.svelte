@@ -1,7 +1,8 @@
 <script lang="ts">
     import favoriteIcon from "$lib/assets/favorite.svg?raw";
     import { createEventDispatcher } from "svelte";
-    import { getToken, updateSingle } from "$lib/scripts/utils";
+    import { updateSingle } from "$lib/scripts/utils";
+    import { getToken } from "$lib/scripts/login";
 
     export let id: string;
     export let starred: Boolean;

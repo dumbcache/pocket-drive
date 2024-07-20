@@ -13,7 +13,8 @@
     import selectallIcon from "$lib/assets/selectall.svg?raw";
     import Count from "$lib/components/utils/Count.svelte";
     import FolderSelect from "$lib/components/folders/FolderSelect.svelte";
-    import { childWorker, getToken, isValidUrl } from "$lib/scripts/utils";
+    import { childWorker, isValidUrl } from "$lib/scripts/utils";
+    import { getToken } from "$lib/scripts/login";
     import { createEventDispatcher, onDestroy, onMount } from "svelte";
 
     export let set: Set<string>,

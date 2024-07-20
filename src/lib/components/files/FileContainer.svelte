@@ -32,15 +32,15 @@
     class="file-container"
     style:display={view === "FILE" ? "initial" : "none"}
 >
-    {#key files}
-        <Container
-            {files}
-            view="FILE"
-            component={File}
-            footObserver={observer}
-            {showFileNames}
-        />
-    {/key}
+    <!-- {#key files} -->
+    <Container
+        {files}
+        view="FILE"
+        component={File}
+        footObserver={observer}
+        {showFileNames}
+    />
+    <!-- {/key} -->
 </section>
 
 {#if $mode === "view"}

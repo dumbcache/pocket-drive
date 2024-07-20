@@ -25,8 +25,8 @@
         FOLDER_MIME_TYPE,
         fetchMultiple,
         IMG_MIME_TYPE,
-        getToken,
     } from "$lib/scripts/utils";
+    import { getToken } from "$lib/scripts/login";
     import { navigating } from "$app/stores";
     import { onDestroy } from "svelte";
 

@@ -7,8 +7,8 @@
         folderActionDetail,
         folderStore,
     } from "$lib/scripts/stores";
+    import { getToken } from "$lib/scripts/login";
     import {
-        getToken,
         toTitleCase,
         afterFolderAction,
         createFolder,

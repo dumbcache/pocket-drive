@@ -2,8 +2,8 @@
     import { activeImage, activeParent, fileStore } from "$lib/scripts/stores";
     import closeIcon from "$lib/assets/close.svg?raw";
     import { createEventDispatcher, onMount } from "svelte";
+    import { getToken } from "$lib/scripts/login";
     import {
-        getToken,
         isValidUrl,
         IMG_MIME_TYPE,
         fetchMultiple,

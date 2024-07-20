@@ -1,7 +1,6 @@
 import { browser } from "$app/environment";
 import { get } from "svelte/store";
 import {
-    activeRefreshTimeout,
     activeTimeout,
     dataCacheName,
     sessionTimeout,
@@ -23,8 +22,8 @@ import {
     theme,
     profile,
     shortcuts,
-    refresh,
 } from "$lib/scripts/stores";
+import { getToken } from "$lib/scripts/login";
 import ChildWorker from "$lib/scripts/worker.ts?worker";
 import { clearDropItems } from "$lib/scripts/image";
 
@@ -77,9 +76,9 @@ export function getRoot() {
     return window.localStorage.getItem("root") as string;
 }
 
-export function getToken() {
-    return window.localStorage.getItem("token") as string;
-}
+// export function getToken() {
+//     return window.localStorage.getItem("token") as string;
+// }
 
 export function isTokenExpired() {
     return Date.now() > Number(window.localStorage.getItem("sessionTime"));
@@ -90,6 +89,12 @@ export function checkLoginStatus() {
         return (
             Boolean(window.localStorage.getItem("token")) && !isTokenExpired()
         );
+    }
+}
+
+export function checkNetworkError(error: Error) {
+    if (error instanceof TypeError && error?.message.includes("NetworkError")) {
+        console.log("NET_ERROR");
     }
 }
 
@@ -161,22 +166,26 @@ export function setSessionTimeout(expires?: number) {
         );
     sessionTimeout.set(false);
     let time = Number(window.localStorage.getItem("sessionTime")) - Date.now();
-    checkSessionTimeout(time);
+    if (time > 0) {
+        checkSessionTimeout(time);
+    } else {
+        sessionTimeout.set(true);
+    }
 }
 
-export function setRefreshTimeout() {
-    let time = Number(window.localStorage.getItem("refreshTime")) - Date.now();
-    let id = get(activeRefreshTimeout);
-    id && clearTimeout(id);
-    if (time > 0) {
-        activeRefreshTimeout.set(setTimeout(setRefreshTimeout, time));
-        return;
-    }
-    time = Date.now() + 24 * 60 * 60 * 1000;
-    window.localStorage.setItem("refreshTime", String(time));
-    setCache(true);
-    activeRefreshTimeout.set(setTimeout(setRefreshTimeout, time));
-}
+// export function setRefreshTimeout() {
+//     let time = Number(window.localStorage.getItem("refreshTime")) - Date.now();
+//     let id = get(activeRefreshTimeout);
+//     id && clearTimeout(id);
+//     if (time > 0) {
+//         activeRefreshTimeout.set(setTimeout(setRefreshTimeout, time));
+//         return;
+//     }
+//     time = Date.now() + 24 * 60 * 60 * 1000;
+//     window.localStorage.setItem("refreshTime", String(time));
+//     setCache(true);
+//     activeRefreshTimeout.set(setTimeout(setRefreshTimeout, time));
+// }
 
 export const updateRecents = (data?: { name: string; id: string }) => {
     let old =
@@ -776,5 +785,9 @@ if (browser) {
                 mode.set("search");
                 return;
         }
+    });
+
+    globalThis.addEventListener("offline", () => {
+        window.alert("No Internet connection");
     });
 }

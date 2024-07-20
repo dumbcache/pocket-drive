@@ -4,7 +4,8 @@ import {
     dropItems,
     preferences,
 } from "$lib/scripts/stores";
-import { childWorker, getRoot, getToken } from "$lib/scripts/utils";
+import { childWorker, getRoot } from "$lib/scripts/utils";
+import { getToken } from "$lib/scripts/login";
 import { get } from "svelte/store";
 
 export function previewAndSetDropItems(
