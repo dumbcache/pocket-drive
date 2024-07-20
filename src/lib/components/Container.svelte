@@ -6,12 +6,12 @@
         mode,
         starred,
     } from "$lib/scripts/stores";
-    import { onDestroy, onMount, SvelteComponent } from "svelte";
+    import { onMount } from "svelte";
     import Edit from "$lib/components/Edit.svelte";
-    import { navigating } from "$app/stores";
     import Folder from "$lib/components/folders/Folder.svelte";
     import File from "$lib/components/files/File.svelte";
     import { get } from "svelte/store";
+    import { navigating } from "$app/stores";
 
     export let files: FileResponse | undefined;
     export let view: "FILE" | "FOLDER";
@@ -20,6 +20,7 @@
     export let showFileNames = false;
 
     let childObserver: IntersectionObserver;
+    let entryLog = new Set<string>();
     let inspectionLog: { [key: string]: boolean } = {};
     let container: HTMLElement;
     let foot: HTMLElement;
@@ -31,6 +32,13 @@
     let memory = 0;
 
     $: foot && footObserver?.observe(foot);
+
+    navigating.subscribe((data) => {
+        if (data) {
+            entryLog.clear();
+            inspectionLog = {};
+        }
+    });
 
     function editCloseAction(e) {
         const eles: HTMLElement[] = document.querySelectorAll(".select");
@@ -149,12 +157,17 @@
         );
         items?.forEach((item) => {
             let id = item.id;
-            if (id && !inspectionLog[id]) {
+            if (id && !entryLog.has(id)) {
                 let li = container?.querySelector(`[data-id="${id}"]`);
                 li && childObserver.observe(li);
+                entryLog.add(id);
             }
         });
     }
+
+    $: setTimeout(() => {
+        childInspection(files);
+    }, 1000);
 
     onMount(() => {
         childInspection(files);

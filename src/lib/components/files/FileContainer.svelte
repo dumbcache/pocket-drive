@@ -1,10 +1,9 @@
 <script lang="ts">
     import { onDestroy } from "svelte";
-    import { fileStore, mode, preferences } from "$lib/scripts/stores";
+    import { fileStore, mode, preferences, refresh } from "$lib/scripts/stores";
     import File from "$lib/components/files/File.svelte";
     import ViewMode from "$lib/components/files/ViewMode.svelte";
     import Container from "$lib/components/Container.svelte";
-    import { navigating } from "$app/stores";
 
     export let view: "FILE" | "FOLDER";
     export let observer: IntersectionObserver;
@@ -32,7 +31,7 @@
     class="file-container"
     style:display={view === "FILE" ? "initial" : "none"}
 >
-    <!-- {#key files} -->
+    <!-- {#key $refresh} -->
     <Container
         {files}
         view="FILE"
