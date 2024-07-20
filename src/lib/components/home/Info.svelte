@@ -48,11 +48,13 @@
         padding-bottom: 2rem;
     }
     li {
-        padding-bottom: 1rem;
+        padding: 1rem;
+        border-left: 5px solid var(--color-focus);
+        margin-bottom: 0.5rem;
     }
 
     section {
-        width: 35rem;
+        width: 40rem;
     }
     @media (max-width: 800px) {
         section {
@@ -63,6 +65,9 @@
     @media (max-width: 600px) {
         section {
             font-size: var(--size-smallest);
+        }
+        li {
+            padding: 0.5rem;
         }
     }
 </style>
