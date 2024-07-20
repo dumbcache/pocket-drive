@@ -6,6 +6,7 @@
     import { onDestroy, onMount } from "svelte";
     import "./app.css";
     import type { Unsubscriber } from "svelte/store";
+    import { loadGSIScript } from "$lib/scripts/login";
 
     let homeIcon = "";
     let startup: HTMLDivElement;
@@ -48,6 +49,11 @@
             root.classList.contains("dark") || root.classList.toggle("dark");
         } else {
             root.classList.contains("dark") && root.classList.toggle("dark");
+        }
+        try {
+            loadGSIScript();
+        } catch (error) {
+            console.warn("Error in loading GSIScript:", error);
         }
     });
 

@@ -1,6 +1,6 @@
 <script lang="ts">
     import closeIcon from "$lib/assets/close.svg?raw";
-    import { profile } from "$lib/scripts/stores";
+    import { activeTimeout, profile } from "$lib/scripts/stores";
     import ColorScheme from "$lib/components/utils/ColorScheme.svelte";
     import Options from "$lib/components/profile/Options.svelte";
     import Logout from "$lib/components/profile/Logout.svelte";
@@ -19,7 +19,9 @@
             <Options />
         </section>
         <section class="three">
-            <SessionInfo />
+            {#key $activeTimeout}
+                <SessionInfo />
+            {/key}
         </section>
         <section class="four">
             <div class="scheme">

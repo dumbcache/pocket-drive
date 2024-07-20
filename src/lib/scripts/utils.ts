@@ -23,7 +23,7 @@ import {
     profile,
     shortcuts,
 } from "$lib/scripts/stores";
-import { getToken } from "$lib/scripts/login";
+import { clearToken, getToken } from "$lib/scripts/login";
 import ChildWorker from "$lib/scripts/worker.ts?worker";
 import { clearDropItems } from "$lib/scripts/image";
 
@@ -138,10 +138,6 @@ export async function setCache(refresh: Boolean) {
     dataCacheName.set(name);
     if (!refresh) return;
     await caches.delete(name);
-    // let parent = getRoot();
-    // let token = getToken();
-    // fetchMultiple({ parent, mimeType: FOLDER_MIME_TYPE }, token, false);
-    // fetchMultiple({ parent, mimeType: IMG_MIME_TYPE }, token, false);
 }
 
 export function checkSessionTimeout(time: number) {
@@ -149,6 +145,8 @@ export function checkSessionTimeout(time: number) {
         setTimeout(() => {
             if (isTokenExpired()) {
                 console.log("session timed out");
+                clearToken();
+                console.log(getToken());
                 sessionTimeout.set(true);
             } else {
                 clearTimeout(get(activeTimeout));
@@ -169,23 +167,10 @@ export function setSessionTimeout(expires?: number) {
     if (time > 0) {
         checkSessionTimeout(time);
     } else {
+        clearToken();
         sessionTimeout.set(true);
     }
 }
-
-// export function setRefreshTimeout() {
-//     let time = Number(window.localStorage.getItem("refreshTime")) - Date.now();
-//     let id = get(activeRefreshTimeout);
-//     id && clearTimeout(id);
-//     if (time > 0) {
-//         activeRefreshTimeout.set(setTimeout(setRefreshTimeout, time));
-//         return;
-//     }
-//     time = Date.now() + 24 * 60 * 60 * 1000;
-//     window.localStorage.setItem("refreshTime", String(time));
-//     setCache(true);
-//     activeRefreshTimeout.set(setTimeout(setRefreshTimeout, time));
-// }
 
 export const updateRecents = (data?: { name: string; id: string }) => {
     let old =

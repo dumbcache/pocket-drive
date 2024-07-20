@@ -1,16 +1,6 @@
 <script lang="ts">
-    import { loadGSIScript, requestToken } from "$lib/scripts/login";
-    import { onMount } from "svelte";
+    import { requestToken } from "$lib/scripts/login";
     import googleIcon from "$lib/assets/google.png";
-    import { checkNetworkError } from "$lib/scripts/utils";
-
-    onMount(async () => {
-        try {
-            loadGSIScript();
-        } catch (error) {
-            checkNetworkError(error);
-        }
-    });
 </script>
 
 <button

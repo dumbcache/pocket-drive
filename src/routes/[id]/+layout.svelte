@@ -14,11 +14,10 @@
         pocketStore,
         sessionTimeout,
         profile,
-        refresh,
         preferences,
         shortcuts,
     } from "$lib/scripts/stores";
-    import { loadGSIScript, requestToken } from "$lib/scripts/login";
+    import { requestToken } from "$lib/scripts/login";
     import { goto } from "$app/navigation";
     import { previewAndSetDropItems } from "$lib/scripts/image";
     import ProgressBar from "$lib/components/utils/ProgressBar.svelte";
@@ -76,7 +75,6 @@
             await fetch("https://jsonplaceholder.typicode.com");
             updateRecents();
             setSessionTimeout();
-            loadGSIScript();
         } catch (error) {
             console.warn(error);
         }
