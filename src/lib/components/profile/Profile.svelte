@@ -97,12 +97,13 @@
         .container {
             border-bottom: none;
             width: 100%;
+            height: 60%;
             border-bottom-left-radius: unset;
             border-bottom-right-radius: unset;
             transform: perspective(50px);
         }
         .scheme {
-            padding: 0rem 1rem;
+            padding: 0rem 1.5rem;
         }
     }
 </style>
