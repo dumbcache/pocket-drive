@@ -79,8 +79,8 @@
         grid-template-areas:
             "one two"
             "one three";
-        border-top-left-radius: 1rem;
-        border-top-right-radius: 1rem;
+        /* border-top-left-radius: 1rem;
+        border-top-right-radius: 1rem; */
         overflow: hidden;
         cursor: pointer;
         transition: transform 0.1s ease-in-out;

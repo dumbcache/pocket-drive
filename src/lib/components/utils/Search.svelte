@@ -143,14 +143,15 @@
         display: block;
         outline: none;
         border: none;
+        border-radius: none;
         border-top-right-radius: 0.5rem;
         border-bottom-right-radius: 0.5rem;
         border-bottom: 2px solid var(--color-border);
-        background-color: var(--color-bg-two);
-    }
-    #search:focus {
         background-color: var(--color-bg-one);
     }
+    /* #search:focus {
+        background-color: var(--color-bg-two);
+    } */
 
     .list {
         display: flex;

@@ -46,7 +46,7 @@
     let filesFetching = false;
 
     function checks() {
-        // $activeView = "FOLDER";
+        $activeView = "FOLDER";
         if (
             $folderStore?.files.length === 0 &&
             $fileStore?.files.length !== 0
@@ -208,7 +208,7 @@
                         href={$activeParent?.parents[0]}>./</a
                     >
                 {/if}
-                {$activeParent?.name}
+                {$activeParent?.name ?? ""}
             </h2>
 
             {#if foldersFetching || filesFetching}
@@ -248,7 +248,7 @@
             <Search />
         {/if}
     {/if}
-    <main class="main" style:display={$mode === "search" ? "none" : "initial"}>
+    <main class="main" style:display={$mode === "search" ? "none" : "block"}>
         <Content
             {view}
             count={view === "FOLDER"
@@ -326,6 +326,11 @@
 
     .two {
         display: none;
+    }
+    .fetch-all {
+        background: none;
+        padding: 0.5rem;
+        box-sizing: content-box;
     }
     .fetch-all :global(svg) {
         fill: var(--color-svg-one);

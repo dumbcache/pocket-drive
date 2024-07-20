@@ -3,7 +3,7 @@
 </script>
 
 <p class="count" title="count">
-    {count}
+    {count ?? ""}
 </p>
 
 <style>

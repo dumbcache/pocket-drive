@@ -39,7 +39,9 @@
 <style>
     .card {
         position: relative;
-        border-radius: 1rem;
+        /* border-radius: 1rem; */
+        border-top-left-radius: 1rem;
+        border-top-right-radius: 1rem;
         overflow: hidden;
     }
     .card:hover {
@@ -67,8 +69,8 @@
         gap: 1rem;
         padding: 1rem;
         background-color: var(--color-bg-one);
-        border-bottom-left-radius: 1rem;
-        border-bottom-right-radius: 1rem;
+        /* border-bottom-left-radius: 1rem;
+        border-bottom-right-radius: 1rem; */
         /* border: 1px solid var(--color-border); */
         border-top: none;
     }

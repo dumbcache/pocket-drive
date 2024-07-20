@@ -76,12 +76,14 @@ export function storeSnap(
 ) {
     try {
         parent ?? (parent = get(activeParent).id);
-        folders ?? (folders = get(folderStore));
-        files ?? (files = get(fileStore));
-        pocketStore.set(parent, {
-            folders,
-            files,
-        });
+        if (parent) {
+            folders ?? (folders = get(folderStore));
+            files ?? (files = get(fileStore));
+            pocketStore.set(parent, {
+                folders,
+                files,
+            });
+        }
     } catch (error) {
         console.warn("storeSnap function error", error);
     }

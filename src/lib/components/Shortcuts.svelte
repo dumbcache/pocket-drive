@@ -11,6 +11,11 @@
         </li>
 
         <li>
+            <span class="l">A, Shift + A</span>:<span class="r"
+                >Mask content</span
+            >
+        </li>
+        <li>
             <span class="l">C, Shift + C</span>:<span class="r"
                 >Change theme</span
             >

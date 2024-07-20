@@ -144,10 +144,9 @@ export function checkSessionTimeout(time: number) {
     activeTimeout.set(
         setTimeout(() => {
             if (isTokenExpired()) {
-                console.log("session timed out");
                 clearToken();
-                console.log(getToken());
                 sessionTimeout.set(true);
+                console.log("session timed out");
             } else {
                 clearTimeout(get(activeTimeout));
                 checkSessionTimeout(time);

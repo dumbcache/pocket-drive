@@ -1,7 +1,8 @@
 <script lang="ts">
-    import { onMount } from "svelte";
+    import { onMount, tick } from "svelte";
     import {
         activeImage,
+        fileStore,
         imageCache,
         imageFetchLog,
         mode,
@@ -16,6 +17,7 @@
     import Info from "$lib/components/files/Info.svelte";
     import Spinner from "$lib/components/utils/Spinner.svelte";
     import FileNav from "$lib/components/files/FileNav.svelte";
+    import Favorite from "../utils/Favorite.svelte";
 
     export let files: File[];
     let infoVisible = false;
@@ -112,6 +114,22 @@
         });
     }
 
+    async function toggleFav(id: string) {
+        activeImage.update((prev) => ({ ...prev, starred: !prev.starred }));
+        await tick();
+        fileStore.update((prev) => {
+            return {
+                nextPageToken: prev?.nextPageToken,
+                files: prev?.files.map((f) => {
+                    if (f.id === id) {
+                        f.starred = !f.starred;
+                    }
+                    return f;
+                }),
+            };
+        });
+    }
+
     function previewInspection() {
         previewObserver = new IntersectionObserver(
             (entries) => {
@@ -200,13 +218,6 @@
                             }}
                         />
                     {:else}
-                        <!-- <img
-                            class:zoom
-                            class="img"
-                            src={file.thumbnailLink}
-                            alt=""
-                            data-id={$activeImage.id}
-                        /> -->
                         <video
                             on:wheel|preventDefault
                             on:keydown|stopPropagation
@@ -242,6 +253,24 @@
         </div>
     {/if} -->
     <div class="action" class:expand>
+        {#if $activeImage?.description}
+            <a
+                title="go to website"
+                href={$activeImage.description}
+                class="btn s-second url">{@html urlIcon}</a
+            >
+        {/if}
+        <Favorite
+            id={$activeImage.id}
+            starred={$activeImage.starred}
+            on:fav={() => toggleFav($activeImage.id)}
+        />
+        <button
+            class="btn s-prime"
+            title="zoom"
+            on:click|stopPropagation|preventDefault={() => (zoom = !zoom)}
+            >{@html zoom ? zoomOutIcon : zoomInIcon}</button
+        >
         {#if !infoVisible}
             <button
                 class="btn s-prime info"
@@ -250,19 +279,6 @@
                     (infoVisible = !infoVisible)}>{@html infoIcon}</button
             >
         {/if}
-        {#if $activeImage?.description}
-            <a
-                title="go to website"
-                href={$activeImage.description}
-                class="btn s-second url">{@html urlIcon}</a
-            >
-        {/if}
-        <button
-            class="btn s-prime"
-            title="zoom"
-            on:click|stopPropagation|preventDefault={() => (zoom = !zoom)}
-            >{@html zoom ? zoomOutIcon : zoomInIcon}</button
-        >
         <button
             class="btn s-prime expand"
             title="expand"
@@ -359,14 +375,14 @@
     .spinner {
         position: absolute;
         z-index: 10;
-        top: 15rem;
+        top: 20rem;
         right: 3rem;
         display: none;
     }
 
     .action {
         display: flex;
-        flex-flow: column nowrap;
+        flex-flow: column-reverse nowrap;
         justify-content: center;
         align-items: center;
         position: fixed;
