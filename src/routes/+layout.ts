@@ -14,9 +14,9 @@ export const load = async () => {
                 await setCache(true);
                 window.localStorage.removeItem("refreshTime");
             }
-            let state = localStorage.getItem("preferences");
-            if (state) {
-                const data = JSON.parse(state);
+            let pref = localStorage.getItem("preferences");
+            if (pref) {
+                const data = JSON.parse(pref);
                 preferences.set(data);
             }
         }

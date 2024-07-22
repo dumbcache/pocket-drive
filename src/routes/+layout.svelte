@@ -2,11 +2,17 @@
     import { navigating } from "$app/stores";
     import { browser } from "$app/environment";
     import Spinner from "$lib/components/utils/Spinner.svelte";
-    import { pocketState, progress, theme } from "$lib/scripts/stores";
+    import {
+        HOME_PATH,
+        pocketState,
+        progress,
+        theme,
+    } from "$lib/scripts/stores";
     import { onDestroy, onMount } from "svelte";
     import "./app.css";
     import type { Unsubscriber } from "svelte/store";
     import { loadGSIScript } from "$lib/scripts/login";
+    import { disableScrolling, enableScorlling } from "$lib/scripts/utils";
 
     let homeIcon = "";
     let startup: HTMLDivElement;
@@ -17,19 +23,19 @@
 
     if (browser) {
         pocketStateUnsubscribe = pocketState.subscribe((val) => {
-            window.localStorage.setItem("pocketState", val);
+            window.localStorage.setItem("pocketState", val ?? HOME_PATH);
         });
 
         navigatingUnsubscribe = navigating.subscribe((val) => {
-            document.body.style.overflow = val ? "hidden" : "auto";
+            val ? disableScrolling() : enableScorlling();
         });
         progressUnsubscribe = progress.subscribe((val) => {
-            document.body.style.overflow = val ? "hidden" : "auto";
+            val ? disableScrolling() : enableScorlling();
         });
     }
 
     onMount(async () => {
-        document.body.style.overflow = "hidden";
+        disableScrolling();
 
         try {
             const response = await fetch("/favicon.svg");
@@ -39,7 +45,7 @@
         }
 
         setTimeout(() => {
-            document.body.style.overflow = "auto";
+            enableScorlling();
             startup.style.display = "none";
         }, 2000);
 

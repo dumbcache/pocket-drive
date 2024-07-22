@@ -158,6 +158,7 @@ declare global {
         imgMeta?: ImgMeta;
         blob?: Blob;
         progressType?: Action;
+        progress?: number;
         id?: string;
         status?: 1 | 0;
     }

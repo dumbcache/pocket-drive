@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { onMount, tick } from "svelte";
+    import { onDestroy, onMount, tick } from "svelte";
     import {
         activeImage,
         fileStore,
@@ -13,7 +13,7 @@
     import zoomOutIcon from "$lib/assets/zoomOut.svg?raw";
     import expandIcon from "$lib/assets/expand.svg?raw";
     import urlIcon from "$lib/assets/url.svg?raw";
-    import { fetchImgPreview } from "$lib/scripts/utils";
+    import { enableScorlling, fetchImgPreview } from "$lib/scripts/utils";
     import Info from "$lib/components/files/Info.svelte";
     import Spinner from "$lib/components/utils/Spinner.svelte";
     import FileNav from "$lib/components/files/FileNav.svelte";
@@ -100,7 +100,7 @@
     }
 
     function handleViewClose() {
-        $mode = "";
+        enableScorlling();
         imageCache.clear();
     }
 
@@ -170,6 +170,9 @@
             li && previewObserver.observe(li);
         });
     }
+    onDestroy(() => {
+        handleViewClose();
+    });
 </script>
 
 <div class="view-container" on:wheel|preventDefault>
@@ -244,7 +247,7 @@
             </section>
         {/if}
     </artcle>
-    <button class="btn s-prime close" on:click={handleViewClose}
+    <button class="btn s-prime close" on:click={() => mode.set("")}
         >{@html closeIcon}</button
     >
     <!-- {#if $previewLoading}

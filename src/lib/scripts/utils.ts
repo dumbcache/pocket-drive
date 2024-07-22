@@ -76,6 +76,14 @@ export function getRoot() {
     return window.localStorage.getItem("root") as string;
 }
 
+export function disableScrolling() {
+    document.body.style.overflow = "hidden";
+}
+
+export function enableScorlling() {
+    document.body.style.overflow = "auto";
+}
+
 // export function getToken() {
 //     return window.localStorage.getItem("token") as string;
 // }

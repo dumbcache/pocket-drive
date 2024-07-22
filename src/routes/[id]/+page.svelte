@@ -157,15 +157,17 @@
         try {
             if (from?.url?.href === to?.url?.href) return;
             let parent = data?.parent;
-            fetchSingle(parent, "FOLDER", getToken())
-                .then((data) => {
-                    activeParent.set({
-                        id: data.id,
-                        name: data.name,
-                        parents: data.parents,
-                    });
-                })
-                .catch(console.warn);
+            if (parent) {
+                fetchSingle(parent, "FOLDER", getToken())
+                    .then((d) => {
+                        activeParent.set({
+                            id: d.id,
+                            name: d.name,
+                            parents: d.parents,
+                        });
+                    })
+                    .catch(console.warn);
+            }
             pocketState.set(parent);
         } catch (error) {
             console.warn("afterNavigate function error", error);

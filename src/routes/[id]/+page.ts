@@ -17,6 +17,7 @@ import {
 } from "$lib/scripts/stores";
 import { get } from "svelte/store";
 import { redirect } from "@sveltejs/kit";
+import { goto } from "$app/navigation";
 
 async function loadContent(parent: string) {
     if (pocketStore.has(parent)) {
@@ -38,7 +39,8 @@ export const load = (async ({ params, fetch }) => {
                 isLoggedin.set(false);
                 signUserOutPartial();
                 pocketState.set(params.id);
-                throw redirect(302, "/");
+                goto("/", { replaceState: true });
+                return;
             }
             sessionTimeout.set(true);
             return;

@@ -12,6 +12,7 @@
     import File from "$lib/components/files/File.svelte";
     import { get } from "svelte/store";
     import { beforeNavigate } from "$app/navigation";
+    import { disableScrolling } from "$lib/scripts/utils";
 
     export let files: FileResponse | undefined;
     export let view: "FILE" | "FOLDER";
@@ -135,6 +136,7 @@
                 );
                 activeImage.set(file);
                 mode.set("view");
+                disableScrolling();
                 return;
         }
     }

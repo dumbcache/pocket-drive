@@ -39,7 +39,7 @@ async function handleGoogleSignIn(tokenResponse: TokenResponse) {
     if (get(isLoggedin)) return;
     isLoggedin.set(true);
     let state = get(pocketState) || HOME_PATH;
-    goto(`/${state}`);
+    goto(`/${state}`, { replaceState: true });
 }
 
 function initClient() {

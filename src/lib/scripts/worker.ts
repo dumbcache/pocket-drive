@@ -103,7 +103,7 @@ async function uploadFile(
         }
         postMessage({
             context: "PROGRESS",
-            type: "DROP",
+            progressType: "DROP",
             id,
             progress: Math.trunc((endByte / fileSize) * 100),
         });

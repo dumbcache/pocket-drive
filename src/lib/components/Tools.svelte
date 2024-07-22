@@ -29,6 +29,7 @@
     import { getToken } from "$lib/scripts/login";
     import { navigating } from "$app/stores";
     import { onDestroy } from "svelte";
+    import { get } from "svelte/store";
 
     let view: "FILE" | "FOLDER";
     let refreshing = false;
@@ -51,33 +52,19 @@
         refreshing = true;
         const token = getToken();
         const parent = $activeParent.id;
+
         fetchMultiple(
             { parent, mimeType: IMG_MIME_TYPE, pageSize: 3 },
             token,
             true
         );
+
         fetchMultiple(
             { parent, mimeType: FOLDER_MIME_TYPE, pageSize: 500 },
             token,
             true
         );
 
-        fileStore.set(
-            await fetchMultiple(
-                { parent, mimeType: IMG_MIME_TYPE },
-                token,
-                true
-            )
-        );
-
-        folderStore.set(
-            await fetchMultiple(
-                { parent, mimeType: FOLDER_MIME_TYPE },
-                token,
-                true
-            )
-        );
-        $refresh = !$refresh;
         $folderStore?.files.forEach((file) => {
             fetchMultiple(
                 { parent: file.id, mimeType: IMG_MIME_TYPE, pageSize: 3 },
@@ -86,9 +73,25 @@
                 true
             );
         });
-        if ($fileStore?.nextPageToken || $folderStore?.nextPageToken) {
-            fetchAll.set(true);
+
+        let fs = await fetchMultiple(
+            { parent, mimeType: IMG_MIME_TYPE },
+            token,
+            true
+        );
+        let fd = await fetchMultiple(
+            { parent, mimeType: FOLDER_MIME_TYPE },
+            token,
+            true
+        );
+        if (parent === get(activeParent).id) {
+            folderStore.set(fd);
+            fileStore.set(fs);
+            if ($fileStore?.nextPageToken || $folderStore?.nextPageToken) {
+                fetchAll.set(true);
+            }
         }
+        $refresh = !$refresh;
         pocketStore.delete(parent);
         refreshing = false;
     }
