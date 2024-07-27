@@ -12,7 +12,11 @@
     import "./app.css";
     import type { Unsubscriber } from "svelte/store";
     import { loadGSIScript } from "$lib/scripts/login";
-    import { disableScrolling, enableScorlling } from "$lib/scripts/utils";
+    import {
+        disableScrolling,
+        enableScorlling,
+        setTheme,
+    } from "$lib/scripts/utils";
 
     let homeIcon = "";
     let startup: HTMLDivElement;
@@ -36,6 +40,7 @@
 
     onMount(async () => {
         disableScrolling();
+        setTheme();
 
         try {
             const response = await fetch("/favicon.svg");
@@ -49,13 +54,6 @@
             startup.style.display = "none";
         }, 2000);
 
-        $theme = window.localStorage.getItem("theme") ?? "";
-        const root = document.documentElement;
-        if ($theme) {
-            root.classList.contains("dark") || root.classList.toggle("dark");
-        } else {
-            root.classList.contains("dark") && root.classList.toggle("dark");
-        }
         try {
             loadGSIScript();
         } catch (error) {

@@ -106,11 +106,25 @@ export function checkNetworkError(error: Error) {
     }
 }
 
-export function toggleTheme() {
-    theme.update((prev) => (prev === "" ? "dark" : ""));
-    window.localStorage.setItem("theme", get(theme));
+export function setTheme(t?: string) {
+    let preferredtheme = t ?? window.localStorage.getItem("theme") ?? "";
+    theme.set(preferredtheme as "" | "dark");
     const root = document.documentElement;
-    root.classList.toggle("dark");
+    let dark = root.classList.contains("dark");
+    switch (preferredtheme) {
+        case "dark":
+            if (!dark) root.classList.add("dark");
+            return;
+        default:
+            if (dark) root.classList.remove("dark");
+            return;
+    }
+}
+
+export function toggleTheme() {
+    let newTheme = get(theme) === "" ? "dark" : "";
+    window.localStorage.setItem("theme", newTheme);
+    setTheme(newTheme);
 }
 
 export function signUserOutPartial() {
