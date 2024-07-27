@@ -2,6 +2,7 @@ import { getContext, setContext } from "svelte";
 import { get, writable } from "svelte/store";
 
 export const HOME_PATH = "home";
+export const CACHE_DATA = "pd-data";
 export const pocketStore = new Map();
 export const imageFetchLog = new Set();
 
@@ -67,7 +68,6 @@ export let theme = writable<"dark" | "">("");
 
 export let activeTimeout = writable(0);
 export let sessionTimeout = writable(false);
-export let dataCacheName = writable("");
 
 export let refresh = writable(false);
 export let starred = writable(false);

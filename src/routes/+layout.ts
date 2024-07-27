@@ -1,6 +1,6 @@
 import { browser } from "$app/environment";
 import { preferences } from "$lib/scripts/stores";
-import { setCache } from "$lib/scripts/utils";
+import { clearCache } from "$lib/scripts/utils";
 
 export const ssr = true;
 export const prerender = true;
@@ -11,7 +11,7 @@ export const load = async () => {
             let time =
                 Number(window.localStorage.getItem("refreshTime")) - Date.now();
             if (time < 0) {
-                await setCache(true);
+                clearCache();
                 window.localStorage.removeItem("refreshTime");
             }
             let pref = localStorage.getItem("preferences");

@@ -38,7 +38,7 @@ async function handleGoogleSignIn(tokenResponse: TokenResponse) {
     }
     if (get(isLoggedin)) return;
     isLoggedin.set(true);
-    let state = getPocketState() || HOME_PATH;
+    let state = getPocketState();
     goto(`/${state}`, { replaceState: true });
 }
 

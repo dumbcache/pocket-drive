@@ -22,6 +22,7 @@ import {
     profile,
     shortcuts,
     setPocketState,
+    CACHE_DATA,
 } from "$lib/scripts/stores";
 import { clearToken, getToken } from "$lib/scripts/login";
 import ChildWorker from "$lib/scripts/worker.ts?worker";
@@ -93,11 +94,7 @@ export function isTokenExpired() {
 }
 
 export function checkLoginStatus() {
-    if (browser) {
-        return (
-            Boolean(window.localStorage.getItem("token")) && !isTokenExpired()
-        );
-    }
+    return Boolean(window.localStorage.getItem("token")) && !isTokenExpired();
 }
 
 export function checkNetworkError(error: Error) {
@@ -127,39 +124,44 @@ export function toggleTheme() {
     setTheme(newTheme);
 }
 
-export function signUserOutPartial() {
+export async function clearCache() {
+    await caches.delete(CACHE_DATA);
+}
+
+export function clearLocalImages() {
     childWorker.postMessage({ context: "CLEAR_IMAGE_CACHE" });
+}
+
+export function clearLocalStorage() {
+    window.localStorage.clear();
+}
+
+export function clearSessionStorage() {
+    window.sessionStorage.clear();
+}
+
+export function signUserOutPartial() {
+    clearLocalImages();
     let theme = window.localStorage.getItem("theme");
     let preferences = window.localStorage.getItem("preferences");
     let recents = window.localStorage.getItem("recents");
-    window.localStorage.clear();
+    clearLocalStorage();
     window.localStorage.setItem("preferences", preferences);
     window.localStorage.setItem("theme", theme);
     window.localStorage.setItem("recents", recents);
 }
 
 export async function signUserOut() {
-    await clearFiles();
-    setPocketState();
-    console.info("logging user out");
-}
-
-export async function clearFiles() {
-    childWorker.postMessage({ context: "CLEAR_IMAGE_CACHE" });
-    await caches.delete("pd-data");
+    clearLocalImages();
+    clearCache();
     let theme = window.localStorage.getItem("theme");
     let preferences = window.localStorage.getItem("preferences");
-    window.localStorage.clear();
+    clearLocalStorage();
     window.localStorage.setItem("theme", theme);
     window.localStorage.setItem("preferences", preferences);
-    window.sessionStorage.clear();
-}
-
-export async function setCache(refresh: Boolean) {
-    let name = "pd-data";
-    dataCacheName.set(name);
-    if (!refresh) return;
-    await caches.delete(name);
+    clearSessionStorage();
+    setPocketState();
+    console.info("logging user out");
 }
 
 export function checkSessionTimeout(time: number) {
@@ -420,7 +422,7 @@ export async function fetchMultiple(
     return new Promise(async (resolve, reject) => {
         const req = constructRequest(params, accessToken);
         try {
-            if (updateCache) await (await caches.open("pd-data")).delete(req);
+            if (updateCache) await (await caches.open(CACHE_DATA)).delete(req);
             if (stopNewReq) {
                 resolve();
                 return;
