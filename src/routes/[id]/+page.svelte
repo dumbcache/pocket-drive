@@ -32,6 +32,7 @@
     import fetchAllIcon from "$lib/assets/fetchAll.svg?raw";
     import Search from "$lib/components/utils/Search.svelte";
     import ScrollButton from "$lib/components/utils/ScrollButton.svelte";
+    import FolderTitle from "$lib/components/utils/FolderTitle.svelte";
 
     export let data: {
         folders: GoogleFileResponse;
@@ -194,14 +195,7 @@
             </div>
 
             <h2 class="folder-name one">
-                {#if $activeParent?.id !== getRoot() && $activeParent?.parents}
-                    <a
-                        class="title-sub"
-                        title="go to parent"
-                        href={$activeParent?.parents[0]}>./</a
-                    >
-                {/if}
-                {$activeParent?.name ?? ""}
+                <FolderTitle />
             </h2>
 
             {#if foldersFetching || filesFetching}
@@ -224,15 +218,9 @@
         </nav>
 
         <h2 class="folder-name two">
-            {#if $activeParent?.id !== getRoot() && $activeParent?.parents}
-                <a
-                    class="title-sub"
-                    title="go to parent"
-                    href={$activeParent?.parents[0]}>./</a
-                >
-            {/if}
-            {$activeParent?.name}
+            <FolderTitle />
         </h2>
+
         {#if $mode === "search"}
             <Search />
         {/if}
@@ -292,10 +280,6 @@
         margin-left: 2rem;
     }
 
-    .title-sub {
-        /* color: var(--color-blue); */
-        color: var(--color-focus);
-    }
     .folder-name {
         font-size: 2rem;
         max-width: 40rem;
