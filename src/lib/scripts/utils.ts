@@ -2,7 +2,6 @@ import { browser } from "$app/environment";
 import { get } from "svelte/store";
 import {
     activeTimeout,
-    dataCacheName,
     sessionTimeout,
     mode,
     activeView,
@@ -27,6 +26,7 @@ import {
 import { clearToken, getToken } from "$lib/scripts/login";
 import ChildWorker from "$lib/scripts/worker.ts?worker";
 import { clearDropItems } from "$lib/scripts/image";
+import { goto, replaceState } from "$app/navigation";
 
 export let childWorker: Worker;
 
@@ -161,6 +161,8 @@ export async function signUserOut() {
     window.localStorage.setItem("preferences", preferences);
     clearSessionStorage();
     setPocketState();
+    profile.set(false);
+    goto("/");
     console.info("logging user out");
 }
 

@@ -9,7 +9,6 @@
     import { onMount } from "svelte";
     import {
         dropItems,
-        isLoggedin,
         mode,
         pocketStore,
         sessionTimeout,
@@ -18,7 +17,6 @@
         shortcuts,
     } from "$lib/scripts/stores";
     import { requestToken } from "$lib/scripts/login";
-    import { goto } from "$app/navigation";
     import { previewAndSetDropItems } from "$lib/scripts/image";
     import ProgressBar from "$lib/components/utils/ProgressBar.svelte";
     import Profile from "$lib/components/profile/Profile.svelte";
@@ -33,12 +31,6 @@
         if (files) {
             previewAndSetDropItems(files);
         }
-    }
-
-    function signoutHandler() {
-        isLoggedin.set(false);
-        signUserOut();
-        goto("/");
     }
 
     function handleUnload(e) {
@@ -121,8 +113,7 @@
             <div class="session-wrapper">
                 <p>Your session has been expired. Click login to continue</p>
                 <div class="button-wrapper">
-                    <button class="cancel" on:click={signoutHandler}
-                        >cancel</button
+                    <button class="cancel" on:click={signUserOut}>cancel</button
                     >
                     <button class="login" on:click={requestToken}>login</button>
                 </div>

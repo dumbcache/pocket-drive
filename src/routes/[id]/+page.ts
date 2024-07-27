@@ -7,14 +7,7 @@ import {
     getRootFolder,
 } from "$lib/scripts/utils";
 import { getToken } from "$lib/scripts/login";
-import {
-    isLoggedin,
-    sessionTimeout,
-    pocketStore,
-    HOME_PATH,
-    setPocketState,
-} from "$lib/scripts/stores";
-import { get } from "svelte/store";
+import { pocketStore, HOME_PATH, setPocketState } from "$lib/scripts/stores";
 import { goto } from "$app/navigation";
 
 async function loadContent(parent: string) {
@@ -30,20 +23,14 @@ async function loadContent(parent: string) {
     return { folders, files, parent };
 }
 
-export const load = (async ({ params, fetch }) => {
+export const load = (async ({ params }) => {
     if (browser) {
+        setPocketState(params?.id);
         if (!checkLoginStatus()) {
-            if (!get(isLoggedin)) {
-                isLoggedin.set(false);
-                signUserOutPartial();
-                setPocketState(params?.id);
-                goto("/", { replaceState: true });
-                return;
-            }
-            sessionTimeout.set(true);
+            signUserOutPartial();
+            goto("/", { replaceState: true });
             return;
         }
-        isLoggedin.set(true);
         let id = params.id;
         if (id === HOME_PATH) {
             id = window.localStorage.getItem("root");

@@ -1,11 +1,12 @@
 import { browser } from "$app/environment";
-import { preferences } from "$lib/scripts/stores";
+import { goto } from "$app/navigation";
+import { preferences, setPocketState } from "$lib/scripts/stores";
 import { clearCache } from "$lib/scripts/utils";
 
 export const ssr = true;
 export const prerender = true;
 
-export const load = async () => {
+export const load = async ({ params }) => {
     try {
         if (browser) {
             let time =

@@ -62,7 +62,6 @@ export let fileStore = writable<GoogleFileResponse | undefined>();
 export let recentStore = writable<{ name: string; id: string }[]>([]);
 export let searchItems = writable<GoogleFile[] | undefined>();
 
-export let isLoggedin = writable(false);
 export let preview = writable<"IMAGE" | "VIDEO">("IMAGE");
 export let theme = writable<"dark" | "">("");
 

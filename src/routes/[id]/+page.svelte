@@ -11,7 +11,6 @@
         mask,
         storeSnap,
         fetchAll,
-        refresh,
         setViewContext,
         setPocketState,
     } from "$lib/scripts/stores";
@@ -161,7 +160,6 @@
                     })
                     .catch(console.warn);
             }
-            setPocketState(parent);
         } catch (error) {
             console.warn("afterNavigate function error", error);
         }

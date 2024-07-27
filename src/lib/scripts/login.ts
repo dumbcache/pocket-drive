@@ -1,9 +1,4 @@
-import {
-    activeTimeout,
-    getPocketState,
-    HOME_PATH,
-    isLoggedin,
-} from "$lib/scripts/stores";
+import { activeTimeout, getPocketState } from "$lib/scripts/stores";
 import { get } from "svelte/store";
 import { PUBLIC_KRAB_CLIENT_ID } from "$env/static/public";
 import { setSessionTimeout, createRootFolder } from "$lib/scripts/utils";
@@ -36,8 +31,6 @@ async function handleGoogleSignIn(tokenResponse: TokenResponse) {
             window.localStorage.setItem("root", id);
         }
     }
-    if (get(isLoggedin)) return;
-    isLoggedin.set(true);
     let state = getPocketState();
     goto(`/${state}`, { replaceState: true });
 }

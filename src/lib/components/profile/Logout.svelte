@@ -1,15 +1,7 @@
 <script lang="ts">
     import { signUserOut } from "$lib/scripts/utils";
-    import { goto } from "$app/navigation";
-    import { isLoggedin, profile } from "$lib/scripts/stores";
+    import { profile } from "$lib/scripts/stores";
     import { requestToken } from "$lib/scripts/login";
-
-    async function signoutHandler() {
-        isLoggedin.set(false);
-        profile.set(false);
-        await signUserOut();
-        goto("/");
-    }
 
     async function tokenHandler() {
         requestToken();
@@ -20,7 +12,7 @@
 <button class="token" title="new session" on:click={tokenHandler}>
     <span>New Session</span>
 </button>
-<button class="logout" title="logout" on:click={signoutHandler}>
+<button class="logout" title="logout" on:click={signUserOut}>
     <span>Logout</span>
 </button>
 
