@@ -13,6 +13,8 @@
     import { get } from "svelte/store";
     import { beforeNavigate } from "$app/navigation";
     import { disableScrolling } from "$lib/scripts/utils";
+    import imgCreate from "$lib/assets/imgCreate.svg?raw";
+    import folderCreate from "$lib/assets/folderCreate.svg?raw";
 
     export let files: FileResponse | undefined;
     export let view: "FILE" | "FOLDER";
@@ -219,6 +221,21 @@
         {/each}
     </ol>
     <div id="{view === 'FILE' ? 'file' : 'folder'}-foot" bind:this={foot}></div>
+{:else}
+    <div class="no-content">
+        {#if view === "FILE"}
+            <p>No Data</p>
+            <p>
+                Click <span class="img">{@html imgCreate}</span> or Drag and Drop
+                to upload
+            </p>
+        {:else}
+            <p>No Data</p>
+            <p>
+                Click <span class="img">{@html folderCreate}</span> to create
+            </p>
+        {/if}
+    </div>
 {/if}
 
 <style>
@@ -247,9 +264,40 @@
     .edit-mode {
         padding: 0rem 5rem;
     }
+    .no-content {
+        display: flex;
+        flex-flow: column nowrap;
+        gap: 0.5rem;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: var(--color-five);
+        text-align: center;
+        user-select: none;
+        font-size: var(--size-smaller);
+    }
+    .img {
+        vertical-align: bottom;
+        display: inline-flex;
+        align-items: center;
+        width: var(--secondary-icon-size);
+        height: var(--secondary-icon-size);
+    }
+    .img :global(svg) {
+        fill: var(--color-five);
+    }
+
     @media (max-width: 600px) {
         .edit-mode {
             padding: unset;
+        }
+        .no-content {
+            font-size: smaller;
+        }
+        .img {
+            min-width: 2rem;
+            min-height: 2rem;
         }
     }
 </style>

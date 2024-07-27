@@ -1,15 +1,16 @@
+import { getContext, setContext } from "svelte";
 import { get, writable } from "svelte/store";
 
 export const HOME_PATH = "home";
 export const pocketStore = new Map();
 export let pocketState = writable<null | string>(null);
 export const imageFetchLog = new Set();
+
 export const progressStore = writable({
     total: 0,
     success: 0,
     fail: 0,
 });
-
 export function updateProgressStore(t = 0, s = 0, f = 0) {
     progressStore.update((val) => {
         return {
@@ -19,6 +20,7 @@ export function updateProgressStore(t = 0, s = 0, f = 0) {
         };
     });
 }
+
 export let profile = writable(false);
 export let preferences = writable<Preferences>({
     showFileNames: false,
@@ -33,13 +35,20 @@ export function updatePreferences(p: Preferences) {
     });
 }
 
+export let activeView = writable<"FILE" | "FOLDER">("FOLDER");
+export function setViewContext() {
+    setContext("view", activeView);
+}
+export function getViewContext(): typeof activeView {
+    return getContext("view");
+}
+
 export let folderStore = writable<GoogleFileResponse | undefined>();
 export let fileStore = writable<GoogleFileResponse | undefined>();
 export let recentStore = writable<{ name: string; id: string }[]>([]);
 export let searchItems = writable<GoogleFile[] | undefined>();
 
 export let isLoggedin = writable(false);
-export let activeView = writable<"FILE" | "FOLDER">("FOLDER");
 export let preview = writable<"IMAGE" | "VIDEO">("IMAGE");
 export let theme = writable<"dark" | "">("");
 

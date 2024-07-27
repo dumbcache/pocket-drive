@@ -1,28 +1,29 @@
 <script lang="ts">
+    import { onMount } from "svelte";
     import FileContainer from "$lib/components/files/FileContainer.svelte";
     import FolderContainer from "$lib/components/folders/FolderContainer.svelte";
-
-    import { activeParent, fileStore, folderStore } from "$lib/scripts/stores";
+    import {
+        activeParent,
+        fileStore,
+        folderStore,
+        getViewContext,
+    } from "$lib/scripts/stores";
     import {
         FOLDER_MIME_TYPE,
         fetchMultiple,
         IMG_MIME_TYPE,
     } from "$lib/scripts/utils";
     import { getToken } from "$lib/scripts/login";
-    import { onMount } from "svelte";
-    import FileLoading from "./utils/FileLoading.svelte";
-    import imgCreate from "$lib/assets/imgCreate.svg?raw";
-    import folderCreate from "$lib/assets/folderCreate.svg?raw";
+    import FileLoading from "$lib/components/utils/FileLoading.svelte";
 
-    export let view: string;
-    export let count: number;
+    export let view = getViewContext();
     let observer: IntersectionObserver;
     let footer: HTMLElement;
     let nextPageToken: string | undefined;
     let mimeType: string;
     let status = "";
     $: status =
-        view === "FOLDER"
+        $view === "FOLDER"
             ? $folderStore?.nextPageToken
                 ? ""
                 : "completed"
@@ -88,30 +89,23 @@
 </script>
 
 <div class="content" role="main" on:dragstart|preventDefault>
-    <FolderContainer {observer} {view} />
-    <FileContainer {observer} {view} />
+    <section
+        class="folder-container"
+        style:display={$view === "FOLDER" ? "initial" : "none"}
+    >
+        <FolderContainer {observer} />
+    </section>
+    <section
+        class="file-container"
+        style:display={$view === "FILE" ? "initial" : "none"}
+    >
+        <FileContainer {observer} />
+    </section>
 </div>
 
-{#if count > 0}
-    <footer bind:this={footer}>
-        <FileLoading {status} />
-    </footer>
-{:else}
-    <div class="no-content">
-        {#if view === "FILE"}
-            <p>No Data</p>
-            <p>
-                Click <span class="img">{@html imgCreate}</span> or Drag and Drop
-                to upload.
-            </p>
-        {:else}
-            <p>No Data</p>
-            <p>
-                Click <span class="img">{@html folderCreate}</span> to create
-            </p>
-        {/if}
-    </div>
-{/if}
+<footer bind:this={footer}>
+    <FileLoading {status} />
+</footer>
 
 <style>
     .content {
@@ -124,38 +118,10 @@
         align-items: center;
         padding: 1rem 0rem;
     }
-    .no-content {
-        display: flex;
-        flex-flow: column nowrap;
-        gap: 0.5rem;
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        color: #555;
-        text-align: center;
-        user-select: none;
-    }
-    .img {
-        vertical-align: bottom;
-        display: inline-flex;
-        align-items: center;
-        width: var(--primary-icon-size);
-        height: var(--primary-icon-size);
-    }
-    .img :global(svg) {
-        fill: #555;
-    }
+
     @media (max-width: 600px) {
         footer {
             padding: 2rem 0rem;
-        }
-        .no-content {
-            font-size: smaller;
-        }
-        .img {
-            min-width: 2rem;
-            min-height: 2rem;
         }
     }
 </style>

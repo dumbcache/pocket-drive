@@ -13,6 +13,7 @@
         storeSnap,
         fetchAll,
         refresh,
+        setViewContext,
     } from "$lib/scripts/stores";
     import Content from "$lib/components/Content.svelte";
     import Tools from "$lib/components/Tools.svelte";
@@ -39,19 +40,20 @@
     };
     $: folderStore.set(data.folders);
     $: fileStore.set(data.files);
-    let view = $activeView;
+
+    setViewContext();
 
     let renderAll = false;
     let foldersFetching = false;
     let filesFetching = false;
 
     function checks() {
-        $activeView = "FOLDER";
+        activeView.set("FOLDER");
         if (
             $folderStore?.files.length === 0 &&
             $fileStore?.files.length !== 0
         ) {
-            $activeView = "FILE";
+            activeView.set("FILE");
         }
         if ($folderStore?.nextPageToken || $fileStore?.nextPageToken) {
             renderAll = true;
@@ -65,7 +67,6 @@
         $mode = "";
         if (!val) checks();
     });
-    const unsubscribeView = activeView.subscribe((data) => (view = data));
 
     // function handlePointerDown(e: PointerEvent) {
     //     if (e.pointerType === "touch") pageX = e.pageX;
@@ -84,11 +85,7 @@
     //     }
     // }
 
-    async function fetchFolders(
-        accessToken: string,
-        parent: string,
-        ref: boolean
-    ) {
+    async function fetchFolders(accessToken: string, parent: string) {
         let pToken = $folderStore?.nextPageToken;
         if (!pToken) {
             foldersFetching = false;
@@ -103,7 +100,7 @@
             },
             accessToken
         );
-        if (parent !== data.parent || ref !== $refresh) {
+        if (parent !== data.parent) {
             foldersFetching = false;
             return;
         }
@@ -115,11 +112,7 @@
         });
         return fetchFolders(accessToken, parent);
     }
-    async function fetchFiles(
-        accessToken: string,
-        parent: string,
-        ref: Boolean
-    ) {
+    async function fetchFiles(accessToken: string, parent: string) {
         let pToken = $fileStore?.nextPageToken;
         if (!pToken) {
             filesFetching = false;
@@ -145,10 +138,9 @@
 
     async function fetchAllAtOnce() {
         let parent = data.parent;
-        let ref = $refresh;
         let accessToken = getToken();
-        fetchFolders(accessToken, parent, ref);
-        fetchFiles(accessToken, parent, ref);
+        fetchFolders(accessToken, parent);
+        fetchFiles(accessToken, parent);
         renderAll = false;
         fetchAll.set(false);
     }
@@ -188,7 +180,6 @@
         checks();
     });
     onDestroy(() => {
-        unsubscribeView();
         unsubscribeNavigation();
         unsubscribeFetchAll();
     });
@@ -229,11 +220,7 @@
                     on:click={fetchAllAtOnce}>{@html fetchAllIcon}</button
                 >
             {/if}
-            <Count
-                count={view === "FOLDER"
-                    ? $folderStore?.files.length
-                    : $fileStore?.files.length}
-            />
+            <Count />
         </nav>
 
         <h2 class="folder-name two">
@@ -251,12 +238,7 @@
         {/if}
     {/if}
     <main class="main" style:display={$mode === "search" ? "none" : "block"}>
-        <Content
-            {view}
-            count={view === "FOLDER"
-                ? $folderStore?.files.length
-                : $fileStore?.files.length}
-        />
+        <Content />
         {#if $mask}
             <div class="mask"></div>
         {/if}
@@ -337,6 +319,11 @@
     .fetch-all :global(svg) {
         fill: var(--color-svg-one);
     }
+    .loading,
+    .fetch-all {
+        position: absolute;
+        right: 10rem;
+    }
 
     @media (max-width: 600px) {
         .wrapper {
@@ -370,12 +357,13 @@
 
         .fetch-all {
             position: absolute;
-            top: 5rem;
+            top: 5.5rem;
+            right: 1rem;
         }
         .loading {
             position: absolute;
-            top: 5rem;
-            right: 1rem;
+            top: 6rem;
+            right: 1.5rem;
         }
     }
 </style>

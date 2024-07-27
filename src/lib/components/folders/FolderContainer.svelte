@@ -6,7 +6,6 @@
     import FolderSelect from "$lib/components/folders/FolderSelect.svelte";
     import Container from "$lib/components/Container.svelte";
 
-    export let view: "FILE" | "FOLDER";
     export let observer: IntersectionObserver;
 
     let files: FileResponse | undefined;
@@ -22,19 +21,9 @@
     });
 </script>
 
-<section
-    class="folder-container"
-    style:display={view === "FOLDER" ? "initial" : "none"}
->
-    <!-- {#key $refresh} -->
-    <Container
-        {files}
-        view="FOLDER"
-        component={Folder}
-        footObserver={observer}
-    />
-    <!-- {/key} -->
-</section>
+<!-- {#key $refresh} -->
+<Container {files} view="FOLDER" component={Folder} footObserver={observer} />
+<!-- {/key} -->
 
 {#if $folderAction}
     {#if $folderAction === "MOVE"}

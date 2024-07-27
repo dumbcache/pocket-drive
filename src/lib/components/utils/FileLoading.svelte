@@ -5,7 +5,7 @@
 </script>
 
 {#if status === "loading"}
-    <Spinner />
+    <Spinner height="4rem" width="4rem" />
 {:else if status === "completed"}
     <div class="end">END</div>
 {/if}

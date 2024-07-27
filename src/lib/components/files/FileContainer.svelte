@@ -5,7 +5,6 @@
     import ViewMode from "$lib/components/files/ViewMode.svelte";
     import Container from "$lib/components/Container.svelte";
 
-    export let view: "FILE" | "FOLDER";
     export let observer: IntersectionObserver;
 
     let files: FileResponse | undefined;
@@ -27,20 +26,15 @@
     });
 </script>
 
-<section
-    class="file-container"
-    style:display={view === "FILE" ? "initial" : "none"}
->
-    <!-- {#key $refresh} -->
-    <Container
-        {files}
-        view="FILE"
-        component={File}
-        footObserver={observer}
-        {showFileNames}
-    />
-    <!-- {/key} -->
-</section>
+<!-- {#key $refresh} -->
+<Container
+    {files}
+    view="FILE"
+    component={File}
+    footObserver={observer}
+    {showFileNames}
+/>
+<!-- {/key} -->
 
 {#if $mode === "view"}
     <ViewMode {files} />

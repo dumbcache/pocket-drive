@@ -11,9 +11,9 @@ import { goto } from "$app/navigation";
 import { browser } from "$app/environment";
 
 let client = null;
-let token: string | null = null;
+let token: string = "";
 if (browser) {
-    token = window.localStorage.getItem("token") || null;
+    token = window.localStorage.getItem("token") || "";
 }
 
 async function handleGoogleSignIn(tokenResponse: TokenResponse) {

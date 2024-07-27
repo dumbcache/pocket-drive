@@ -34,12 +34,6 @@
     let view: "FILE" | "FOLDER";
     let refreshing = false;
 
-    const unsubscribeNavigation = navigating.subscribe((val) => {
-        if (!val) {
-            $starred = false;
-        }
-    });
-
     function imgPickerHandler(e: InputEvent) {
         e.preventDefault();
         const target = e.target as HTMLInputElement;
@@ -95,7 +89,17 @@
         pocketStore.delete(parent);
         refreshing = false;
     }
-    const unsubscribeView = activeView.subscribe((data) => (view = data));
+
+    const unsubscribeNavigation = navigating.subscribe((val) => {
+        if (!val) {
+            $starred = false;
+        }
+    });
+
+    const unsubscribeView = activeView.subscribe(
+        (data) => data && (view = data)
+    );
+
     onDestroy(() => {
         unsubscribeView();
         unsubscribeNavigation();
@@ -106,7 +110,7 @@
     <button
         class="view btn s-prime"
         title="folders"
-        on:click={() => ($activeView = "FOLDER")}
+        on:click={() => activeView.set("FOLDER")}
         class:active={view === "FOLDER"}
     >
         {@html folderIcon}
@@ -114,7 +118,7 @@
     <button
         class="view btn s-prime"
         title="files"
-        on:click={() => ($activeView = "FILE")}
+        on:click={() => activeView.set("FILE")}
         class:active={view === "FILE"}
     >
         {@html fileIcon}
@@ -143,7 +147,7 @@
         <button
             class="btn s-prime"
             title="create folder"
-            on:click={() => ($folderAction = "CREATE")}
+            on:click={() => folderAction.set("CREATE")}
         >
             {@html folderCreate}
         </button>
@@ -152,7 +156,7 @@
         class="btn s-prime"
         title="edit"
         on:click={() => {
-            $mode = "edit";
+            mode.set("edit");
         }}
     >
         {@html editIcon}
@@ -160,7 +164,7 @@
     <button
         class="btn s-prime"
         title="search folders"
-        on:click={() => ($mode = $mode === "" ? "search" : "")}
+        on:click={() => mode.set($mode === "" ? "search" : "")}
     >
         {@html searchIcon}
     </button>
@@ -168,7 +172,7 @@
         class="btn s-prime"
         title="favorites"
         class:favorites={$starred}
-        on:click={() => ($starred = !$starred)}
+        on:click={() => starred.set(!$starred)}
     >
         {@html favoriteIcon}
     </button>

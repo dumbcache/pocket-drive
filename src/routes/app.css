@@ -19,6 +19,7 @@
     --color-green: #5f5;
     --color-red: #f55;
     --color-red-dark: #f00;
+    --color-green-dark: #151;
 
     --color-black: #000;
     --color-black-light: #0002;
@@ -45,6 +46,8 @@
     --color: var(--color-black-one);
     --color-one: var(--color-black-three);
     --color-two: var(--color-black-four);
+    --color-three: var(--color-black-five);
+    --color-five: var(--color-black-seven);
 
     --color-bg: var(--color-white);
     --color-bg-one: var(--color-white-one);
@@ -85,6 +88,8 @@
     --color: var(--color-white-one);
     --color-one: var(--color-white-two);
     --color-two: var(--color-white-three);
+    --color-three: var(--color-white-four);
+    --color-five: var(--color-white-six);
 
     --color-bg: var(--color-black-one);
     --color-bg-one: var(--color-black-three);
