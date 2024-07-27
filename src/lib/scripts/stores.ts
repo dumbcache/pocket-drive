@@ -76,11 +76,7 @@ export let mask = writable(false);
 export let fetchAll = writable(false);
 export let mode = writable("");
 export let shortcuts = writable(false);
-export let activeParent = writable<{
-    id: string;
-    name: string;
-    parents?: string[];
-}>();
+export let activeParent = writable<Folder>();
 export let activeImage = writable<GoogleFile>();
 export let activeFile = writable<string>();
 export let dropItems = writable<DropItem[]>([]);
@@ -91,18 +87,19 @@ export let folderAction = writable<FolderAction | undefined>();
 export let folderActionDetail = writable<FolderActionDetail | undefined>();
 
 export function storeSnap(
-    parent?: string,
     files?: GoogleFileResponse,
-    folders?: GoogleFileResponse
+    folders?: GoogleFileResponse,
+    info?: Folder
 ) {
     try {
-        parent ?? (parent = get(activeParent).id);
-        if (parent) {
-            folders ?? (folders = get(folderStore));
-            files ?? (files = get(fileStore));
+        info ??= get(activeParent);
+        folders ??= get(folderStore);
+        files ??= get(fileStore);
+        if (folders && files && parent) {
             pocketStore.set(parent, {
                 folders,
                 files,
+                info,
             });
         }
     } catch (error) {

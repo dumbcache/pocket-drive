@@ -5,34 +5,30 @@ import {
     signUserOutPartial,
     loadAll,
     getRootFolder,
-    setSessionTimeout,
+    fetchSingle,
 } from "$lib/scripts/utils";
 import { getToken } from "$lib/scripts/login";
-import {
-    pocketStore,
-    HOME_PATH,
-    setPocketState,
-    sessionTimeout,
-} from "$lib/scripts/stores";
+import { pocketStore, HOME_PATH, setPocketState } from "$lib/scripts/stores";
 import { goto } from "$app/navigation";
 
 async function loadContent(parent: string) {
     try {
         if (pocketStore.has(parent)) {
             const data = pocketStore.get(parent);
-            return { ...data, parent };
+            return { ...data };
         }
         const [folders, files] = await loadAll(parent, getToken());
-        if (folders && files) {
+        const info = await fetchSingle(parent, "FOLDER", getToken());
+        if (folders && files && info) {
             pocketStore.set(parent, {
                 folders,
                 files,
+                info,
             });
-            return { folders, files, parent };
+            return { folders, files, info };
         }
     } catch (error) {
         console.log("erored,", error);
-        sessionTimeout.set(true);
     }
 }
 
@@ -49,6 +45,7 @@ export const load = (async ({ params }) => {
             id = window.localStorage.getItem("root");
             if (!id) id = await getRootFolder(getToken());
         }
+
         return loadContent(id);
     }
 }) satisfies PageLoad;

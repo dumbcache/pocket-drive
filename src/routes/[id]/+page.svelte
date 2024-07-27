@@ -1,7 +1,7 @@
 <script lang="ts">
     import { onDestroy, onMount } from "svelte";
     import { navigating } from "$app/stores";
-    import { afterNavigate, beforeNavigate } from "$app/navigation";
+    import { beforeNavigate } from "$app/navigation";
     import {
         activeParent,
         activeView,
@@ -9,19 +9,16 @@
         folderStore,
         mode,
         mask,
-        storeSnap,
         fetchAll,
         setViewContext,
-        setPocketState,
+        storeSnap,
     } from "$lib/scripts/stores";
     import Content from "$lib/components/Content.svelte";
     import Tools from "$lib/components/Tools.svelte";
     import Count from "$lib/components/utils/Count.svelte";
     import {
         fetchMultiple,
-        fetchSingle,
         FOLDER_MIME_TYPE,
-        getRoot,
         IMG_MIME_TYPE,
     } from "$lib/scripts/utils";
     import { getToken } from "$lib/scripts/login";
@@ -32,14 +29,16 @@
     import Search from "$lib/components/utils/Search.svelte";
     import ScrollButton from "$lib/components/utils/ScrollButton.svelte";
     import FolderTitle from "$lib/components/utils/FolderTitle.svelte";
+    import { get } from "svelte/store";
 
     export let data: {
         folders: GoogleFileResponse;
         files: GoogleFileResponse;
-        parent: string;
+        info: Folder;
     };
     $: folderStore.set(data.folders);
     $: fileStore.set(data.files);
+    $: activeParent.set(data.info);
 
     setViewContext();
 
@@ -137,7 +136,7 @@
     }
 
     async function fetchAllAtOnce() {
-        let parent = data.parent;
+        let parent = data.info.id;
         let accessToken = getToken();
         fetchFolders(accessToken, parent);
         fetchFiles(accessToken, parent);
@@ -145,31 +144,11 @@
         fetchAll.set(false);
     }
 
-    afterNavigate(async ({ from, to }) => {
-        try {
-            if (from?.url?.href === to?.url?.href) return;
-            let parent = data?.parent;
-            if (parent) {
-                fetchSingle(parent, "FOLDER", getToken())
-                    .then((d) => {
-                        activeParent.set({
-                            id: d.id,
-                            name: d.name,
-                            parents: d.parents,
-                        });
-                    })
-                    .catch(console.warn);
-            }
-        } catch (error) {
-            console.warn("afterNavigate function error", error);
-        }
-    });
-
     beforeNavigate(({ from, to }) => {
         try {
             if (from?.url?.href === to?.url?.href) return;
             renderAll = false;
-            storeSnap();
+            // storeSnap(get(fileStore),get(folderStore),get(activeParent));
         } catch (error) {
             console.warn(error);
         }
