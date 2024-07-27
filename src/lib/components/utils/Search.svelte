@@ -1,10 +1,12 @@
 <script lang="ts">
-    import { folderStore, mode } from "$lib/scripts/stores";
+    import { folderAction, folderStore, mode } from "$lib/scripts/stores";
     import { searchHandler } from "$lib/scripts/utils";
     import { getToken } from "$lib/scripts/login";
     import Folder from "$lib/components/folders/Folder.svelte";
     import { onDestroy, onMount } from "svelte";
     import Spinner from "$lib/components/utils/Spinner.svelte";
+    import FolderSelect from "$lib/components/folders/FolderSelect.svelte";
+    import ActionForm from "$lib/components/folders/ActionForm.svelte";
 
     let global = false;
     let searchElement: HTMLInputElement;
@@ -109,6 +111,14 @@
         <p class="no-content">No Content</p>
     {/if}
 </section>
+
+{#if $folderAction && $mode === "search"}
+    {#if $folderAction === "MOVE"}
+        <FolderSelect type="FOLDER" />
+    {:else}
+        <ActionForm />
+    {/if}
+{/if}
 
 <style>
     .search-wrapper {

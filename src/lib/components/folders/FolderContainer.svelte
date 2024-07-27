@@ -1,6 +1,11 @@
 <script lang="ts">
     import { onDestroy } from "svelte";
-    import { folderStore, folderAction, refresh } from "$lib/scripts/stores";
+    import {
+        folderStore,
+        folderAction,
+        refresh,
+        mode,
+    } from "$lib/scripts/stores";
     import Folder from "$lib/components/folders/Folder.svelte";
     import ActionForm from "$lib/components/folders/ActionForm.svelte";
     import FolderSelect from "$lib/components/folders/FolderSelect.svelte";
@@ -25,7 +30,7 @@
 <Container {files} view="FOLDER" component={Folder} footObserver={observer} />
 <!-- {/key} -->
 
-{#if $folderAction}
+{#if $folderAction && $mode !== "search"}
     {#if $folderAction === "MOVE"}
         <FolderSelect type="FOLDER" />
     {:else}
