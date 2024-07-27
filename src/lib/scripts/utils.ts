@@ -90,7 +90,9 @@ export function enableScorlling() {
 // }
 
 export function isTokenExpired() {
-    return Date.now() > Number(window.localStorage.getItem("sessionTime"));
+    return (
+        Date.now() - Number(window.localStorage.getItem("sessionTime")) > 5000
+    );
 }
 
 export function checkLoginStatus() {
@@ -166,31 +168,25 @@ export async function signUserOut() {
     console.info("logging user out");
 }
 
-export function checkSessionTimeout(time: number) {
-    activeTimeout.set(
-        setTimeout(() => {
-            if (isTokenExpired()) {
+export function setSessionTimeout(expires?: number) {
+    if (expires) {
+        expires = Date.now() + expires * 1000;
+        window.localStorage.setItem("sessionTime", String(expires));
+    } else {
+        expires = Number(window.localStorage.getItem("sessionTime")) ?? 0;
+    }
+
+    let time = expires - Date.now();
+    clearTimeout(get(activeTimeout));
+    if (time > 0) {
+        sessionTimeout.set(false);
+        activeTimeout.set(
+            setTimeout(() => {
                 clearToken();
                 sessionTimeout.set(true);
                 console.log("session timed out");
-            } else {
-                clearTimeout(get(activeTimeout));
-                checkSessionTimeout(time);
-            }
-        }, time)
-    );
-}
-
-export function setSessionTimeout(expires?: number) {
-    expires &&
-        window.localStorage.setItem(
-            "sessionTime",
-            String(Date.now() + expires * 1000)
+            }, time)
         );
-    sessionTimeout.set(false);
-    let time = Number(window.localStorage.getItem("sessionTime")) - Date.now();
-    if (time > 0) {
-        checkSessionTimeout(time);
     } else {
         clearToken();
         sessionTimeout.set(true);
@@ -242,12 +238,7 @@ export const wait = (s: number) => new Promise((res) => setTimeout(res, s));
 
 export async function makeFetch(request: Request) {
     try {
-        const res = await fetch(request);
-        if (res.status < 200 || res.status > 300) {
-            console.info(await res.text());
-            return;
-        }
-        return res;
+        return fetch(request);
     } catch (error) {
         console.log(error);
     }
@@ -433,6 +424,10 @@ export async function fetchMultiple(
             console.log(error);
         }
         const res = await makeFetch(req);
+        if (res.status < 200 || res.status > 300) {
+            reject(res);
+            return;
+        }
         resolve(res?.json() as Promise<GoogleFileResponse>);
         return;
     });
@@ -506,12 +501,9 @@ export const loadAll = (
             .then((data) => {
                 resolve(data);
             })
-            .catch(async (e) => {
-                console.warn(e);
-                if (e.status === 401) {
-                    get(sessionTimeout) === false && sessionTimeout.set(true);
-                    return;
-                }
+            .catch(async (error) => {
+                console.warn(await error.text());
+                resolve([]);
             });
     });
 };

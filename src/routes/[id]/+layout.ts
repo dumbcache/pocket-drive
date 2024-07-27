@@ -5,7 +5,7 @@ import { checkLoginStatus } from "$lib/scripts/utils";
 export const ssr = false;
 export const prerender = false;
 
-export const load = () => {
+export const load = ({ params }) => {
     try {
         if (browser) {
             if (checkLoginStatus()) {

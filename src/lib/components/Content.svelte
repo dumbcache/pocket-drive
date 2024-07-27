@@ -14,11 +14,10 @@
         IMG_MIME_TYPE,
     } from "$lib/scripts/utils";
     import { getToken } from "$lib/scripts/login";
-    import FileLoading from "$lib/components/utils/FileLoading.svelte";
+    import Spinner from "$lib/components/utils/Spinner.svelte";
 
     export let view = getViewContext();
     let observer: IntersectionObserver;
-    let footer: HTMLElement;
     let nextPageToken: string | undefined;
     let mimeType: string;
     let status = "";
@@ -103,8 +102,11 @@
     </section>
 </div>
 
-<footer bind:this={footer}>
-    <FileLoading {status} />
+<footer>
+    {#if status === "loading"}
+        <Spinner height="4rem" width="4rem" />
+    {/if}
+    <!-- <FileLoading {status} /> -->
 </footer>
 
 <style>

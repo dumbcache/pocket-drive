@@ -6,13 +6,15 @@
     } from "$lib/scripts/stores";
 
     let view = getViewContext();
+    $: count =
+        $view === "FOLDER"
+            ? $folderStore?.files?.length
+            : $fileStore?.files?.length;
 </script>
 
-{#if $view}
+{#if count}
     <p class="count" title="count">
-        {$view === "FOLDER"
-            ? $folderStore?.files.length
-            : $fileStore?.files.length}
+        {count}
     </p>
 {/if}
 

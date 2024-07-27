@@ -5,22 +5,35 @@ import {
     signUserOutPartial,
     loadAll,
     getRootFolder,
+    setSessionTimeout,
 } from "$lib/scripts/utils";
 import { getToken } from "$lib/scripts/login";
-import { pocketStore, HOME_PATH, setPocketState } from "$lib/scripts/stores";
+import {
+    pocketStore,
+    HOME_PATH,
+    setPocketState,
+    sessionTimeout,
+} from "$lib/scripts/stores";
 import { goto } from "$app/navigation";
 
 async function loadContent(parent: string) {
-    if (pocketStore.has(parent)) {
-        const data = pocketStore.get(parent);
-        return { ...data, parent };
+    try {
+        if (pocketStore.has(parent)) {
+            const data = pocketStore.get(parent);
+            return { ...data, parent };
+        }
+        const [folders, files] = await loadAll(parent, getToken());
+        if (folders && files) {
+            pocketStore.set(parent, {
+                folders,
+                files,
+            });
+            return { folders, files, parent };
+        }
+    } catch (error) {
+        console.log("erored,", error);
+        sessionTimeout.set(true);
     }
-    const [folders, files] = await loadAll(parent, getToken());
-    pocketStore.set(parent, {
-        folders,
-        files,
-    });
-    return { folders, files, parent };
 }
 
 export const load = (async ({ params }) => {
