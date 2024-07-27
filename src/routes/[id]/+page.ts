@@ -5,18 +5,16 @@ import {
     signUserOutPartial,
     loadAll,
     getRootFolder,
-    fetchSingle,
 } from "$lib/scripts/utils";
 import { getToken } from "$lib/scripts/login";
 import {
     isLoggedin,
     sessionTimeout,
     pocketStore,
-    pocketState,
     HOME_PATH,
+    setPocketState,
 } from "$lib/scripts/stores";
 import { get } from "svelte/store";
-import { redirect } from "@sveltejs/kit";
 import { goto } from "$app/navigation";
 
 async function loadContent(parent: string) {
@@ -38,7 +36,7 @@ export const load = (async ({ params, fetch }) => {
             if (!get(isLoggedin)) {
                 isLoggedin.set(false);
                 signUserOutPartial();
-                pocketState.set(params.id);
+                setPocketState(params?.id);
                 goto("/", { replaceState: true });
                 return;
             }

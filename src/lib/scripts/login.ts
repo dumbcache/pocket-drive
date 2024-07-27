@@ -1,8 +1,8 @@
 import {
     activeTimeout,
+    getPocketState,
     HOME_PATH,
     isLoggedin,
-    pocketState,
 } from "$lib/scripts/stores";
 import { get } from "svelte/store";
 import { PUBLIC_KRAB_CLIENT_ID } from "$env/static/public";
@@ -38,7 +38,7 @@ async function handleGoogleSignIn(tokenResponse: TokenResponse) {
     }
     if (get(isLoggedin)) return;
     isLoggedin.set(true);
-    let state = get(pocketState) || HOME_PATH;
+    let state = getPocketState() || HOME_PATH;
     goto(`/${state}`, { replaceState: true });
 }
 

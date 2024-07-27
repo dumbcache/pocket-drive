@@ -8,12 +8,12 @@
         fileStore,
         folderStore,
         mode,
-        pocketState,
         mask,
         storeSnap,
         fetchAll,
         refresh,
         setViewContext,
+        setPocketState,
     } from "$lib/scripts/stores";
     import Content from "$lib/components/Content.svelte";
     import Tools from "$lib/components/Tools.svelte";
@@ -160,7 +160,7 @@
                     })
                     .catch(console.warn);
             }
-            pocketState.set(parent);
+            setPocketState(parent);
         } catch (error) {
             console.warn("afterNavigate function error", error);
         }

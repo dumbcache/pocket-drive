@@ -2,12 +2,7 @@
     import { navigating } from "$app/stores";
     import { browser } from "$app/environment";
     import Spinner from "$lib/components/utils/Spinner.svelte";
-    import {
-        HOME_PATH,
-        pocketState,
-        progress,
-        theme,
-    } from "$lib/scripts/stores";
+    import { progress } from "$lib/scripts/stores";
     import { onDestroy, onMount } from "svelte";
     import "./app.css";
     import type { Unsubscriber } from "svelte/store";
@@ -26,10 +21,6 @@
     let progressUnsubscribe: Unsubscriber;
 
     if (browser) {
-        pocketStateUnsubscribe = pocketState.subscribe((val) => {
-            window.localStorage.setItem("pocketState", val ?? HOME_PATH);
-        });
-
         navigatingUnsubscribe = navigating.subscribe((val) => {
             val ? disableScrolling() : enableScorlling();
         });

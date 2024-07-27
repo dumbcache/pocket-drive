@@ -13,7 +13,6 @@ import {
     pocketStore,
     imageCache,
     imageFetchLog,
-    pocketState,
     updateProgressStore,
     starred,
     mask,
@@ -22,6 +21,7 @@ import {
     theme,
     profile,
     shortcuts,
+    setPocketState,
 } from "$lib/scripts/stores";
 import { clearToken, getToken } from "$lib/scripts/login";
 import ChildWorker from "$lib/scripts/worker.ts?worker";
@@ -140,7 +140,7 @@ export function signUserOutPartial() {
 
 export async function signUserOut() {
     await clearFiles();
-    pocketState.set(null);
+    setPocketState();
     console.info("logging user out");
 }
 
