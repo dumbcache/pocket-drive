@@ -148,7 +148,7 @@
         try {
             if (from?.url?.href === to?.url?.href) return;
             renderAll = false;
-            // storeSnap(get(fileStore),get(folderStore),get(activeParent));
+            storeSnap(get(fileStore), get(folderStore), get(activeParent));
         } catch (error) {
             console.warn(error);
         }

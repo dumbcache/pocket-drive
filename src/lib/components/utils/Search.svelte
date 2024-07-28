@@ -98,7 +98,7 @@
     {/if}
 </div>
 
-<section class="folder-container">
+<section class="search-results">
     {#if searchFolders && searchFolders.length > 0}
         <ol class="list">
             {#each searchFolders as file (file.id)}
@@ -108,7 +108,7 @@
             {/each}
         </ol>
     {:else}
-        <p class="no-content">No Content</p>
+        <p class="no-content">No Results</p>
     {/if}
 </section>
 
@@ -160,8 +160,8 @@
         background-color: var(--color-bg-one);
     }
     /* #search:focus {
-        background-color: var(--color-bg-two);
-    } */
+        background-color: var(--color-bg-one);
+    }  */
 
     .list {
         display: flex;
