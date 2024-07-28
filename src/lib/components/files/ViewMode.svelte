@@ -12,12 +12,13 @@
     import zoomInIcon from "$lib/assets/zoomIn.svg?raw";
     import zoomOutIcon from "$lib/assets/zoomOut.svg?raw";
     import expandIcon from "$lib/assets/expand.svg?raw";
+    import downloadIcon from "$lib/assets/download.svg?raw";
     import urlIcon from "$lib/assets/url.svg?raw";
     import { enableScorlling, fetchImgPreview } from "$lib/scripts/utils";
     import Info from "$lib/components/files/Info.svelte";
     import Spinner from "$lib/components/utils/Spinner.svelte";
     import FileNav from "$lib/components/files/FileNav.svelte";
-    import Favorite from "../utils/Favorite.svelte";
+    import Favorite from "$lib/components/utils/Favorite.svelte";
 
     export let files: File[];
     let infoVisible = false;
@@ -159,6 +160,10 @@
                                 target.src = imageCache.get(id);
                             }
                         }
+                    } else {
+                        let target = entry.target as HTMLVideoElement;
+                        if (target.localName !== "video") return;
+                        target.pause();
                     }
                 });
             },
@@ -263,6 +268,14 @@
                 class="btn s-second url">{@html urlIcon}</a
             >
         {/if}
+        <a
+            href={$activeImage.thumbnailLink}
+            download={$activeImage.name}
+            class="btn s-prime"
+            target="_blank"
+            rel="noopener noreferrer"
+            title="download">{@html downloadIcon}</a
+        >
         <Favorite
             id={$activeImage.id}
             starred={$activeImage.starred}
@@ -378,7 +391,7 @@
     .spinner {
         position: absolute;
         z-index: 10;
-        top: 20rem;
+        top: 25rem;
         right: 3rem;
         display: none;
     }
