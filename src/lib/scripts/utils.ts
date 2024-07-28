@@ -792,4 +792,10 @@ if (browser) {
     globalThis.addEventListener("offline", () => {
         window.alert("No Internet connection");
     });
+
+    navigator.serviceWorker.addEventListener("message", (event) => {
+        if (event.data && event.data.type === "SHARED_FILES") {
+            window.alert("message received");
+        }
+    });
 }

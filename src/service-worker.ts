@@ -33,7 +33,54 @@ sw.addEventListener("activate", (e) => {
     e.waitUntil(deleteOldCaches());
 });
 
+async function handleShareTarget(event) {
+    try {
+        const formData = await event.request.formData();
+        const title = formData.get("title");
+        const text = formData.get("text");
+        const url = formData.get("url");
+        const files = formData.getAll("file");
+
+        const fileData = files.map((file) => ({
+            title,
+            text,
+            url,
+            fileName: file.name,
+            fileType: file.type,
+            fileContent: file.arrayBuffer(),
+        }));
+
+        // Await all fileContent promises to resolve
+        await Promise.all(
+            fileData.map(async (fd) => {
+                fd.fileContent = await fd.fileContent;
+            })
+        );
+
+        // Send a message to the client with the shared data
+        const clients = await self.clients.matchAll({
+            includeUncontrolled: true,
+        });
+        for (const client of clients) {
+            client.postMessage({
+                type: "SHARED_FILES",
+                data: fileData,
+            });
+        }
+
+        // Redirect to a page where you can display the received files
+        return Response.redirect("/display.html");
+    } catch (error) {
+        console.error("Error handling share target:", error);
+        return new Response("Error handling share target", { status: 500 });
+    }
+}
+
 sw.addEventListener("fetch", (e) => {
+    if (e.request.url.endsWith("/share-target")) {
+        e.respondWith(handleShareTarget(e));
+        return;
+    }
     if (e.request.method !== "GET") return;
     if (e.request.mode === "navigate") return;
     const url = new URL(e.request.url);
