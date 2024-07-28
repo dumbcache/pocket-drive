@@ -51,6 +51,7 @@
                 }),
             };
         });
+        activeImage.set(file);
     }
     function handleCancel() {
         name = $activeImage.name;
@@ -153,7 +154,6 @@
     }
     input {
         background: unset;
-        padding: 0.5rem;
         border: none;
         /* border-bottom: 1px solid var(--color-focus); */
         background-color: var(--color-bg-two);
@@ -163,7 +163,7 @@
     }
     input:active,
     input:focus {
-        background-color: var(--color-bg-three);
+        /* background-color: var(--color-bg-three); */
         border-bottom: 2px solid var(--color-focus);
         outline: none;
     }

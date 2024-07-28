@@ -32,6 +32,20 @@
             previewAndSetDropItems(files);
         }
     }
+    function handlePaste(e: ClipboardEvent) {
+        const clipboardItems = e.clipboardData?.items;
+        if (!clipboardItems) return;
+        for (const item of clipboardItems) {
+            if (item.type.match("image/")) {
+                const file = item.getAsFile();
+                if (file) {
+                    const dataTransfer = new DataTransfer();
+                    dataTransfer.items.add(file);
+                    previewAndSetDropItems(dataTransfer.files);
+                }
+            }
+        }
+    }
 
     function handleUnload(e) {
         if ($dropItems.length > 0) {
@@ -77,6 +91,7 @@
     on:keydown
     on:beforeunload={handleUnload}
     on:storage={handleSession}
+    on:paste={handlePaste}
 />
 
 <div

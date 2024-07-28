@@ -27,7 +27,7 @@ import {
 import { clearToken, getToken } from "$lib/scripts/login";
 import ChildWorker from "$lib/scripts/worker.ts?worker";
 import { clearDropItems } from "$lib/scripts/image";
-import { goto, replaceState } from "$app/navigation";
+import { goto } from "$app/navigation";
 
 export let childWorker: Worker;
 

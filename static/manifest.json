@@ -33,21 +33,21 @@
     "display": "standalone",
     "screenshots": [
         {
-            "src": "/screenshots/mobile-screenshot.png",
+            "src": "/screenshots/mobile-screenshot.webp",
             "sizes": "535x1132",
-            "type": "image/png",
+            "type": "image/webp",
             "form_factor": "narrow"
         },
         {
-            "src": "/screenshots/desktop-screenshot.png",
+            "src": "/screenshots/desktop-screenshot.webp",
             "sizes": "1563x898",
-            "type": "image/png",
+            "type": "image/webp",
             "form_factor": "wide"
         },
         {
-            "src": "/screenshots/desktop-screenshot.png",
+            "src": "/screenshots/desktop-screenshot.webp",
             "sizes": "1563x898",
-            "type": "image/png"
+            "type": "image/webp"
         }
     ],
     "share_target": {

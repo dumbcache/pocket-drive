@@ -94,8 +94,8 @@
         width: 100%;
         border: none;
         outline: none;
-        border-bottom-left-radius: 0.5rem;
-        border-bottom-right-radius: 0.5rem;
+        border-top-left-radius: 0.5rem;
+        border-top-right-radius: 0.5rem;
         padding: 0.5rem;
         font-size: 1.6rem;
         color: var(--color);
@@ -106,7 +106,7 @@
     .drop :global(input:disabled:hover),
     .drop :global(input:disabled) {
         background-color: var(--color-bg-one);
-        color: #666;
+        color: var(--color-five);
         cursor: not-allowed;
         border-bottom: none;
     }
