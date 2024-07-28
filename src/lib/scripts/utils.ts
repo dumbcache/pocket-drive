@@ -22,6 +22,7 @@ import {
     shortcuts,
     setPocketState,
     CACHE_DATA,
+    activeImage,
 } from "$lib/scripts/stores";
 import { clearToken, getToken } from "$lib/scripts/login";
 import ChildWorker from "$lib/scripts/worker.ts?worker";
@@ -527,6 +528,7 @@ export function setPreviewFile(id: string, url: string) {
             ele.src = url;
         }, 1000);
     }
+    activeImage.update((prev) => ({ ...prev, download: url }));
     ele.nextElementSibling.style.display = "none";
 }
 
@@ -793,9 +795,9 @@ if (browser) {
         window.alert("No Internet connection");
     });
 
-    navigator.serviceWorker.addEventListener("message", (event) => {
-        if (event.data && event.data.type === "SHARED_FILES") {
-            window.alert("message received");
-        }
-    });
+    // navigator.serviceWorker.addEventListener("message", (event) => {
+    //     if (event.data && event.data.type === "SHARED_FILES") {
+    //         window.alert("message received");
+    //     }
+    // });
 }

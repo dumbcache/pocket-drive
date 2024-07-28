@@ -19,6 +19,7 @@
     import Spinner from "$lib/components/utils/Spinner.svelte";
     import FileNav from "$lib/components/files/FileNav.svelte";
     import Favorite from "$lib/components/utils/Favorite.svelte";
+    import { get } from "svelte/store";
 
     export let files: File[];
     let infoVisible = false;
@@ -140,24 +141,28 @@
                         let { id, src } = target.dataset;
                         if (!id) return;
                         if (!target.src && src) target.src = src;
-                        if ($activeImage.id !== id) {
+                        if (get(activeImage).id !== id) {
                             const [file] = files.filter(
                                 (file) => file.id === id
                             );
                             activeImage.set(file);
                         }
-                        if (!imageCache.has(id)) {
-                            if (!imageFetchLog.has(id)) {
-                                // $previewLoading = true;
+                        if (target.src.startsWith("blob:")) {
+                            activeImage.update((prev) => ({
+                                ...prev,
+                                download: target.src,
+                            }));
+                            return;
+                        } else {
+                            if (imageCache.has(id)) {
+                                target.src = imageCache.get(id);
+                            } else {
+                                if (imageFetchLog.has(id)) return;
                                 target.nextElementSibling.style.display =
                                     "initial";
                                 fetchImgPreview(id);
                                 imageFetchLog.add(id);
                                 return;
-                            }
-                        } else {
-                            if (!target.src.startsWith("blob:")) {
-                                target.src = imageCache.get(id);
                             }
                         }
                     } else {
@@ -261,6 +266,16 @@
         </div>
     {/if} -->
     <div class="action" class:expand>
+        {#if $activeImage?.download}
+            <a
+                href={$activeImage.download}
+                download={$activeImage.name}
+                class="btn s-prime"
+                target="_blank"
+                rel="noopener noreferrer"
+                title="download">{@html downloadIcon}</a
+            >
+        {/if}
         {#if $activeImage?.description}
             <a
                 title="go to website"
@@ -268,14 +283,6 @@
                 class="btn s-second url">{@html urlIcon}</a
             >
         {/if}
-        <a
-            href={$activeImage.thumbnailLink}
-            download={$activeImage.name}
-            class="btn s-prime"
-            target="_blank"
-            rel="noopener noreferrer"
-            title="download">{@html downloadIcon}</a
-        >
         <Favorite
             id={$activeImage.id}
             starred={$activeImage.starred}

@@ -100,6 +100,7 @@
         if (target === navigation) return;
         target.localName !== "img" && (target = target.querySelector("img"));
         const { id } = target.dataset;
+        if (id === active) return;
         const [file] = files.filter((file) => file.id === id);
         activeImage.set(file);
         dispatch("change", { id });
