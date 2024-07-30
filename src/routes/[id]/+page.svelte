@@ -99,7 +99,7 @@
             },
             accessToken
         );
-        if (parent !== data.parent) {
+        if (parent !== data.info.id) {
             foldersFetching = false;
             return;
         }
@@ -122,7 +122,7 @@
             { parent: parent, mimeType: IMG_MIME_TYPE, pageToken: pToken },
             accessToken
         );
-        if (parent !== data.parent) {
+        if (parent !== data.info.id) {
             filesFetching = false;
             return;
         }
