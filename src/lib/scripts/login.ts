@@ -4,6 +4,7 @@ import { PUBLIC_KRAB_CLIENT_ID } from "$env/static/public";
 import { setSessionTimeout, createRootFolder } from "$lib/scripts/utils";
 import { goto } from "$app/navigation";
 import { browser } from "$app/environment";
+import { page } from "$app/stores";
 
 let client = null;
 let token: string = "";
@@ -32,7 +33,7 @@ async function handleGoogleSignIn(tokenResponse: TokenResponse) {
         }
     }
     let state = getPocketState();
-    goto(`/${state}`, { replaceState: true });
+    if (!get(page).params?.id) goto(`/${state}`, { replaceState: true });
 }
 
 function initClient() {
