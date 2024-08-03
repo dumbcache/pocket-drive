@@ -16,6 +16,8 @@
         fetchSingle,
         moveSingle,
         getRoot,
+        disableScrolling,
+        enableScorlling,
     } from "$lib/scripts/utils";
     import { getToken } from "$lib/scripts/login";
 
@@ -106,7 +108,8 @@
             parents: [selectedParent],
         });
     }
-    function setRecents() {
+    function setRecents(e) {
+        e.stopPropagation();
         let temp = [...recents];
         if (recents.length > 0) {
             let item = temp.shift();
@@ -165,78 +168,76 @@
         let items = window.localStorage.getItem("recents");
         recents = JSON.parse(items);
         recents ?? (recents = []);
+        disableScrolling();
     });
     onDestroy(() => {
+        enableScorlling();
         window.localStorage.setItem("recents", JSON.stringify(recents));
     });
 </script>
 
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
-    class="move"
-    on:keydown|stopPropagation
-    on:wheel|preventDefault
-    on:click={() => {
+    class="wrapper"
+    onkeydown={(e) => e.stopPropagation()}
+    onclick={() => {
         dispatchClose();
         $folderAction = undefined;
     }}
 >
     {#if !$progress}
         <!-- svelte-ignore a11y-no-static-element-interactions -->
-        <div
-            class="wrapper"
-            on:click|stopPropagation={() => (listVisible = false)}
-            on:keydown
-            on:wheel|preventDefault
-        >
-            <div class="nav">
+        <!-- svelte-ignore a11y_click_events_have_key_events -->
+        <div class="folder-select" onclick={(e) => e.stopPropagation()}>
+            <section class="nav">
                 <button
                     class="btn root"
                     title="root"
-                    on:click|stopPropagation={() => fetchInfo(root)}>/R</button
+                    onclick={(e) => {
+                        e.stopPropagation();
+                        fetchInfo(root);
+                    }}>/R</button
                 >
                 {#if selectedId !== root}
                     <button
                         class="btn s-prime prev"
                         title="previous"
-                        on:click|stopPropagation={() => {
+                        onclick={(e) => {
+                            e.stopPropagation();
                             fetchInfo(selectedParent);
                         }}>{@html beforeIcon}</button
                     >
                 {/if}
-            </div>
-            <div class="selection">
+            </section>
+            <section class="selection-wrapper">
                 <div class="label">Select destination folder</div>
-                <button
-                    class="selected"
-                    data-id={selectedId}
-                    on:click|stopPropagation={() =>
-                        (listVisible = !listVisible)}
-                >
-                    <div class="selected-text">
+                <div class="selection">
+                    <button
+                        class="selected"
+                        data-id={selectedId}
+                        onclick={(e) => {
+                            e.stopPropagation();
+                            listVisible = !listVisible;
+                        }}
+                    >
                         {selectedName}
-                    </div>
+                    </button>
                     <button
                         class="done-button btn s-prime"
                         disabled={selectedId === $activeParent.id}
-                        on:click={okHandler}>{@html doneIcon}</button
+                        onclick={okHandler}
                     >
-                    {#if recents?.length > 0}
+                        {@html doneIcon}
+                    </button>{#if recents?.length > 0}
                         <button
                             class="btn s-second history-button"
                             title="history"
-                            on:click|stopPropagation={setRecents}
-                            >{@html historyIcon}</button
+                            onclick={setRecents}>{@html historyIcon}</button
                         >
                     {/if}
                     {#if listVisible}
                         <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
-                        <ol
-                            class="list"
-                            on:keydown
-                            on:click|stopPropagation={selectFolder}
-                            on:wheel|stopPropagation
-                        >
+                        <ol class="list" onclick={selectFolder}>
                             {#if tempFolderStore?.files}
                                 {#if tempFolderStore.files.length > 0}
                                     {#each tempFolderStore.files as file}
@@ -248,14 +249,14 @@
                             {/if}
                         </ol>
                     {/if}
-                </button>
-            </div>
+                </div>
+            </section>
         </div>
     {/if}
 </div>
 
 <style>
-    .move {
+    .wrapper {
         position: fixed;
         top: 0;
         bottom: 0;
@@ -265,24 +266,10 @@
         place-content: center;
         background-color: var(--color-backdrop);
         z-index: 3;
-        user-select: none;
         font-size: var(--size-smaller);
     }
-    .nav {
-        display: flex;
-        flex-flow: column;
-        gap: 1rem;
-        align-items: center;
-        min-width: 2.8rem;
-    }
-    .root {
-        color: var(--color-red-dark);
-    }
-    .prev :global(svg) {
-        fill: var(--color-red-dark);
-    }
-    .wrapper {
-        /* outline: 2px solid var(--color-focus); */
+
+    .folder-select {
         padding: 4rem 2rem;
         border-radius: 1rem;
         display: flex;
@@ -291,18 +278,36 @@
         background-color: var(--color-bg-one);
         gap: 2rem;
     }
-    .label {
-        text-align: start;
-        color: var(--color-one);
+    .nav {
+        display: flex;
+        flex-flow: column;
+        gap: 1rem;
+        align-items: center;
+        min-width: 2.8rem;
     }
-    .selection {
+    .selection-wrapper {
         position: relative;
-        border-radius: 1rem;
         display: flex;
         flex-flow: column;
         width: 25rem;
         gap: 2rem;
     }
+    .selection,
+    .selected {
+        width: 100%;
+        position: relative;
+    }
+    .root {
+        color: var(--color-red-dark);
+    }
+    .prev :global(svg) {
+        fill: var(--color-red-dark);
+    }
+
+    .label {
+        color: var(--color-one);
+    }
+
     button {
         text-align: start;
         cursor: pointer;
@@ -358,23 +363,12 @@
         overflow: hidden;
         text-overflow: ellipsis;
     }
-    .list-item:not(:last-child) {
-        /* border-bottom: 1px solid var(--color-border); */
-        /* border-bottom: 1px solid var(--color); */
-    }
-    .selected-text {
-        word-wrap: unset;
-        white-space: nowrap;
-        overflow-x: hidden;
-        text-overflow: ellipsis;
-        padding-right: 3rem;
-    }
     .list-item:hover {
         filter: none;
         background-color: var(--color-bg-four);
     }
     @media (max-width: 600px) {
-        .wrapper {
+        .folder-select {
             gap: 1rem;
         }
         .selected {

@@ -1,7 +1,5 @@
 <script>
-    export let borderWidth = "5px";
-    export let width = "5rem";
-    export let height = "5rem";
+    let { borderWidth = "5px", width = "5rem", height = "5rem" } = $props();
 </script>
 
 <div
