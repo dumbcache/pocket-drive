@@ -28,7 +28,7 @@
     //         (file) => file.id !== $folderActionDetail.id
     //     ));
 
-    let tempFolderStore: GoogleFileResponse;
+    let tempFolderStore: GoogleDriveResponse;
     onMount(() => {
         fetchChildren(selectedId);
     });

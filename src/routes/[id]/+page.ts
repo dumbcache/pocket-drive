@@ -18,14 +18,14 @@ async function loadContent(parent: string) {
             return { ...data };
         }
         const [folders, files] = await loadAll(parent, getToken());
-        const info = await fetchSingle(parent, "FOLDER", getToken());
-        if (folders && files && info) {
+        const activeFolder = await fetchSingle(parent, "FOLDER", getToken());
+        if (folders && files && activeFolder) {
             pocketStore.set(parent, {
                 folders,
                 files,
-                info,
+                activeFolder,
             });
-            return { folders, files, info };
+            return { folders, files, activeFolder };
         }
     } catch (error) {
         console.log("erored,", error);

@@ -36,19 +36,6 @@ export function updateProgressStore(t = 0, s = 0, f = 0) {
 }
 
 export let profile = writable(false);
-export let preferences = writable<Preferences>({
-    showFileNames: false,
-    disableWebp: false,
-});
-export function updatePreferences(p: Preferences) {
-    preferences.update((val) => {
-        return {
-            ...val,
-            ...p,
-        };
-    });
-}
-
 export let activeView = writable<"FILE" | "FOLDER">("FOLDER");
 export function setViewContext() {
     setContext("view", activeView);
@@ -57,16 +44,10 @@ export function getViewContext(): typeof activeView {
     return getContext("view");
 }
 
-export let folderStore = writable<GoogleFileResponse | undefined>();
-export let fileStore = writable<GoogleFileResponse | undefined>();
+export let folderStore = writable<GoogleDriveResponse | undefined>();
+export let fileStore = writable<GoogleDriveResponse | undefined>();
 export let recentStore = writable<{ name: string; id: string }[]>([]);
-export let searchItems = writable<GoogleFile[] | undefined>();
-
-export let preview = writable<"IMAGE" | "VIDEO">("IMAGE");
-export let theme = writable<"dark" | "">("");
-
-export let activeTimeout = writable(0);
-export let sessionTimeout = writable(false);
+export let searchItems = writable<DriveFile[] | undefined>();
 
 export let refresh = writable(false);
 export let starred = writable(false);
@@ -76,30 +57,29 @@ export let mask = writable(false);
 export let fetchAll = writable(false);
 export let mode = writable("");
 export let shortcuts = writable(false);
-export let activeParent = writable<Folder>();
-export let activeImage = writable<GoogleFile>();
-export let activeFile = writable<string>();
+export let activeParent = writable<DriveFolder>();
+export let activeImage = writable<DriveFile>();
 export let dropItems = writable<DropItem[]>([]);
-export let editItems = writable<GoogleFile[]>([]);
+export let editItems = writable<DriveFile[]>([]);
 
 export let folderActionToggle = writable(false);
 export let folderAction = writable<FolderAction | undefined>();
 export let folderActionDetail = writable<FolderActionDetail | undefined>();
 
 export function storeSnap(
-    files?: GoogleFileResponse,
-    folders?: GoogleFileResponse,
-    info?: Folder
+    files?: GoogleDriveResponse,
+    folders?: GoogleDriveResponse,
+    activeFolder?: DriveFolder
 ) {
     try {
-        info ??= get(activeParent);
+        activeFolder ??= get(activeParent);
         folders ??= get(folderStore);
         files ??= get(fileStore);
         if (folders && files && parent) {
             pocketStore.set(parent, {
                 folders,
                 files,
-                info,
+                info: activeFolder,
             });
         }
     } catch (error) {

@@ -1,10 +1,11 @@
 <script lang="ts">
     import closeIcon from "$lib/assets/close.svg?raw";
-    import { activeTimeout, profile } from "$lib/scripts/stores";
+    import { profile } from "$lib/scripts/stores";
     import ColorScheme from "$lib/components/utils/ColorScheme.svelte";
     import Options from "$lib/components/profile/Options.svelte";
     import Logout from "$lib/components/profile/Logout.svelte";
     import SessionInfo from "$lib/components/profile/SessionInfo.svelte";
+    import { appStates } from "$lib/scripts/state.svelte";
 </script>
 
 <div class="profile" on:wheel|stopPropagation|preventDefault>
@@ -19,7 +20,7 @@
             <Options />
         </section>
         <section class="three">
-            {#key $activeTimeout}
+            {#key appStates.sessionTimeoutId}
                 <SessionInfo />
             {/key}
         </section>

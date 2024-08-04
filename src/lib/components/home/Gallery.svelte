@@ -7,7 +7,7 @@
     import pic2dark from "$lib/assets/about/pic2dark.webp";
     import pic3dark from "$lib/assets/about/pic3dark.webp";
     import pic4dark from "$lib/assets/about/pic4dark.webp";
-    import { theme } from "$lib/scripts/stores";
+    import { appPreferences } from "$lib/scripts/state.svelte";
 </script>
 
 <article class="article two">
@@ -15,7 +15,7 @@
     <section class="gallery-section">
         <figure class="gallery-item">
             <img
-                src={$theme === "" ? pic1 : pic1dark}
+                src={appPreferences.theme === "" ? pic1 : pic1dark}
                 class="pic pic11"
                 alt="UI desktop"
                 data-nosnippet
@@ -24,7 +24,7 @@
         </figure>
         <figure class="gallery-item">
             <img
-                src={$theme === "" ? pic2 : pic2dark}
+                src={appPreferences.theme === "" ? pic2 : pic2dark}
                 class="pic pic12"
                 alt="UI mobile"
                 data-nosnippet
@@ -33,7 +33,7 @@
         </figure>
         <figure class="gallery-item">
             <img
-                src={$theme === "" ? pic3 : pic3dark}
+                src={appPreferences.theme === "" ? pic3 : pic3dark}
                 class="pic pic13"
                 alt="View mode mobile"
                 data-nosnippet
@@ -42,7 +42,7 @@
         </figure>
         <figure class="gallery-item">
             <img
-                src={$theme === "" ? pic4 : pic4dark}
+                src={appPreferences.theme === "" ? pic4 : pic4dark}
                 class="pic pic14"
                 alt="View mode dektop"
                 data-nosnippet

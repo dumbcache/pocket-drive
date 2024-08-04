@@ -30,21 +30,26 @@
     import ScrollButton from "$lib/components/utils/ScrollButton.svelte";
     import FolderTitle from "$lib/components/utils/FolderTitle.svelte";
     import { get } from "svelte/store";
+    import { fdStore, fsStore } from "$lib/scripts/state.svelte";
 
-    export let data: {
-        folders: GoogleFileResponse;
-        files: GoogleFileResponse;
-        info: Folder;
-    };
-    $: folderStore.set(data.folders);
-    $: fileStore.set(data.files);
-    $: activeParent.set(data.info);
+    let { data }: { data: PageData } = $props();
+
+    $effect(() => {
+        if (data) {
+            fsStore.set(data.files);
+            fdStore.set(data.folders);
+        }
+    });
+
+    folderStore.set(data.folders);
+    fileStore.set(data.files);
+    activeParent.set(data.activeFolder);
 
     setViewContext();
 
-    let renderAll = false;
-    let foldersFetching = false;
-    let filesFetching = false;
+    let renderAll = $state(false);
+    let foldersFetching = $state(false);
+    let filesFetching = $state(false);
 
     function checks() {
         activeView.set("FOLDER");
@@ -99,7 +104,7 @@
             },
             accessToken
         );
-        if (parent !== data.info.id) {
+        if (parent !== data.activeFolder.id) {
             foldersFetching = false;
             return;
         }
@@ -122,7 +127,7 @@
             { parent: parent, mimeType: IMG_MIME_TYPE, pageToken: pToken },
             accessToken
         );
-        if (parent !== data.info.id) {
+        if (parent !== data.activeFolder.id) {
             filesFetching = false;
             return;
         }
@@ -136,7 +141,7 @@
     }
 
     async function fetchAllAtOnce() {
-        let parent = data.info.id;
+        let parent = data.activeFolder.id;
         let accessToken = getToken();
         fetchFolders(accessToken, parent);
         fetchFiles(accessToken, parent);

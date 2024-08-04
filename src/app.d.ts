@@ -25,24 +25,6 @@ declare global {
         pageSize?: number;
         pageToken?: string;
     }
-    interface GoogleFile {
-        id: string;
-        name: string;
-        description?: string;
-        starred?: Boolean;
-        parents?: string[];
-        thumbnailLink?: string;
-        appProperties?: {
-            origin: string;
-            src: string;
-        };
-        url?: string;
-    }
-
-    interface GoogleFileRes {
-        files: GoogleFile[];
-        nextPageToken?: string;
-    }
 
     interface ImgMeta {
         name?: string;
@@ -91,14 +73,14 @@ declare global {
         progress?: string;
         parent: string;
         parentName: string;
-        file: File;
+        file: DriveFile;
     }
 
     interface DropItems {
         [id: number]: DropItem;
     }
 
-    interface File {
+    interface DriveFile {
         id: string;
         name: string;
         description: string;
@@ -108,18 +90,24 @@ declare global {
         mimeType: string;
         size: string;
     }
-    interface Folder {
+    interface DriveFolder {
         id: string;
         name: string;
         parents: string[];
         starred: Boolean;
     }
 
-    type FileResponse = File[] | Folder[];
+    type FileResponse = DriveFile[] | DriveFolder[];
 
-    interface GoogleFileResponse {
-        files: FileResponse;
+    interface GoogleDriveResponse<T> {
+        files: T[];
         nextPageToken?: string;
+    }
+
+    interface PageData {
+        folders: GoogleDriveResponse<DriveFolder>;
+        files: GoogleDriveResponse<DriveFile>;
+        activeFolder: DriveFolder;
     }
 
     type FolderAction = "EDIT" | "DELETE" | "MOVE" | "CREATE";

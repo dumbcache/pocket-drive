@@ -1,8 +1,8 @@
 <script lang="ts">
     import lightModeIcon from "$lib/assets/lightMode.svg?raw";
     import darkModeIcon from "$lib/assets/darkMode.svg?raw";
-    import { theme } from "$lib/scripts/stores";
     import { toggleTheme } from "$lib/scripts/utils";
+    import { appPreferences } from "$lib/scripts/state.svelte";
 </script>
 
 <button
@@ -11,10 +11,10 @@
     title="toggle theme"
     role="switch"
     aria-label="Toggle dark mode"
-    aria-checked={$theme === "" ? "false" : "true"}
+    aria-checked={appPreferences.theme === "" ? "false" : "true"}
     on:click={toggleTheme}
 >
-    {#if $theme === ""}
+    {#if appPreferences.theme === ""}
         {@html lightModeIcon}
     {:else}
         {@html darkModeIcon}

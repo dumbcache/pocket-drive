@@ -1,12 +1,8 @@
-import {
-    activeParent,
-    autosave,
-    dropItems,
-    preferences,
-} from "$lib/scripts/stores";
+import { activeParent, autosave, dropItems } from "$lib/scripts/stores";
 import { childWorker, getRoot } from "$lib/scripts/utils";
 import { getToken } from "$lib/scripts/login";
 import { get } from "svelte/store";
+import { appPreferences } from "$lib/scripts/state.svelte";
 
 export function previewAndSetDropItems(
     files: FileList,
@@ -18,7 +14,7 @@ export function previewAndSetDropItems(
         const imgRef = URL.createObjectURL(file);
         if (file.type.match("image/")) {
             if (
-                get(preferences).disableWebp ||
+                appPreferences.disableWebp ||
                 file.type === "image/gif" ||
                 file.type === "image/avif" ||
                 file.type === "image/webp"

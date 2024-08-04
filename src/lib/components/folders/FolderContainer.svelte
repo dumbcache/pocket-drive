@@ -1,33 +1,39 @@
 <script lang="ts">
-    import { onDestroy } from "svelte";
+    // import { onDestroy } from "svelte";
     import {
-        folderStore,
+        // folderStore,
         folderAction,
-        refresh,
+        // refresh,
         mode,
     } from "$lib/scripts/stores";
     import Folder from "$lib/components/folders/Folder.svelte";
     import ActionForm from "$lib/components/folders/ActionForm.svelte";
     import FolderSelect from "$lib/components/folders/FolderSelect.svelte";
     import Container from "$lib/components/Container.svelte";
+    import { fdStore } from "$lib/scripts/state.svelte";
 
-    export let observer: IntersectionObserver;
+    let { observer }: { observer: IntersectionObserver } = $props();
 
-    let files: FileResponse | undefined;
+    // let files: DriveFolder[] = fdStore.files;
 
-    let unsubscribeFolderStore = folderStore.subscribe((data) => {
-        if (data) {
-            files = data?.files;
-        }
-    });
+    // let unsubscribeFolderStore = folderStore.subscribe((data) => {
+    //     if (data) {
+    //         files = data?.files;
+    //     }
+    // });
 
-    onDestroy(() => {
-        unsubscribeFolderStore();
-    });
+    // onDestroy(() => {
+    //     unsubscribeFolderStore();
+    // });
 </script>
 
 <!-- {#key $refresh} -->
-<Container {files} view="FOLDER" component={Folder} footObserver={observer} />
+<Container
+    files={fdStore.files}
+    view="FOLDER"
+    component={Folder}
+    footObserver={observer}
+/>
 <!-- {/key} -->
 
 {#if $folderAction && $mode !== "search"}

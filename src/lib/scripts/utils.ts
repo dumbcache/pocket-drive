@@ -1,8 +1,6 @@
 import { browser } from "$app/environment";
 import { get } from "svelte/store";
 import {
-    activeTimeout,
-    sessionTimeout,
     mode,
     activeView,
     fileStore,
@@ -17,7 +15,6 @@ import {
     mask,
     fetchAll,
     folderStore,
-    theme,
     profile,
     shortcuts,
     setPocketState,
@@ -28,6 +25,7 @@ import { clearToken, getToken } from "$lib/scripts/login";
 import ChildWorker from "$lib/scripts/worker.ts?worker";
 import { clearDropItems } from "$lib/scripts/image";
 import { goto } from "$app/navigation";
+import { appPreferences, appStates } from "$lib/scripts/state.svelte";
 
 export let childWorker: Worker;
 
@@ -108,7 +106,7 @@ export function checkNetworkError(error: Error) {
 
 export function setTheme(t?: string) {
     let preferredtheme = t ?? window.localStorage.getItem("theme") ?? "";
-    theme.set(preferredtheme as "" | "dark");
+    appPreferences.toggleTheme(preferredtheme as "" | "dark");
     const root = document.documentElement;
     let dark = root.classList.contains("dark");
     switch (preferredtheme) {
@@ -122,7 +120,7 @@ export function setTheme(t?: string) {
 }
 
 export function toggleTheme() {
-    let newTheme = get(theme) === "" ? "dark" : "";
+    let newTheme = appPreferences.theme === "" ? "dark" : "";
     window.localStorage.setItem("theme", newTheme);
     setTheme(newTheme);
 }
@@ -178,19 +176,17 @@ export function setSessionTimeout(expires?: number) {
     }
 
     let time = expires - Date.now();
-    clearTimeout(get(activeTimeout));
+    clearTimeout(appStates.sessionTimeoutId);
     if (time > 0) {
-        sessionTimeout.set(false);
-        activeTimeout.set(
-            setTimeout(() => {
-                clearToken();
-                sessionTimeout.set(true);
-                console.log("session timed out");
-            }, time)
-        );
+        appStates.sessionTimeout = false;
+        appStates.sessionTimeoutId = setTimeout(() => {
+            clearToken();
+            appStates.sessionTimeout = true;
+            console.log("session timed out");
+        }, time);
     } else {
         clearToken();
-        sessionTimeout.set(true);
+        appStates.sessionTimeout = true;
     }
 }
 
@@ -302,7 +298,8 @@ export const createFolder = async (
             data
         );
         if (status === 401) {
-            get(sessionTimeout) === false && sessionTimeout.set(true);
+            appStates.sessionTimeout === false &&
+                (appStates.sessionTimeout = true);
             return;
         }
     }
@@ -341,7 +338,8 @@ export const deleteFolder = async (
             await req.text()
         );
         if (status === 401) {
-            get(sessionTimeout) === false && sessionTimeout.set(true);
+            appStates.sessionTimeout === false &&
+                (appStates.sessionTimeout = true);
             return;
         }
     }
@@ -412,7 +410,7 @@ export async function fetchMultiple(
     accessToken: string,
     updateCache: Boolean = false,
     stopNewReq: Boolean = false
-): Promise<GoogleFileResponse> {
+): Promise<GoogleDriveResponse> {
     return new Promise(async (resolve, reject) => {
         const req = constructRequest(params, accessToken);
         try {
@@ -429,7 +427,7 @@ export async function fetchMultiple(
             reject(res);
             return;
         }
-        resolve(res?.json() as Promise<GoogleFileResponse>);
+        resolve(res?.json() as Promise<GoogleDriveResponse>);
         return;
     });
 }
@@ -438,7 +436,7 @@ export async function fetchSingle(
     id: string,
     mimeType: "FOLDER" | "IMG",
     accessToken: string
-): Promise<GoogleFile> {
+): Promise<DriveFile> {
     let req = new Request(
         `${FILE_API}/${id}?fields=${
             mimeType === "FOLDER" ? FIELDS_FOLDER : FIELDS_IMG
@@ -492,7 +490,7 @@ export const updateSingle = async (
 export const loadAll = (
     parent: string,
     accessToken: string
-): Promise<GoogleFileResponse[]> => {
+): Promise<GoogleDriveResponse[]> => {
     return new Promise(async (resolve, reject) => {
         const proms = [
             fetchMultiple({ parent, mimeType: FOLDER_MIME_TYPE }, accessToken),

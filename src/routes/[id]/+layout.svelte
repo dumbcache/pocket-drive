@@ -11,9 +11,7 @@
         dropItems,
         mode,
         pocketStore,
-        sessionTimeout,
         profile,
-        preferences,
         shortcuts,
     } from "$lib/scripts/stores";
     import { requestToken } from "$lib/scripts/login";
@@ -21,6 +19,7 @@
     import ProgressBar from "$lib/components/utils/ProgressBar.svelte";
     import Profile from "$lib/components/profile/Profile.svelte";
     import Shortcuts from "$lib/components/Shortcuts.svelte";
+    import { appPreferences, appStates } from "$lib/scripts/state.svelte";
 
     let draggedOver = false;
 
@@ -62,14 +61,14 @@
         try {
             if (e.key === "token") {
                 if (e.newValue) {
-                    sessionTimeout.set(false);
+                    appStates.sessionTimeout = false;
                 } else {
-                    sessionTimeout.set(true);
+                    appStates.sessionTimeout = true;
                 }
                 return;
             }
             if (e.key === "preferences") {
-                e.newValue && preferences.set(JSON.parse(e.newValue));
+                e.newValue && appPreferences.set(JSON.parse(e.newValue));
             }
         } catch (error) {
             console.warn(error);
@@ -123,7 +122,7 @@
         <Shortcuts />
     {/if}
     <ProgressBar />
-    {#if $sessionTimeout}
+    {#if appStates.sessionTimeout}
         <div class="session-notify" on:wheel|preventDefault>
             <div class="session-wrapper">
                 <p>Your session has been expired. Click login to continue</p>
