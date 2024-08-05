@@ -1,4 +1,4 @@
-import { activeParent, dropItems } from "$lib/scripts/stores";
+import { activeFolder, dropItems } from "$lib/scripts/stores";
 import { childWorker, getRoot } from "$lib/scripts/utils";
 import { getToken } from "$lib/scripts/login";
 import { get } from "svelte/store";
@@ -25,8 +25,8 @@ export function previewAndSetDropItems(
                     mimeType: file.type,
                     file,
                     imgRef,
-                    parent: parent || get(activeParent).id,
-                    parentName: parentName || get(activeParent).name,
+                    parent: parent || get(activeFolder).id,
+                    parentName: parentName || get(activeFolder).name,
                 };
                 dropItems.set([...get(dropItems), item]);
                 if (appStates.autosave) {
@@ -52,8 +52,8 @@ export function previewAndSetDropItems(
                             mimeType: file.type,
                             file: blob,
                             imgRef,
-                            parent: parent || get(activeParent).id,
-                            parentName: parentName || get(activeParent).name,
+                            parent: parent || get(activeFolder).id,
+                            parentName: parentName || get(activeFolder).name,
                         };
                         dropItems.set([...get(dropItems), item]);
                         if (appStates.autosave) {
@@ -75,8 +75,8 @@ export function previewAndSetDropItems(
                 mimeType: file.type,
                 file,
                 imgRef,
-                parent: parent || get(activeParent).id,
-                parentName: parentName || get(activeParent).name,
+                parent: parent || get(activeFolder).id,
+                parentName: parentName || get(activeFolder).name,
             };
             dropItems.set([...get(dropItems), item]);
             // if (get(autosave)) {

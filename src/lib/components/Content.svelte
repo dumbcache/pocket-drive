@@ -2,7 +2,7 @@
     import { onMount } from "svelte";
     import FileContainer from "$lib/components/files/FileContainer.svelte";
     import FolderContainer from "$lib/components/folders/FolderContainer.svelte";
-    import { activeParent, fileStore, folderStore } from "$lib/scripts/stores";
+    import { activeFolder, fileStore, folderStore } from "$lib/scripts/stores";
     import {
         FOLDER_MIME_TYPE,
         fetchMultiple,
@@ -46,7 +46,7 @@
                         if (nextPageToken) {
                             fetchMultiple(
                                 {
-                                    parent: $activeParent.id,
+                                    parent: $activeFolder.id,
                                     mimeType: mimeType,
                                     pageToken: nextPageToken,
                                 },

@@ -3,9 +3,16 @@ export class AppStore<T> {
     files = $state<T[]>([]);
 
     set(data: GoogleDriveResponse<T>) {
-        console.log(data);
+        // console.log(data);
         this.nextPageToken = data?.nextPageToken;
         this.files = data.files;
+    }
+
+    get() {
+        return {
+            nextPageToken: this.nextPageToken,
+            files: this.files,
+        };
     }
 }
 export const fsStore = new AppStore<DriveFile>();
@@ -42,6 +49,7 @@ export class AppStates {
     starred = $state(false);
     profile = $state(false);
     refresh = $state(false);
+    fetchall = $state(false);
     autosave = $state(false);
     progress = $state(false);
     shortcuts = $state(false);

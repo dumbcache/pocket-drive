@@ -2,8 +2,8 @@
     import urlIcon from "$lib/assets/url.svg?raw";
     import playIcon from "$lib/assets/play.svg?raw";
     import { isValidUrl } from "$lib/scripts/utils";
-    import { mode } from "$lib/scripts/stores";
     import Favorite from "$lib/components/utils/Favorite.svelte";
+    import { appStates } from "$lib/scripts/state.svelte";
 
     export let visible: Boolean;
     export let file: File;
@@ -15,14 +15,14 @@
     class="card"
     title={file.name}
     class:select={selected}
-    class:edit-mode={$mode === "edit"}
+    class:edit-mode={appStates.mode === "edit"}
 >
     {#if visible}
         <img
             src={file.thumbnailLink}
             data-id={file.id}
             alt=""
-            class="img {$mode === 'delete' ? 'delete' : ''}"
+            class="img {appStates.mode === 'delete' ? 'delete' : ''}"
             loading="lazy"
             height="200"
             width="200"
@@ -33,7 +33,7 @@
         {#if file.mimeType.match("video/")}
             <div class="play">{@html playIcon}</div>
         {/if}
-        {#if $mode !== "edit"}
+        {#if appStates.mode !== "edit"}
             {#if file.description}
                 <a
                     href={isValidUrl(file.description)}

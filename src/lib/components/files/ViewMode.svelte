@@ -5,7 +5,6 @@
         fileStore,
         imageCache,
         imageFetchLog,
-        mode,
     } from "$lib/scripts/stores";
     import closeIcon from "$lib/assets/close.svg?raw";
     import infoIcon from "$lib/assets/arrowLeftDouble.svg?raw";
@@ -20,6 +19,7 @@
     import FileNav from "$lib/components/files/FileNav.svelte";
     import Favorite from "$lib/components/utils/Favorite.svelte";
     import { get } from "svelte/store";
+    import { appStates } from "$lib/scripts/state.svelte";
 
     export let files: DriveFile[];
     let infoVisible = false;
@@ -257,7 +257,7 @@
             </section>
         {/if}
     </artcle>
-    <button class="btn s-prime close" on:click={() => mode.set("")}
+    <button class="btn s-prime close" on:click={() => (appStates.mode = "")}
         >{@html closeIcon}</button
     >
     <!-- {#if $previewLoading}

@@ -1,5 +1,5 @@
 <script>
-    import { activeParent, HOME_PATH } from "$lib/scripts/stores";
+    import { activeFolder, HOME_PATH } from "$lib/scripts/stores";
     import Tools from "$lib/components/Tools.svelte";
     import { onMount } from "svelte";
     import BackButton from "$lib/components/utils/BackButton.svelte";
@@ -40,7 +40,7 @@
             >{@html helpIcon}</button
         >
         <a
-            href={`https://drive.google.com/drive/folders/${$activeParent?.id}`}
+            href={`https://drive.google.com/drive/folders/${$activeFolder?.id}`}
             referrerpolicy="no-referrer"
             rel="external noopener noreferrer nofollow"
             class="btn s-prime"

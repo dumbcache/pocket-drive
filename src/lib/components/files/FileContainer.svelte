@@ -1,12 +1,20 @@
 <script lang="ts">
-    import { mode } from "$lib/scripts/stores";
     import File from "$lib/components/files/File.svelte";
     import ViewMode from "$lib/components/files/ViewMode.svelte";
     import Container from "$lib/components/Container.svelte";
-    import { appPreferences, fsStore } from "$lib/scripts/state.svelte";
+    import {
+        appPreferences,
+        appStates,
+        fsStore,
+    } from "$lib/scripts/state.svelte";
+    import FetchAll from "$lib/components/utils/FetchAll.svelte";
 
     let { observer }: { observer: IntersectionObserver | undefined } = $props();
 </script>
+
+{#if fsStore?.nextPageToken}
+    <FetchAll view="FILE" />
+{/if}
 
 <!-- {#key $refresh} -->
 <Container
@@ -18,6 +26,6 @@
 />
 <!-- {/key} -->
 
-{#if $mode === "view"}
+{#if appStates.mode === "view"}
     <ViewMode files={fsStore.files} />
 {/if}

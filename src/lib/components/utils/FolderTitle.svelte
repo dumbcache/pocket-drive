@@ -1,17 +1,17 @@
 <script>
-    import { activeParent } from "$lib/scripts/stores";
+    import { activeFolder } from "$lib/scripts/stores";
     import { getRoot } from "$lib/scripts/utils";
 </script>
 
-{#if $activeParent && $activeParent.name}
-    {#if $activeParent?.id !== getRoot() && $activeParent?.parents}
+{#if $activeFolder && $activeFolder.name}
+    {#if $activeFolder?.id !== getRoot() && $activeFolder?.parents}
         <a
             class="title-sub"
             title="go to parent"
-            href={$activeParent?.parents[0]}>./</a
+            href={$activeFolder?.parents[0]}>./</a
         >
     {/if}
-    {$activeParent?.name}
+    {$activeFolder?.name}
 {/if}
 
 <style>

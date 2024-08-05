@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { activeImage, fileStore, mode } from "$lib/scripts/stores";
+    import { activeImage, fileStore } from "$lib/scripts/stores";
     import { onMount } from "svelte";
     import Edit from "$lib/components/Edit.svelte";
     import Folder from "$lib/components/folders/Folder.svelte";
@@ -100,7 +100,7 @@
         if (!target) return;
         let { id, index, size } = target?.dataset;
         if (!id) return;
-        switch (get(mode)) {
+        switch (appStates.mode) {
             case "edit":
                 if (e.shiftKey) {
                     index = Number(index);
@@ -132,7 +132,7 @@
                     (file) => file.id === id
                 );
                 activeImage.set(file);
-                mode.set("view");
+                appStates.mode = "view";
                 disableScrolling();
                 return;
         }
@@ -176,7 +176,7 @@
     });
 </script>
 
-{#if $mode === "edit" && appStates.view === view}
+{#if appStates.mode === "edit" && appStates.view === view}
     <Edit
         {view}
         {set}
@@ -191,7 +191,7 @@
     <ol
         class="list"
         bind:this={container}
-        class:edit-mode={$mode === "edit"}
+        class:edit-mode={appStates.mode === "edit"}
         on:click={handleImageClick}
         on:keydown
     >

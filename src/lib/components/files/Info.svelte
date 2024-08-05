@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { activeImage, activeParent, fileStore } from "$lib/scripts/stores";
+    import { activeImage, activeFolder, fileStore } from "$lib/scripts/stores";
     import closeIcon from "$lib/assets/close.svg?raw";
     import { createEventDispatcher, onMount } from "svelte";
     import { getToken } from "$lib/scripts/login";
@@ -38,7 +38,7 @@
         changes = false;
         let file = { ...$activeImage, name, description };
         fetchMultiple(
-            { parent: $activeParent.id, mimeType: IMG_MIME_TYPE },
+            { parent: $activeFolder.id, mimeType: IMG_MIME_TYPE },
             getToken(),
             true
         );

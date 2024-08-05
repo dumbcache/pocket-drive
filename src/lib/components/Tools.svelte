@@ -3,15 +3,13 @@
     import folderCreate from "$lib/assets/folderCreate.svg?raw";
     import { previewAndSetDropItems } from "$lib/scripts/image";
     import {
-        activeParent,
-        fetchAll,
+        activeFolder,
         fileStore,
         folderAction,
         folderStore,
         pocketStore,
     } from "$lib/scripts/stores";
     import editIcon from "$lib/assets/editMode.svg?raw";
-    import { mode } from "$lib/scripts/stores";
     import folderIcon from "$lib/assets/folder.svg?raw";
     import fileIcon from "$lib/assets/file.svg?raw";
     import searchIcon from "$lib/assets/search.svg?raw";
@@ -43,7 +41,7 @@
     async function refreshHandler() {
         refreshing = true;
         const token = getToken();
-        const parent = $activeParent.id;
+        const parent = $activeFolder.id;
 
         fetchMultiple(
             { parent, mimeType: IMG_MIME_TYPE, pageSize: 3 },
@@ -76,12 +74,9 @@
             token,
             true
         );
-        if (parent === get(activeParent).id) {
+        if (parent === get(activeFolder).id) {
             folderStore.set(fd);
             fileStore.set(fs);
-            if ($fileStore?.nextPageToken || $folderStore?.nextPageToken) {
-                fetchAll.set(true);
-            }
         }
         appStates.refresh = !appStates.refresh;
         pocketStore.delete(parent);
@@ -103,7 +98,7 @@
     <button
         class="view btn s-prime"
         title="folders"
-        on:click={() => (appStates.view = "FOLDER")}
+        onclick={() => (appStates.view = "FOLDER")}
         class:active={appStates.view === "FOLDER"}
     >
         {@html folderIcon}
@@ -111,7 +106,7 @@
     <button
         class="view btn s-prime"
         title="files"
-        on:click={() => (appStates.view = "FILE")}
+        onclick={() => (appStates.view = "FILE")}
         class:active={appStates.view === "FILE"}
     >
         {@html fileIcon}
@@ -133,14 +128,14 @@
                 id="img-picker"
                 accept="image/*,video/*"
                 multiple
-                on:change={imgPickerHandler}
+                onchange={imgPickerHandler}
             />
         </button>
     {:else}
         <button
             class="btn s-prime"
             title="create folder"
-            on:click={() => folderAction.set("CREATE")}
+            onclick={() => folderAction.set("CREATE")}
         >
             {@html folderCreate}
         </button>
@@ -148,8 +143,8 @@
     <button
         class="btn s-prime"
         title="edit"
-        on:click={() => {
-            mode.set("edit");
+        onclick={() => {
+            appStates.mode = "edit";
         }}
     >
         {@html editIcon}
@@ -157,7 +152,7 @@
     <button
         class="btn s-prime"
         title="search folders"
-        on:click={() => mode.set($mode === "" ? "search" : "")}
+        onclick={() => (appStates.mode = appStates.mode === "" ? "search" : "")}
     >
         {@html searchIcon}
     </button>
@@ -165,7 +160,7 @@
         class="btn s-prime"
         title="favorites"
         class:favorites={appStates.starred}
-        on:click={() => (appStates.starred = !appStates.starred)}
+        onclick={() => (appStates.starred = !appStates.starred)}
     >
         {@html favoriteIcon}
     </button>
@@ -173,7 +168,7 @@
         class="btn s-prime"
         class:refreshing
         title="refresh"
-        on:click={refreshHandler}
+        onclick={refreshHandler}
     >
         {@html refreshIcon}
     </button>

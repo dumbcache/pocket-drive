@@ -110,6 +110,8 @@ declare global {
         activeFolder: DriveFolder;
     }
 
+    type View = "FILE" | "FOLDER";
+
     type FolderAction = "EDIT" | "DELETE" | "MOVE" | "CREATE";
     interface FolderActionDetail {
         id: string;

@@ -1,5 +1,5 @@
-import { getContext, setContext } from "svelte";
 import { get, writable } from "svelte/store";
+import { fdStore, fsStore } from "./state.svelte";
 
 export const HOME_PATH = "home";
 export const CACHE_DATA = "pd-data";
@@ -39,32 +39,27 @@ export let folderStore = writable<GoogleDriveResponse | undefined>();
 export let fileStore = writable<GoogleDriveResponse | undefined>();
 export let searchItems = writable<DriveFile[] | undefined>();
 
-export let fetchAll = writable(false);
-export let mode = writable("");
-export let activeParent = writable<DriveFolder>();
+export let activeFolder = writable<DriveFolder>();
 export let activeImage = writable<DriveFile>();
 export let dropItems = writable<DropItem[]>([]);
-export let editItems = writable<DriveFile[]>([]);
 
 export let folderActionToggle = writable(false);
 export let folderAction = writable<FolderAction | undefined>();
 export let folderActionDetail = writable<FolderActionDetail | undefined>();
 
 export function storeSnap(
-    files?: GoogleDriveResponse,
-    folders?: GoogleDriveResponse,
+    files?: GoogleDriveResponse<DriveFile>,
+    folders?: GoogleDriveResponse<DriveFolder>,
     activeFolder?: DriveFolder
 ) {
     try {
-        activeFolder ??= get(activeParent);
-        folders ??= get(folderStore);
-        files ??= get(fileStore);
-        if (folders && files && parent) {
-            pocketStore.set(parent, {
+        if (folders && files && activeFolder) {
+            pocketStore.set(activeFolder.id, {
                 folders,
                 files,
                 info: activeFolder,
             });
+            console.log(pocketStore);
         }
     } catch (error) {
         console.warn("storeSnap function error", error);

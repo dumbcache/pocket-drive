@@ -6,7 +6,7 @@
     import {
         folderAction,
         folderActionDetail,
-        activeParent,
+        activeFolder,
         folderStore,
     } from "$lib/scripts/stores";
     import {
@@ -33,9 +33,9 @@
         fetchChildren(selectedId);
     });
 
-    let selectedName = $activeParent?.name;
-    let selectedId = $activeParent?.id;
-    let selectedParent = $activeParent.parents && $activeParent.parents[0];
+    let selectedName = $activeFolder?.name;
+    let selectedId = $activeFolder?.id;
+    let selectedParent = $activeFolder.parents && $activeFolder.parents[0];
     let listVisible = false;
     let recents = [];
     let accessToken = getToken();
@@ -70,7 +70,7 @@
             };
         }
         if (type === "FOLDER") {
-            if (selectedId === $activeParent.id) {
+            if (selectedId === $activeFolder.id) {
                 tempFolderStore.files = tempFolderStore.files?.filter(
                     (file) => file.id !== $folderActionDetail?.id
                 );
@@ -145,13 +145,13 @@
             true
         );
         fetchMultiple(
-            { parent: $activeParent?.id, mimeType: FOLDER_MIME_TYPE },
+            { parent: $activeFolder?.id, mimeType: FOLDER_MIME_TYPE },
             accessToken,
             true
         );
         fetchMultiple(
             {
-                parent: $activeParent?.id,
+                parent: $activeFolder?.id,
                 mimeType: FOLDER_MIME_TYPE,
                 pageSize: 500,
             },
@@ -224,7 +224,7 @@
                     </button>
                     <button
                         class="done-button btn s-prime"
-                        disabled={selectedId === $activeParent.id}
+                        disabled={selectedId === $activeFolder.id}
                         onclick={okHandler}
                     >
                         {@html doneIcon}

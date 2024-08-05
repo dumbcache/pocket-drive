@@ -1,9 +1,5 @@
 <script lang="ts">
-    import {
-        activeParent,
-        mode,
-        updateProgressStore,
-    } from "$lib/scripts/stores";
+    import { activeFolder, updateProgressStore } from "$lib/scripts/stores";
     import closeIcon from "$lib/assets/close.svg?raw";
     import deleteIcon from "$lib/assets/delete.svg?raw";
     import moveIcon from "$lib/assets/move.svg?raw";
@@ -16,6 +12,7 @@
     import { childWorker, isValidUrl } from "$lib/scripts/utils";
     import { getToken } from "$lib/scripts/login";
     import { createEventDispatcher, onDestroy, onMount } from "svelte";
+    import { appStates } from "$lib/scripts/state.svelte";
 
     export let set: Set<string>,
         view: "FILE" | "FOLDER",
@@ -34,7 +31,7 @@
     const dispatch = createEventDispatcher();
 
     function close(type?: string) {
-        $mode = "";
+        appStates.mode = "";
         dispatch("close", { type });
     }
     function confirmAction() {
@@ -47,7 +44,7 @@
             context: "DELETE",
             ids: set,
             token: getToken(),
-            activeParent: $activeParent.id,
+            activeParent: $activeFolder.id,
             view,
         };
         childWorker.postMessage(workerMessage);
@@ -56,11 +53,11 @@
     }
 
     function moveToTop() {
-        $mode = "";
+        appStates.mode = "";
         updateProgressStore(set.size);
         workerMessage = {
             context: "TOP",
-            parent: $activeParent.id,
+            parent: $activeFolder.id,
             ids: set,
             token: getToken(),
         };
@@ -76,7 +73,7 @@
         workerMessage = {
             context: action,
             parent: selectedParent,
-            activeParent: $activeParent.id,
+            activeParent: $activeFolder.id,
             ids: set,
             token: getToken(),
             view,
@@ -97,7 +94,7 @@
         name?.trim() || (name = undefined);
         description?.trim() || (description = undefined);
         workerMessage = {
-            activeParent: $activeParent.id,
+            activeParent: $activeFolder.id,
             context: "EDIT",
             ids: set,
             imgMeta: { name, description },

@@ -1,7 +1,6 @@
 <script lang="ts">
     import FolderCover from "$lib/components/folders/FolderCover.svelte";
     import { appStates } from "$lib/scripts/state.svelte";
-    import { mode } from "$lib/scripts/stores";
     import Favorite from "../utils/Favorite.svelte";
 
     export let visible: Boolean;
@@ -12,7 +11,7 @@
 
 <div
     class="card"
-    class:edit-mode={$mode === "edit"}
+    class:edit-mode={appStates.mode === "edit"}
     role="listitem"
     on:dragstart|preventDefault
     data-id={file.id}
@@ -32,7 +31,7 @@
             />
         </div>
     </div>
-    {#if $mode === "edit"}
+    {#if appStates.mode === "edit"}
         <div class="mask"></div>
     {/if}
 </div>

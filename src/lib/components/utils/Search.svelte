@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { folderAction, folderStore, mode } from "$lib/scripts/stores";
+    import { folderAction, folderStore } from "$lib/scripts/stores";
     import { searchHandler } from "$lib/scripts/utils";
     import { getToken } from "$lib/scripts/login";
     import Folder from "$lib/components/folders/Folder.svelte";
@@ -7,6 +7,7 @@
     import Spinner from "$lib/components/utils/Spinner.svelte";
     import FolderSelect from "$lib/components/folders/FolderSelect.svelte";
     import ActionForm from "$lib/components/folders/ActionForm.svelte";
+    import { appStates } from "$lib/scripts/state.svelte";
 
     let global = false;
     let searchElement: HTMLInputElement;
@@ -47,13 +48,13 @@
         }
     }
 
-    const unsubscribeMode = mode.subscribe((data) => {
-        if (data === "") {
-            search = "";
-            global = false;
-            searchFolders = [];
-        }
-    });
+    // const unsubscribeMode = mode.subscribe((data) => {
+    //     if (data === "") {
+    //         search = "";
+    //         global = false;
+    //         searchFolders = [];
+    //     }
+    // });
     onMount(() => {
         setTimeout(() => {
             searchElement.focus();
@@ -112,7 +113,7 @@
     {/if}
 </section>
 
-{#if $folderAction && $mode === "search"}
+{#if $folderAction && appStates.mode === "search"}
     {#if $folderAction === "MOVE"}
         <FolderSelect type="FOLDER" />
     {:else}

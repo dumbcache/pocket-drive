@@ -1,15 +1,13 @@
 import { browser } from "$app/environment";
 import { get } from "svelte/store";
 import {
-    mode,
     fileStore,
-    activeParent,
+    activeFolder,
     dropItems,
     pocketStore,
     imageCache,
     imageFetchLog,
     updateProgressStore,
-    fetchAll,
     folderStore,
     setPocketState,
     CACHE_DATA,
@@ -386,7 +384,7 @@ export async function fetchMultiple(
     accessToken: string,
     updateCache: Boolean = false,
     stopNewReq: Boolean = false
-): Promise<GoogleDriveResponse> {
+): Promise<GoogleDriveResponse<DriveFolder | DriveFile>> {
     return new Promise(async (resolve, reject) => {
         const req = constructRequest(params, accessToken);
         try {
@@ -525,7 +523,7 @@ if (browser) {
 
             case "EDIT":
                 let imgMeta = data.imgMeta;
-                if (aParent === get(activeParent).id) {
+                if (aParent === get(activeFolder).id) {
                     fileStore.update((prev) => ({
                         nextPageToken: prev?.nextPageToken,
                         files: prev?.files.map((file) => {
@@ -555,7 +553,6 @@ if (browser) {
                 ).then((files) => {
                     if (data?.context === "TOP") {
                         fileStore.set(files);
-                        files.nextPageToken && fetchAll.set(true);
                     }
 
                     if (pocketStore.has(parent)) {
@@ -574,7 +571,7 @@ if (browser) {
             case "MOVE":
             case "DELETE":
                 success = new Set(success);
-                let currentActiveParent = get(activeParent).id;
+                let currentActiveParent = get(activeFolder).id;
                 if (aParent === currentActiveParent) {
                     if (view === "FILE") {
                         fileStore.update((prev) => ({
@@ -592,7 +589,7 @@ if (browser) {
                         }));
                     }
                 } else {
-                    pocketStore.delete(activeParent);
+                    pocketStore.delete(activeFolder);
                 }
                 parent && pocketStore.delete(parent);
 
@@ -675,7 +672,7 @@ if (browser) {
                         getToken(),
                         true
                     );
-                    if (parent === get(activeParent).id) {
+                    if (parent === get(activeFolder).id) {
                         fileStore.set(res);
                     } else {
                         pocketStore.delete(parent);
@@ -723,7 +720,7 @@ if (browser) {
         if (e.ctrlKey) return;
         switch (e.key) {
             case "Escape":
-                if (get(mode) !== "edit") mode.set("");
+                if (appStates.mode !== "edit") appStates.mode = "";
                 appStates.profile = false;
                 appStates.shortcuts = false;
                 return;
@@ -749,7 +746,7 @@ if (browser) {
                 return;
 
             case "E":
-                mode.set("edit");
+                appStates.mode = "edit";
                 return;
 
             case "h":
@@ -759,7 +756,7 @@ if (browser) {
 
             case "s":
             case "S":
-                mode.set("search");
+                appStates.mode = "search";
                 return;
         }
     });

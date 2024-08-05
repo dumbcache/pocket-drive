@@ -2,7 +2,7 @@
     import { onDestroy, onMount } from "svelte";
     import doneIcon from "$lib/assets/done.svg?raw";
     import {
-        activeParent,
+        activeFolder,
         folderAction,
         folderActionDetail,
         folderStore,
@@ -48,7 +48,7 @@
         const token = getToken();
         let folderName = toTitleCase(placeholder);
         type !== "DELETE" && (placeholder = folderName);
-        let parent = $activeParent.id;
+        let parent = $activeFolder.id;
         if (type === "CREATE") {
             const data = await createFolder(folderName, parent, token);
             folderStore.update((prev) => {
