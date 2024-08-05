@@ -2,7 +2,7 @@ import { activeFolder, dropItems } from "$lib/scripts/stores";
 import { childWorker, getRoot } from "$lib/scripts/utils";
 import { getToken } from "$lib/scripts/login";
 import { get } from "svelte/store";
-import { appPreferences, appStates } from "$lib/scripts/state.svelte";
+import { preferences, states } from "$lib/scripts/state.svelte";
 
 export function previewAndSetDropItems(
     files: FileList,
@@ -14,7 +14,7 @@ export function previewAndSetDropItems(
         const imgRef = URL.createObjectURL(file);
         if (file.type.match("image/")) {
             if (
-                appPreferences.disableWebp ||
+                preferences.disableWebp ||
                 file.type === "image/gif" ||
                 file.type === "image/avif" ||
                 file.type === "image/webp"
@@ -29,7 +29,7 @@ export function previewAndSetDropItems(
                     parentName: parentName || get(activeFolder).name,
                 };
                 dropItems.set([...get(dropItems), item]);
-                if (appStates.autosave) {
+                if (states.autosave) {
                     setTimeout(() => autosaveItem(item), 500);
                 }
             } else {
@@ -56,7 +56,7 @@ export function previewAndSetDropItems(
                             parentName: parentName || get(activeFolder).name,
                         };
                         dropItems.set([...get(dropItems), item]);
-                        if (appStates.autosave) {
+                        if (states.autosave) {
                             setTimeout(() => autosaveItem(item), 500);
                         }
                     }, "image/webp");

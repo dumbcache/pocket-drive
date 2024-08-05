@@ -19,7 +19,7 @@
     import FileNav from "$lib/components/files/FileNav.svelte";
     import Favorite from "$lib/components/utils/Favorite.svelte";
     import { get } from "svelte/store";
-    import { appStates } from "$lib/scripts/state.svelte";
+    import { states } from "$lib/scripts/state.svelte";
 
     export let files: DriveFile[];
     let infoVisible = false;
@@ -257,7 +257,7 @@
             </section>
         {/if}
     </artcle>
-    <button class="btn s-prime close" on:click={() => (appStates.mode = "")}
+    <button class="btn s-prime close" on:click={() => (states.mode = "")}
         >{@html closeIcon}</button
     >
     <!-- {#if $previewLoading}

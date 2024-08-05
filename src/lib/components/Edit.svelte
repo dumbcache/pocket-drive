@@ -12,7 +12,7 @@
     import { childWorker, isValidUrl } from "$lib/scripts/utils";
     import { getToken } from "$lib/scripts/login";
     import { createEventDispatcher, onDestroy, onMount } from "svelte";
-    import { appStates } from "$lib/scripts/state.svelte";
+    import { states } from "$lib/scripts/state.svelte";
 
     export let set: Set<string>,
         view: "FILE" | "FOLDER",
@@ -31,7 +31,7 @@
     const dispatch = createEventDispatcher();
 
     function close(type?: string) {
-        appStates.mode = "";
+        states.mode = "";
         dispatch("close", { type });
     }
     function confirmAction() {
@@ -53,7 +53,7 @@
     }
 
     function moveToTop() {
-        appStates.mode = "";
+        states.mode = "";
         updateProgressStore(set.size);
         workerMessage = {
             context: "TOP",

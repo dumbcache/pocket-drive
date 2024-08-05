@@ -112,6 +112,8 @@ declare global {
 
     type View = "FILE" | "FOLDER";
 
+    type Mode = "" | "VIEW" | "EDIT" | "SEARCH" | "DELETE";
+
     type FolderAction = "EDIT" | "DELETE" | "MOVE" | "CREATE";
     interface FolderActionDetail {
         id: string;
@@ -119,8 +121,9 @@ declare global {
     }
 
     interface Preferences {
-        showFileNames?: Boolean;
-        disableWebp?: Boolean;
+        showFileNames: boolean;
+        disableWebp: boolean;
+        theme: "DARK" | "";
     }
 
     type Action =

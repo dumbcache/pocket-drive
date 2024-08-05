@@ -1,15 +1,15 @@
 <script>
     import ToggleButton from "$lib/components/utils/ToggleButton.svelte";
     import { onDestroy } from "svelte";
-    import { appPreferences } from "$lib/scripts/state.svelte";
+    import { preferences } from "$lib/scripts/state.svelte";
 
     onDestroy(() => {
         window.localStorage.setItem(
             "preferences",
             JSON.stringify({
-                showFileNames: appPreferences.showFileNames,
-                disableWebp: appPreferences.disableWebp,
-                theme: appPreferences.theme,
+                showFileNames: preferences.showFileNames,
+                disableWebp: preferences.disableWebp,
+                theme: preferences.theme,
             })
         );
     });
@@ -18,14 +18,14 @@
 <ul class="options">
     <li>
         <div>Display filenames</div>
-        <button onclick={() => appPreferences.toggleShowFileNames()}>
-            <ToggleButton bool={appPreferences.showFileNames} />
+        <button onclick={() => preferences.toggleShowFileNames()}>
+            <ToggleButton bool={preferences.showFileNames} />
         </button>
     </li>
     <li>
         <div>Disable WebP conversion</div>
-        <button onclick={() => appPreferences.toggleWebp()}>
-            <ToggleButton bool={appPreferences.disableWebp} />
+        <button onclick={() => preferences.toggleWebp()}>
+            <ToggleButton bool={preferences.disableWebp} />
         </button>
     </li>
 </ul>

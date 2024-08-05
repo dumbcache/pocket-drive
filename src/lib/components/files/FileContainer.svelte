@@ -2,11 +2,7 @@
     import File from "$lib/components/files/File.svelte";
     import ViewMode from "$lib/components/files/ViewMode.svelte";
     import Container from "$lib/components/Container.svelte";
-    import {
-        appPreferences,
-        appStates,
-        fsStore,
-    } from "$lib/scripts/state.svelte";
+    import { preferences, states, fsStore } from "$lib/scripts/state.svelte";
     import FetchAll from "$lib/components/utils/FetchAll.svelte";
 
     let { observer }: { observer: IntersectionObserver | undefined } = $props();
@@ -22,10 +18,10 @@
     view="FILE"
     component={File}
     footObserver={observer}
-    showFileNames={appPreferences.showFileNames}
+    showFileNames={preferences.showFileNames}
 />
 <!-- {/key} -->
 
-{#if appStates.mode === "view"}
+{#if states.mode === "VIEW"}
     <ViewMode files={fsStore.files} />
 {/if}

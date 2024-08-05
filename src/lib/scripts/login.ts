@@ -5,7 +5,7 @@ import { setSessionTimeout, createRootFolder } from "$lib/scripts/utils";
 import { goto } from "$app/navigation";
 import { browser } from "$app/environment";
 import { page } from "$app/stores";
-import { appStates } from "./state.svelte";
+import { states } from "./state.svelte";
 
 let client = null;
 let token: string = "";
@@ -16,7 +16,7 @@ if (browser) {
 async function handleGoogleSignIn(tokenResponse: TokenResponse) {
     token = tokenResponse.access_token;
     window.localStorage.setItem("token", token);
-    clearTimeout(appStates.sessionTimeoutId);
+    clearTimeout(states.sessionTimeoutId);
     setSessionTimeout(tokenResponse.expires_in);
     if (!window.localStorage.getItem("root")) {
         const res = await fetch(

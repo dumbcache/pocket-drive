@@ -1,6 +1,6 @@
 <script lang="ts">
     import FolderCover from "$lib/components/folders/FolderCover.svelte";
-    import { appStates } from "$lib/scripts/state.svelte";
+    import { states } from "$lib/scripts/state.svelte";
     import Favorite from "../utils/Favorite.svelte";
 
     export let visible: Boolean;
@@ -11,14 +11,14 @@
 
 <div
     class="card"
-    class:edit-mode={appStates.mode === "edit"}
+    class:edit-mode={states.mode === "EDIT"}
     role="listitem"
     on:dragstart|preventDefault
     data-id={file.id}
 >
     <!-- on:mouseleave={closePeak}
     on:mouseenter={displayPeak} -->
-    {#key appStates.refresh}
+    {#key states.refresh}
         <FolderCover id={file.id} name={file.name} {toolsVisible} {visible} />
     {/key}
     <div class="title-wrapper">
@@ -31,7 +31,7 @@
             />
         </div>
     </div>
-    {#if appStates.mode === "edit"}
+    {#if states.mode === "EDIT"}
         <div class="mask"></div>
     {/if}
 </div>

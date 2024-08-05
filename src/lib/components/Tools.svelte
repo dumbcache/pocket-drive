@@ -25,7 +25,7 @@
     import { navigating } from "$app/stores";
     import { onDestroy } from "svelte";
     import { get } from "svelte/store";
-    import { appStates } from "$lib/scripts/state.svelte";
+    import { states } from "$lib/scripts/state.svelte";
 
     let view: "FILE" | "FOLDER";
     let refreshing = false;
@@ -78,14 +78,14 @@
             folderStore.set(fd);
             fileStore.set(fs);
         }
-        appStates.refresh = !appStates.refresh;
+        states.refresh = !states.refresh;
         pocketStore.delete(parent);
         refreshing = false;
     }
 
     const unsubscribeNavigation = navigating.subscribe((val) => {
         if (!val) {
-            appStates.starred = false;
+            states.starred = false;
         }
     });
 
@@ -98,22 +98,22 @@
     <button
         class="view btn s-prime"
         title="folders"
-        onclick={() => (appStates.view = "FOLDER")}
-        class:active={appStates.view === "FOLDER"}
+        onclick={() => (states.view = "FOLDER")}
+        class:active={states.view === "FOLDER"}
     >
         {@html folderIcon}
     </button>
     <button
         class="view btn s-prime"
         title="files"
-        onclick={() => (appStates.view = "FILE")}
-        class:active={appStates.view === "FILE"}
+        onclick={() => (states.view = "FILE")}
+        class:active={states.view === "FILE"}
     >
         {@html fileIcon}
     </button>
     <hr class="hr" />
 
-    {#if appStates.view === "FILE"}
+    {#if states.view === "FILE"}
         <button class="img-picker btn s-prime">
             <label
                 for="img-picker"
@@ -144,7 +144,7 @@
         class="btn s-prime"
         title="edit"
         onclick={() => {
-            appStates.mode = "edit";
+            states.mode = "EDIT";
         }}
     >
         {@html editIcon}
@@ -152,15 +152,15 @@
     <button
         class="btn s-prime"
         title="search folders"
-        onclick={() => (appStates.mode = appStates.mode === "" ? "search" : "")}
+        onclick={() => (states.mode = states.mode === "" ? "SEARCH" : "")}
     >
         {@html searchIcon}
     </button>
     <button
         class="btn s-prime"
         title="favorites"
-        class:favorites={appStates.starred}
-        onclick={() => (appStates.starred = !appStates.starred)}
+        class:favorites={states.starred}
+        onclick={() => (states.starred = !states.starred)}
     >
         {@html favoriteIcon}
     </button>

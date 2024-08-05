@@ -21,7 +21,7 @@ export const fdStore = new AppStore<DriveFolder>();
 export class AppPreferences {
     showFileNames = $state(false);
     disableWebp = $state(false);
-    theme = $state<"dark" | "">("");
+    theme = $state<"DARK" | "">("");
 
     toggleShowFileNames() {
         this.showFileNames = !this.showFileNames;
@@ -31,21 +31,21 @@ export class AppPreferences {
         this.disableWebp = !this.disableWebp;
     }
 
-    toggleTheme(theme: "dark" | "") {
+    toggleTheme(theme: "DARK" | "") {
         this.theme = theme;
     }
 
-    set({ showFileNames, disableWebp, theme }) {
+    set({ showFileNames, disableWebp, theme }: Preferences) {
         this.showFileNames = showFileNames;
         this.disableWebp = disableWebp;
         this.theme = theme;
     }
 }
-export const appPreferences = new AppPreferences();
+export const preferences = new AppPreferences();
 
 export class AppStates {
     view = $state<"FILE" | "FOLDER">("FOLDER");
-    mode = $state("");
+    mode = $state<Mode>("");
     starred = $state(false);
     profile = $state(false);
     refresh = $state(false);
@@ -58,4 +58,4 @@ export class AppStates {
     sessionTimeoutId = $state<number>();
 }
 
-export const appStates = new AppStates();
+export const states = new AppStates();

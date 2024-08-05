@@ -17,7 +17,7 @@ import { clearToken, getToken } from "$lib/scripts/login";
 import ChildWorker from "$lib/scripts/worker.ts?worker";
 import { clearDropItems } from "$lib/scripts/image";
 import { goto } from "$app/navigation";
-import { appPreferences, appStates } from "$lib/scripts/state.svelte";
+import { preferences, states } from "$lib/scripts/state.svelte";
 
 export let childWorker: Worker;
 
@@ -98,7 +98,7 @@ export function checkNetworkError(error: Error) {
 
 export function setTheme(t?: string) {
     let preferredtheme = t ?? window.localStorage.getItem("theme") ?? "";
-    appPreferences.toggleTheme(preferredtheme as "" | "dark");
+    preferences.toggleTheme(preferredtheme as "" | "dark");
     const root = document.documentElement;
     let dark = root.classList.contains("dark");
     switch (preferredtheme) {
@@ -112,7 +112,7 @@ export function setTheme(t?: string) {
 }
 
 export function toggleTheme() {
-    let newTheme = appPreferences.theme === "" ? "dark" : "";
+    let newTheme = preferences.theme === "" ? "DARK" : "";
     window.localStorage.setItem("theme", newTheme);
     setTheme(newTheme);
 }
@@ -154,7 +154,7 @@ export async function signUserOut() {
     window.localStorage.setItem("preferences", preferences);
     clearSessionStorage();
     setPocketState();
-    appStates.profile = false;
+    states.profile = false;
     goto("/");
     console.info("logging user out");
 }
@@ -168,17 +168,17 @@ export function setSessionTimeout(expires?: number) {
     }
 
     let time = expires - Date.now();
-    clearTimeout(appStates.sessionTimeoutId);
+    clearTimeout(states.sessionTimeoutId);
     if (time > 0) {
-        appStates.sessionTimeout = false;
-        appStates.sessionTimeoutId = setTimeout(() => {
+        states.sessionTimeout = false;
+        states.sessionTimeoutId = setTimeout(() => {
             clearToken();
-            appStates.sessionTimeout = true;
+            states.sessionTimeout = true;
             console.log("session timed out");
         }, time);
     } else {
         clearToken();
-        appStates.sessionTimeout = true;
+        states.sessionTimeout = true;
     }
 }
 
@@ -272,8 +272,7 @@ export const createFolder = async (
             data
         );
         if (status === 401) {
-            appStates.sessionTimeout === false &&
-                (appStates.sessionTimeout = true);
+            states.sessionTimeout === false && (states.sessionTimeout = true);
             return;
         }
     }
@@ -312,8 +311,7 @@ export const deleteFolder = async (
             await req.text()
         );
         if (status === 401) {
-            appStates.sessionTimeout === false &&
-                (appStates.sessionTimeout = true);
+            states.sessionTimeout === false && (states.sessionTimeout = true);
             return;
         }
     }
@@ -720,14 +718,14 @@ if (browser) {
         if (e.ctrlKey) return;
         switch (e.key) {
             case "Escape":
-                if (appStates.mode !== "edit") appStates.mode = "";
-                appStates.profile = false;
-                appStates.shortcuts = false;
+                if (states.mode !== "EDIT") states.mode = "";
+                states.profile = false;
+                states.shortcuts = false;
                 return;
 
             case "a":
             case "A":
-                appStates.mask = !appStates.mask;
+                states.mask = !states.mask;
                 return;
 
             case "c":
@@ -737,26 +735,25 @@ if (browser) {
 
             case "d":
             case "D":
-                appStates.starred = !appStates.starred;
+                states.starred = !states.starred;
                 return;
 
             case "e":
-                appStates.view =
-                    appStates.view === "FOLDER" ? "FILE" : "FOLDER";
+                states.view = states.view === "FOLDER" ? "FILE" : "FOLDER";
                 return;
 
             case "E":
-                appStates.mode = "edit";
+                states.mode = "EDIT";
                 return;
 
             case "h":
             case "H":
-                appStates.shortcuts = !appStates.shortcuts;
+                states.shortcuts = !states.shortcuts;
                 return;
 
             case "s":
             case "S":
-                appStates.mode = "search";
+                states.mode = "SEARCH";
                 return;
         }
     });

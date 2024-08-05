@@ -11,7 +11,7 @@
         enableScorlling,
         setTheme,
     } from "$lib/scripts/utils";
-    import { appStates } from "$lib/scripts/state.svelte";
+    import { states } from "$lib/scripts/state.svelte";
 
     let homeIcon = "";
     let startup: HTMLDivElement;
@@ -59,7 +59,7 @@
     });
 </script>
 
-{#if $navigating || appStates.progress}
+{#if $navigating || states.progress}
     <div class="loading">
         <Spinner />
     </div>

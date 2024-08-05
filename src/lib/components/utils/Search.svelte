@@ -7,7 +7,7 @@
     import Spinner from "$lib/components/utils/Spinner.svelte";
     import FolderSelect from "$lib/components/folders/FolderSelect.svelte";
     import ActionForm from "$lib/components/folders/ActionForm.svelte";
-    import { appStates } from "$lib/scripts/state.svelte";
+    import { states } from "$lib/scripts/state.svelte";
 
     let global = false;
     let searchElement: HTMLInputElement;
@@ -113,7 +113,7 @@
     {/if}
 </section>
 
-{#if $folderAction && appStates.mode === "search"}
+{#if $folderAction && states.mode === "SEARCH"}
     {#if $folderAction === "MOVE"}
         <FolderSelect type="FOLDER" />
     {:else}

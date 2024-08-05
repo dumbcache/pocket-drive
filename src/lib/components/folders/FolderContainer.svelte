@@ -4,7 +4,7 @@
     import ActionForm from "$lib/components/folders/ActionForm.svelte";
     import FolderSelect from "$lib/components/folders/FolderSelect.svelte";
     import Container from "$lib/components/Container.svelte";
-    import { appStates, fdStore } from "$lib/scripts/state.svelte";
+    import { states, fdStore } from "$lib/scripts/state.svelte";
     import FetchAll from "$lib/components/utils/FetchAll.svelte";
 
     let { observer }: { observer: IntersectionObserver | undefined } = $props();
@@ -23,7 +23,7 @@
 />
 <!-- {/key} -->
 
-{#if $folderAction && appStates.mode !== "search"}
+{#if $folderAction && states.mode !== "SEARCH"}
     {#if $folderAction === "MOVE"}
         <FolderSelect type="FOLDER" />
     {:else}

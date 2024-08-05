@@ -9,7 +9,7 @@
     import { disableScrolling } from "$lib/scripts/utils";
     import imgCreate from "$lib/assets/imgCreate.svg?raw";
     import folderCreate from "$lib/assets/folderCreate.svg?raw";
-    import { appStates } from "$lib/scripts/state.svelte";
+    import { states } from "$lib/scripts/state.svelte";
 
     export let files: FileResponse | undefined;
     export let view: "FILE" | "FOLDER";
@@ -100,7 +100,7 @@
         if (!target) return;
         let { id, index, size } = target?.dataset;
         if (!id) return;
-        switch (appStates.mode) {
+        switch (states.mode) {
             case "edit":
                 if (e.shiftKey) {
                     index = Number(index);
@@ -132,7 +132,7 @@
                     (file) => file.id === id
                 );
                 activeImage.set(file);
-                appStates.mode = "view";
+                states.mode = "VIEW";
                 disableScrolling();
                 return;
         }
@@ -176,7 +176,7 @@
     });
 </script>
 
-{#if appStates.mode === "edit" && appStates.view === view}
+{#if states.mode === "EDIT" && states.view === view}
     <Edit
         {view}
         {set}
@@ -191,7 +191,7 @@
     <ol
         class="list"
         bind:this={container}
-        class:edit-mode={appStates.mode === "edit"}
+        class:edit-mode={states.mode === "EDIT"}
         on:click={handleImageClick}
         on:keydown
     >
@@ -202,8 +202,7 @@
                 data-size={file?.size}
                 data-starred={file.starred}
                 class:select={allSelected}
-                style:display={appStates.starred === true &&
-                file.starred === false
+                style:display={states.starred === true && file.starred === false
                     ? "none"
                     : "initial"}
             >

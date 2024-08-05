@@ -1,13 +1,7 @@
 <script lang="ts">
-    import { onDestroy, onMount } from "svelte";
-    import { navigating } from "$app/stores";
-    import { beforeNavigate } from "$app/navigation";
-    import {
-        activeFolder,
-        fileStore,
-        folderStore,
-        storeSnap,
-    } from "$lib/scripts/stores";
+    import { onMount } from "svelte";
+    import { afterNavigate, beforeNavigate } from "$app/navigation";
+    import { activeFolder, storeSnap } from "$lib/scripts/stores";
     import Content from "$lib/components/Content.svelte";
     import Tools from "$lib/components/Tools.svelte";
     import Count from "$lib/components/utils/Count.svelte";
@@ -18,7 +12,7 @@
     import ScrollButton from "$lib/components/utils/ScrollButton.svelte";
     import FolderTitle from "$lib/components/utils/FolderTitle.svelte";
     import { get } from "svelte/store";
-    import { appStates, fdStore, fsStore } from "$lib/scripts/state.svelte";
+    import { states, fdStore, fsStore } from "$lib/scripts/state.svelte";
 
     let { data }: { data: PageData } = $props();
 
@@ -31,15 +25,15 @@
     });
 
     function check() {
-        appStates.view = "FOLDER";
+        states.view = "FOLDER";
         if (fdStore.files.length === 0 && fsStore.files.length !== 0) {
-            appStates.view = "FILE";
+            states.view = "FILE";
         }
     }
 
-    const unsubscribeNavigation = navigating.subscribe((val) => {
-        appStates.mode = "";
-        if (!val) check();
+    afterNavigate(() => {
+        states.mode = "";
+        check();
     });
 
     beforeNavigate(({ from, to }) => {
@@ -54,13 +48,10 @@
     onMount(() => {
         check();
     });
-    onDestroy(() => {
-        unsubscribeNavigation();
-    });
 </script>
 
 <section class="wrapper" style:display="">
-    {#if appStates.mode !== "edit"}
+    {#if states.mode !== "EDIT"}
         <nav class="nav">
             <BackButton />
             <div class="tool-wrapper">
@@ -72,7 +63,7 @@
             </h2>
 
             <Count
-                count={appStates.view === "FOLDER"
+                count={states.view === "FOLDER"
                     ? fdStore.files.length
                     : fsStore.files.length}
             />
@@ -82,16 +73,16 @@
             <FolderTitle />
         </h2>
 
-        {#if appStates.mode === "search"}
+        {#if states.mode === "SEARCH"}
             <Search />
         {/if}
     {/if}
     <main
         class="main"
-        style:display={appStates.mode === "search" ? "none" : "block"}
+        style:display={states.mode === "SEARCH" ? "none" : "block"}
     >
         <Content />
-        {#if appStates.mask}
+        {#if states.mask}
             <div class="mask"></div>
         {/if}
     </main>

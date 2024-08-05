@@ -7,7 +7,7 @@
     import expandIcon from "$lib/assets/expand.svg?raw";
     import { dropOkHandler } from "$lib/scripts/image";
     import { dropItems } from "$lib/scripts/stores";
-    import { appStates } from "$lib/scripts/state.svelte";
+    import { states } from "$lib/scripts/state.svelte";
 
     const dispatch = createEventDispatcher();
     function triggerDispatch(type: string) {
@@ -24,7 +24,7 @@
         );
         if (running.length === 0) {
             $dropItems = [];
-            appStates.autosave = false;
+            states.autosave = false;
         } else {
             triggerDispatch("mini");
         }
@@ -64,10 +64,10 @@
     />
     <span>
         <button
-            class="btn s-prime {appStates.autosave === true ? 'autosave' : ''}"
+            class="btn s-prime {states.autosave === true ? 'autosave' : ''}"
             title="toggle autosave"
             on:click={() => {
-                appStates.autosave = !appStates.autosave;
+                states.autosave = !states.autosave;
             }}
         >
             {@html toggleIcon}

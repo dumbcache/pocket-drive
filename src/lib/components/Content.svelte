@@ -10,13 +10,13 @@
     } from "$lib/scripts/utils";
     import { getToken } from "$lib/scripts/login";
     import Spinner from "$lib/components/utils/Spinner.svelte";
-    import { appStates, fdStore, fsStore } from "$lib/scripts/state.svelte";
+    import { states, fdStore, fsStore } from "$lib/scripts/state.svelte";
 
     let observer = $state<IntersectionObserver>();
     let nextPageToken: string | undefined;
     let mimeType: string;
     let status = $derived(
-        appStates.view === "FOLDER"
+        states.view === "FOLDER"
             ? fdStore?.nextPageToken
                 ? "loading"
                 : "completed"
@@ -85,13 +85,13 @@
 <div class="content" role="main" ondragstart={(e) => e.preventDefault()}>
     <section
         class="folder-container"
-        style:display={appStates.view === "FOLDER" ? "initial" : "none"}
+        style:display={states.view === "FOLDER" ? "initial" : "none"}
     >
         <FolderContainer {observer} />
     </section>
     <section
         class="file-container"
-        style:display={appStates.view === "FILE" ? "initial" : "none"}
+        style:display={states.view === "FILE" ? "initial" : "none"}
     >
         <FileContainer {observer} />
     </section>

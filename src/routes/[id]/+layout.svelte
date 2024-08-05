@@ -9,7 +9,7 @@
     import ProgressBar from "$lib/components/utils/ProgressBar.svelte";
     import Profile from "$lib/components/profile/Profile.svelte";
     import Shortcuts from "$lib/components/Shortcuts.svelte";
-    import { appPreferences, appStates } from "$lib/scripts/state.svelte";
+    import { preferences, states } from "$lib/scripts/state.svelte";
 
     let draggedOver = false;
 
@@ -51,14 +51,14 @@
         try {
             if (e.key === "token") {
                 if (e.newValue) {
-                    appStates.sessionTimeout = false;
+                    states.sessionTimeout = false;
                 } else {
-                    appStates.sessionTimeout = true;
+                    states.sessionTimeout = true;
                 }
                 return;
             }
             if (e.key === "preferences") {
-                e.newValue && appPreferences.set(JSON.parse(e.newValue));
+                e.newValue && preferences.set(JSON.parse(e.newValue));
             }
         } catch (error) {
             console.warn(error);
@@ -97,21 +97,21 @@
     }}
     on:drop={imgDropHandler}
 >
-    {#if appStates.mode !== "edit"}
+    {#if states.mode !== "EDIT"}
         <Header />
     {/if}
     <slot />
     {#if $dropItems.length > 0}
         <Drop />
     {/if}
-    {#if appStates.profile}
+    {#if states.profile}
         <Profile />
     {/if}
-    {#if appStates.shortcuts}
+    {#if states.shortcuts}
         <Shortcuts />
     {/if}
     <ProgressBar />
-    {#if appStates.sessionTimeout}
+    {#if states.sessionTimeout}
         <div class="session-notify" on:wheel|preventDefault>
             <div class="session-wrapper">
                 <p>Your session has been expired. Click login to continue</p>

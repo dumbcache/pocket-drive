@@ -3,7 +3,7 @@
     import { IMG_MIME_TYPE, fetchMultiple } from "$lib/scripts/utils";
     import { getToken } from "$lib/scripts/login";
     import { previewAndSetDropItems } from "$lib/scripts/image";
-    import { appStates } from "$lib/scripts/state.svelte";
+    import { states } from "$lib/scripts/state.svelte";
 
     export let visible: Boolean;
     export let toolsVisible: Boolean;
@@ -59,7 +59,7 @@
         <div class="pic-wrapper placeholder" />
         <div class="pic-wrapper placeholder" />
     {/if}
-    {#if appStates.mode !== "edit"}
+    {#if states.mode !== "EDIT"}
         <div class="edit">
             <ActionButtons {id} {name} />
         </div>

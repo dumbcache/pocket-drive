@@ -4,16 +4,14 @@
     import Options from "$lib/components/profile/Options.svelte";
     import Logout from "$lib/components/profile/Logout.svelte";
     import SessionInfo from "$lib/components/profile/SessionInfo.svelte";
-    import { appStates } from "$lib/scripts/state.svelte";
+    import { states } from "$lib/scripts/state.svelte";
 </script>
 
 <div class="profile">
     <div class="container">
         <section class="one">
             <h2>Settings</h2>
-            <button
-                class="btn s-prime"
-                onclick={() => (appStates.profile = false)}
+            <button class="btn s-prime" onclick={() => (states.profile = false)}
                 >{@html closeIcon}</button
             >
         </section>
@@ -21,7 +19,7 @@
             <Options />
         </section>
         <section class="three">
-            {#key appStates.sessionTimeoutId}
+            {#key states.sessionTimeoutId}
                 <SessionInfo />
             {/key}
         </section>

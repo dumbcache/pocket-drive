@@ -1,5 +1,5 @@
 import { browser } from "$app/environment";
-import { appPreferences } from "$lib/scripts/state.svelte.js";
+import { preferences } from "$lib/scripts/state.svelte.js";
 import { clearCache } from "$lib/scripts/utils";
 
 export const ssr = true;
@@ -17,7 +17,7 @@ export const load = async ({ params }) => {
             let pref = localStorage.getItem("preferences");
             if (pref) {
                 const data = JSON.parse(pref);
-                appPreferences.set(data);
+                preferences.set(data);
             }
         }
     } catch (error) {

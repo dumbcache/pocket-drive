@@ -6,7 +6,7 @@
     import helpIcon from "$lib/assets/help.svg?raw";
     import profileIcon from "$lib/assets/profile.svg?raw";
     import goToDrive from "$lib/assets/drive.svg?raw";
-    import { appStates } from "$lib/scripts/state.svelte";
+    import { states } from "$lib/scripts/state.svelte";
 
     let homeButton = "";
 
@@ -36,8 +36,7 @@
         <button
             class="btn s-prime shortcuts"
             title="shortcuts"
-            on:click={() => (appStates.shortcuts = true)}
-            >{@html helpIcon}</button
+            on:click={() => (states.shortcuts = true)}>{@html helpIcon}</button
         >
         <a
             href={`https://drive.google.com/drive/folders/${$activeFolder?.id}`}
@@ -52,8 +51,7 @@
         <button
             class="btn s-prime settings"
             title="settings"
-            on:click={() => (appStates.profile = true)}
-            >{@html profileIcon}</button
+            on:click={() => (states.profile = true)}>{@html profileIcon}</button
         >
     </div>
 </header>

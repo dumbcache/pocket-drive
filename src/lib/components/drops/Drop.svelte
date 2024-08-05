@@ -6,7 +6,7 @@
     import { fade } from "svelte/transition";
     import { onDestroy } from "svelte";
     import { navigating } from "$app/stores";
-    import { appStates } from "$lib/scripts/state.svelte";
+    import { states } from "$lib/scripts/state.svelte";
 
     let mini = false;
     let expand = false;
@@ -14,7 +14,7 @@
         data && (mini = true);
     });
     onDestroy(() => {
-        appStates.autosave = false;
+        states.autosave = false;
         unsubscribe();
     });
 </script>

@@ -19,7 +19,7 @@
         enableScorlling,
     } from "$lib/scripts/utils";
     import { getToken } from "$lib/scripts/login";
-    import { appStates } from "$lib/scripts/state.svelte";
+    import { states } from "$lib/scripts/state.svelte";
 
     export let type: "FOLDER" | "FILE";
     // let tempFolderStore = { ...$folderStore };
@@ -129,7 +129,7 @@
             dispatchOk();
             return;
         }
-        appStates.progress = true;
+        states.progress = true;
         await moveSingle(selectedId, $folderActionDetail?.id, accessToken);
         folderStore.update((prev) => {
             return {
@@ -160,7 +160,7 @@
             true
         );
         $folderAction = undefined;
-        appStates.progress = false;
+        states.progress = false;
         return;
     }
 
@@ -185,7 +185,7 @@
         $folderAction = undefined;
     }}
 >
-    {#if appStates.progress}
+    {#if states.progress}
         <!-- svelte-ignore a11y-no-static-element-interactions -->
         <!-- svelte-ignore a11y_click_events_have_key_events -->
         <div class="folder-select" onclick={(e) => e.stopPropagation()}>

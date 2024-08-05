@@ -37,7 +37,6 @@ export function updateProgressStore(t = 0, s = 0, f = 0) {
 
 export let folderStore = writable<GoogleDriveResponse | undefined>();
 export let fileStore = writable<GoogleDriveResponse | undefined>();
-export let searchItems = writable<DriveFile[] | undefined>();
 
 export let activeFolder = writable<DriveFolder>();
 export let activeImage = writable<DriveFile>();
