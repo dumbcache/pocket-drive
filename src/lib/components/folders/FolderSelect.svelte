@@ -4,9 +4,6 @@
     import beforeIcon from "$lib/assets/beforeNavigate.svg?raw";
     import historyIcon from "$lib/assets/history.svg?raw";
     import {
-        folderStore,
-    } from "$lib/scripts/stores";
-    import {
         FOLDER_MIME_TYPE,
         fetchMultiple,
         fetchSingle,
@@ -16,7 +13,7 @@
         enableScorlling,
     } from "$lib/scripts/utils";
     import { getToken } from "$lib/scripts/login";
-    import { states, temp } from "$lib/scripts/state.svelte";
+    import { folderStore, states, tempStore } from "$lib/scripts/state.svelte";
 
     export let type: "FOLDER" | "FILE";
     // let tempFolderStore = { ...$folderStore };
@@ -30,9 +27,9 @@
         fetchChildren(selectedId);
     });
 
-    let selectedName = temp.activeFolder!.name;
-    let selectedId = temp.activeFolder!.id;
-    let selectedParent = temp.activeFolder!.parents && temp.activeFolder!.parents[0];
+    let selectedName = tempStore.activeFolder!.name;
+    let selectedId = tempStore.activeFolder!.id;
+    let selectedParent = tempStore.activeFolder!.parents && tempStore.activeFolder!.parents[0];
     let listVisible = false;
     let recents = [];
     let accessToken = getToken();
@@ -67,9 +64,9 @@
             };
         }
         if (type === "FOLDER") {
-            if (selectedId === temp.activeFolder.id) {
+            if (selectedId === tempStore.activeFolder.id) {
                 tempFolderStore.files = tempFolderStore.files?.filter(
-                    (file) => file.id !== temp.folderAction.id
+                    (file) => file.id !== tempStore.folderAction.id
                 );
             }
         }
@@ -127,28 +124,23 @@
             return;
         }
         states.progress = true;
-        await moveSingle(selectedId, temp.folderAction.id, accessToken);
-        folderStore.update((prev) => {
-            return {
-                files: prev?.files.filter(
-                    (file) => file.id !== temp.folderAction.id
-                ),
-                nextPageToken: prev?.nextPageToken,
-            };
-        });
+        await moveSingle(selectedId, tempStore.folderAction.id, accessToken);
+         let index = folderStore.files.findIndex((i) => i.id === tempStore.folderAction.id);
+               folderStore.files.splice(index, 1);
+        
         fetchMultiple(
             { parent: selectedId, mimeType: FOLDER_MIME_TYPE },
             accessToken,
             true
         );
         fetchMultiple(
-            { parent: temp.activeFolder!.id, mimeType: FOLDER_MIME_TYPE },
+            { parent: tempStore.activeFolder!.id, mimeType: FOLDER_MIME_TYPE },
             accessToken,
             true
         );
         fetchMultiple(
             {
-                parent: temp.activeFolder!.id,
+                parent: tempStore.activeFolder!.id,
                 mimeType: FOLDER_MIME_TYPE,
                 pageSize: 500,
             },
@@ -156,7 +148,7 @@
             true,
             true
         );
-        temp.folderAction = {} as FolderAction;
+        tempStore.folderAction = {} as FolderAction;
         states.progress = false;
         return;
     }
@@ -179,7 +171,7 @@
     onkeydown={(e) => e.stopPropagation()}
     onclick={() => {
         dispatchClose();
-    temp.folderAction = {} as FolderAction
+    tempStore.folderAction = {} as FolderAction
     }}
 >
     {#if states.progress}
@@ -221,7 +213,7 @@
                     </button>
                     <button
                         class="done-button btn s-prime"
-                        disabled={selectedId === temp.activeFolder!.id}
+                        disabled={selectedId === tempStore.activeFolder!.id}
                         onclick={okHandler}
                     >
                         {@html doneIcon}

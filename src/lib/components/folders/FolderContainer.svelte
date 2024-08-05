@@ -3,27 +3,27 @@
     import ActionForm from "$lib/components/folders/ActionForm.svelte";
     import FolderSelect from "$lib/components/folders/FolderSelect.svelte";
     import Container from "$lib/components/Container.svelte";
-    import { states, fdStore, temp } from "$lib/scripts/state.svelte";
+    import { states, folderStore, tempStore } from "$lib/scripts/state.svelte";
     import FetchAll from "$lib/components/utils/FetchAll.svelte";
 
     let { observer }: { observer: IntersectionObserver | undefined } = $props();
 </script>
 
-{#if fdStore?.nextPageToken}
+{#if folderStore?.nextPageToken}
     <FetchAll view="FOLDER" />
 {/if}
 
 <!-- {#key $refresh} -->
 <Container
-    files={fdStore.files}
+    files={folderStore.files}
     view="FOLDER"
     component={Folder}
     footObserver={observer}
 />
 <!-- {/key} -->
 
-{#if temp.folderAction.type && states.mode !== "SEARCH"}
-    {#if temp.folderAction.type === "MOVE"}
+{#if tempStore.folderAction.type && states.mode !== "SEARCH"}
+    {#if tempStore.folderAction.type === "MOVE"}
         <FolderSelect type="FOLDER" />
     {:else}
         <ActionForm />

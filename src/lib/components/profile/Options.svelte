@@ -4,14 +4,7 @@
     import { preferences } from "$lib/scripts/state.svelte";
 
     onDestroy(() => {
-        window.localStorage.setItem(
-            "preferences",
-            JSON.stringify({
-                showFileNames: preferences.showFileNames,
-                disableWebp: preferences.disableWebp,
-                theme: preferences.theme,
-            })
-        );
+        preferences.saveToLocal();
     });
 </script>
 

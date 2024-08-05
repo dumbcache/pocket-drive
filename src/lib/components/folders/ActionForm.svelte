@@ -1,7 +1,6 @@
 <script lang="ts">
     import { onDestroy, onMount } from "svelte";
     import doneIcon from "$lib/assets/done.svg?raw";
-    import { folderStore } from "$lib/scripts/stores";
     import { getToken } from "$lib/scripts/login";
     import {
         toTitleCase,
@@ -13,11 +12,11 @@
         FOLDER_MIME_TYPE,
     } from "$lib/scripts/utils";
     import Spinner from "$lib/components/utils/Spinner.svelte";
-    import { temp } from "$lib/scripts/state.svelte";
+    import { folderStore, tempStore } from "$lib/scripts/state.svelte";
 
     const confirmText = "confirm";
     let placeholder = $state<string>();
-    let { id, name, type } = temp.folderAction;
+    let { id, name, type } = tempStore.folderAction;
 
     onMount(() => {
         try {
@@ -33,7 +32,7 @@
     let progress = $state(false);
 
     function close() {
-        temp.folderAction = {} as FolderAction;
+        tempStore.folderAction = {} as FolderAction;
     }
 
     async function applyAction() {
@@ -41,22 +40,14 @@
         const token = getToken();
         let folderName = toTitleCase(placeholder);
         type !== "DELETE" && (placeholder = folderName);
-        let parent = temp.activeFolder!.id;
+        let parent = tempStore.activeFolder!.id;
         if (type === "CREATE") {
             const data = await createFolder(folderName, parent, token);
-            folderStore.update((prev) => {
-                return {
-                    files: [
-                        {
-                            id: data.id,
-                            name: data.name,
-                            parents: [parent],
-                            starred: false,
-                        },
-                        ...prev?.files,
-                    ],
-                    nextPageToken: prev?.nextPageToken,
-                };
+            folderStore.files.unshift({
+                id: data.id,
+                name: data.name,
+                parents: [parent],
+                starred: false,
             });
             fetchMultiple(
                 { parent, mimeType: FOLDER_MIME_TYPE, pageSize: 500 },
@@ -68,28 +59,15 @@
         }
         if (type === "EDIT") {
             await updateFolder(folderName, id, parent, token);
-            folderStore.update((prev) => {
-                return {
-                    files: prev?.files.map((file) => {
-                        if (file.id === id) {
-                            return { ...file, name: folderName };
-                        }
-                        return file;
-                    }),
-                    nextPageToken: prev?.nextPageToken,
-                };
-            });
+            let index = folderStore.files.findIndex((i) => i.id === id);
+            folderStore.files[index].name = folderName;
             afterFolderAction(parent, token);
             close();
         }
         if (type === "DELETE") {
             await deleteFolder(id, parent, token);
-            folderStore.update((prev) => {
-                return {
-                    files: prev?.files.filter((file) => file.id !== id),
-                    nextPageToken: prev?.nextPageToken,
-                };
-            });
+            let index = folderStore.files.findIndex((i) => i.id === id);
+            folderStore.files.splice(index, 1);
             afterFolderAction(parent, token);
             close();
         }

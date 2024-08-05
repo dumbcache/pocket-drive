@@ -34,11 +34,7 @@ export function updateProgressStore(t = 0, s = 0, f = 0) {
     });
 }
 
-export let folderStore = writable<GoogleDriveResponse | undefined>();
-export let fileStore = writable<GoogleDriveResponse | undefined>();
-
 export let activeImage = writable<DriveFile>();
-export let dropItems = writable<DropItem[]>([]);
 
 export function storeSnap(
     files?: GoogleDriveResponse<DriveFile>,

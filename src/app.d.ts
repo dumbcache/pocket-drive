@@ -88,7 +88,7 @@ declare global {
         thumbnailLink: string;
         parents?: string[];
         mimeType: string;
-        size: string;
+        size: number;
     }
     interface DriveFolder {
         id: string;

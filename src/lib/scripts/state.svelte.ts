@@ -15,8 +15,8 @@ class AppStore<T> {
         };
     }
 }
-export const fsStore = new AppStore<DriveFile>();
-export const fdStore = new AppStore<DriveFolder>();
+export const fileStore = new AppStore<DriveFile>();
+export const folderStore = new AppStore<DriveFolder>();
 
 class AppPreferences {
     showFileNames = $state(false);
@@ -31,14 +31,37 @@ class AppPreferences {
         this.disableWebp = !this.disableWebp;
     }
 
-    toggleTheme(theme: "DARK" | "") {
-        this.theme = theme;
+    toggleTheme() {
+        this.theme = this.theme === "DARK" ? "" : "DARK";
+        const root = document.documentElement;
+        let dark = root.classList.contains("dark");
+        switch (this.theme) {
+            case "DARK":
+                if (!dark) root.classList.add("dark");
+                break;
+            default:
+                if (dark) root.classList.remove("dark");
+                break;
+        }
+        this.saveToLocal();
     }
 
     set({ showFileNames, disableWebp, theme }: Preferences) {
         this.showFileNames = showFileNames;
         this.disableWebp = disableWebp;
         this.theme = theme;
+    }
+
+    get(): Preferences {
+        return {
+            showFileNames: this.showFileNames,
+            disableWebp: this.disableWebp,
+            theme: this.theme,
+        };
+    }
+
+    saveToLocal() {
+        window.localStorage.setItem("preferences", JSON.stringify(this.get()));
     }
 }
 export const preferences = new AppPreferences();
@@ -65,4 +88,4 @@ class TempStore {
     dropItems = $state<DropItem[]>([]);
     folderAction = $state<FolderAction>({});
 }
-export const temp = new TempStore();
+export const tempStore = new TempStore();

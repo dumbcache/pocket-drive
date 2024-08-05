@@ -1,8 +1,6 @@
-import { dropItems } from "$lib/scripts/stores";
 import { childWorker, getRoot } from "$lib/scripts/utils";
 import { getToken } from "$lib/scripts/login";
-import { get } from "svelte/store";
-import { preferences, states, temp } from "$lib/scripts/state.svelte";
+import { preferences, states, tempStore } from "$lib/scripts/state.svelte";
 
 export function previewAndSetDropItems(
     files: FileList,
@@ -19,16 +17,16 @@ export function previewAndSetDropItems(
                 file.type === "image/avif" ||
                 file.type === "image/webp"
             ) {
-                let item = {
+                let item: DropItem = {
                     id,
                     name: file.name,
                     mimeType: file.type,
                     file,
                     imgRef,
-                    parent: parent || temp.activeFolder?.id,
-                    parentName: parentName || temp.activeFolder?.name,
+                    parent: parent || tempStore.activeFolder?.id,
+                    parentName: parentName || tempStore.activeFolder?.name,
                 };
-                dropItems.set([...get(dropItems), item]);
+                tempStore.dropItems.push(item);
                 if (states.autosave) {
                     setTimeout(() => autosaveItem(item), 500);
                 }
@@ -46,16 +44,17 @@ export function previewAndSetDropItems(
                         //     (await blob?.arrayBuffer()) as ArrayBuffer;
                         // const bytes = new Uint8Array(result);
                         // const imgRef = URL.createObjectURL(blob);
-                        let item = {
+                        let item: DropItem = {
                             id,
                             name: file.name.replace(/\..*$/, ".webp"),
                             mimeType: file.type,
                             file: blob,
                             imgRef,
-                            parent: parent || temp.activeFolder?.id,
-                            parentName: parentName || temp.activeFolder?.name,
+                            parent: parent || tempStore.activeFolder?.id,
+                            parentName:
+                                parentName || tempStore.activeFolder?.name,
                         };
-                        dropItems.set([...get(dropItems), item]);
+                        tempStore.dropItems.push(item);
                         if (states.autosave) {
                             setTimeout(() => autosaveItem(item), 500);
                         }
@@ -69,16 +68,16 @@ export function previewAndSetDropItems(
             }
         }
         if (file.type.match("video/")) {
-            let item = {
+            let item: DropItem = {
                 id,
                 name: file.name,
                 mimeType: file.type,
                 file,
                 imgRef,
-                parent: parent || temp.activeFolder?.id,
-                parentName: parentName || temp.activeFolder?.name,
+                parent: parent || tempStore.activeFolder?.id,
+                parentName: parentName || tempStore.activeFolder?.name,
             };
-            dropItems.set([...get(dropItems), item]);
+            tempStore.dropItems.push(item);
             // if (get(autosave)) {
             //     setTimeout(() => autosaveItem(item), 500);
             // }
@@ -89,14 +88,13 @@ export function previewAndSetDropItems(
 function autosaveItem(item: DropItem) {
     const tempItems = setExtraInfo([item]);
     let single = tempItems[1][0];
-    let items = get(dropItems).map((i) => {
+    tempStore.dropItems = tempStore.dropItems.map((i) => {
         if (i.id === item.id) {
             return single;
         } else {
             return i;
         }
     });
-    dropItems.set(items);
     const { pathname } = window.location;
     const parent = pathname === "/" ? getRoot() : pathname.substring(1);
     const token = getToken();
@@ -141,26 +139,26 @@ export function setExtraInfo(items: DropItem[]) {
 }
 
 export function removeDropEntry(id: string) {
-    dropItems.set(get(dropItems).filter((item) => item.id !== id));
+    tempStore.dropItems = tempStore.dropItems.filter((item) => item.id !== id);
 }
 
 export function clearDropItems() {
-    const a = get(dropItems).filter((item) => item.progress !== "success");
-    dropItems.set(a);
+    tempStore.dropItems = tempStore.dropItems.filter(
+        (item) => item.progress !== "success"
+    );
 }
 
 export function dropOkHandlerSingle(id: string) {
-    let items = get(dropItems).filter((item) => item.id === id);
+    let items = tempStore.dropItems.filter((item) => item.id !== id);
     const tempItems = setExtraInfo(items);
     let single = tempItems[1][0];
-    items = get(dropItems).map((item) => {
+    tempStore.dropItems = tempStore.dropItems.map((item) => {
         if (item.id === id) {
             return single;
         } else {
             return item;
         }
     });
-    dropItems.set(items);
     const { pathname } = window.location;
     const parent = pathname === "/" ? getRoot() : pathname.substring(1);
     const token = getToken();
@@ -174,8 +172,8 @@ export function dropOkHandlerSingle(id: string) {
 }
 
 export function dropOkHandler() {
-    let [items, tempItems] = setExtraInfo(get(dropItems));
-    dropItems.set(items);
+    let [items, tempItems] = setExtraInfo(tempStore.dropItems);
+    tempStore.dropItems = items;
     const { pathname } = window.location;
     const parent = pathname === "/" ? getRoot() : pathname.substring(1);
     const token = getToken();

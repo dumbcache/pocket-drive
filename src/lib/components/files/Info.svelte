@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { activeImage, fileStore } from "$lib/scripts/stores";
+    import { activeImage } from "$lib/scripts/stores";
     import closeIcon from "$lib/assets/close.svg?raw";
     import { createEventDispatcher, onMount } from "svelte";
     import { getToken } from "$lib/scripts/login";
@@ -10,7 +10,7 @@
         updateSingle,
     } from "$lib/scripts/utils";
     import { fade } from "svelte/transition";
-    import { temp } from "$lib/scripts/state.svelte";
+    import { fileStore, tempStore } from "$lib/scripts/state.svelte";
 
     const dispatch = createEventDispatcher();
     let id: string = $activeImage.id;
@@ -39,19 +39,12 @@
         changes = false;
         let file = { ...$activeImage, name, description };
         fetchMultiple(
-            { parent: temp.activeFolder!.id, mimeType: IMG_MIME_TYPE },
+            { parent: tempStore.activeFolder!.id, mimeType: IMG_MIME_TYPE },
             getToken(),
             true
         );
-        fileStore.update((prev) => {
-            return {
-                nextPageToken: prev?.nextPageToken,
-                files: prev?.files.map((f) => {
-                    if (f.id === id) return file;
-                    else return f;
-                }),
-            };
-        });
+        let index = fileStore.files.findIndex((i) => i.id === id);
+        fileStore.files[index] = file;
         activeImage.set(file);
     }
     function handleCancel() {

@@ -2,7 +2,7 @@
     import imgCreate from "$lib/assets/imgCreate.svg?raw";
     import folderCreate from "$lib/assets/folderCreate.svg?raw";
     import { previewAndSetDropItems } from "$lib/scripts/image";
-    import { fileStore, folderStore, pocketStore } from "$lib/scripts/stores";
+    import { pocketStore } from "$lib/scripts/stores";
     import editIcon from "$lib/assets/editMode.svg?raw";
     import folderIcon from "$lib/assets/folder.svg?raw";
     import fileIcon from "$lib/assets/file.svg?raw";
@@ -18,11 +18,14 @@
     import { getToken } from "$lib/scripts/login";
     import { navigating } from "$app/stores";
     import { onDestroy } from "svelte";
-    import { get } from "svelte/store";
-    import { states, temp } from "$lib/scripts/state.svelte";
+    import {
+        folderStore,
+        fileStore,
+        states,
+        tempStore,
+    } from "$lib/scripts/state.svelte";
 
-    let view: "FILE" | "FOLDER";
-    let refreshing = false;
+    let refreshing = $state(false);
 
     function imgPickerHandler(e: InputEvent) {
         e.preventDefault();
@@ -35,7 +38,7 @@
     async function refreshHandler() {
         refreshing = true;
         const token = getToken();
-        const parent = temp.activeFolder!.id;
+        const parent = tempStore.activeFolder!.id;
 
         fetchMultiple(
             { parent, mimeType: IMG_MIME_TYPE, pageSize: 3 },
@@ -49,7 +52,7 @@
             true
         );
 
-        $folderStore?.files.forEach((file) => {
+        folderStore.files.forEach((file) => {
             fetchMultiple(
                 { parent: file.id, mimeType: IMG_MIME_TYPE, pageSize: 3 },
                 token,
@@ -58,17 +61,17 @@
             );
         });
 
-        let fs = await fetchMultiple(
+        let fs = (await fetchMultiple(
             { parent, mimeType: IMG_MIME_TYPE },
             token,
             true
-        );
-        let fd = await fetchMultiple(
+        )) as GoogleDriveResponse<DriveFile>;
+        let fd = (await fetchMultiple(
             { parent, mimeType: FOLDER_MIME_TYPE },
             token,
             true
-        );
-        if (parent === temp.activeFolder!.id) {
+        )) as GoogleDriveResponse<DriveFolder>;
+        if (parent === tempStore.activeFolder!.id) {
             folderStore.set(fd);
             fileStore.set(fs);
         }
@@ -130,7 +133,7 @@
             class="btn s-prime"
             title="create folder"
             onclick={() => {
-                temp.folderAction.type = "CREATE";
+                tempStore.folderAction.type = "CREATE";
             }}
         >
             {@html folderCreate}

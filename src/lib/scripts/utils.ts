@@ -1,13 +1,9 @@
 import { browser } from "$app/environment";
-import { get } from "svelte/store";
 import {
-    fileStore,
-    dropItems,
     pocketStore,
     imageCache,
     imageFetchLog,
     updateProgressStore,
-    folderStore,
     setPocketState,
     CACHE_DATA,
     activeImage,
@@ -16,7 +12,13 @@ import { clearToken, getToken } from "$lib/scripts/login";
 import ChildWorker from "$lib/scripts/worker.ts?worker";
 import { clearDropItems } from "$lib/scripts/image";
 import { goto } from "$app/navigation";
-import { preferences, states, temp } from "$lib/scripts/state.svelte";
+import {
+    folderStore,
+    fileStore,
+    preferences,
+    states,
+    tempStore,
+} from "$lib/scripts/state.svelte";
 
 export let childWorker: Worker;
 
@@ -95,27 +97,6 @@ export function checkNetworkError(error: Error) {
     }
 }
 
-export function setTheme(t?: string) {
-    let preferredtheme = t ?? window.localStorage.getItem("theme") ?? "";
-    preferences.toggleTheme(preferredtheme as "" | "dark");
-    const root = document.documentElement;
-    let dark = root.classList.contains("dark");
-    switch (preferredtheme) {
-        case "dark":
-            if (!dark) root.classList.add("dark");
-            return;
-        default:
-            if (dark) root.classList.remove("dark");
-            return;
-    }
-}
-
-export function toggleTheme() {
-    let newTheme = preferences.theme === "" ? "DARK" : "";
-    window.localStorage.setItem("theme", newTheme);
-    setTheme(newTheme);
-}
-
 export async function clearCache() {
     await caches.delete(CACHE_DATA);
 }
@@ -134,22 +115,18 @@ export function clearSessionStorage() {
 
 export function signUserOutPartial() {
     clearLocalImages();
-    let theme = window.localStorage.getItem("theme");
     let preferences = window.localStorage.getItem("preferences");
     let recents = window.localStorage.getItem("recents");
     clearLocalStorage();
     window.localStorage.setItem("preferences", preferences);
-    window.localStorage.setItem("theme", theme);
     window.localStorage.setItem("recents", recents);
 }
 
 export async function signUserOut() {
     clearLocalImages();
     clearCache();
-    let theme = window.localStorage.getItem("theme");
     let preferences = window.localStorage.getItem("preferences");
     clearLocalStorage();
-    window.localStorage.setItem("theme", theme);
     window.localStorage.setItem("preferences", preferences);
     clearSessionStorage();
     setPocketState();
@@ -520,18 +497,15 @@ if (browser) {
 
             case "EDIT":
                 let imgMeta = data.imgMeta;
-                if (aParent === temp.activeFolder.id) {
-                    fileStore.update((prev) => ({
-                        nextPageToken: prev?.nextPageToken,
-                        files: prev?.files.map((file) => {
-                            if (success.has(file.id)) {
-                                imgMeta?.name && (file.name = imgMeta.name);
-                                imgMeta?.description &&
-                                    (file.description = imgMeta.description);
-                            }
-                            return file;
-                        }),
-                    }));
+                if (aParent === tempStore.activeFolder!.id) {
+                    fileStore.files = fileStore.files.map((file) => {
+                        if (success.has(file.id)) {
+                            imgMeta?.name && (file.name = imgMeta.name);
+                            imgMeta?.description &&
+                                (file.description = imgMeta.description);
+                        }
+                        return file;
+                    });
                 }
                 fetchMultiple(
                     { parent: aParent, mimeType: IMG_MIME_TYPE },
@@ -549,7 +523,7 @@ if (browser) {
                     true
                 ).then((files) => {
                     if (data?.context === "TOP") {
-                        fileStore.set(files);
+                        fileStore.set(files as GoogleDriveResponse<DriveFile>);
                     }
 
                     if (pocketStore.has(parent)) {
@@ -568,25 +542,19 @@ if (browser) {
             case "MOVE":
             case "DELETE":
                 success = new Set(success);
-                let currentActiveParent = temp.activeFolder.id;
+                let currentActiveParent = tempStore.activeFolder!.id;
                 if (aParent === currentActiveParent) {
                     if (view === "FILE") {
-                        fileStore.update((prev) => ({
-                            nextPageToken: prev?.nextPageToken,
-                            files: prev?.files.filter(
-                                (file) => !success.has(file.id)
-                            ),
-                        }));
+                        fileStore.files = fileStore.files.filter(
+                            (file) => !success.has(file.id)
+                        );
                     } else {
-                        folderStore.update((prev) => ({
-                            nextPageToken: prev?.nextPageToken,
-                            files: prev?.files.filter(
-                                (file) => !success.has(file.id)
-                            ),
-                        }));
+                        folderStore.files = folderStore.files.filter(
+                            (file) => !success.has(file.id)
+                        );
                     }
                 } else {
-                    pocketStore.delete(temp.activeFolder?.id);
+                    pocketStore.delete(tempStore.activeFolder?.id);
                 }
                 parent && pocketStore.delete(parent);
 
@@ -648,11 +616,10 @@ if (browser) {
 
             case "DROP":
                 clearDropItems();
-                dropItems.set(
-                    get(dropItems).map((item) => {
-                        if (item.id === data.id) item.progress = data.status;
-                        return item;
-                    })
+                tempStore.dropItems.forEach(
+                    (item) =>
+                        item.id === data.id &&
+                        (item.progress = data.status === 1 ? "success" : "")
                 );
                 setTimeout(async () => {
                     const res = await fetchMultiple(
@@ -669,7 +636,7 @@ if (browser) {
                         getToken(),
                         true
                     );
-                    if (parent === temp.activeFolder.id) {
+                    if (parent === tempStore.activeFolder.id) {
                         fileStore.set(res);
                     } else {
                         pocketStore.delete(parent);
@@ -729,7 +696,7 @@ if (browser) {
 
             case "c":
             case "C":
-                toggleTheme();
+                preferences.toggleTheme();
                 return;
 
             case "d":

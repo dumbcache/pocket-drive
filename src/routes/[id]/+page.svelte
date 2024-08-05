@@ -12,21 +12,26 @@
     import ScrollButton from "$lib/components/utils/ScrollButton.svelte";
     import FolderTitle from "$lib/components/utils/FolderTitle.svelte";
     import { get } from "svelte/store";
-    import { states, fdStore, fsStore, temp } from "$lib/scripts/state.svelte";
+    import {
+        states,
+        folderStore,
+        fileStore,
+        tempStore,
+    } from "$lib/scripts/state.svelte";
 
     let { data }: { data: PageData } = $props();
 
     $effect(() => {
         if (data) {
-            fsStore.set(data.files);
-            fdStore.set(data.folders);
-            temp.activeFolder = data.activeFolder;
+            fileStore.set(data.files);
+            folderStore.set(data.folders);
+            tempStore.activeFolder = data.activeFolder;
         }
     });
 
     function check() {
         states.view = "FOLDER";
-        if (fdStore.files.length === 0 && fsStore.files.length !== 0) {
+        if (folderStore.files.length === 0 && fileStore.files.length !== 0) {
             states.view = "FILE";
         }
     }
@@ -39,7 +44,11 @@
     beforeNavigate(({ from, to }) => {
         try {
             if (from?.url?.href === to?.url?.href) return;
-            storeSnap(fsStore.get(), fdStore.get(), temp.activeFolder);
+            storeSnap(
+                fileStore.get(),
+                folderStore.get(),
+                tempStore.activeFolder
+            );
         } catch (error) {
             console.warn(error);
         }
@@ -64,8 +73,8 @@
 
             <Count
                 count={states.view === "FOLDER"
-                    ? fdStore.files.length
-                    : fsStore.files.length}
+                    ? folderStore.files.length
+                    : fileStore.files.length}
             />
         </nav>
 

@@ -3,13 +3,13 @@
     import Drop from "$lib/components/drops/Drop.svelte";
     import { signUserOut, setSessionTimeout } from "$lib/scripts/utils";
     import { onMount } from "svelte";
-    import { dropItems, pocketStore } from "$lib/scripts/stores";
+    import { pocketStore } from "$lib/scripts/stores";
     import { requestToken } from "$lib/scripts/login";
     import { previewAndSetDropItems } from "$lib/scripts/image";
     import ProgressBar from "$lib/components/utils/ProgressBar.svelte";
     import Profile from "$lib/components/profile/Profile.svelte";
     import Shortcuts from "$lib/components/Shortcuts.svelte";
-    import { preferences, states } from "$lib/scripts/state.svelte";
+    import { preferences, states, tempStore } from "$lib/scripts/state.svelte";
 
     let draggedOver = false;
 
@@ -37,7 +37,7 @@
     }
 
     function handleUnload(e) {
-        if ($dropItems.length > 0) {
+        if (tempStore.dropItems.length > 0) {
             e.preventDefault();
         }
         window.sessionStorage.setItem(
@@ -101,7 +101,7 @@
         <Header />
     {/if}
     <slot />
-    {#if $dropItems.length > 0}
+    {#if tempStore.dropItems.length > 0}
         <Drop />
     {/if}
     {#if states.profile}

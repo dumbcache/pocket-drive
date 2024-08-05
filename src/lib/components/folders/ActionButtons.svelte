@@ -3,13 +3,13 @@
     import editIcon from "$lib/assets/edit.svg?raw";
     import deleteIcon from "$lib/assets/delete.svg?raw";
     import moveIcon from "$lib/assets/move.svg?raw";
-    import { temp } from "$lib/scripts/state.svelte";
+    import { tempStore } from "$lib/scripts/state.svelte";
 
     export let id: string;
     export let name: string;
 
     function handler(type: FAction) {
-        temp.folderAction = { type, id, name };
+        tempStore.folderAction = { type, id, name };
     }
 </script>
 

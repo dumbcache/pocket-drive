@@ -2,7 +2,6 @@
     import { onDestroy, onMount, tick } from "svelte";
     import {
         activeImage,
-        fileStore,
         imageCache,
         imageFetchLog,
     } from "$lib/scripts/stores";
@@ -19,7 +18,7 @@
     import FileNav from "$lib/components/files/FileNav.svelte";
     import Favorite from "$lib/components/utils/Favorite.svelte";
     import { get } from "svelte/store";
-    import { states } from "$lib/scripts/state.svelte";
+    import { fileStore, states } from "$lib/scripts/state.svelte";
 
     export let files: DriveFile[];
     let infoVisible = false;
@@ -119,16 +118,11 @@
     async function toggleFav(id: string) {
         activeImage.update((prev) => ({ ...prev, starred: !prev.starred }));
         await tick();
-        fileStore.update((prev) => {
-            return {
-                nextPageToken: prev?.nextPageToken,
-                files: prev?.files.map((f) => {
-                    if (f.id === id) {
-                        f.starred = !f.starred;
-                    }
-                    return f;
-                }),
-            };
+        fileStore.files = fileStore.files.map((f) => {
+            if (f.id === id) {
+                f.starred = !f.starred;
+            }
+            return f;
         });
     }
 

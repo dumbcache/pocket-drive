@@ -1,12 +1,11 @@
 <script>
-    import { dropItems } from "$lib/scripts/stores";
     import DropItem from "$lib/components/drops/DropItem.svelte";
     import DropTools from "$lib/components/drops/DropTools.svelte";
     import doubleLeftIcon from "$lib/assets/arrowLeftDouble.svg?raw";
     import { fade } from "svelte/transition";
     import { onDestroy } from "svelte";
     import { navigating } from "$app/stores";
-    import { states } from "$lib/scripts/state.svelte";
+    import { states, tempStore } from "$lib/scripts/state.svelte";
 
     let mini = false;
     let expand = false;
@@ -19,7 +18,7 @@
     });
 </script>
 
-{#if $dropItems.length !== 0}
+{#if tempStore.dropItems.length !== 0}
     <!-- {#if mini} -->
     <button
         class="drop-mini btn s-prime"
@@ -40,7 +39,7 @@
             on:expand={() => (expand = !expand)}
         />
         <div class="drop-items">
-            {#each $dropItems as item}
+            {#each tempStore.dropItems as item}
                 {#key item.id}
                     <DropItem {item} />
                 {/key}

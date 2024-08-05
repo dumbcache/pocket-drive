@@ -12,7 +12,7 @@
     import { childWorker, isValidUrl } from "$lib/scripts/utils";
     import { getToken } from "$lib/scripts/login";
     import { createEventDispatcher, onDestroy, onMount } from "svelte";
-    import { states, temp } from "$lib/scripts/state.svelte";
+    import { states, tempStore } from "$lib/scripts/state.svelte";
 
     export let set: Set<string>,
         view: "FILE" | "FOLDER",
@@ -44,7 +44,7 @@
             context: "DELETE",
             ids: set,
             token: getToken(),
-            activeParent: temp.activeFolder!.id,
+            activeParent: tempStore.activeFolder!.id,
             view,
         };
         childWorker.postMessage(workerMessage);
@@ -57,7 +57,7 @@
         updateProgressStore(set.size);
         workerMessage = {
             context: "TOP",
-            parent: temp.activeFolder!.id,
+            parent: tempStore.activeFolder!.id,
             ids: set,
             token: getToken(),
         };
@@ -73,7 +73,7 @@
         workerMessage = {
             context: action,
             parent: selectedParent,
-            activeParent: temp.activeFolder!.id,
+            activeParent: tempStore.activeFolder!.id,
             ids: set,
             token: getToken(),
             view,
@@ -94,7 +94,7 @@
         name?.trim() || (name = undefined);
         description?.trim() || (description = undefined);
         workerMessage = {
-            activeParent: temp.activeFolder!.id,
+            activeParent: tempStore.activeFolder!.id,
             context: "EDIT",
             ids: set,
             imgMeta: { name, description },

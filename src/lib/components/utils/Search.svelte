@@ -1,13 +1,11 @@
 <script lang="ts">
-    import { folderStore } from "$lib/scripts/stores";
     import { searchHandler } from "$lib/scripts/utils";
     import { getToken } from "$lib/scripts/login";
     import Folder from "$lib/components/folders/Folder.svelte";
-    import { onDestroy, onMount } from "svelte";
     import Spinner from "$lib/components/utils/Spinner.svelte";
     import FolderSelect from "$lib/components/folders/FolderSelect.svelte";
     import ActionForm from "$lib/components/folders/ActionForm.svelte";
-    import { states, temp } from "$lib/scripts/state.svelte";
+    import { folderStore, states, tempStore } from "$lib/scripts/state.svelte";
 
     let global = false;
     let searchElement: HTMLInputElement;
@@ -34,7 +32,7 @@
                 loading = false;
                 return;
             }
-            searchFolders = $folderStore?.files.filter((folder) =>
+            searchFolders = folderStore.files.filter((folder) =>
                 folder.name.toLowerCase().includes(val.toLowerCase())
             );
             loading = false;
@@ -59,10 +57,6 @@
         setTimeout(() => {
             searchElement.focus();
         });
-    });
-
-    onDestroy(() => {
-        unsubscribeMode();
     });
 </script>
 
@@ -113,8 +107,8 @@
     {/if}
 </section>
 
-{#if temp.folderAction.type && states.mode === "SEARCH"}
-    {#if temp.folderAction.type === "MOVE"}
+{#if tempStore.folderAction.type && states.mode === "SEARCH"}
+    {#if tempStore.folderAction.type === "MOVE"}
         <FolderSelect type="FOLDER" />
     {:else}
         <ActionForm />

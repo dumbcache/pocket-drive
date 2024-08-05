@@ -1,13 +1,13 @@
 <script lang="ts">
     import Spinner from "$lib/components/utils/Spinner.svelte";
 
-    export let status: string;
+    let { status } = $props();
 </script>
 
-{#if status === "loading"}
+{#if status === ""}
     <Spinner height="4rem" width="4rem" />
 {:else if status === "completed"}
-    <!-- <div class="end">END</div> -->
+    <div class="end">END</div>
 {/if}
 
 <style>

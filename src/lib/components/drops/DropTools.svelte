@@ -6,24 +6,24 @@
     import doubleRightIcon from "$lib/assets/arrowRightDouble.svg?raw";
     import expandIcon from "$lib/assets/expand.svg?raw";
     import { dropOkHandler } from "$lib/scripts/image";
-    import { dropItems } from "$lib/scripts/stores";
-    import { states } from "$lib/scripts/state.svelte";
+    import { states, tempStore } from "$lib/scripts/state.svelte";
 
     const dispatch = createEventDispatcher();
     function triggerDispatch(type: string) {
         dispatch(type);
     }
     export function clearDropItems() {
-        const a = $dropItems.filter((item) => item.progress !== "success");
-        dropItems.set(a);
+        tempStore.dropItems = tempStore.dropItems.filter(
+            (item) => item.progress !== "success"
+        );
     }
 
     export function dropCloseHandler() {
-        const running = $dropItems.filter(
+        const running = tempStore.dropItems.filter(
             (item) => item.progress === "uploading"
         );
         if (running.length === 0) {
-            $dropItems = [];
+            tempStore.dropItems = [];
             states.autosave = false;
         } else {
             triggerDispatch("mini");

@@ -1,7 +1,11 @@
 <script lang="ts">
     import fetchAllIcon from "$lib/assets/fetchAll.svg?raw";
     import { getToken } from "$lib/scripts/login";
-    import { fdStore, fsStore, temp } from "$lib/scripts/state.svelte";
+    import {
+        folderStore,
+        fileStore,
+        tempStore,
+    } from "$lib/scripts/state.svelte";
     import {
         fetchMultiple,
         FOLDER_MIME_TYPE,
@@ -14,10 +18,12 @@
 
     async function clickHandler() {
         let token = getToken();
-        let parent = temp.activeFolder?.id;
+        let parent = tempStore.activeFolder?.id;
         if (!parent) return;
         let pageToken =
-            view === "FOLDER" ? fdStore.nextPageToken : fsStore.nextPageToken;
+            view === "FOLDER"
+                ? folderStore.nextPageToken
+                : fileStore.nextPageToken;
         let mimeType = view === "FOLDER" ? FOLDER_MIME_TYPE : IMG_MIME_TYPE;
         loading = true;
         while (pageToken) {
@@ -27,11 +33,11 @@
             );
             pageToken = res?.nextPageToken;
             if (view === "FOLDER") {
-                fdStore.nextPageToken = pageToken;
-                fdStore.files.push(...(res.files as DriveFolder[]));
+                folderStore.nextPageToken = pageToken;
+                folderStore.files.push(...(res.files as DriveFolder[]));
             } else {
-                fsStore.nextPageToken = pageToken;
-                fsStore.files.push(...(res.files as DriveFile[]));
+                fileStore.nextPageToken = pageToken;
+                fileStore.files.push(...(res.files as DriveFile[]));
             }
         }
         loading = false;

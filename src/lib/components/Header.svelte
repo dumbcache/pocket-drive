@@ -6,7 +6,7 @@
     import helpIcon from "$lib/assets/help.svg?raw";
     import profileIcon from "$lib/assets/profile.svg?raw";
     import goToDrive from "$lib/assets/drive.svg?raw";
-    import { states, temp } from "$lib/scripts/state.svelte";
+    import { states, tempStore } from "$lib/scripts/state.svelte";
 
     let homeButton = "";
 
@@ -39,7 +39,7 @@
             on:click={() => (states.shortcuts = true)}>{@html helpIcon}</button
         >
         <a
-            href={`https://drive.google.com/drive/folders/${temp.activeFolder?.id}`}
+            href={`https://drive.google.com/drive/folders/${tempStore.activeFolder?.id}`}
             referrerpolicy="no-referrer"
             rel="external noopener noreferrer nofollow"
             class="btn s-prime"

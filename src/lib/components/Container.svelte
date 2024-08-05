@@ -1,15 +1,14 @@
 <script lang="ts">
-    import { activeImage, fileStore } from "$lib/scripts/stores";
+    import { activeImage } from "$lib/scripts/stores";
     import { onMount } from "svelte";
     import Edit from "$lib/components/Edit.svelte";
     import Folder from "$lib/components/folders/Folder.svelte";
     import File from "$lib/components/files/File.svelte";
-    import { get } from "svelte/store";
     import { beforeNavigate } from "$app/navigation";
     import { disableScrolling } from "$lib/scripts/utils";
     import imgCreate from "$lib/assets/imgCreate.svg?raw";
     import folderCreate from "$lib/assets/folderCreate.svg?raw";
-    import { states } from "$lib/scripts/state.svelte";
+    import { fileStore, states } from "$lib/scripts/state.svelte";
 
     export let files: FileResponse | undefined;
     export let view: "FILE" | "FOLDER";
@@ -101,7 +100,7 @@
         let { id, index, size } = target?.dataset;
         if (!id) return;
         switch (states.mode) {
-            case "edit":
+            case "EDIT":
                 if (e.shiftKey) {
                     index = Number(index);
                     if (lastSelected < index) {
@@ -128,9 +127,7 @@
                 return;
             default:
                 if (view === "FOLDER") return;
-                const [file] = get(fileStore)?.files.filter(
-                    (file) => file.id === id
-                );
+                const [file] = fileStore.files.filter((file) => file.id === id);
                 activeImage.set(file);
                 states.mode = "VIEW";
                 disableScrolling();
@@ -215,7 +212,7 @@
             </li>
         {/each}
     </ol>
-    <div id="{view === 'FILE' ? 'file' : 'folder'}-foot" bind:this={foot}></div>
+    <div id="{view === 'FILE' ? 'FILE' : 'FOLDER'}-FOOT" bind:this={foot}></div>
 {:else}
     <div class="no-content">
         {#if view === "FILE"}

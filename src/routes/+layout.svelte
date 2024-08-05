@@ -6,11 +6,7 @@
     import "./app.css";
     import type { Unsubscriber } from "svelte/store";
     import { loadGSIScript } from "$lib/scripts/login";
-    import {
-        disableScrolling,
-        enableScorlling,
-        setTheme,
-    } from "$lib/scripts/utils";
+    import { disableScrolling, enableScorlling } from "$lib/scripts/utils";
     import { states } from "$lib/scripts/state.svelte";
 
     let homeIcon = "";
@@ -31,7 +27,6 @@
 
     onMount(async () => {
         disableScrolling();
-        setTheme();
 
         try {
             const response = await fetch("/favicon.svg");
