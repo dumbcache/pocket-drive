@@ -1,9 +1,13 @@
 <script>
-    import { shortcuts } from "$lib/scripts/stores";
+    import { appStates } from "$lib/scripts/state.svelte";
 </script>
 
 <!-- svelte-ignore a11y-no-static-element-interactions -->
-<div class="shortcuts" on:click={() => ($shortcuts = false)} on:keydown>
+<div
+    class="shortcuts"
+    on:click={() => (appStates.shortcuts = false)}
+    on:keydown
+>
     <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
     <ul on:keydown on:click|stopPropagation>
         <li>

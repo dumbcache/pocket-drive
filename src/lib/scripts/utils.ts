@@ -9,11 +9,8 @@ import {
     imageCache,
     imageFetchLog,
     updateProgressStore,
-    starred,
-    mask,
     fetchAll,
     folderStore,
-    shortcuts,
     setPocketState,
     CACHE_DATA,
     activeImage,
@@ -728,12 +725,12 @@ if (browser) {
             case "Escape":
                 if (get(mode) !== "edit") mode.set("");
                 appStates.profile = false;
-                shortcuts.set(false);
+                appStates.shortcuts = false;
                 return;
 
             case "a":
             case "A":
-                mask.set(!get(mask));
+                appStates.mask = !appStates.mask;
                 return;
 
             case "c":
@@ -743,7 +740,7 @@ if (browser) {
 
             case "d":
             case "D":
-                starred.set(!get(starred));
+                appStates.starred = !appStates.starred;
                 return;
 
             case "e":
@@ -757,7 +754,7 @@ if (browser) {
 
             case "h":
             case "H":
-                shortcuts.set(!get(shortcuts));
+                appStates.shortcuts = !appStates.shortcuts;
                 return;
 
             case "s":

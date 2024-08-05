@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { activeImage, fileStore, mode, starred } from "$lib/scripts/stores";
+    import { activeImage, fileStore, mode } from "$lib/scripts/stores";
     import { onMount } from "svelte";
     import Edit from "$lib/components/Edit.svelte";
     import Folder from "$lib/components/folders/Folder.svelte";
@@ -202,7 +202,8 @@
                 data-size={file?.size}
                 data-starred={file.starred}
                 class:select={allSelected}
-                style:display={$starred === true && file.starred === false
+                style:display={appStates.starred === true &&
+                file.starred === false
                     ? "none"
                     : "initial"}
             >

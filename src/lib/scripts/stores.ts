@@ -39,14 +39,8 @@ export let folderStore = writable<GoogleDriveResponse | undefined>();
 export let fileStore = writable<GoogleDriveResponse | undefined>();
 export let searchItems = writable<DriveFile[] | undefined>();
 
-export let refresh = writable(false);
-export let starred = writable(false);
-export let autosave = writable(false);
-export let progress = writable(false);
-export let mask = writable(false);
 export let fetchAll = writable(false);
 export let mode = writable("");
-export let shortcuts = writable(false);
 export let activeParent = writable<DriveFolder>();
 export let activeImage = writable<DriveFile>();
 export let dropItems = writable<DropItem[]>([]);

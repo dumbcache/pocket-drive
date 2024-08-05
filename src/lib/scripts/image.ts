@@ -1,8 +1,8 @@
-import { activeParent, autosave, dropItems } from "$lib/scripts/stores";
+import { activeParent, dropItems } from "$lib/scripts/stores";
 import { childWorker, getRoot } from "$lib/scripts/utils";
 import { getToken } from "$lib/scripts/login";
 import { get } from "svelte/store";
-import { appPreferences } from "$lib/scripts/state.svelte";
+import { appPreferences, appStates } from "$lib/scripts/state.svelte";
 
 export function previewAndSetDropItems(
     files: FileList,
@@ -29,7 +29,7 @@ export function previewAndSetDropItems(
                     parentName: parentName || get(activeParent).name,
                 };
                 dropItems.set([...get(dropItems), item]);
-                if (get(autosave)) {
+                if (appStates.autosave) {
                     setTimeout(() => autosaveItem(item), 500);
                 }
             } else {
@@ -56,7 +56,7 @@ export function previewAndSetDropItems(
                             parentName: parentName || get(activeParent).name,
                         };
                         dropItems.set([...get(dropItems), item]);
-                        if (get(autosave)) {
+                        if (appStates.autosave) {
                             setTimeout(() => autosaveItem(item), 500);
                         }
                     }, "image/webp");

@@ -3,12 +3,7 @@
     import Drop from "$lib/components/drops/Drop.svelte";
     import { signUserOut, setSessionTimeout } from "$lib/scripts/utils";
     import { onMount } from "svelte";
-    import {
-        dropItems,
-        mode,
-        pocketStore,
-        shortcuts,
-    } from "$lib/scripts/stores";
+    import { dropItems, mode, pocketStore } from "$lib/scripts/stores";
     import { requestToken } from "$lib/scripts/login";
     import { previewAndSetDropItems } from "$lib/scripts/image";
     import ProgressBar from "$lib/components/utils/ProgressBar.svelte";
@@ -112,7 +107,7 @@
     {#if appStates.profile}
         <Profile />
     {/if}
-    {#if $shortcuts}
+    {#if appStates.shortcuts}
         <Shortcuts />
     {/if}
     <ProgressBar />

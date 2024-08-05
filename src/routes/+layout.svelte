@@ -2,7 +2,6 @@
     import { navigating } from "$app/stores";
     import { browser } from "$app/environment";
     import Spinner from "$lib/components/utils/Spinner.svelte";
-    import { progress } from "$lib/scripts/stores";
     import { onDestroy, onMount } from "svelte";
     import "./app.css";
     import type { Unsubscriber } from "svelte/store";
@@ -12,6 +11,7 @@
         enableScorlling,
         setTheme,
     } from "$lib/scripts/utils";
+    import { appStates } from "$lib/scripts/state.svelte";
 
     let homeIcon = "";
     let startup: HTMLDivElement;
@@ -24,9 +24,9 @@
         navigatingUnsubscribe = navigating.subscribe((val) => {
             val ? disableScrolling() : enableScorlling();
         });
-        progressUnsubscribe = progress.subscribe((val) => {
-            val ? disableScrolling() : enableScorlling();
-        });
+        // progressUnsubscribe = progress.subscribe((val) => {
+        //     val ? disableScrolling() : enableScorlling();
+        // });
     }
 
     onMount(async () => {
@@ -55,11 +55,11 @@
     onDestroy(() => {
         pocketStateUnsubscribe && pocketStateUnsubscribe();
         navigatingUnsubscribe && navigatingUnsubscribe();
-        progressUnsubscribe && progressUnsubscribe();
+        // progressUnsubscribe && progressUnsubscribe();
     });
 </script>
 
-{#if $navigating || $progress}
+{#if $navigating || appStates.progress}
     <div class="loading">
         <Spinner />
     </div>

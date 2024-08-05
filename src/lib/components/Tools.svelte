@@ -9,8 +9,6 @@
         folderAction,
         folderStore,
         pocketStore,
-        refresh,
-        starred,
     } from "$lib/scripts/stores";
     import editIcon from "$lib/assets/editMode.svg?raw";
     import { mode } from "$lib/scripts/stores";
@@ -85,14 +83,14 @@
                 fetchAll.set(true);
             }
         }
-        $refresh = !$refresh;
+        appStates.refresh = !appStates.refresh;
         pocketStore.delete(parent);
         refreshing = false;
     }
 
     const unsubscribeNavigation = navigating.subscribe((val) => {
         if (!val) {
-            $starred = false;
+            appStates.starred = false;
         }
     });
 
@@ -166,8 +164,8 @@
     <button
         class="btn s-prime"
         title="favorites"
-        class:favorites={$starred}
-        on:click={() => starred.set(!$starred)}
+        class:favorites={appStates.starred}
+        on:click={() => (appStates.starred = !appStates.starred)}
     >
         {@html favoriteIcon}
     </button>

@@ -1,6 +1,7 @@
 <script lang="ts">
     import FolderCover from "$lib/components/folders/FolderCover.svelte";
-    import { mode, refresh } from "$lib/scripts/stores";
+    import { appStates } from "$lib/scripts/state.svelte";
+    import { mode } from "$lib/scripts/stores";
     import Favorite from "../utils/Favorite.svelte";
 
     export let visible: Boolean;
@@ -18,7 +19,7 @@
 >
     <!-- on:mouseleave={closePeak}
     on:mouseenter={displayPeak} -->
-    {#key $refresh}
+    {#key appStates.refresh}
         <FolderCover id={file.id} name={file.name} {toolsVisible} {visible} />
     {/key}
     <div class="title-wrapper">

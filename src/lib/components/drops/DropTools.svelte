@@ -6,7 +6,8 @@
     import doubleRightIcon from "$lib/assets/arrowRightDouble.svg?raw";
     import expandIcon from "$lib/assets/expand.svg?raw";
     import { dropOkHandler } from "$lib/scripts/image";
-    import { autosave, dropItems } from "$lib/scripts/stores";
+    import { dropItems } from "$lib/scripts/stores";
+    import { appStates } from "$lib/scripts/state.svelte";
 
     const dispatch = createEventDispatcher();
     function triggerDispatch(type: string) {
@@ -23,7 +24,7 @@
         );
         if (running.length === 0) {
             $dropItems = [];
-            $autosave = false;
+            appStates.autosave = false;
         } else {
             triggerDispatch("mini");
         }
@@ -63,10 +64,10 @@
     />
     <span>
         <button
-            class="btn s-prime {$autosave === true ? 'autosave' : ''}"
+            class="btn s-prime {appStates.autosave === true ? 'autosave' : ''}"
             title="toggle autosave"
             on:click={() => {
-                $autosave = !$autosave;
+                appStates.autosave = !appStates.autosave;
             }}
         >
             {@html toggleIcon}

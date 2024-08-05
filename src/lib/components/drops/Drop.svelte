@@ -1,11 +1,12 @@
 <script>
-    import { autosave, dropItems } from "$lib/scripts/stores";
+    import { dropItems } from "$lib/scripts/stores";
     import DropItem from "$lib/components/drops/DropItem.svelte";
     import DropTools from "$lib/components/drops/DropTools.svelte";
     import doubleLeftIcon from "$lib/assets/arrowLeftDouble.svg?raw";
     import { fade } from "svelte/transition";
     import { onDestroy } from "svelte";
     import { navigating } from "$app/stores";
+    import { appStates } from "$lib/scripts/state.svelte";
 
     let mini = false;
     let expand = false;
@@ -13,7 +14,7 @@
         data && (mini = true);
     });
     onDestroy(() => {
-        $autosave = false;
+        appStates.autosave = false;
         unsubscribe();
     });
 </script>

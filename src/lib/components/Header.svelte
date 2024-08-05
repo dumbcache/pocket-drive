@@ -1,5 +1,5 @@
 <script>
-    import { activeParent, HOME_PATH, shortcuts } from "$lib/scripts/stores";
+    import { activeParent, HOME_PATH } from "$lib/scripts/stores";
     import Tools from "$lib/components/Tools.svelte";
     import { onMount } from "svelte";
     import BackButton from "$lib/components/utils/BackButton.svelte";
@@ -36,7 +36,8 @@
         <button
             class="btn s-prime shortcuts"
             title="shortcuts"
-            on:click={() => ($shortcuts = true)}>{@html helpIcon}</button
+            on:click={() => (appStates.shortcuts = true)}
+            >{@html helpIcon}</button
         >
         <a
             href={`https://drive.google.com/drive/folders/${$activeParent?.id}`}

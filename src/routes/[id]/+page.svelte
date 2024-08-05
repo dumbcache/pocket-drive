@@ -7,7 +7,6 @@
         fileStore,
         folderStore,
         mode,
-        mask,
         fetchAll,
         storeSnap,
     } from "$lib/scripts/stores";
@@ -42,7 +41,6 @@
     folderStore.set(data.folders);
     fileStore.set(data.files);
     activeParent.set(data.activeFolder);
-
 
     let renderAll = $state(false);
     let foldersFetching = $state(false);
@@ -222,7 +220,7 @@
     {/if}
     <main class="main" style:display={$mode === "search" ? "none" : "block"}>
         <Content />
-        {#if $mask}
+        {#if appStates.mask}
             <div class="mask"></div>
         {/if}
     </main>
