@@ -7,7 +7,6 @@
         dropItems,
         mode,
         pocketStore,
-        profile,
         shortcuts,
     } from "$lib/scripts/stores";
     import { requestToken } from "$lib/scripts/login";
@@ -110,7 +109,7 @@
     {#if $dropItems.length > 0}
         <Drop />
     {/if}
-    {#if $profile}
+    {#if appStates.profile}
         <Profile />
     {/if}
     {#if $shortcuts}

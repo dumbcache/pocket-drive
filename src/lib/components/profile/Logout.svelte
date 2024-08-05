@@ -1,11 +1,11 @@
 <script lang="ts">
     import { signUserOut } from "$lib/scripts/utils";
-    import { profile } from "$lib/scripts/stores";
     import { requestToken } from "$lib/scripts/login";
+    import { appStates } from "$lib/scripts/state.svelte";
 
     async function tokenHandler() {
         requestToken();
-        profile.set(false);
+        appStates.profile = false;
     }
 </script>
 

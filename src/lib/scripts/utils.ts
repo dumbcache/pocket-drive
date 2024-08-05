@@ -13,7 +13,6 @@ import {
     mask,
     fetchAll,
     folderStore,
-    profile,
     shortcuts,
     setPocketState,
     CACHE_DATA,
@@ -160,7 +159,7 @@ export async function signUserOut() {
     window.localStorage.setItem("preferences", preferences);
     clearSessionStorage();
     setPocketState();
-    profile.set(false);
+    appStates.profile = false;
     goto("/");
     console.info("logging user out");
 }
@@ -728,7 +727,7 @@ if (browser) {
         switch (e.key) {
             case "Escape":
                 if (get(mode) !== "edit") mode.set("");
-                profile.set(false);
+                appStates.profile = false;
                 shortcuts.set(false);
                 return;
 

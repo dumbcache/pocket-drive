@@ -1,16 +1,12 @@
 <script>
-    import {
-        activeParent,
-        HOME_PATH,
-        profile,
-        shortcuts,
-    } from "$lib/scripts/stores";
+    import { activeParent, HOME_PATH, shortcuts } from "$lib/scripts/stores";
     import Tools from "$lib/components/Tools.svelte";
     import { onMount } from "svelte";
     import BackButton from "$lib/components/utils/BackButton.svelte";
     import helpIcon from "$lib/assets/help.svg?raw";
     import profileIcon from "$lib/assets/profile.svg?raw";
     import goToDrive from "$lib/assets/drive.svg?raw";
+    import { appStates } from "$lib/scripts/state.svelte";
 
     let homeButton = "";
 
@@ -55,7 +51,8 @@
         <button
             class="btn s-prime settings"
             title="settings"
-            on:click={() => ($profile = true)}>{@html profileIcon}</button
+            on:click={() => (appStates.profile = true)}
+            >{@html profileIcon}</button
         >
     </div>
 </header>

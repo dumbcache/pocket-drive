@@ -1,6 +1,5 @@
 <script lang="ts">
     import closeIcon from "$lib/assets/close.svg?raw";
-    import { profile } from "$lib/scripts/stores";
     import ColorScheme from "$lib/components/utils/ColorScheme.svelte";
     import Options from "$lib/components/profile/Options.svelte";
     import Logout from "$lib/components/profile/Logout.svelte";
@@ -8,11 +7,13 @@
     import { appStates } from "$lib/scripts/state.svelte";
 </script>
 
-<div class="profile" on:wheel|stopPropagation|preventDefault>
+<div class="profile">
     <div class="container">
         <section class="one">
             <h2>Settings</h2>
-            <button class="btn s-prime" on:click={() => ($profile = false)}
+            <button
+                class="btn s-prime"
+                onclick={() => (appStates.profile = false)}
                 >{@html closeIcon}</button
             >
         </section>
