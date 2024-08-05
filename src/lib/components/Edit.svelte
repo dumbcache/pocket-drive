@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { activeFolder, updateProgressStore } from "$lib/scripts/stores";
+    import { updateProgressStore } from "$lib/scripts/stores";
     import closeIcon from "$lib/assets/close.svg?raw";
     import deleteIcon from "$lib/assets/delete.svg?raw";
     import moveIcon from "$lib/assets/move.svg?raw";
@@ -12,7 +12,7 @@
     import { childWorker, isValidUrl } from "$lib/scripts/utils";
     import { getToken } from "$lib/scripts/login";
     import { createEventDispatcher, onDestroy, onMount } from "svelte";
-    import { states } from "$lib/scripts/state.svelte";
+    import { states, temp } from "$lib/scripts/state.svelte";
 
     export let set: Set<string>,
         view: "FILE" | "FOLDER",
@@ -44,7 +44,7 @@
             context: "DELETE",
             ids: set,
             token: getToken(),
-            activeParent: $activeFolder.id,
+            activeParent: temp.activeFolder!.id,
             view,
         };
         childWorker.postMessage(workerMessage);
@@ -57,7 +57,7 @@
         updateProgressStore(set.size);
         workerMessage = {
             context: "TOP",
-            parent: $activeFolder.id,
+            parent: temp.activeFolder!.id,
             ids: set,
             token: getToken(),
         };
@@ -73,7 +73,7 @@
         workerMessage = {
             context: action,
             parent: selectedParent,
-            activeParent: $activeFolder.id,
+            activeParent: temp.activeFolder!.id,
             ids: set,
             token: getToken(),
             view,
@@ -94,7 +94,7 @@
         name?.trim() || (name = undefined);
         description?.trim() || (description = undefined);
         workerMessage = {
-            activeParent: $activeFolder.id,
+            activeParent: temp.activeFolder!.id,
             context: "EDIT",
             ids: set,
             imgMeta: { name, description },

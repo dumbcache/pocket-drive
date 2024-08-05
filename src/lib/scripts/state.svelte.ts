@@ -1,4 +1,4 @@
-export class AppStore<T> {
+class AppStore<T> {
     nextPageToken = $state<string>();
     files = $state<T[]>([]);
 
@@ -18,7 +18,7 @@ export class AppStore<T> {
 export const fsStore = new AppStore<DriveFile>();
 export const fdStore = new AppStore<DriveFolder>();
 
-export class AppPreferences {
+class AppPreferences {
     showFileNames = $state(false);
     disableWebp = $state(false);
     theme = $state<"DARK" | "">("");
@@ -43,7 +43,7 @@ export class AppPreferences {
 }
 export const preferences = new AppPreferences();
 
-export class AppStates {
+class AppStates {
     view = $state<"FILE" | "FOLDER">("FOLDER");
     mode = $state<Mode>("");
     starred = $state(false);
@@ -57,5 +57,12 @@ export class AppStates {
     sessionTimeout = $state<Boolean>();
     sessionTimeoutId = $state<number>();
 }
-
 export const states = new AppStates();
+
+class TempStore {
+    activeFolder = $state<DriveFolder>();
+    activeFile = $state<DriveFile>();
+    dropItems = $state<DropItem[]>([]);
+    folderAction = $state<FolderAction>({});
+}
+export const temp = new TempStore();

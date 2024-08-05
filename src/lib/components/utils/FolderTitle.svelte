@@ -1,17 +1,17 @@
 <script>
-    import { activeFolder } from "$lib/scripts/stores";
+    import { temp } from "$lib/scripts/state.svelte";
     import { getRoot } from "$lib/scripts/utils";
 </script>
 
-{#if $activeFolder && $activeFolder.name}
-    {#if $activeFolder?.id !== getRoot() && $activeFolder?.parents}
+{#if temp.activeFolder?.name}
+    {#if temp.activeFolder?.id !== getRoot()}
         <a
             class="title-sub"
             title="go to parent"
-            href={$activeFolder?.parents[0]}>./</a
+            href={temp.activeFolder.parents[0]}>./</a
         >
     {/if}
-    {$activeFolder?.name}
+    {temp.activeFolder.name}
 {/if}
 
 <style>

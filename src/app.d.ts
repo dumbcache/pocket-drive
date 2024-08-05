@@ -114,7 +114,13 @@ declare global {
 
     type Mode = "" | "VIEW" | "EDIT" | "SEARCH" | "DELETE";
 
-    type FolderAction = "EDIT" | "DELETE" | "MOVE" | "CREATE";
+    type FAction = "EDIT" | "DELETE" | "MOVE" | "CREATE";
+
+    interface FolderAction {
+        type: "EDIT" | "DELETE" | "MOVE" | "CREATE";
+        id: string;
+        name: string;
+    }
     interface FolderActionDetail {
         id: string;
         name: string;

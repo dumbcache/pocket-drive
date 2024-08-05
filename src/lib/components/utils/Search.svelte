@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { folderAction, folderStore } from "$lib/scripts/stores";
+    import { folderStore } from "$lib/scripts/stores";
     import { searchHandler } from "$lib/scripts/utils";
     import { getToken } from "$lib/scripts/login";
     import Folder from "$lib/components/folders/Folder.svelte";
@@ -7,7 +7,7 @@
     import Spinner from "$lib/components/utils/Spinner.svelte";
     import FolderSelect from "$lib/components/folders/FolderSelect.svelte";
     import ActionForm from "$lib/components/folders/ActionForm.svelte";
-    import { states } from "$lib/scripts/state.svelte";
+    import { states, temp } from "$lib/scripts/state.svelte";
 
     let global = false;
     let searchElement: HTMLInputElement;
@@ -113,8 +113,8 @@
     {/if}
 </section>
 
-{#if $folderAction && states.mode === "SEARCH"}
-    {#if $folderAction === "MOVE"}
+{#if temp.folderAction.type && states.mode === "SEARCH"}
+    {#if temp.folderAction.type === "MOVE"}
         <FolderSelect type="FOLDER" />
     {:else}
         <ActionForm />

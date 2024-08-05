@@ -1,5 +1,4 @@
 import { get, writable } from "svelte/store";
-import { fdStore, fsStore } from "./state.svelte";
 
 export const HOME_PATH = "home";
 export const CACHE_DATA = "pd-data";
@@ -38,13 +37,8 @@ export function updateProgressStore(t = 0, s = 0, f = 0) {
 export let folderStore = writable<GoogleDriveResponse | undefined>();
 export let fileStore = writable<GoogleDriveResponse | undefined>();
 
-export let activeFolder = writable<DriveFolder>();
 export let activeImage = writable<DriveFile>();
 export let dropItems = writable<DropItem[]>([]);
-
-export let folderActionToggle = writable(false);
-export let folderAction = writable<FolderAction | undefined>();
-export let folderActionDetail = writable<FolderActionDetail | undefined>();
 
 export function storeSnap(
     files?: GoogleDriveResponse<DriveFile>,

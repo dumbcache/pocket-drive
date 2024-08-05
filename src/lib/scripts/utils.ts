@@ -2,7 +2,6 @@ import { browser } from "$app/environment";
 import { get } from "svelte/store";
 import {
     fileStore,
-    activeFolder,
     dropItems,
     pocketStore,
     imageCache,
@@ -17,7 +16,7 @@ import { clearToken, getToken } from "$lib/scripts/login";
 import ChildWorker from "$lib/scripts/worker.ts?worker";
 import { clearDropItems } from "$lib/scripts/image";
 import { goto } from "$app/navigation";
-import { preferences, states } from "$lib/scripts/state.svelte";
+import { preferences, states, temp } from "$lib/scripts/state.svelte";
 
 export let childWorker: Worker;
 
@@ -521,7 +520,7 @@ if (browser) {
 
             case "EDIT":
                 let imgMeta = data.imgMeta;
-                if (aParent === get(activeFolder).id) {
+                if (aParent === temp.activeFolder.id) {
                     fileStore.update((prev) => ({
                         nextPageToken: prev?.nextPageToken,
                         files: prev?.files.map((file) => {
@@ -569,7 +568,7 @@ if (browser) {
             case "MOVE":
             case "DELETE":
                 success = new Set(success);
-                let currentActiveParent = get(activeFolder).id;
+                let currentActiveParent = temp.activeFolder.id;
                 if (aParent === currentActiveParent) {
                     if (view === "FILE") {
                         fileStore.update((prev) => ({
@@ -587,7 +586,7 @@ if (browser) {
                         }));
                     }
                 } else {
-                    pocketStore.delete(activeFolder);
+                    pocketStore.delete(temp.activeFolder?.id);
                 }
                 parent && pocketStore.delete(parent);
 
@@ -670,7 +669,7 @@ if (browser) {
                         getToken(),
                         true
                     );
-                    if (parent === get(activeFolder).id) {
+                    if (parent === temp.activeFolder.id) {
                         fileStore.set(res);
                     } else {
                         pocketStore.delete(parent);

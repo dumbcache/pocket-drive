@@ -1,12 +1,7 @@
 <script lang="ts">
     import { onDestroy, onMount } from "svelte";
     import doneIcon from "$lib/assets/done.svg?raw";
-    import {
-        activeFolder,
-        folderAction,
-        folderActionDetail,
-        folderStore,
-    } from "$lib/scripts/stores";
+    import { folderStore } from "$lib/scripts/stores";
     import { getToken } from "$lib/scripts/login";
     import {
         toTitleCase,
@@ -18,15 +13,14 @@
         FOLDER_MIME_TYPE,
     } from "$lib/scripts/utils";
     import Spinner from "$lib/components/utils/Spinner.svelte";
+    import { temp } from "$lib/scripts/state.svelte";
 
     const confirmText = "confirm";
-    let type: FolderAction, id: string, name: string, placeholder: string;
+    let placeholder = $state<string>();
+    let { id, name, type } = temp.folderAction;
 
     onMount(() => {
         try {
-            type = $folderAction;
-            id = $folderActionDetail?.id;
-            name = $folderActionDetail?.name;
             placeholder = name || "";
             type === "DELETE" && (placeholder = "");
         } catch (error) {
@@ -35,12 +29,11 @@
     });
 
     let dirField: HTMLInputElement;
-    let submitDisabled = true;
-    let progress = false;
+    let submitDisabled = $state(true);
+    let progress = $state(false);
 
     function close() {
-        $folderAction = undefined;
-        $folderActionDetail = undefined;
+        temp.folderAction = {} as FolderAction;
     }
 
     async function applyAction() {
@@ -48,7 +41,7 @@
         const token = getToken();
         let folderName = toTitleCase(placeholder);
         type !== "DELETE" && (placeholder = folderName);
-        let parent = $activeFolder.id;
+        let parent = temp.activeFolder!.id;
         if (type === "CREATE") {
             const data = await createFolder(folderName, parent, token);
             folderStore.update((prev) => {

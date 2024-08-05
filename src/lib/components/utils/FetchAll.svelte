@@ -1,14 +1,12 @@
 <script lang="ts">
     import fetchAllIcon from "$lib/assets/fetchAll.svg?raw";
     import { getToken } from "$lib/scripts/login";
-    import { fdStore, fsStore } from "$lib/scripts/state.svelte";
-    import { activeFolder } from "$lib/scripts/stores";
+    import { fdStore, fsStore, temp } from "$lib/scripts/state.svelte";
     import {
         fetchMultiple,
         FOLDER_MIME_TYPE,
         IMG_MIME_TYPE,
     } from "$lib/scripts/utils";
-    import { get } from "svelte/store";
     import Spinner from "$lib/components/utils/Spinner.svelte";
 
     let { view }: { view: View } = $props();
@@ -16,7 +14,7 @@
 
     async function clickHandler() {
         let token = getToken();
-        let parent = get(activeFolder)?.id;
+        let parent = temp.activeFolder?.id;
         if (!parent) return;
         let pageToken =
             view === "FOLDER" ? fdStore.nextPageToken : fsStore.nextPageToken;

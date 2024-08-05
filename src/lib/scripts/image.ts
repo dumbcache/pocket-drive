@@ -1,8 +1,8 @@
-import { activeFolder, dropItems } from "$lib/scripts/stores";
+import { dropItems } from "$lib/scripts/stores";
 import { childWorker, getRoot } from "$lib/scripts/utils";
 import { getToken } from "$lib/scripts/login";
 import { get } from "svelte/store";
-import { preferences, states } from "$lib/scripts/state.svelte";
+import { preferences, states, temp } from "$lib/scripts/state.svelte";
 
 export function previewAndSetDropItems(
     files: FileList,
@@ -25,8 +25,8 @@ export function previewAndSetDropItems(
                     mimeType: file.type,
                     file,
                     imgRef,
-                    parent: parent || get(activeFolder).id,
-                    parentName: parentName || get(activeFolder).name,
+                    parent: parent || temp.activeFolder?.id,
+                    parentName: parentName || temp.activeFolder?.name,
                 };
                 dropItems.set([...get(dropItems), item]);
                 if (states.autosave) {
@@ -52,8 +52,8 @@ export function previewAndSetDropItems(
                             mimeType: file.type,
                             file: blob,
                             imgRef,
-                            parent: parent || get(activeFolder).id,
-                            parentName: parentName || get(activeFolder).name,
+                            parent: parent || temp.activeFolder?.id,
+                            parentName: parentName || temp.activeFolder?.name,
                         };
                         dropItems.set([...get(dropItems), item]);
                         if (states.autosave) {
@@ -75,8 +75,8 @@ export function previewAndSetDropItems(
                 mimeType: file.type,
                 file,
                 imgRef,
-                parent: parent || get(activeFolder).id,
-                parentName: parentName || get(activeFolder).name,
+                parent: parent || temp.activeFolder?.id,
+                parentName: parentName || temp.activeFolder?.name,
             };
             dropItems.set([...get(dropItems), item]);
             // if (get(autosave)) {

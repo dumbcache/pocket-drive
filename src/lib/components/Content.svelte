@@ -2,7 +2,7 @@
     import { onMount } from "svelte";
     import FileContainer from "$lib/components/files/FileContainer.svelte";
     import FolderContainer from "$lib/components/folders/FolderContainer.svelte";
-    import { activeFolder, fileStore, folderStore } from "$lib/scripts/stores";
+    import { fileStore, folderStore } from "$lib/scripts/stores";
     import {
         FOLDER_MIME_TYPE,
         fetchMultiple,
@@ -10,7 +10,7 @@
     } from "$lib/scripts/utils";
     import { getToken } from "$lib/scripts/login";
     import Spinner from "$lib/components/utils/Spinner.svelte";
-    import { states, fdStore, fsStore } from "$lib/scripts/state.svelte";
+    import { states, fdStore, fsStore, temp } from "$lib/scripts/state.svelte";
 
     let observer = $state<IntersectionObserver>();
     let nextPageToken: string | undefined;
@@ -46,7 +46,7 @@
                         if (nextPageToken) {
                             fetchMultiple(
                                 {
-                                    parent: $activeFolder.id,
+                                    parent: temp.activeFolder!.id,
                                     mimeType: mimeType,
                                     pageToken: nextPageToken,
                                 },

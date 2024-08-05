@@ -1,12 +1,12 @@
 <script>
-    import { activeFolder, HOME_PATH } from "$lib/scripts/stores";
+    import { HOME_PATH } from "$lib/scripts/stores";
     import Tools from "$lib/components/Tools.svelte";
     import { onMount } from "svelte";
     import BackButton from "$lib/components/utils/BackButton.svelte";
     import helpIcon from "$lib/assets/help.svg?raw";
     import profileIcon from "$lib/assets/profile.svg?raw";
     import goToDrive from "$lib/assets/drive.svg?raw";
-    import { states } from "$lib/scripts/state.svelte";
+    import { states, temp } from "$lib/scripts/state.svelte";
 
     let homeButton = "";
 
@@ -39,7 +39,7 @@
             on:click={() => (states.shortcuts = true)}>{@html helpIcon}</button
         >
         <a
-            href={`https://drive.google.com/drive/folders/${$activeFolder?.id}`}
+            href={`https://drive.google.com/drive/folders/${temp.activeFolder?.id}`}
             referrerpolicy="no-referrer"
             rel="external noopener noreferrer nofollow"
             class="btn s-prime"

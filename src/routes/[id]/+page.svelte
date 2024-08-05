@@ -1,7 +1,7 @@
 <script lang="ts">
     import { onMount } from "svelte";
     import { afterNavigate, beforeNavigate } from "$app/navigation";
-    import { activeFolder, storeSnap } from "$lib/scripts/stores";
+    import { storeSnap } from "$lib/scripts/stores";
     import Content from "$lib/components/Content.svelte";
     import Tools from "$lib/components/Tools.svelte";
     import Count from "$lib/components/utils/Count.svelte";
@@ -12,7 +12,7 @@
     import ScrollButton from "$lib/components/utils/ScrollButton.svelte";
     import FolderTitle from "$lib/components/utils/FolderTitle.svelte";
     import { get } from "svelte/store";
-    import { states, fdStore, fsStore } from "$lib/scripts/state.svelte";
+    import { states, fdStore, fsStore, temp } from "$lib/scripts/state.svelte";
 
     let { data }: { data: PageData } = $props();
 
@@ -20,7 +20,7 @@
         if (data) {
             fsStore.set(data.files);
             fdStore.set(data.folders);
-            activeFolder.set(data.activeFolder);
+            temp.activeFolder = data.activeFolder;
         }
     });
 
@@ -39,7 +39,7 @@
     beforeNavigate(({ from, to }) => {
         try {
             if (from?.url?.href === to?.url?.href) return;
-            storeSnap(fsStore.get(), fdStore.get(), get(activeFolder));
+            storeSnap(fsStore.get(), fdStore.get(), temp.activeFolder);
         } catch (error) {
             console.warn(error);
         }

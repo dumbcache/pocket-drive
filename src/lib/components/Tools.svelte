@@ -2,13 +2,7 @@
     import imgCreate from "$lib/assets/imgCreate.svg?raw";
     import folderCreate from "$lib/assets/folderCreate.svg?raw";
     import { previewAndSetDropItems } from "$lib/scripts/image";
-    import {
-        activeFolder,
-        fileStore,
-        folderAction,
-        folderStore,
-        pocketStore,
-    } from "$lib/scripts/stores";
+    import { fileStore, folderStore, pocketStore } from "$lib/scripts/stores";
     import editIcon from "$lib/assets/editMode.svg?raw";
     import folderIcon from "$lib/assets/folder.svg?raw";
     import fileIcon from "$lib/assets/file.svg?raw";
@@ -25,7 +19,7 @@
     import { navigating } from "$app/stores";
     import { onDestroy } from "svelte";
     import { get } from "svelte/store";
-    import { states } from "$lib/scripts/state.svelte";
+    import { states, temp } from "$lib/scripts/state.svelte";
 
     let view: "FILE" | "FOLDER";
     let refreshing = false;
@@ -41,7 +35,7 @@
     async function refreshHandler() {
         refreshing = true;
         const token = getToken();
-        const parent = $activeFolder.id;
+        const parent = temp.activeFolder!.id;
 
         fetchMultiple(
             { parent, mimeType: IMG_MIME_TYPE, pageSize: 3 },
@@ -74,7 +68,7 @@
             token,
             true
         );
-        if (parent === get(activeFolder).id) {
+        if (parent === temp.activeFolder!.id) {
             folderStore.set(fd);
             fileStore.set(fs);
         }
@@ -135,7 +129,9 @@
         <button
             class="btn s-prime"
             title="create folder"
-            onclick={() => folderAction.set("CREATE")}
+            onclick={() => {
+                temp.folderAction.type = "CREATE";
+            }}
         >
             {@html folderCreate}
         </button>
