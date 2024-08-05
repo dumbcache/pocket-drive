@@ -4,7 +4,6 @@
     import { previewAndSetDropItems } from "$lib/scripts/image";
     import {
         activeParent,
-        activeView,
         fetchAll,
         fileStore,
         folderAction,
@@ -30,6 +29,7 @@
     import { navigating } from "$app/stores";
     import { onDestroy } from "svelte";
     import { get } from "svelte/store";
+    import { appStates } from "$lib/scripts/state.svelte";
 
     let view: "FILE" | "FOLDER";
     let refreshing = false;
@@ -96,12 +96,7 @@
         }
     });
 
-    const unsubscribeView = activeView.subscribe(
-        (data) => data && (view = data)
-    );
-
     onDestroy(() => {
-        unsubscribeView();
         unsubscribeNavigation();
     });
 </script>
@@ -110,22 +105,22 @@
     <button
         class="view btn s-prime"
         title="folders"
-        on:click={() => activeView.set("FOLDER")}
-        class:active={view === "FOLDER"}
+        on:click={() => (appStates.view = "FOLDER")}
+        class:active={appStates.view === "FOLDER"}
     >
         {@html folderIcon}
     </button>
     <button
         class="view btn s-prime"
         title="files"
-        on:click={() => activeView.set("FILE")}
-        class:active={view === "FILE"}
+        on:click={() => (appStates.view = "FILE")}
+        class:active={appStates.view === "FILE"}
     >
         {@html fileIcon}
     </button>
     <hr class="hr" />
 
-    {#if $activeView === "FILE"}
+    {#if appStates.view === "FILE"}
         <button class="img-picker btn s-prime">
             <label
                 for="img-picker"

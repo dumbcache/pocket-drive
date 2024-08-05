@@ -2,12 +2,7 @@
     import { onMount } from "svelte";
     import FileContainer from "$lib/components/files/FileContainer.svelte";
     import FolderContainer from "$lib/components/folders/FolderContainer.svelte";
-    import {
-        activeParent,
-        fileStore,
-        folderStore,
-        getViewContext,
-    } from "$lib/scripts/stores";
+    import { activeParent, fileStore, folderStore } from "$lib/scripts/stores";
     import {
         FOLDER_MIME_TYPE,
         fetchMultiple,
@@ -15,20 +10,20 @@
     } from "$lib/scripts/utils";
     import { getToken } from "$lib/scripts/login";
     import Spinner from "$lib/components/utils/Spinner.svelte";
+    import { appStates, fdStore, fsStore } from "$lib/scripts/state.svelte";
 
-    export let view = getViewContext();
-    let observer: IntersectionObserver;
+    let observer = $state<IntersectionObserver>();
     let nextPageToken: string | undefined;
     let mimeType: string;
-    let status = "";
-    $: status =
-        $view === "FOLDER"
-            ? $folderStore?.nextPageToken
-                ? ""
+    let status = $derived(
+        appStates.view === "FOLDER"
+            ? fdStore?.nextPageToken
+                ? "loading"
                 : "completed"
-            : $fileStore?.nextPageToken
-              ? ""
-              : "completed";
+            : fsStore?.nextPageToken
+              ? "loading"
+              : "completed"
+    );
 
     onMount(() => {
         setupIntersectionObserver();
@@ -40,7 +35,7 @@
                 entries.forEach((entry) => {
                     if (entry.isIntersecting && status === "") {
                         let ele = entry.target.id;
-                        status = "loading";
+                        // status = "loading";
                         if (ele === "folder-foot") {
                             nextPageToken = $folderStore?.nextPageToken;
                             mimeType = FOLDER_MIME_TYPE;
@@ -87,16 +82,16 @@
     }
 </script>
 
-<div class="content" role="main" on:dragstart|preventDefault>
+<div class="content" role="main" ondragstart={(e) => e.preventDefault()}>
     <section
         class="folder-container"
-        style:display={$view === "FOLDER" ? "initial" : "none"}
+        style:display={appStates.view === "FOLDER" ? "initial" : "none"}
     >
         <FolderContainer {observer} />
     </section>
     <section
         class="file-container"
-        style:display={$view === "FILE" ? "initial" : "none"}
+        style:display={appStates.view === "FILE" ? "initial" : "none"}
     >
         <FileContainer {observer} />
     </section>

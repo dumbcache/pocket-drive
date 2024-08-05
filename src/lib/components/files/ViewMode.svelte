@@ -21,7 +21,7 @@
     import Favorite from "$lib/components/utils/Favorite.svelte";
     import { get } from "svelte/store";
 
-    export let files: File[];
+    export let files: DriveFile[];
     let infoVisible = false;
     let zoom = false;
     let expand = false;

@@ -4,13 +4,11 @@
     import { beforeNavigate } from "$app/navigation";
     import {
         activeParent,
-        activeView,
         fileStore,
         folderStore,
         mode,
         mask,
         fetchAll,
-        setViewContext,
         storeSnap,
     } from "$lib/scripts/stores";
     import Content from "$lib/components/Content.svelte";
@@ -30,7 +28,7 @@
     import ScrollButton from "$lib/components/utils/ScrollButton.svelte";
     import FolderTitle from "$lib/components/utils/FolderTitle.svelte";
     import { get } from "svelte/store";
-    import { fdStore, fsStore } from "$lib/scripts/state.svelte";
+    import { appStates, fdStore, fsStore } from "$lib/scripts/state.svelte";
 
     let { data }: { data: PageData } = $props();
 
@@ -45,31 +43,42 @@
     fileStore.set(data.files);
     activeParent.set(data.activeFolder);
 
-    setViewContext();
 
     let renderAll = $state(false);
     let foldersFetching = $state(false);
     let filesFetching = $state(false);
 
-    function checks() {
-        activeView.set("FOLDER");
-        if (
-            $folderStore?.files.length === 0 &&
-            $fileStore?.files.length !== 0
-        ) {
-            activeView.set("FILE");
+    function check() {
+        appStates.view = "FOLDER";
+        if (fdStore.files.length === 0 && fsStore.files.length !== 0) {
+            appStates.view = "FILE";
         }
-        if ($folderStore?.nextPageToken || $fileStore?.nextPageToken) {
+        if (fdStore?.nextPageToken || fsStore?.nextPageToken) {
             renderAll = true;
         }
     }
+
+    // function checks() {
+    //     activeView.set("FOLDER");
+    //     appStates.view = "FOLDER";
+    //     if (
+    //         $folderStore?.files.length === 0 &&
+    //         $fileStore?.files.length !== 0
+    //     ) {
+    //         activeView.set("FILE");
+    //         appStates.view = "FILE";
+    //     }
+    //     if ($folderStore?.nextPageToken || $fileStore?.nextPageToken) {
+    //         renderAll = true;
+    //     }
+    // }
     const unsubscribeFetchAll = fetchAll.subscribe((data) => {
         renderAll = data;
     });
 
     const unsubscribeNavigation = navigating.subscribe((val) => {
         $mode = "";
-        if (!val) checks();
+        if (!val) check();
     });
 
     // function handlePointerDown(e: PointerEvent) {
@@ -160,7 +169,7 @@
     });
 
     onMount(() => {
-        checks();
+        check();
     });
     onDestroy(() => {
         unsubscribeNavigation();
@@ -196,7 +205,11 @@
                     on:click={fetchAllAtOnce}>{@html fetchAllIcon}</button
                 >
             {/if}
-            <Count />
+            <Count
+                count={appStates.view === "FOLDER"
+                    ? fdStore.files.length
+                    : fsStore.files.length}
+            />
         </nav>
 
         <h2 class="folder-name two">

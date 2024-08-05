@@ -1,11 +1,7 @@
 <script lang="ts">
     import Header from "$lib/components/Header.svelte";
     import Drop from "$lib/components/drops/Drop.svelte";
-    import {
-        signUserOut,
-        updateRecents,
-        setSessionTimeout,
-    } from "$lib/scripts/utils";
+    import { signUserOut, setSessionTimeout } from "$lib/scripts/utils";
     import { onMount } from "svelte";
     import {
         dropItems,
@@ -78,7 +74,6 @@
     onMount(async () => {
         try {
             await fetch("https://jsonplaceholder.typicode.com");
-            updateRecents();
             setSessionTimeout();
         } catch (error) {
             console.warn(error);

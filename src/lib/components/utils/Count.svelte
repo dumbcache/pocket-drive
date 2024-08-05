@@ -1,23 +1,10 @@
 <script lang="ts">
-    import {
-        fileStore,
-        folderStore,
-        getViewContext,
-    } from "$lib/scripts/stores";
-
-    export let count: number;
-
-    let view = getViewContext();
-    $: c =
-        count ??
-        ($view === "FOLDER"
-            ? $folderStore?.files?.length
-            : $fileStore?.files?.length);
+    let { count } = $props();
 </script>
 
-{#if c}
+{#if count}
     <p class="count" title="count">
-        {c}
+        {count}
     </p>
 {/if}
 

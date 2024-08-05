@@ -36,17 +36,9 @@ export function updateProgressStore(t = 0, s = 0, f = 0) {
 }
 
 export let profile = writable(false);
-export let activeView = writable<"FILE" | "FOLDER">("FOLDER");
-export function setViewContext() {
-    setContext("view", activeView);
-}
-export function getViewContext(): typeof activeView {
-    return getContext("view");
-}
 
 export let folderStore = writable<GoogleDriveResponse | undefined>();
 export let fileStore = writable<GoogleDriveResponse | undefined>();
-export let recentStore = writable<{ name: string; id: string }[]>([]);
 export let searchItems = writable<DriveFile[] | undefined>();
 
 export let refresh = writable(false);

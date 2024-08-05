@@ -1,11 +1,5 @@
 <script lang="ts">
-    import {
-        activeImage,
-        activeView,
-        fileStore,
-        mode,
-        starred,
-    } from "$lib/scripts/stores";
+    import { activeImage, fileStore, mode, starred } from "$lib/scripts/stores";
     import { onMount } from "svelte";
     import Edit from "$lib/components/Edit.svelte";
     import Folder from "$lib/components/folders/Folder.svelte";
@@ -15,11 +9,12 @@
     import { disableScrolling } from "$lib/scripts/utils";
     import imgCreate from "$lib/assets/imgCreate.svg?raw";
     import folderCreate from "$lib/assets/folderCreate.svg?raw";
+    import { appStates } from "$lib/scripts/state.svelte";
 
     export let files: FileResponse | undefined;
     export let view: "FILE" | "FOLDER";
     export let component: typeof Folder | typeof File;
-    export let footObserver: IntersectionObserver;
+    export let footObserver: IntersectionObserver | undefined;
     export let showFileNames = false;
 
     let childObserver: IntersectionObserver;
@@ -181,7 +176,7 @@
     });
 </script>
 
-{#if $mode === "edit" && $activeView === view}
+{#if $mode === "edit" && appStates.view === view}
     <Edit
         {view}
         {set}

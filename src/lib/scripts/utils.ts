@@ -2,10 +2,8 @@ import { browser } from "$app/environment";
 import { get } from "svelte/store";
 import {
     mode,
-    activeView,
     fileStore,
     activeParent,
-    recentStore,
     dropItems,
     pocketStore,
     imageCache,
@@ -189,24 +187,6 @@ export function setSessionTimeout(expires?: number) {
         appStates.sessionTimeout = true;
     }
 }
-
-export const updateRecents = (data?: { name: string; id: string }) => {
-    let old =
-        (JSON.parse(window.localStorage.getItem("recents")!) as {
-            name: string;
-            id: string;
-        }[]) ?? [];
-    if (old.length === 0 && !data) return;
-    if (data) {
-        if (old?.length === 10) {
-            old.pop();
-        }
-        old = old.filter((item) => item.id !== data.id);
-        old.unshift(data);
-    }
-    recentStore.set(old);
-    window.localStorage.setItem("recents", JSON.stringify(old));
-};
 
 export function fetchImgPreview(id: string) {
     childWorker.postMessage({
@@ -768,9 +748,8 @@ if (browser) {
                 return;
 
             case "e":
-                activeView.update((prev) =>
-                    prev === "FOLDER" ? "FILE" : "FOLDER"
-                );
+                appStates.view =
+                    appStates.view === "FOLDER" ? "FILE" : "FOLDER";
                 return;
 
             case "E":
