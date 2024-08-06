@@ -8,8 +8,8 @@ import {
     fetchSingle,
 } from "$lib/scripts/utils";
 import { getToken } from "$lib/scripts/login";
-import { pocketStore, HOME_PATH, setPocketState } from "$lib/scripts/stores";
 import { goto } from "$app/navigation";
+import { pocketStore, HOME_PATH, states } from "$lib/scripts/stores.svelte";
 
 async function loadContent(parent: string) {
     try {
@@ -34,7 +34,7 @@ async function loadContent(parent: string) {
 
 export const load = (async ({ params }) => {
     if (browser) {
-        setPocketState(params?.id);
+        states.setPocketState(params?.id);
         if (!checkLoginStatus()) {
             signUserOutPartial();
             goto("/", { replaceState: true });

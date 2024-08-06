@@ -1,23 +1,20 @@
 <script lang="ts">
     import { onMount } from "svelte";
     import { afterNavigate, beforeNavigate } from "$app/navigation";
-    import { storeSnap } from "$lib/scripts/stores";
     import Content from "$lib/components/Content.svelte";
     import Tools from "$lib/components/Tools.svelte";
     import Count from "$lib/components/utils/Count.svelte";
-
     import BackButton from "$lib/components/utils/BackButton.svelte";
-
     import Search from "$lib/components/utils/Search.svelte";
     import ScrollButton from "$lib/components/utils/ScrollButton.svelte";
     import FolderTitle from "$lib/components/utils/FolderTitle.svelte";
-    import { get } from "svelte/store";
     import {
         states,
         folderStore,
         fileStore,
         tempStore,
-    } from "$lib/scripts/state.svelte";
+        storeSnap,
+    } from "$lib/scripts/stores.svelte";
 
     let { data }: { data: PageData } = $props();
 

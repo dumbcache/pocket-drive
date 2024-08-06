@@ -12,7 +12,7 @@
         FOLDER_MIME_TYPE,
     } from "$lib/scripts/utils";
     import Spinner from "$lib/components/utils/Spinner.svelte";
-    import { folderStore, tempStore } from "$lib/scripts/state.svelte";
+    import { folderStore, tempStore } from "$lib/scripts/stores.svelte";
 
     const confirmText = "confirm";
     let placeholder = $state<string>();

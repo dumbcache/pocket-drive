@@ -1,5 +1,5 @@
 import { browser } from "$app/environment";
-import { pocketStore } from "$lib/scripts/stores";
+import { pocketStore } from "$lib/scripts/stores.svelte";
 import { checkLoginStatus } from "$lib/scripts/utils";
 
 export const ssr = false;

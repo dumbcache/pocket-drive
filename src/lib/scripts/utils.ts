@@ -1,24 +1,20 @@
 import { browser } from "$app/environment";
-import {
-    pocketStore,
-    imageCache,
-    imageFetchLog,
-    updateProgressStore,
-    setPocketState,
-    CACHE_DATA,
-    activeImage,
-} from "$lib/scripts/stores";
 import { clearToken, getToken } from "$lib/scripts/login";
 import ChildWorker from "$lib/scripts/worker.ts?worker";
 import { clearDropItems } from "$lib/scripts/image";
 import { goto } from "$app/navigation";
 import {
+    pocketStore,
     folderStore,
     fileStore,
     preferences,
     states,
     tempStore,
-} from "$lib/scripts/state.svelte";
+    imageCache,
+    imageFetchLog,
+    CACHE_DATA,
+    progressStore,
+} from "$lib/scripts/stores.svelte";
 
 export let childWorker: Worker;
 
@@ -129,7 +125,7 @@ export async function signUserOut() {
     clearLocalStorage();
     window.localStorage.setItem("preferences", preferences);
     clearSessionStorage();
-    setPocketState();
+    states.setPocketState();
     states.profile = false;
     goto("/");
     console.info("logging user out");
@@ -474,8 +470,10 @@ export function setPreviewFile(id: string, url: string) {
             ele.src = url;
         }, 1000);
     }
-    activeImage.update((prev) => ({ ...prev, download: url }));
-    ele.nextElementSibling.style.display = "none";
+    tempStore.activeFile.download = url;
+    tempStore.activeFile.loading = false;
+    // activeImage.update((prev) => ({ ...prev, download: url }));
+    // ele.nextElementSibling.style.display = "none";
 }
 
 if (browser) {
@@ -647,19 +645,19 @@ if (browser) {
                     let ele = document.querySelector(`[data-id="${data.id}"]`);
                     if (data.status === 1) {
                         ele?.remove();
-                        updateProgressStore(0, 1, 0);
+                        progressStore.update(0, 1, 0);
                         return;
                     }
-                    updateProgressStore(0, 0, 1);
+                    progressStore.update(0, 0, 1);
                     ele.style.display = "initial";
                     return;
                 }
                 if (type === "COPY" || type === "EDIT") {
                     if (data.status === 1) {
-                        updateProgressStore(0, 1, 0);
+                        progressStore.update(0, 1, 0);
                         return;
                     }
-                    updateProgressStore(0, 0, 1);
+                    progressStore.update(0, 0, 1);
                     return;
                 }
                 if (type === "DROP") {

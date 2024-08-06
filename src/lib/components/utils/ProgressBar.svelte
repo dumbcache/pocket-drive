@@ -1,40 +1,44 @@
 <script lang="ts">
     import failIcon from "$lib/assets/failure.svg?raw";
     import successIcon from "$lib/assets/success.svg?raw";
-    import { progressStore } from "$lib/scripts/stores";
     import Spinner from "$lib/components/utils/Spinner.svelte";
+    import { progressStore } from "$lib/scripts/stores.svelte";
 
-    let total = 0,
-        success = 0,
-        fail = 0;
-    progressStore.subscribe((val) => {
-        total = val.total;
-        success = val.success;
-        fail = val.fail;
-        if (success + fail === total && total !== 0)
+    $effect(() => {
+        if (
+            progressStore.success + progressStore.fail ===
+                progressStore.total &&
+            progressStore.total !== 0
+        ) {
             setTimeout(() => {
-                progressStore.update(() => ({ total: 0, success: 0, fail: 0 }));
+                progressStore.set(0, 0, 0);
             }, 5000);
+        }
     });
 </script>
 
-<div class="progress-bar" style:display={total ? "initial" : "none"}>
+<div
+    class="progress-bar"
+    style:display={progressStore.total ? "initial" : "none"}
+>
     <div class="items">
         <!-- <button class="close btn s-second">{@html closeButton}</button> -->
-        {#if success + fail !== total}
+        {#if progressStore.success + progressStore.fail !== progressStore.total}
             <span class="loading item">
                 <Spinner width={"2rem"} height={"2rem"} borderWidth={"2px"} />
-                {total}
+                {progressStore.total}
             </span>
         {/if}
-        {#if success > 0}
+        {#if progressStore.success > 0}
             <div class="success item">
-                <span class="s-second">{@html successIcon}</span>{success}
+                <span class="s-second">{@html successIcon}</span
+                >{progressStore.success}
             </div>
         {/if}
-        {#if fail > 0}
+        {#if progressStore.fail > 0}
             <div class="fail item">
-                <span class="s-second">{@html failIcon}</span>{fail}
+                <span class="s-second">{@html failIcon}</span
+                >{progressStore.fail}
             </div>
         {/if}
     </div>

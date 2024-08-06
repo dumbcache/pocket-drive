@@ -1,5 +1,5 @@
 <script>
-    import { states } from "$lib/scripts/state.svelte";
+    import { states } from "$lib/scripts/stores.svelte";
 </script>
 
 <!-- svelte-ignore a11y-no-static-element-interactions -->

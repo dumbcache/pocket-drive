@@ -1,12 +1,11 @@
 <script>
-    import { HOME_PATH } from "$lib/scripts/stores";
     import Tools from "$lib/components/Tools.svelte";
     import { onMount } from "svelte";
     import BackButton from "$lib/components/utils/BackButton.svelte";
     import helpIcon from "$lib/assets/help.svg?raw";
     import profileIcon from "$lib/assets/profile.svg?raw";
     import goToDrive from "$lib/assets/drive.svg?raw";
-    import { states, tempStore } from "$lib/scripts/state.svelte";
+    import { states, tempStore, HOME_PATH } from "$lib/scripts/stores.svelte";
 
     let homeButton = "";
 

@@ -4,7 +4,7 @@
     import Options from "$lib/components/profile/Options.svelte";
     import Logout from "$lib/components/profile/Logout.svelte";
     import SessionInfo from "$lib/components/profile/SessionInfo.svelte";
-    import { states } from "$lib/scripts/state.svelte";
+    import { states } from "$lib/scripts/stores.svelte";
 </script>
 
 <div class="profile">

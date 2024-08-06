@@ -1,7 +1,7 @@
 <script lang="ts">
     import lightModeIcon from "$lib/assets/lightMode.svg?raw";
     import darkModeIcon from "$lib/assets/darkMode.svg?raw";
-    import { preferences } from "$lib/scripts/state.svelte";
+    import { preferences } from "$lib/scripts/stores.svelte";
 </script>
 
 <button

@@ -13,7 +13,7 @@
         enableScorlling,
     } from "$lib/scripts/utils";
     import { getToken } from "$lib/scripts/login";
-    import { folderStore, states, tempStore } from "$lib/scripts/state.svelte";
+    import { folderStore, states, tempStore } from "$lib/scripts/stores.svelte";
 
     export let type: "FOLDER" | "FILE";
     // let tempFolderStore = { ...$folderStore };

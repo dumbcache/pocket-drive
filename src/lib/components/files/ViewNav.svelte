@@ -1,53 +1,47 @@
 <script lang="ts">
-    import { activeImage } from "$lib/scripts/stores";
-    import { createEventDispatcher, onDestroy, onMount } from "svelte";
+    import { fileStore, tempStore } from "$lib/scripts/stores.svelte";
+    import { onMount } from "svelte";
+    import { SvelteSet } from "svelte/reactivity";
 
-    export let files: File[];
-    export let preview: HTMLElement;
-    let active: string;
+    let { expand }: { expand: boolean } = $props();
     let navigation: HTMLElement;
-    const dispatch = createEventDispatcher();
     let observer: IntersectionObserver;
-    let inspectionLog = {};
+    let inspectionLog = new SvelteSet();
 
-    const unsubscribe = activeImage.subscribe((data) => {
-        if (data && data.id != active) {
-            active = data.id;
-            if (navigation) {
-                let ele = navigation.querySelector(
-                    `[data-id="${data.id}"]`
-                ) as HTMLElement;
-                setTimeout(() => {
-                    ele?.scrollIntoView({
-                        behavior: "smooth",
-                        block: "center",
-                        inline: "center",
-                    });
-                });
-            }
-        }
-    });
+    function changeHandler(id: string) {
+        let preview = document.querySelector(".preview");
+        if (!preview) return;
+        const ele = preview.querySelector(`[data-id="${id}"]`);
+        ele?.scrollIntoView({
+            behavior: "instant",
+            block: "center",
+            inline: "center",
+        });
+        const ele2 = navigation.querySelector(`[data-id="${id}"]`);
+        ele2?.scrollIntoView({
+            behavior: "instant",
+            block: "center",
+            inline: "center",
+        });
+    }
 
-    function childInspection(items: FileResponse | undefined) {
+    function childInspection() {
         observer = new IntersectionObserver(
             (entries) => {
                 entries.forEach((entry) => {
                     if (entry.isIntersecting) {
                         entry.target.timeoutid = setTimeout(() => {
                             let { id } = entry.target.dataset;
-                            if (!inspectionLog[id]) {
-                                // viewCache.update((val) => ({
-                                //     ...val,
-                                //     [id]: true,
-                                // }));
-                                let li = preview?.querySelector(
-                                    `[data-id="${id}"]`
-                                ) as HTMLImageElement;
-                                if (!li.src.startsWith("blob://")) {
-                                    li.src = li.dataset.src;
-                                }
-                                inspectionLog[id] = true;
+                            if (inspectionLog.has(id)) return;
+
+                            let preview = document.querySelector(".preview");
+                            let li = preview?.querySelector(
+                                `[data-id="${id}"]`
+                            ) as HTMLImageElement;
+                            if (!li.src.startsWith("blob:")) {
+                                li.src = li.dataset.src as string;
                             }
+                            inspectionLog.add(id);
                             observer.unobserve(entry.target);
                         }, 700);
                     } else {
@@ -57,7 +51,7 @@
             },
             { threshold: 0 }
         );
-        items?.forEach((item) => {
+        fileStore.files.forEach((item) => {
             let id = item.id;
             if (id) {
                 let li = navigation?.querySelector(`[data-id="${id}"]`);
@@ -68,31 +62,17 @@
 
     onMount(() => {
         setTimeout(() => {
-            if ($activeImage) {
-                const ele = navigation.querySelector(
-                    `[data-id="${$activeImage.id}"]`
-                );
+            let id = tempStore.activeFile.id;
+            if (id) {
+                const ele = navigation.querySelector(`[data-id="${id}"]`);
                 ele?.scrollIntoView({
                     behavior: "instant",
                     block: "center",
                     inline: "center",
                 });
-                let fc = document.querySelector(".file-container");
-                const ele2 = fc.querySelector(`[data-id="${$activeImage.id}"]`);
-                ele2?.scrollIntoView({
-                    behavior: "instant",
-                    block: "center",
-                    inline: "center",
-                });
             }
-        }, 0.1);
-        setTimeout(() => {
-            childInspection(files);
-        }, 1000);
-    });
-
-    onDestroy(() => {
-        unsubscribe();
+            childInspection();
+        }, 0);
     });
 
     function thumbClick(e: MouseEvent) {
@@ -100,23 +80,40 @@
         if (target === navigation) return;
         target.localName !== "img" && (target = target.querySelector("img"));
         const { id } = target.dataset;
-        if (id === active) return;
-        const [file] = files.filter((file) => file.id === id);
-        activeImage.set(file);
-        dispatch("change", { id });
+        if (!id) return;
+        if (id === tempStore.activeFile.id) return;
+        let file = fileStore.files.find((file) => file.id === id);
+        file && (tempStore.activeFile = file);
+        changeHandler(id);
     }
+
+    $effect(() => {
+        const ele = navigation.querySelector(
+            `[data-id="${tempStore.activeFile.id}"]`
+        );
+        ele?.scrollIntoView({
+            behavior: "instant",
+            block: "center",
+            inline: "center",
+        });
+    });
 </script>
 
-{#if files}
-    <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
-    <nav class="thumbs" on:click={thumbClick} on:keydown bind:this={navigation}>
-        {#each files as file}
+<section
+    class="one nav"
+    style:display={expand ? "none" : "initial"}
+    onwheel={(e) => e.stopPropagation()}
+>
+    <!-- svelte-ignore a11y_click_events_have_key_events -->
+    <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+    <nav class="thumbs" onclick={thumbClick} bind:this={navigation}>
+        {#each fileStore.files as file}
             <button
-                class:active={file.id === $activeImage?.id}
+                class:active={file.id === tempStore.activeFile.id}
                 data-id={file.id}
             >
                 <img
-                    src={inspectionLog[file.id] ? file.thumbnailLink : ""}
+                    src={inspectionLog.has(file.id) ? file.thumbnailLink : ""}
                     alt=""
                     class:no={!file.thumbnailLink}
                     height="150"
@@ -126,7 +123,7 @@
             </button>
         {/each}
     </nav>
-{/if}
+</section>
 
 <style>
     .thumbs {
@@ -186,6 +183,14 @@
 
         .no {
             width: 5rem;
+        }
+        .one::-webkit-scrollbar {
+            display: none;
+        }
+        @media (max-width: 600px) and (orientation: landscape) {
+            .one {
+                min-width: 10rem;
+            }
         }
     }
 </style>

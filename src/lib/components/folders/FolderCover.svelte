@@ -3,7 +3,7 @@
     import { IMG_MIME_TYPE, fetchMultiple } from "$lib/scripts/utils";
     import { getToken } from "$lib/scripts/login";
     import { previewAndSetDropItems } from "$lib/scripts/image";
-    import { states } from "$lib/scripts/state.svelte";
+    import { states } from "$lib/scripts/stores.svelte";
 
     export let visible: Boolean;
     export let toolsVisible: Boolean;

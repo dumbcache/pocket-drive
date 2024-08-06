@@ -7,7 +7,7 @@
     import type { Unsubscriber } from "svelte/store";
     import { loadGSIScript } from "$lib/scripts/login";
     import { disableScrolling, enableScorlling } from "$lib/scripts/utils";
-    import { preferences, states } from "$lib/scripts/state.svelte";
+    import { preferences, states } from "$lib/scripts/stores.svelte";
 
     let homeIcon = "";
     let startup: HTMLDivElement;

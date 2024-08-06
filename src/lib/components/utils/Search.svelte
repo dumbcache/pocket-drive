@@ -5,7 +5,7 @@
     import Spinner from "$lib/components/utils/Spinner.svelte";
     import FolderSelect from "$lib/components/folders/FolderSelect.svelte";
     import ActionForm from "$lib/components/folders/ActionForm.svelte";
-    import { folderStore, states, tempStore } from "$lib/scripts/state.svelte";
+    import { folderStore, states, tempStore } from "$lib/scripts/stores.svelte";
 
     let global = false;
     let searchElement: HTMLInputElement;

@@ -5,7 +5,7 @@
         folderStore,
         fileStore,
         tempStore,
-    } from "$lib/scripts/state.svelte";
+    } from "$lib/scripts/stores.svelte";
     import {
         fetchMultiple,
         FOLDER_MIME_TYPE,

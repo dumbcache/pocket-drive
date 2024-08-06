@@ -1,11 +1,10 @@
-import { getPocketState } from "$lib/scripts/stores";
 import { get } from "svelte/store";
 import { PUBLIC_KRAB_CLIENT_ID } from "$env/static/public";
 import { setSessionTimeout, createRootFolder } from "$lib/scripts/utils";
 import { goto } from "$app/navigation";
 import { browser } from "$app/environment";
 import { page } from "$app/stores";
-import { states } from "./state.svelte";
+import { states } from "./stores.svelte";
 
 let client = null;
 let token: string = "";
@@ -33,7 +32,7 @@ async function handleGoogleSignIn(tokenResponse: TokenResponse) {
             window.localStorage.setItem("root", id);
         }
     }
-    let state = getPocketState();
+    let state = states.getPocketState();
     if (!get(page).params?.id) goto(`/${state}`, { replaceState: true });
 }
 

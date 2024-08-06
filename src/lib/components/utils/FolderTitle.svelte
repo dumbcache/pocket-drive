@@ -1,5 +1,5 @@
 <script>
-    import { tempStore } from "$lib/scripts/state.svelte";
+    import { tempStore } from "$lib/scripts/stores.svelte";
     import { getRoot } from "$lib/scripts/utils";
 </script>
 

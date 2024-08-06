@@ -1,5 +1,5 @@
 import { browser } from "$app/environment";
-import { preferences } from "$lib/scripts/state.svelte.js";
+import { preferences } from "$lib/scripts/stores.svelte.js";
 import { clearCache } from "$lib/scripts/utils";
 
 export const ssr = true;

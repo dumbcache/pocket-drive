@@ -7,7 +7,7 @@
     import pic2dark from "$lib/assets/about/pic2dark.webp";
     import pic3dark from "$lib/assets/about/pic3dark.webp";
     import pic4dark from "$lib/assets/about/pic4dark.webp";
-    import { preferences } from "$lib/scripts/state.svelte";
+    import { preferences } from "$lib/scripts/stores.svelte";
 </script>
 
 <article class="article two">

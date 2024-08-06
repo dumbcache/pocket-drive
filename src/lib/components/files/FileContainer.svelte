@@ -1,8 +1,8 @@
 <script lang="ts">
     import File from "$lib/components/files/File.svelte";
-    import ViewMode from "$lib/components/files/ViewMode.svelte";
+    import View from "$lib/components/files/View.svelte";
     import Container from "$lib/components/Container.svelte";
-    import { preferences, states, fileStore } from "$lib/scripts/state.svelte";
+    import { preferences, states, fileStore } from "$lib/scripts/stores.svelte";
     import FetchAll from "$lib/components/utils/FetchAll.svelte";
 
     let { observer }: { observer: IntersectionObserver | undefined } = $props();
@@ -23,5 +23,5 @@
 <!-- {/key} -->
 
 {#if states.mode === "VIEW"}
-    <ViewMode files={fileStore.files} />
+    <View />
 {/if}

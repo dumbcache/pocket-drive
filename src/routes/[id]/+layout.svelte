@@ -3,13 +3,17 @@
     import Drop from "$lib/components/drops/Drop.svelte";
     import { signUserOut, setSessionTimeout } from "$lib/scripts/utils";
     import { onMount } from "svelte";
-    import { pocketStore } from "$lib/scripts/stores";
     import { requestToken } from "$lib/scripts/login";
     import { previewAndSetDropItems } from "$lib/scripts/image";
     import ProgressBar from "$lib/components/utils/ProgressBar.svelte";
     import Profile from "$lib/components/profile/Profile.svelte";
     import Shortcuts from "$lib/components/Shortcuts.svelte";
-    import { preferences, states, tempStore } from "$lib/scripts/state.svelte";
+    import {
+        preferences,
+        states,
+        tempStore,
+        pocketStore,
+    } from "$lib/scripts/stores.svelte";
 
     let draggedOver = false;
 

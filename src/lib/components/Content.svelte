@@ -13,7 +13,7 @@
         folderStore,
         fileStore,
         tempStore,
-    } from "$lib/scripts/state.svelte";
+    } from "$lib/scripts/stores.svelte";
     import FileLoading from "$lib/components/utils/FileLoading.svelte";
 
     let observer = $state<IntersectionObserver>();

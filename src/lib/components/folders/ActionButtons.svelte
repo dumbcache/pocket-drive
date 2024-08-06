@@ -3,7 +3,7 @@
     import editIcon from "$lib/assets/edit.svg?raw";
     import deleteIcon from "$lib/assets/delete.svg?raw";
     import moveIcon from "$lib/assets/move.svg?raw";
-    import { tempStore } from "$lib/scripts/state.svelte";
+    import { tempStore } from "$lib/scripts/stores.svelte";
 
     export let id: string;
     export let name: string;

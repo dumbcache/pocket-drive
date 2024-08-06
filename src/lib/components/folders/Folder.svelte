@@ -1,6 +1,6 @@
 <script lang="ts">
     import FolderCover from "$lib/components/folders/FolderCover.svelte";
-    import { states } from "$lib/scripts/state.svelte";
+    import { states } from "$lib/scripts/stores.svelte";
     import Favorite from "../utils/Favorite.svelte";
 
     export let visible: Boolean;

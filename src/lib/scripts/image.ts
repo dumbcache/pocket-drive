@@ -1,6 +1,6 @@
 import { childWorker } from "$lib/scripts/utils";
 import { getToken } from "$lib/scripts/login";
-import { preferences, states, tempStore } from "$lib/scripts/state.svelte";
+import { preferences, states, tempStore } from "$lib/scripts/stores.svelte";
 
 export function previewAndSetDropItems(
     files: FileList,

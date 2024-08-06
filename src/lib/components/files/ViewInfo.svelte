@@ -1,7 +1,5 @@
 <script lang="ts">
-    import { activeImage } from "$lib/scripts/stores";
     import closeIcon from "$lib/assets/close.svg?raw";
-    import { createEventDispatcher, onMount } from "svelte";
     import { getToken } from "$lib/scripts/login";
     import {
         isValidUrl,
@@ -10,60 +8,61 @@
         updateSingle,
     } from "$lib/scripts/utils";
     import { fade } from "svelte/transition";
-    import { fileStore, tempStore } from "$lib/scripts/state.svelte";
+    import { tempStore } from "$lib/scripts/stores.svelte";
 
-    const dispatch = createEventDispatcher();
-    let id: string = $activeImage.id;
-    let name: string = $activeImage.name;
-    let description: string = $activeImage.description;
-    let size: number = $activeImage.size;
+    let { toggleInfo }: { toggleInfo: MouseEventHandler<HTMLButtonElement> } =
+        $props();
 
-    let invalid = false;
-    let changes = true;
-    onMount(() => {
-        return activeImage.subscribe((data) => {
-            name = data.name;
-            description = data.description;
-            id = data.id;
-            size = data.size;
-            size = `${(size / (1024 * 1024)).toFixed(2)} MB`;
-            invalid = false;
-            changes = false;
-        });
+    let name = $state("");
+    let description = $state("");
+
+    let invalid = $state(false);
+    let changes = $state(false);
+
+    $effect(() => {
+        name = tempStore.activeFile.name;
+        description = tempStore.activeFile.description;
     });
+
     async function handleSave() {
         if (description) {
-            if (!checkValid()) return;
+            if (!checkValid(description)) return;
         }
-        await updateSingle(id, { name, description }, getToken());
+        let id = tempStore.activeFile.id;
+        await updateSingle(
+            id,
+            {
+                name,
+                description,
+            },
+            getToken()
+        );
         changes = false;
-        let file = { ...$activeImage, name, description };
         fetchMultiple(
-            { parent: tempStore.activeFolder!.id, mimeType: IMG_MIME_TYPE },
+            { parent: id, mimeType: IMG_MIME_TYPE },
             getToken(),
             true
         );
-        let index = fileStore.files.findIndex((i) => i.id === id);
-        fileStore.files[index] = file;
-        activeImage.set(file);
+        tempStore.activeFile.name = name;
+        tempStore.activeFile.description = description;
     }
+
     function handleCancel() {
-        name = $activeImage.name;
-        description = $activeImage.description;
         changes = false;
         invalid = false;
     }
 
     function handleChange(e) {
         changes = true;
-        e.target.name = "url" && checkValid();
+        e.target.name = "url" && checkValid(description);
     }
-    function checkValid() {
-        if (description.trim() === "") {
+
+    function checkValid(url: string) {
+        if (url.trim() === "") {
             invalid = false;
             return;
         }
-        const url = isValidUrl(description);
+        url = isValidUrl(url);
         if (!url) {
             invalid = true;
             return false;
@@ -73,55 +72,59 @@
     }
 </script>
 
-<!-- svelte-ignore a11y-no-static-element-interactions -->
-<div
-    class="info"
-    on:wheel|preventDefault
-    on:keydown|stopPropagation
-    transition:fade={{ duration: 100 }}
->
-    <header>
-        <h5>Info</h5>
-        <button class="btn s-prime close" on:click={() => dispatch("close")}
-            >{@html closeIcon}</button
-        >
-    </header>
-
-    <p class="id" title="id">{id}</p>
-    <p class="size" title="size">
-        {size}
-    </p>
-    <input
-        type="text"
-        name="name"
-        title="file name"
-        placeholder="Name"
-        bind:value={name}
-        on:change={handleChange}
-        autocomplete="off"
-    />
-    <input
-        type="url"
-        name="url"
-        title="link to website"
-        class:invalid
-        placeholder="URL"
-        bind:value={description}
-        on:change={handleChange}
-        autocomplete="off"
-    />
-
-    {#if invalid}
-        <p class="alert">Enter valid url</p>
-    {/if}
-    {#if changes}
-        <footer>
-            <button class="cancel action" on:click={handleCancel}>cancel</button
+<section class="three">
+    <!-- svelte-ignore a11y-no-static-element-interactions -->
+    <!-- svelte-ignore a11y_no_static_element_interactions -->
+    <div
+        class="info"
+        onwheel={(e) => e.preventDefault()}
+        onkeydown={(e) => e.stopPropagation()}
+        transition:fade={{ duration: 100 }}
+    >
+        <header>
+            <h5>Info</h5>
+            <button class="btn s-prime close" onclick={toggleInfo}
+                >{@html closeIcon}</button
             >
-            <button class="save action" on:click={handleSave}>save</button>
-        </footer>
-    {/if}
-</div>
+        </header>
+
+        <p class="id" title="id">{tempStore.activeFile.id}</p>
+        <p class="size" title="size">
+            {tempStore.activeFile.size}
+        </p>
+        <input
+            type="text"
+            name="name"
+            title="file name"
+            placeholder="Name"
+            bind:value={name}
+            onchange={handleChange}
+            autocomplete="off"
+        />
+        <input
+            type="url"
+            name="url"
+            title="link to website"
+            class:invalid
+            placeholder="URL"
+            bind:value={description}
+            onchange={handleChange}
+            autocomplete="off"
+        />
+
+        {#if invalid}
+            <p class="alert">Enter valid url</p>
+        {/if}
+        {#if changes}
+            <footer>
+                <button class="cancel action" onclick={handleCancel}
+                    >cancel</button
+                >
+                <button class="save action" onclick={handleSave}>save</button>
+            </footer>
+        {/if}
+    </div>
+</section>
 
 <style>
     h5 {

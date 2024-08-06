@@ -1,5 +1,4 @@
 <script lang="ts">
-    import { updateProgressStore } from "$lib/scripts/stores";
     import closeIcon from "$lib/assets/close.svg?raw";
     import deleteIcon from "$lib/assets/delete.svg?raw";
     import moveIcon from "$lib/assets/move.svg?raw";
@@ -12,7 +11,11 @@
     import { childWorker, isValidUrl } from "$lib/scripts/utils";
     import { getToken } from "$lib/scripts/login";
     import { createEventDispatcher, onDestroy, onMount } from "svelte";
-    import { states, tempStore } from "$lib/scripts/state.svelte";
+    import {
+        progressStore,
+        states,
+        tempStore,
+    } from "$lib/scripts/stores.svelte";
 
     export let set: Set<string>,
         view: "FILE" | "FOLDER",
@@ -39,7 +42,7 @@
         if (action === "TOP") moveToTop();
     }
     function deleteAction() {
-        updateProgressStore(set.size);
+        progressStore.update(set.size);
         workerMessage = {
             context: "DELETE",
             ids: set,
@@ -54,7 +57,7 @@
 
     function moveToTop() {
         states.mode = "";
-        updateProgressStore(set.size);
+        progressStore.update(set.size);
         workerMessage = {
             context: "TOP",
             parent: tempStore.activeFolder!.id,
@@ -69,7 +72,7 @@
     function folderSelectOk(e) {
         selectedParent = e.detail.id;
         folderSelectVisible = false;
-        updateProgressStore(set.size);
+        progressStore.update(set.size);
         workerMessage = {
             context: action,
             parent: selectedParent,
@@ -90,7 +93,7 @@
         if (description.trim()) {
             if (!checkValid()) return;
         }
-        updateProgressStore(set.size);
+        progressStore.update(set.size);
         name?.trim() || (name = undefined);
         description?.trim() || (description = undefined);
         workerMessage = {

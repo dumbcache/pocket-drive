@@ -5,7 +5,7 @@
     import { fade } from "svelte/transition";
     import { onDestroy, onMount } from "svelte";
     import { navigating } from "$app/stores";
-    import { states, tempStore } from "$lib/scripts/state.svelte";
+    import { states, tempStore } from "$lib/scripts/stores.svelte";
 
     let mini = $state(false);
     let expand = $state(false);

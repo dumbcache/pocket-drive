@@ -2,7 +2,6 @@
     import imgCreate from "$lib/assets/imgCreate.svg?raw";
     import folderCreate from "$lib/assets/folderCreate.svg?raw";
     import { previewAndSetDropItems } from "$lib/scripts/image";
-    import { pocketStore } from "$lib/scripts/stores";
     import editIcon from "$lib/assets/editMode.svg?raw";
     import folderIcon from "$lib/assets/folder.svg?raw";
     import fileIcon from "$lib/assets/file.svg?raw";
@@ -23,7 +22,8 @@
         fileStore,
         states,
         tempStore,
-    } from "$lib/scripts/state.svelte";
+        pocketStore,
+    } from "$lib/scripts/stores.svelte";
 
     let refreshing = $state(false);
 

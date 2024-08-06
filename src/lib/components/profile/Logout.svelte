@@ -1,7 +1,7 @@
 <script lang="ts">
     import { signUserOut } from "$lib/scripts/utils";
     import { requestToken } from "$lib/scripts/login";
-    import { states } from "$lib/scripts/state.svelte";
+    import { states } from "$lib/scripts/stores.svelte";
 
     async function tokenHandler() {
         requestToken();

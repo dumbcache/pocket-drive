@@ -1,7 +1,7 @@
 <script>
     import ToggleButton from "$lib/components/utils/ToggleButton.svelte";
     import { onDestroy } from "svelte";
-    import { preferences } from "$lib/scripts/state.svelte";
+    import { preferences } from "$lib/scripts/stores.svelte";
 
     onDestroy(() => {
         preferences.saveToLocal();

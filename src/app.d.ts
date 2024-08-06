@@ -98,6 +98,9 @@ declare global {
         starred: Boolean;
     }
 
+    type ActiveFolder = DriveFolder;
+    type ActiveFile = DriveFile & { download?: string; loading?: boolean };
+
     type FileResponse = DriveFile[] | DriveFolder[];
 
     interface GoogleDriveResponse<T> {

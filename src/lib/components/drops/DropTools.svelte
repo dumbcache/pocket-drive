@@ -6,7 +6,7 @@
     import doubleRightIcon from "$lib/assets/arrowRightDouble.svg?raw";
     import expandIcon from "$lib/assets/expand.svg?raw";
     import { dropOkHandler } from "$lib/scripts/image";
-    import { states, tempStore } from "$lib/scripts/state.svelte";
+    import { states, tempStore } from "$lib/scripts/stores.svelte";
     import type { MouseEventHandler } from "svelte/elements";
 
     let {

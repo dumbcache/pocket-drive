@@ -1,5 +1,4 @@
 <script lang="ts">
-    import { activeImage } from "$lib/scripts/stores";
     import { onMount } from "svelte";
     import Edit from "$lib/components/Edit.svelte";
     import Folder from "$lib/components/folders/Folder.svelte";
@@ -8,7 +7,7 @@
     import { disableScrolling } from "$lib/scripts/utils";
     import imgCreate from "$lib/assets/imgCreate.svg?raw";
     import folderCreate from "$lib/assets/folderCreate.svg?raw";
-    import { fileStore, states } from "$lib/scripts/state.svelte";
+    import { fileStore, states, tempStore } from "$lib/scripts/stores.svelte";
 
     export let files: FileResponse | undefined;
     export let view: "FILE" | "FOLDER";
@@ -128,7 +127,7 @@
             default:
                 if (view === "FOLDER") return;
                 const [file] = fileStore.files.filter((file) => file.id === id);
-                activeImage.set(file);
+                tempStore.activeFile = file;
                 states.mode = "VIEW";
                 disableScrolling();
                 return;

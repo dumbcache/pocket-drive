@@ -3,7 +3,7 @@
     import playIcon from "$lib/assets/play.svg?raw";
     import { isValidUrl } from "$lib/scripts/utils";
     import Favorite from "$lib/components/utils/Favorite.svelte";
-    import { states } from "$lib/scripts/state.svelte";
+    import { states } from "$lib/scripts/stores.svelte";
 
     export let visible: Boolean;
     export let file: File;
