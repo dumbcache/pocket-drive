@@ -3,51 +3,58 @@
     import DropTools from "$lib/components/drops/DropTools.svelte";
     import doubleLeftIcon from "$lib/assets/arrowLeftDouble.svg?raw";
     import { fade } from "svelte/transition";
-    import { onDestroy } from "svelte";
+    import { onDestroy, onMount } from "svelte";
     import { navigating } from "$app/stores";
     import { states, tempStore } from "$lib/scripts/state.svelte";
 
-    let mini = false;
-    let expand = false;
+    let mini = $state(false);
+    let expand = $state(false);
     const unsubscribe = navigating.subscribe((data) => {
         data && (mini = true);
     });
+
+    function onMini() {
+        mini = false;
+    }
+
+    function onExpand() {
+        expand = !expand;
+    }
+
     onDestroy(() => {
         states.autosave = false;
         unsubscribe();
     });
 </script>
 
-{#if tempStore.dropItems.length !== 0}
-    <!-- {#if mini} -->
-    <button
-        class="drop-mini btn s-prime"
-        style:display={mini === true ? "initial" : "none"}
-        on:click={() => {
-            mini = !mini;
-        }}>{@html doubleLeftIcon}</button
-    >
-    <!-- {:else} -->
-    <div
-        class="drop"
-        class:expand
-        style:display={mini === true ? "none" : "initial"}
-        transition:fade={{ duration: 200 }}
-    >
-        <DropTools
-            on:mini={() => (mini = true)}
-            on:expand={() => (expand = !expand)}
-        />
-        <div class="drop-items">
-            {#each tempStore.dropItems as item}
-                {#key item.id}
-                    <DropItem {item} />
-                {/key}
-            {/each}
-        </div>
+<!-- {#if tempStore.dropItems.length !== 0} -->
+<!-- {#if mini} -->
+<button
+    class="drop-mini btn s-prime"
+    style:display={mini === true ? "initial" : "none"}
+    onclick={() => {
+        mini = !mini;
+    }}>{@html doubleLeftIcon}</button
+>
+<!-- {:else} -->
+<div
+    class="drop"
+    class:expand
+    style:display={mini === true ? "none" : "initial"}
+    transition:fade={{ duration: 200 }}
+>
+    <DropTools {onMini} {onExpand} />
+    <div class="drop-items">
+        {#each tempStore.dropItems as item}
+            {#key item.id}
+                <DropItem {item} />
+            {/key}
+        {/each}
     </div>
-    <!-- {/if} -->
-{/if}
+</div>
+
+<!-- {/if} -->
+<!-- {/if} -->
 
 <style>
     .drop-mini {

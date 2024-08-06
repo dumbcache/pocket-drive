@@ -73,7 +73,8 @@ declare global {
         progress?: string;
         parent: string;
         parentName: string;
-        file: DriveFile;
+        file: File | Blob;
+        loaded: boolean;
     }
 
     interface DropItems {
@@ -159,7 +160,7 @@ declare global {
         progressType?: Action;
         progress?: number;
         id?: string;
-        status?: 1 | 0;
+        status?: 1 | 0 | "success" | "failure";
     }
 }
 

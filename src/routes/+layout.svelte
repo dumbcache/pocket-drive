@@ -7,14 +7,13 @@
     import type { Unsubscriber } from "svelte/store";
     import { loadGSIScript } from "$lib/scripts/login";
     import { disableScrolling, enableScorlling } from "$lib/scripts/utils";
-    import { states } from "$lib/scripts/state.svelte";
+    import { preferences, states } from "$lib/scripts/state.svelte";
 
     let homeIcon = "";
     let startup: HTMLDivElement;
 
     let pocketStateUnsubscribe: Unsubscriber;
     let navigatingUnsubscribe: Unsubscriber;
-    let progressUnsubscribe: Unsubscriber;
 
     if (browser) {
         navigatingUnsubscribe = navigating.subscribe((val) => {
@@ -27,6 +26,7 @@
 
     onMount(async () => {
         disableScrolling();
+        preferences.setTheme();
 
         try {
             const response = await fetch("/favicon.svg");

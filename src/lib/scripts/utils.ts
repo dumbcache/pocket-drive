@@ -616,11 +616,8 @@ if (browser) {
 
             case "DROP":
                 clearDropItems();
-                tempStore.dropItems.forEach(
-                    (item) =>
-                        item.id === data.id &&
-                        (item.progress = data.status === 1 ? "success" : "")
-                );
+                let item = tempStore.dropItems.find((i) => i.id === data.id);
+                item && (item.progress = data.status as string);
                 setTimeout(async () => {
                     const res = await fetchMultiple(
                         { parent, mimeType: IMG_MIME_TYPE },

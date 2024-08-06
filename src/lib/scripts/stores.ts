@@ -46,9 +46,8 @@ export function storeSnap(
             pocketStore.set(activeFolder.id, {
                 folders,
                 files,
-                info: activeFolder,
+                activeFolder,
             });
-            console.log(pocketStore);
         }
     } catch (error) {
         console.warn("storeSnap function error", error);

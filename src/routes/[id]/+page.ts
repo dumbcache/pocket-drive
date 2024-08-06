@@ -15,7 +15,6 @@ async function loadContent(parent: string) {
     try {
         if (pocketStore.has(parent)) {
             const data = pocketStore.get(parent);
-            console.log(data);
             return { ...data };
         }
         const [folders, files] = await loadAll(parent, getToken());

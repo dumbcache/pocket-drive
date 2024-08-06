@@ -33,6 +33,11 @@ class AppPreferences {
 
     toggleTheme() {
         this.theme = this.theme === "DARK" ? "" : "DARK";
+        this.setTheme();
+        this.saveToLocal();
+    }
+
+    setTheme() {
         const root = document.documentElement;
         let dark = root.classList.contains("dark");
         switch (this.theme) {
@@ -43,7 +48,6 @@ class AppPreferences {
                 if (dark) root.classList.remove("dark");
                 break;
         }
-        this.saveToLocal();
     }
 
     set({ showFileNames, disableWebp, theme }: Preferences) {
@@ -85,7 +89,8 @@ export const states = new AppStates();
 class TempStore {
     activeFolder = $state<DriveFolder>();
     activeFile = $state<DriveFile>();
-    dropItems = $state<DropItem[]>([]);
     folderAction = $state<FolderAction>({});
+    dropItems = $state<DropItem[]>([]);
+    dropURL = $state("");
 }
 export const tempStore = new TempStore();
