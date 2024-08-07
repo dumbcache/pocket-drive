@@ -29,7 +29,7 @@
     }
 </script>
 
-<div class="action" class:expand>
+<div class="action" class:expanded={expand}>
     {#if tempStore.activeFile?.download}
         <a
             href={tempStore.activeFile.download}
@@ -50,7 +50,7 @@
     <Favorite
         id={tempStore.activeFile.id}
         starred={tempStore.activeFile.starred}
-        on:fav={() => toggleFav(tempStore.activeFile.id)}
+        toggle={() => toggleFav(tempStore.activeFile.id)}
     />
     <button
         class="btn s-prime"
@@ -65,7 +65,7 @@
         >{@html infoIcon}</button
     >
     <button
-        class="btn s-prime"
+        class="btn s-prime expand"
         title="expand"
         onclick={(e) => {
             e.stopPropagation();
@@ -109,9 +109,11 @@
             flex-flow: row nowrap;
         }
 
-        .expand {
-            display: flex;
+        .expanded {
             bottom: 1rem;
+        }
+        .expand {
+            display: initial;
         }
         .info {
             rotate: 90deg;

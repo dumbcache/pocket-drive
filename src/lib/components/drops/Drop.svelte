@@ -14,7 +14,7 @@
     });
 
     function onMini() {
-        mini = false;
+        mini = true;
     }
 
     function onExpand() {
@@ -27,8 +27,6 @@
     });
 </script>
 
-<!-- {#if tempStore.dropItems.length !== 0} -->
-<!-- {#if mini} -->
 <button
     class="drop-mini btn s-prime"
     style:display={mini === true ? "initial" : "none"}
@@ -36,7 +34,6 @@
         mini = !mini;
     }}>{@html doubleLeftIcon}</button
 >
-<!-- {:else} -->
 <div
     class="drop"
     class:expand
@@ -52,9 +49,6 @@
         {/each}
     </div>
 </div>
-
-<!-- {/if} -->
-<!-- {/if} -->
 
 <style>
     .drop-mini {

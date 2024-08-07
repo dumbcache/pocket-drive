@@ -9,7 +9,9 @@
     import { disableScrolling, enableScorlling } from "$lib/scripts/utils";
     import { preferences, states } from "$lib/scripts/stores.svelte";
 
-    let homeIcon = "";
+    let { children } = $props();
+
+    let homeIcon = $state("");
     let startup: HTMLDivElement;
 
     let pocketStateUnsubscribe: Unsubscriber;
@@ -66,7 +68,7 @@
     </span>
 </div>
 
-<slot />
+{@render children()}
 
 <style>
     .loading,

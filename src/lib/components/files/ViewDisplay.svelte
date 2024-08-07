@@ -166,9 +166,6 @@
                     alt=""
                     data-id={file.id}
                     data-src={file.thumbnailLink}
-                    onerror={(e) => {
-                        e.target.src = file.thumbnailLink;
-                    }}
                 />
             {:else}
                 <video

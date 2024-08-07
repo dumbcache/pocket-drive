@@ -6,6 +6,7 @@
     import FolderSelect from "$lib/components/folders/FolderSelect.svelte";
     import ActionForm from "$lib/components/folders/ActionForm.svelte";
     import { folderStore, states, tempStore } from "$lib/scripts/stores.svelte";
+    import { onMount } from "svelte";
 
     let global = false;
     let searchElement: HTMLInputElement;
@@ -61,14 +62,14 @@
 </script>
 
 <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
-<div class="search-wrapper" role="form" on:keydown|stopPropagation>
+<div class="search-wrapper" role="form" onkeydown={(e) => e.stopPropagation()}>
     <button
         title="global"
         role="switch"
         aria-checked="false"
         class="global"
         class:active={global}
-        on:click={() => {
+        onclick={() => {
             global = !global;
             searchElement.focus();
             handleSearch();
@@ -83,11 +84,11 @@
         placeholder="search folders"
         bind:this={searchElement}
         bind:value={search}
-        on:input={handleSearch}
-        on:change={handleChange}
+        oninput={handleSearch}
+        onchange={handleChange}
     />
     {#if loading}
-        <div class="loading" on:wheel|preventDefault>
+        <div class="loading">
             <Spinner width={"1.5rem"} height={"1.5rem"} borderWidth={"2px"} />
         </div>
     {/if}

@@ -5,9 +5,16 @@
     import Favorite from "$lib/components/utils/Favorite.svelte";
     import { states } from "$lib/scripts/stores.svelte";
 
-    export let visible: Boolean;
-    export let file: File;
-    export let showFileNames = false;
+    let {
+        visible,
+        file,
+        showFileNames = false,
+    }: {
+        visible: boolean;
+        file: DriveFile;
+        showFileNames?: boolean;
+    } = $props();
+
     let selected = "";
 </script>
 
@@ -27,7 +34,7 @@
             height="200"
             width="200"
             referrerpolicy="no-referrer"
-            on:error={() => (visible = false)}
+            onerror={() => (visible = false)}
         />
         <button class="anchor">.</button>
         {#if file.mimeType.match("video/")}
@@ -41,7 +48,7 @@
                     referrerpolicy="no-referrer"
                     rel="external noopener noreferrer nofollow"
                     title={file.description}
-                    on:click|stopPropagation
+                    onclick={(e) => e.stopPropagation()}
                 >
                     {@html urlIcon}
                 </a>
@@ -51,7 +58,7 @@
                 <Favorite
                     id={file.id}
                     starred={file.starred}
-                    on:fav={() => (file.starred = !file.starred)}
+                    toggle={() => (file.starred = !file.starred)}
                 />
             </span>
         {/if}

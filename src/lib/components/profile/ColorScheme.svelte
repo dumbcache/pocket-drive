@@ -11,7 +11,7 @@
     role="switch"
     aria-label="Toggle dark mode"
     aria-checked={preferences.theme === "" ? "false" : "true"}
-    on:click={() => preferences.toggleTheme()}
+    onclick={() => preferences.toggleTheme()}
 >
     {#if preferences.theme === ""}
         {@html lightModeIcon}

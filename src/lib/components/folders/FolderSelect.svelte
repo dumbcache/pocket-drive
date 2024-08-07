@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { createEventDispatcher, onDestroy, onMount } from "svelte";
+    import {  onDestroy, onMount } from "svelte";
     import doneIcon from "$lib/assets/done.svg?raw";
     import beforeIcon from "$lib/assets/beforeNavigate.svg?raw";
     import historyIcon from "$lib/assets/history.svg?raw";
@@ -15,33 +15,27 @@
     import { getToken } from "$lib/scripts/login";
     import { folderStore, states, tempStore } from "$lib/scripts/stores.svelte";
 
-    export let type: "FOLDER" | "FILE";
+   let {type,onOk,onClose} :{type:View,onOk?:Function,onClose?:Function} = $props()
     // let tempFolderStore = { ...$folderStore };
     // type === "FOLDER" &&
     //     (tempFolderStore.files = tempFolderStore.files?.filter(
     //         (file) => file.id !== $folderActionDetail.id
     //     ));
 
-    let tempFolderStore: GoogleDriveResponse;
+    let tempFolderStore = $state<GoogleDriveResponse<DriveFolder> >();
     onMount(() => {
         fetchChildren(selectedId);
     });
 
-    let selectedName = tempStore.activeFolder!.name;
-    let selectedId = tempStore.activeFolder!.id;
-    let selectedParent = tempStore.activeFolder!.parents && tempStore.activeFolder!.parents[0];
-    let listVisible = false;
-    let recents = [];
+    let selectedName = $state(tempStore.activeFolder!.name);
+    let selectedId = $state(tempStore.activeFolder!.id);
+    let selectedParent = $state(tempStore.activeFolder!.parents && tempStore.activeFolder!.parents[0]);
+    let listVisible = $state(false);
+    let recents = $state([]);
     let accessToken = getToken();
     const root = getRoot();
 
-    const dispatch = createEventDispatcher();
-    function dispatchOk() {
-        dispatch("ok", { id: selectedId });
-    }
-    function dispatchClose() {
-        dispatch("close");
-    }
+   
 
     async function fetchChildren(id: string) {
         tempFolderStore = await fetchMultiple(
@@ -120,7 +114,7 @@
         updateRecents();
         listVisible = false;
         if (type === "FILE") {
-            dispatchOk();
+            onOk(selectedId)
             return;
         }
         states.progress = true;
@@ -165,12 +159,12 @@
     });
 </script>
 
-<!-- svelte-ignore a11y-no-static-element-interactions -->
+<!-- svelte-ignore a11y_no_static_element_interactions -->
 <div
     class="wrapper"
     onkeydown={(e) => e.stopPropagation()}
     onclick={() => {
-        dispatchClose();
+        onClose();
     tempStore.folderAction = {} as FolderAction
     }}
 >

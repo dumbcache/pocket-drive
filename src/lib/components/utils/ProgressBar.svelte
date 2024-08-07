@@ -17,10 +17,7 @@
     });
 </script>
 
-<div
-    class="progress-bar"
-    style:display={progressStore.total ? "initial" : "none"}
->
+<div class="progress-bar">
     <div class="items">
         <!-- <button class="close btn s-second">{@html closeButton}</button> -->
         {#if progressStore.success + progressStore.fail !== progressStore.total}

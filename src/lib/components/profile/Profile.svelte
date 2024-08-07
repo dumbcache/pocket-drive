@@ -1,10 +1,17 @@
 <script lang="ts">
     import closeIcon from "$lib/assets/close.svg?raw";
-    import ColorScheme from "$lib/components/utils/ColorScheme.svelte";
+    import ColorScheme from "$lib/components/profile/ColorScheme.svelte";
     import Options from "$lib/components/profile/Options.svelte";
     import Logout from "$lib/components/profile/Logout.svelte";
     import SessionInfo from "$lib/components/profile/SessionInfo.svelte";
     import { states } from "$lib/scripts/stores.svelte";
+    import { onMount } from "svelte";
+    import { disableScrolling, enableScorlling } from "$lib/scripts/utils";
+
+    onMount(() => {
+        disableScrolling();
+        return () => enableScorlling();
+    });
 </script>
 
 <div class="profile">
@@ -39,7 +46,7 @@
         margin: auto;
         width: 100%;
         height: 100vh;
-        z-index: 1;
+        z-index: 2;
         display: flex;
         flex-flow: column;
         justify-content: center;

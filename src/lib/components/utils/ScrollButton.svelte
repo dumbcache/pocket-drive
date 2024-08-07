@@ -25,7 +25,7 @@
     class:up={delta < 0}
     class:down={delta > 0}
     style:display={isScrolling ? "initial" : "none"}
-    on:click={() => {
+    onclick={() => {
         delta > 0
             ? window.scrollTo({
                   top: document.body.scrollHeight,

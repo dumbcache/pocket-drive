@@ -1,5 +1,4 @@
 <script lang="ts">
-    import File from "$lib/components/files/File.svelte";
     import View from "$lib/components/files/View.svelte";
     import Container from "$lib/components/Container.svelte";
     import { preferences, states, fileStore } from "$lib/scripts/stores.svelte";
@@ -16,7 +15,6 @@
 <Container
     files={fileStore.files}
     view="FILE"
-    component={File}
     footObserver={observer}
     showFileNames={preferences.showFileNames}
 />

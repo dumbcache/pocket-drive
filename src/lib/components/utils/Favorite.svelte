@@ -1,31 +1,27 @@
 <script lang="ts">
     import favoriteIcon from "$lib/assets/favorite.svg?raw";
-    import { createEventDispatcher } from "svelte";
     import { updateSingle } from "$lib/scripts/utils";
     import { getToken } from "$lib/scripts/login";
 
-    export let id: string;
-    export let starred: Boolean;
+    let {
+        id,
+        starred,
+        toggle,
+    }: { id: string; starred: Boolean; toggle: Function } = $props();
 
-    const dispatch = createEventDispatcher();
-    function favStatus() {
+    function update(e: MouseEvent) {
+        e.stopPropagation();
         updateSingle(id, { starred: !starred }, getToken()).then(
             ({ status }) => {
                 if (status === 200) {
-                    dispatch("fav");
-                    // const ele = document.querySelector(`[data-id="${id}"]`);
-                    // let { starred } = ele.dataset;
-                    // ele.dataset.starred = starred === "true" ? "false" : "true";
+                    toggle();
                 }
             }
         );
     }
 </script>
 
-<button
-    class="favorite btn s-second {starred && 'starred'}"
-    on:click|stopPropagation={favStatus}
->
+<button class="favorite btn s-second {starred && 'starred'}" onclick={update}>
     {@html favoriteIcon}
 </button>
 

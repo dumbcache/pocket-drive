@@ -1,5 +1,4 @@
 <script lang="ts">
-    import Folder from "$lib/components/folders/Folder.svelte";
     import ActionForm from "$lib/components/folders/ActionForm.svelte";
     import FolderSelect from "$lib/components/folders/FolderSelect.svelte";
     import Container from "$lib/components/Container.svelte";
@@ -14,12 +13,7 @@
 {/if}
 
 <!-- {#key $refresh} -->
-<Container
-    files={folderStore.files}
-    view="FOLDER"
-    component={Folder}
-    footObserver={observer}
-/>
+<Container files={folderStore.files} view="FOLDER" footObserver={observer} />
 <!-- {/key} -->
 
 {#if tempStore.folderAction.type && states.mode !== "SEARCH"}

@@ -9,10 +9,10 @@
     }
 </script>
 
-<button class="token" title="new session" on:click={tokenHandler}>
+<button class="token" title="new session" onclick={tokenHandler}>
     <span>New Session</span>
 </button>
-<button class="logout" title="logout" on:click={signUserOut}>
+<button class="logout" title="logout" onclick={signUserOut}>
     <span>Logout</span>
 </button>
 

@@ -172,7 +172,7 @@ export const FIELDS_IMG =
     "id,name,description,thumbnailLink,starred,mimeType,size";
 export const FIELDS_FOLDER = "id,name,starred,parents";
 export const FIELDS_SINGLE = "id,name,parents";
-// export const DEFAULT_PAGESIZE = 1000;
+export const FIELDS_COVER = "thumbnailLink";
 export const PAGESIZE = 100;
 
 export const wait = (s: number) => new Promise((res) => setTimeout(res, s));
@@ -191,22 +191,26 @@ export function constructRequest(
     { parent, mimeType, pageSize, pageToken }: ParamsObject,
     accessToken: string
 ) {
+    pageSize ??= PAGESIZE;
     let mime =
         mimeType === FOLDER_MIME_TYPE
             ? `mimeType contains '${mimeType}'`
             : `mimeType contains '${mimeType}' or mimeType contains 'video/'`;
     let q = `q='${parent}' in parents and (${mime})`;
-    let p = `&pageSize=${pageSize || PAGESIZE}`;
-    let f = `&fields=nextPageToken,files(${
-        mimeType === IMG_MIME_TYPE ? FIELDS_IMG : FIELDS_FOLDER
-    })`;
-    // let f = `&fields=files(${
-    //     mimeType === IMG_MIME_TYPE ? FIELDS_IMG : FIELDS_FOLDER
-    // })`;
+    let p = `&pageSize=${pageSize}`;
+    let f = "";
+    let t = "";
+    if (pageSize === 3) {
+        f = `&fields=files(${FIELDS_COVER})`;
+    } else {
+        f = `&fields=nextPageToken,files(${
+            mimeType === IMG_MIME_TYPE ? FIELDS_IMG : FIELDS_FOLDER
+        })`;
+        t = Boolean(pageToken) === true ? `&pageToken=${pageToken}` : "";
+    }
     let o =
         `&orderBy=` +
         (mimeType === FOLDER_MIME_TYPE ? "name" : "createdTime desc");
-    let t = Boolean(pageToken) === true ? `&pageToken=${pageToken}` : "";
     let url = `${FILE_API}?${q}${f}${o}${t}${p}`;
 
     const req = new Request(url, {

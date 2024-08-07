@@ -35,7 +35,8 @@
         tempStore.folderAction = {} as FolderAction;
     }
 
-    async function applyAction() {
+    async function applyAction(e) {
+        e.preventDefault();
         progress = true;
         const token = getToken();
         let folderName = toTitleCase(placeholder);
@@ -94,20 +95,18 @@
     });
 </script>
 
-<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
 <form
     class="create"
-    on:click={() => progress || close()}
-    on:keypress|stopPropagation
-    on:submit|preventDefault={applyAction}
-    on:wheel|preventDefault
+    onclick={() => progress || close()}
+    onkeypress={(e) => e.stopPropagation()}
+    onsubmit={applyAction}
 >
-    <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
     <label
         class="wrapper"
         for="dir-name"
-        on:click|stopPropagation
-        on:keypress|stopPropagation
+        onclick={(e) => e.stopPropagation()}
+        onkeypress={(e) => e.stopPropagation()}
     >
         {#if type === "DELETE"}
             <p>
@@ -125,9 +124,9 @@
             placeholder={type === "DELETE" ? confirmText : "Directory Name"}
             bind:value={placeholder}
             bind:this={dirField}
-            on:click|stopPropagation
-            on:keydown|stopPropagation
-            on:input={checkDisabled}
+            onclick={(e) => e.stopPropagation()}
+            onkeydown={(e) => e.stopPropagation()}
+            oninput={checkDisabled}
             autocomplete="off"
         />
         {#if progress}
@@ -137,7 +136,7 @@
                 type="submit"
                 class="btn s-prime"
                 disabled={submitDisabled}
-                on:click={applyAction}>{@html doneIcon}</button
+                onclick={applyAction}>{@html doneIcon}</button
             >
         {/if}
     </label>

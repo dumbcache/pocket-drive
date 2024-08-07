@@ -1,5 +1,5 @@
 import { browser } from "$app/environment";
-import { pocketStore } from "$lib/scripts/stores.svelte";
+// import { pocketStore } from "$lib/scripts/stores.svelte";
 import { checkLoginStatus } from "$lib/scripts/utils";
 
 export const ssr = false;
@@ -14,13 +14,13 @@ export const load = ({ params }) => {
                         "refreshTime",
                         String(Date.now() + 1 * 60 * 60 * 1000)
                     );
-                let state = sessionStorage.getItem("pocketStore");
-                if (state) {
-                    const data = JSON.parse(state);
-                    for (let [key, val] of data) {
-                        pocketStore.set(key, val);
-                    }
-                }
+                // let state = sessionStorage.getItem("pocketStore");
+                // if (state) {
+                //     const data = JSON.parse(state);
+                //     for (let [key, val] of data) {
+                //         pocketStore.set(key, val);
+                //     }
+                // }
             }
         }
     } catch (error) {

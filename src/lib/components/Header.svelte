@@ -7,7 +7,7 @@
     import goToDrive from "$lib/assets/drive.svg?raw";
     import { states, tempStore, HOME_PATH } from "$lib/scripts/stores.svelte";
 
-    let homeButton = "";
+    let homeButton = $state("");
 
     onMount(async () => {
         const response = await fetch("/favicon.svg");
@@ -35,7 +35,7 @@
         <button
             class="btn s-prime shortcuts"
             title="shortcuts"
-            on:click={() => (states.shortcuts = true)}>{@html helpIcon}</button
+            onclick={() => (states.shortcuts = true)}>{@html helpIcon}</button
         >
         <a
             href={`https://drive.google.com/drive/folders/${tempStore.activeFolder?.id}`}
@@ -50,7 +50,7 @@
         <button
             class="btn s-prime settings"
             title="settings"
-            on:click={() => (states.profile = true)}>{@html profileIcon}</button
+            onclick={() => (states.profile = true)}>{@html profileIcon}</button
         >
     </div>
 </header>
@@ -124,7 +124,7 @@
         .wrapper {
             flex-flow: row nowrap;
             justify-content: end;
-            gap: 1rem;
+            gap: 2rem;
         }
         .tool-wrapper {
             display: none;

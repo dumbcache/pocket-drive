@@ -10,33 +10,37 @@
     import FolderSelect from "$lib/components/folders/FolderSelect.svelte";
     import { childWorker, isValidUrl } from "$lib/scripts/utils";
     import { getToken } from "$lib/scripts/login";
-    import { createEventDispatcher, onDestroy, onMount } from "svelte";
     import {
         progressStore,
         states,
         tempStore,
     } from "$lib/scripts/stores.svelte";
 
-    export let set: Set<string>,
-        view: "FILE" | "FOLDER",
-        count: Number = 0,
-        memory: Number = 0;
+    let {
+        set,
+        view,
+        count = 0,
+        memory = 0,
+        closeHandler,
+        selectAllHandler,
+    }: {
+        set: Set<string>;
+        view: View;
+        count: number;
+        memory: number;
+        closeHandler: Function;
+        selectAllHandler: Function;
+    } = $props();
 
-    let action = "";
-    let folderSelectVisible = false;
+    let action = $state("");
+    let folderSelectVisible = $state(false);
     let selectedParent = "";
-    let confirm = false;
-    let name: string = "";
-    let description: string = "";
-    let invalid = false;
+    let confirm = $state(false);
+    let name: string = $state("");
+    let description: string = $state("");
+    let invalid = $state(false);
     let workerMessage: WorkerMessage;
 
-    const dispatch = createEventDispatcher();
-
-    function close(type?: string) {
-        states.mode = "";
-        dispatch("close", { type });
-    }
     function confirmAction() {
         if (action === "DELETE") deleteAction();
         if (action === "TOP") moveToTop();
@@ -52,7 +56,7 @@
         };
         childWorker.postMessage(workerMessage);
         confirm = false;
-        close("DELETE");
+        closeHandler("DELETE");
     }
 
     function moveToTop() {
@@ -66,11 +70,11 @@
         };
         childWorker.postMessage(workerMessage);
         action = "";
-        close();
+        closeHandler();
     }
 
-    function folderSelectOk(e) {
-        selectedParent = e.detail.id;
+    function folderSelectOk(id) {
+        selectedParent = id;
         folderSelectVisible = false;
         progressStore.update(set.size);
         workerMessage = {
@@ -82,14 +86,15 @@
             view,
         };
         childWorker.postMessage(workerMessage);
-        close(action);
+        closeHandler(action);
         action = "";
     }
     function folderSelectClose() {
         folderSelectVisible = false;
         action = "";
     }
-    async function handleSave() {
+    async function handleSave(e) {
+        e.preventDefault();
         if (description.trim()) {
             if (!checkValid()) return;
         }
@@ -104,7 +109,7 @@
             token: getToken(),
         };
         childWorker.postMessage(workerMessage);
-        close();
+        closeHandler();
     }
 
     function handleChange(e) {
@@ -127,7 +132,7 @@
 
 <svelte:window
     on:keydown={(e) => {
-        e.key === "Escape" && close();
+        e.key === "Escape" && closeHandler();
     }}
 />
 
@@ -140,23 +145,21 @@
                 </span>
             </p>
         {/if}
-        <button class="cancel action" on:click={() => (confirm = false)}
+        <button class="cancel action" onclick={() => (confirm = false)}
             >cancel</button
         >
-        <button class="confirm action" on:click={confirmAction}>confirm</button>
+        <button class="confirm action" onclick={confirmAction}>confirm</button>
     {:else}
         <button
             class="btn s-prime"
             title="select all"
-            on:click={() => {
-                dispatch("selectAll");
-            }}>{@html selectallIcon}</button
+            onclick={selectAllHandler}>{@html selectallIcon}</button
         >
         <button
             class="btn s-prime"
             title="move"
             disabled={count === 0}
-            on:click={() => {
+            onclick={() => {
                 action = "MOVE";
                 folderSelectVisible = true;
             }}>{@html moveIcon}</button
@@ -166,7 +169,7 @@
                 class="btn s-prime"
                 title="copy"
                 disabled={count === 0}
-                on:click={() => {
+                onclick={() => {
                     action = "COPY";
                     folderSelectVisible = true;
                 }}>{@html copyIcon}</button
@@ -175,49 +178,50 @@
                 class="btn s-prime"
                 title="edit"
                 disabled={count === 0}
-                on:click={() => (action = "EDIT")}>{@html editIcon}</button
+                onclick={() => (action = "EDIT")}>{@html editIcon}</button
             >
             <button
                 class="btn s-prime"
                 title="move to start"
                 disabled={count === 0}
-                on:click={() => {
+                onclick={() => {
                     action = "TOP";
                     confirm = true;
-                }}
-                on:click={() => moveToTop()}>{@html startIcon}</button
+                }}>{@html startIcon}</button
             >
         {/if}
         <button
             class="btn s-prime"
             title="delete"
             disabled={count === 0}
-            on:click={() => {
+            onclick={() => {
                 action = "DELETE";
                 confirm = true;
             }}>{@html deleteIcon}</button
         >
     {/if}
     <Count {count} />
-    <button class="btn s-prime" on:click={close}>{@html closeIcon}</button>
+    <button class="btn s-prime" onclick={closeHandler}>{@html closeIcon}</button
+    >
 </div>
 
 {#if folderSelectVisible}
     <FolderSelect
         type="FILE"
-        on:close={folderSelectClose}
-        on:ok={folderSelectOk}
+        onClose={folderSelectClose}
+        onOk={folderSelectOk}
     />
 {/if}
 {#if action === "EDIT"}
-    <!-- svelte-ignore a11y-no-static-element-interactions -->
-    <div class="edit-form-wrapper" on:keydown on:click={() => (action = "")}>
-        <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+    <!-- svelte-ignore a11y_click_events_have_key_events -->
+    <!-- svelte-ignore a11y_no_static_element_interactions -->
+    <div class="edit-form-wrapper" onclick={() => (action = "")}>
+        <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
         <form
             class="edit-form"
-            on:keydown|stopPropagation
-            on:click|stopPropagation
-            on:submit|preventDefault={handleSave}
+            onkeydown={(e) => e.stopPropagation()}
+            onclick={(e) => e.stopPropagation()}
+            onsubmit={handleSave}
         >
             <div class="input-wrapper">
                 <p class="label">Enter either values</p>
@@ -226,7 +230,7 @@
                     name="name"
                     placeholder="Name"
                     bind:value={name}
-                    on:change={handleChange}
+                    onchange={handleChange}
                     autocomplete="off"
                 />
                 <input
@@ -235,7 +239,7 @@
                     class:invalid
                     placeholder="URL"
                     bind:value={description}
-                    on:change={handleChange}
+                    onchange={handleChange}
                     autocomplete="off"
                 />
 
@@ -247,7 +251,7 @@
                 <button
                     class="cancel action"
                     type="reset"
-                    on:click={() => (action = "")}>Cancel</button
+                    onclick={() => (action = "")}>Cancel</button
                 >
                 <button
                     class="save action"
@@ -255,7 +259,7 @@
                     disabled={name?.trim().length <= 0 &&
                         description?.trim().length <= 0 &&
                         true}
-                    on:click={handleSave}>Save</button
+                    onclick={handleSave}>Save</button
                 >
             </div>
         </form>

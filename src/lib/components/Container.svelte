@@ -9,25 +9,34 @@
     import folderCreate from "$lib/assets/folderCreate.svg?raw";
     import { fileStore, states, tempStore } from "$lib/scripts/stores.svelte";
 
-    export let files: FileResponse | undefined;
-    export let view: "FILE" | "FOLDER";
-    export let component: typeof Folder | typeof File;
-    export let footObserver: IntersectionObserver | undefined;
-    export let showFileNames = false;
+    let {
+        files,
+        view,
+        footObserver,
+        showFileNames,
+    }: {
+        files: FileResponse | undefined;
+        view: View;
+        footObserver: IntersectionObserver | undefined;
+        showFileNames?: boolean;
+    } = $props();
 
     let childObserver: IntersectionObserver;
     let entryLog = new Set<string>();
-    let inspectionLog: { [key: string]: boolean } = {};
-    let container: HTMLElement;
-    let foot: HTMLElement;
+    let inspectionLog = $state<{ [key: string]: boolean }>({});
+    let container = $state<HTMLElement>();
+    let foot = $state<HTMLElement>();
 
     let lastSelected = -1;
-    let allSelected = false;
+    let allSelected = $state(false);
     let set = new Set<string>();
-    let count = 0;
-    let memory = 0;
+    let count = $state(0);
+    let memory = $state(0);
 
-    $: foot && footObserver?.observe(foot);
+    $effect(() => {
+        foot && footObserver?.observe(foot);
+        childInspection(files);
+    });
 
     beforeNavigate(({ from, to }) => {
         try {
@@ -39,12 +48,11 @@
         }
     });
 
-    function editCloseAction(e) {
+    function closeHandler(type: string) {
         const eles: HTMLElement[] = document.querySelectorAll(".select");
         eles.forEach((ele) => {
             ele.classList.remove("select");
-            let detail = e.detail.type;
-            if (detail === "DELETE" || detail === "MOVE") {
+            if (type === "DELETE" || type === "MOVE") {
                 ele.style.display = "none";
             }
         });
@@ -53,9 +61,10 @@
         memory = 0;
         set.clear();
         lastSelected = -1;
+        states.mode = "";
     }
 
-    function selectAllAction() {
+    function selectAllHandler() {
         allSelected = !allSelected;
         memory = 0;
         if (allSelected) {
@@ -162,34 +171,19 @@
             }
         });
     }
-
-    $: setTimeout(() => {
-        childInspection(files);
-    }, 1000);
-
-    onMount(() => {
-        childInspection(files);
-    });
 </script>
 
 {#if states.mode === "EDIT" && states.view === view}
-    <Edit
-        {view}
-        {set}
-        {count}
-        on:close={editCloseAction}
-        {memory}
-        on:selectAll={selectAllAction}
-    />
+    <Edit {view} {set} {count} {closeHandler} {memory} {selectAllHandler} />
 {/if}
 {#if files && files.length > 0}
-    <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+    <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+    <!-- svelte-ignore a11y_click_events_have_key_events -->
     <ol
         class="list"
         bind:this={container}
         class:edit-mode={states.mode === "EDIT"}
-        on:click={handleImageClick}
-        on:keydown
+        onclick={handleImageClick}
     >
         {#each files as file, index (file.id)}
             <li
@@ -202,12 +196,15 @@
                     ? "none"
                     : "initial"}
             >
-                <svelte:component
-                    this={component}
-                    {file}
-                    visible={inspectionLog[file.id]}
-                    {showFileNames}
-                ></svelte:component>
+                {#if view === "FOLDER"}
+                    <Folder {file} visible={inspectionLog[file.id]} />
+                {:else}
+                    <File
+                        {showFileNames}
+                        {file}
+                        visible={inspectionLog[file.id]}
+                    />
+                {/if}
             </li>
         {/each}
     </ol>

@@ -8,7 +8,7 @@
     <button
         class="back-button btn s-prime"
         title="go back"
-        on:click={() => {
+        onclick={() => {
             history.back();
         }}
     >

@@ -5,8 +5,7 @@
     import moveIcon from "$lib/assets/move.svg?raw";
     import { tempStore } from "$lib/scripts/stores.svelte";
 
-    export let id: string;
-    export let name: string;
+    let { id, name }: { id: string; name: string } = $props();
 
     function handler(type: FAction) {
         tempStore.folderAction = { type, id, name };
@@ -17,25 +16,43 @@
     <button
         class="btn s-second action"
         title="edit folder"
-        on:click|stopPropagation|preventDefault={() => handler("EDIT")}
+        onclick={(e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            handler("EDIT");
+        }}
     >
         {@html editIcon}
     </button>
     <button
         class="btn s-second action"
         title="move folder"
-        on:click|stopPropagation|preventDefault={() => handler("MOVE")}
+        onclick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            handler("MOVE");
+        }}
     >
         {@html moveIcon}
     </button>
     <button
         class="btn s-second action"
         title="delete folder"
-        on:click|stopPropagation|preventDefault={() => handler("DELETE")}
+        onclick={(e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            handler("DELETE");
+        }}
     >
         {@html deleteIcon}
     </button>
-    <button class="btn s-second expand" on:click|stopPropagation|preventDefault>
+    <button
+        class="btn s-second expand"
+        onclick={(e) => {
+            e.stopPropagation();
+            e.preventDefault();
+        }}
+    >
         {@html expandIcon}
     </button>
 </div>

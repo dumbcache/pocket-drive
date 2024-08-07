@@ -2,7 +2,7 @@
     let { count } = $props();
 </script>
 
-{#if count}
+{#if count >= 0}
     <p class="count" title="count">
         {count}
     </p>

@@ -3,23 +3,24 @@
     import { states } from "$lib/scripts/stores.svelte";
     import Favorite from "../utils/Favorite.svelte";
 
-    export let visible: Boolean;
-    export let toolsVisible: Boolean = true;
-    export let file: Folder;
-    export const showFileNames: Boolean = false;
+    let {
+        visible,
+        file,
+    }: {
+        visible: boolean;
+        file: DriveFolder;
+    } = $props();
 </script>
 
 <div
     class="card"
     class:edit-mode={states.mode === "EDIT"}
     role="listitem"
-    on:dragstart|preventDefault
+    ondragstart={(e) => e.preventDefault()}
     data-id={file.id}
 >
-    <!-- on:mouseleave={closePeak}
-    on:mouseenter={displayPeak} -->
     {#key states.refresh}
-        <FolderCover id={file.id} name={file.name} {toolsVisible} {visible} />
+        <FolderCover id={file.id} name={file.name} {visible} />
     {/key}
     <div class="title-wrapper">
         <h2 class="folder-title" title={file.name}>{file.name}</h2>
@@ -27,7 +28,7 @@
             <Favorite
                 id={file.id}
                 starred={file.starred}
-                on:fav={() => (file.starred = !file.starred)}
+                toggle={() => (file.starred = !file.starred)}
             />
         </div>
     </div>
