@@ -249,9 +249,9 @@
         filter: none;
         filter: brightness(0.3);
     }
-    .edit-mode {
+    /* .edit-mode {
         padding: 0rem 5rem;
-    }
+    } */
     .no-content {
         display: flex;
         flex-flow: column nowrap;

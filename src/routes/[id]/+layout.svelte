@@ -1,5 +1,4 @@
 <script lang="ts">
-    import Header from "$lib/components/Header.svelte";
     import Drop from "$lib/components/drops/Drop.svelte";
     import { setSessionTimeout } from "$lib/scripts/utils";
     import { onMount } from "svelte";
@@ -12,7 +11,6 @@
         progressStore,
         states,
         tempStore,
-        // pocketStore,
     } from "$lib/scripts/stores.svelte";
     import SessionNotify from "$lib/components/profile/SessionNotify.svelte";
 
@@ -106,9 +104,6 @@
     }}
     ondrop={imgDropHandler}
 >
-    {#if states.mode !== "EDIT"}
-        <Header />
-    {/if}
 
     {#if states.profile}
         <Profile />
@@ -142,7 +137,8 @@
     .dragover {
         background-color: #55f5;
     }
-    @media (max-width: 600px) {
+
+       @media (max-width: 600px) {
         .layout {
             height: initial;
             display: initial;

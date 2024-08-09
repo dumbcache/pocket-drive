@@ -15,6 +15,7 @@
         tempStore,
     } from "$lib/scripts/stores.svelte";
     import FileLoading from "$lib/components/utils/FileLoading.svelte";
+    import Count from "$lib/components/utils/Count.svelte";
 
     let observer = $state<IntersectionObserver>();
     let status = $derived(
@@ -87,9 +88,11 @@
     </section>
 </div>
 
-<footer>
-    <FileLoading {status} />
-</footer>
+{#if fileStore.files.length > 0 || folderStore.files.length > 0}
+    <footer>
+        <FileLoading {status} />
+    </footer>
+{/if}
 
 <style>
     .content {
@@ -100,7 +103,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        padding: 1rem 0rem;
+        padding-bottom: 2rem;
     }
 
     @media (max-width: 600px) {

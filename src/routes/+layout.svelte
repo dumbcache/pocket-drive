@@ -8,10 +8,10 @@
     import { loadGSIScript } from "$lib/scripts/login";
     import { disableScrolling, enableScorlling } from "$lib/scripts/utils";
     import { preferences, states } from "$lib/scripts/stores.svelte";
+    import HomeIcon from "$lib/components/HomeIcon.svelte";
 
     let { children } = $props();
 
-    let homeIcon = $state("");
     let startup: HTMLDivElement;
 
     let pocketStateUnsubscribe: Unsubscriber;
@@ -29,13 +29,6 @@
     onMount(async () => {
         disableScrolling();
         preferences.setTheme();
-
-        try {
-            const response = await fetch("/favicon.svg");
-            homeIcon = await response.text();
-        } catch (error) {
-            console.error("Failed to fetch favicon:", error);
-        }
 
         setTimeout(() => {
             enableScorlling();
@@ -64,7 +57,7 @@
 
 <div class="startup" bind:this={startup}>
     <span class="icon">
-        {@html homeIcon}
+        <HomeIcon/>
     </span>
 </div>
 

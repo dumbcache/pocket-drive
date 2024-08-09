@@ -191,7 +191,7 @@
         margin: 1rem 0rem;
         width: 100%;
         border: none;
-        height: 1px;
+        height: 3px;
         background-color: var(--color-border);
     }
 

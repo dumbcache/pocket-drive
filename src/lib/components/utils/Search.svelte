@@ -127,8 +127,8 @@
         margin: auto;
         color: var(--color-two);
         position: sticky;
-        top: 5rem;
-        z-index: 1;
+        /* top: 10rem; */
+        /* z-index: 2; */
         /* box-shadow: 0 0 5px 1px var(--color-border); */
         background-color: var(--color-bg);
     }

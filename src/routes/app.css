@@ -78,8 +78,8 @@
     --content-column-gap: 3rem;
     --content-row-gap: 3rem;
     --content-gap: var(--content-row-gap) var(--content-column-gap);
-    --vertical-padding: 3rem;
-    --horizontal-padding: 5rem;
+    --vertical-padding: 5rem;
+    --horizontal-padding: 10rem;
     --content-padding: var(--vertical-padding) var(--horizontal-padding);
 }
 .dark {
@@ -159,6 +159,10 @@ svg {
     width: 100%;
 }
 
+span {
+    display: inline-block;
+}
+
 input,
 button,
 textarea,
@@ -177,7 +181,8 @@ button,
     display: inline-block;
 }
 
-.btn svg {
+.btn svg,
+.icon {
     fill: var(--color-svg);
 }
 .btn svg:hover {
@@ -235,11 +240,9 @@ a {
 @media (max-width: 900px) {
     :root {
         --title-size: var(--size-small);
-        --primary-icon-size: var(--size-medium);
-        --secondary-icon-size: var(--size-small);
         --content-column-gap: 2rem;
         --content-row-gap: 2rem;
-        --horizontal-padding: 3rem;
+        --horizontal-padding: 7rem;
         --cover-height: 17rem;
         --folder-width: 25rem;
         --file-width: 15rem;
@@ -248,6 +251,9 @@ a {
 
 @media (max-width: 600px) {
     :root {
+        --vertical-padding: 3rem;
+        --primary-icon-size: var(--size-medium);
+        --secondary-icon-size: var(--size-small);
         --content-padding: 2rem 0rem;
         --content-column-gap: 0.7rem;
         --content-row-gap: 2rem;

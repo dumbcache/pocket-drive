@@ -67,8 +67,9 @@
     .drop {
         position: sticky;
         top: 0;
-        background-color: var(--color-bg-one);
-        /* border-left: 1px solid var(--color); */
+        background: inherit;
+        /* background-color: var(--color-bg-one); */
+        border-left: 1px solid var(--color-border);
         overflow-y: scroll;
         padding: 1rem;
         padding-top: 0rem;
@@ -100,19 +101,19 @@
         padding: 0.5rem;
         font-size: 1.6rem;
         color: var(--color);
-        background-color: var(--color-bg-two);
+        background-color: var(--color-bg-one);
         padding-left: 0.5rem;
     }
 
     .drop :global(input:disabled:hover),
     .drop :global(input:disabled) {
-        background-color: var(--color-bg-one);
+        background-color: var(--color-bg);
         color: var(--color-five);
         cursor: not-allowed;
         border-bottom: none;
     }
     .drop :global(input:hover) {
-        background-color: var(--color-bg-three);
+        background-color: var(--color-bg-two);
     }
 
     .expand {

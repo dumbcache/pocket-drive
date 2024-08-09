@@ -87,13 +87,14 @@
         z-index: 2;
         backdrop-filter: blur(1rem);
         -webkit-backdrop-filter: blur(1rem);
+        gap: 2rem;
     }
     .autosave :global(svg) {
         fill: red;
     }
 
     .common-url {
-        max-width: 20rem;
+        max-width: 30rem;
     }
     button {
         display: inline-flex;

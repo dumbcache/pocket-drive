@@ -59,15 +59,19 @@
 <style>
     .fetch-all {
         position: fixed;
-        top: 3rem;
-        right: 10rem;
+        top: 7rem;
+        right: 7rem;
         z-index: 1;
+    }
+
+    .fetch-all :global(svg) {
+        fill: var(--color-five);
     }
 
     @media (max-width: 600px) {
         .fetch-all {
             position: absolute;
-            top: -2rem;
+            top: -1rem;
             right: 1rem;
             z-index: unset;
         }

@@ -7,7 +7,7 @@
     let { observer }: { observer: IntersectionObserver | undefined } = $props();
 </script>
 
-{#if fileStore?.nextPageToken}
+{#if fileStore?.nextPageToken && states.mode !== "EDIT"}
     <FetchAll view="FILE" />
 {/if}
 

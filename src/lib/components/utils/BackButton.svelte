@@ -15,3 +15,9 @@
         {@html beforeNavigate}
     </button>
 {/if}
+
+<style>
+    button {
+        flex-shrink: 0;
+    }
+</style>

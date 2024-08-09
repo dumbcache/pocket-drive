@@ -15,6 +15,8 @@
         tempStore,
         storeSnap,
     } from "$lib/scripts/stores.svelte";
+    import Head from "$lib/components/header/Head.svelte";
+    import Crumbs from "$lib/components/header/Crumbs.svelte";
 
     let { data }: { data: PageData } = $props();
 
@@ -58,30 +60,30 @@
 
 <section class="wrapper" style:display="">
     {#if states.mode !== "EDIT"}
-        <nav class="nav">
-            <BackButton />
-            <div class="tool-wrapper">
-                <Tools />
-            </div>
-
-            <h2 class="folder-name one">
-                <FolderTitle />
-            </h2>
-
-            <Count
-                count={states.view === "FOLDER"
-                    ? folderStore.files.length
-                    : fileStore.files.length}
-            />
-        </nav>
-
-        <h2 class="folder-name two">
-            <FolderTitle />
-        </h2>
-
+        <Head />
         {#if states.mode === "SEARCH"}
             <Search />
         {/if}
+
+        <section class="utils">
+            <div class="tools">
+                <Tools />
+            </div>
+            <div class="count">
+                <Count
+                    count={states.view === "FOLDER"
+                        ? folderStore.files.length
+                        : fileStore.files.length}
+                />
+            </div>
+        </section>
+
+        <div class="crumbs">
+            <BackButton />
+            <span>
+                <Crumbs />
+            </span>
+        </div>
     {/if}
     <main
         class="main"
@@ -117,74 +119,64 @@
         background-color: #5555;
         backdrop-filter: blur(5rem);
     }
-    .tool-wrapper {
-        display: none;
-    }
-    .nav {
-        width: 100%;
-        display: flex;
-        flex-flow: row nowrap;
-        align-items: center;
-        justify-content: flex-end;
-        padding: 2rem 0rem;
-        position: sticky;
-        top: 0;
-        background-color: var(--color-bg);
+
+    .utils {
         z-index: 1;
-        gap: 5rem;
     }
-    .nav :global(.back-button) {
-        position: absolute;
+    .tools {
+        position: fixed;
         top: 50%;
-        left: 0%;
+        left: 0;
         transform: translate(0%, -50%);
-        margin-left: 2rem;
+        padding: 2rem;
+        z-index: 1;
     }
-
-    .folder-name {
-        font-size: 2rem;
-        max-width: 40rem;
-        width: fit-content;
-        word-wrap: unset;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        margin: auto;
-        padding: 1rem;
+    .count {
+        position: fixed;
+        right: 0;
+        top: 7rem;
+        z-index: 1;
     }
-
-    .two {
+    .crumbs {
         display: none;
     }
-
     @media (max-width: 600px) {
         .wrapper {
             padding: 0rem 0.5rem;
         }
 
-        .tool-wrapper {
-            display: initial;
+        .utils {
+            position: sticky;
+            top: 0;
+            background: inherit;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
         }
-        .nav :global(.back-button) {
-            display: none;
-        }
-        .nav {
-            padding: 1.5rem 0.5rem;
-            gap: 2rem;
-            margin-bottom: 0rem;
-        }
-        .one {
-            display: none;
-        }
-        .two {
-            display: block;
-            font-size: initial;
-            max-width: 80%;
+        .crumbs {
+            display: flex;
+            align-items: center;
+            padding: 1rem 0rem;
+            /* gap: 1rem; */
+            /* margin: auto; */
+            /* justify-content: start; */
         }
 
-        .folder-name {
-            flex-shrink: 0;
-            padding: 0.5rem;
+        .crumbs span {
+            margin: auto;
+            width: fit-content;
+            /* flex-grow: 1;
+            width: 100%;
+            text-align: center; */
+        }
+        .count,
+        .tools {
+            position: unset;
+        }
+        .tools {
+            padding: 0rem;
+            transform: unset;
         }
     }
 </style>

@@ -15,7 +15,7 @@
         font-size: 1rem;
         user-select: none;
         position: relative;
-        padding: 5rem;
+        padding: 0rem 5rem;
         color: #555;
     }
     .end::after,

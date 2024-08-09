@@ -41,8 +41,8 @@
     .card {
         position: relative;
         /* border-radius: 1rem; */
-        border-top-left-radius: 1rem;
-        border-top-right-radius: 1rem;
+        /* border-top-left-radius: 1rem;
+        border-top-right-radius: 1rem; */
         overflow: hidden;
     }
     .card:hover {

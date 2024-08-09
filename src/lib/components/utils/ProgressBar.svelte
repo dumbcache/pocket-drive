@@ -22,7 +22,11 @@
         <!-- <button class="close btn s-second">{@html closeButton}</button> -->
         {#if progressStore.success + progressStore.fail !== progressStore.total}
             <span class="loading item">
-                <Spinner width={"2rem"} height={"2rem"} borderWidth={"2px"} />
+                <Spinner
+                    width={"2.4rem"}
+                    height={"2.4rem"}
+                    borderWidth={"2px"}
+                />
                 {progressStore.total}
             </span>
         {/if}
@@ -44,7 +48,7 @@
 <style>
     .progress-bar {
         position: fixed;
-        top: 7rem;
+        top: 12rem;
         right: 0rem;
         z-index: 10;
         padding: 0.5rem;
