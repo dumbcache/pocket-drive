@@ -31,13 +31,13 @@
     </div>
     {#if item?.progress !== "uploading" && item?.progress !== "success" && item?.loaded === true}
         <button
-            class="remove btn s-prime"
+            class="remove btn s-second"
             onclick={() => removeDropEntry(item.id)}
         >
             {@html closeIcon}
         </button>
         <button
-            class="done btn s-prime"
+            class="done btn s-second"
             onclick={() => {
                 dropOkHandlerSingle(item.id);
             }}
@@ -77,7 +77,7 @@
         flex-flow: column nowrap;
         position: relative;
         border-radius: 1rem;
-        max-width: 20rem;
+        max-width: 15rem;
         border-bottom: none;
         border: 1px solid var(--color-border);
         overflow: hidden;
@@ -94,6 +94,10 @@
         border-top-left-radius: 0.5rem;
         border-top-right-radius: 0.5rem;
         filter: brightness(0.8);
+    }
+
+    input {
+        padding: 0.5rem;
     }
     .drop-item:hover .drop-img {
         filter: brightness(0.5);

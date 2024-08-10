@@ -89,6 +89,10 @@
         -webkit-backdrop-filter: blur(1rem);
         gap: 2rem;
     }
+    input {
+        border-radius: 2.5rem;
+        padding: 1rem 1.5rem;
+    }
     .autosave :global(svg) {
         fill: red;
     }

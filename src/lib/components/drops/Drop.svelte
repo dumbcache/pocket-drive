@@ -96,23 +96,22 @@
         width: 100%;
         border: none;
         outline: none;
-        border-top-left-radius: 0.5rem;
-        border-top-right-radius: 0.5rem;
-        padding: 0.5rem;
-        font-size: 1.6rem;
+        /* padding: 0.5rem; */
+        font-size: 1.3rem;
         color: var(--color);
         background-color: var(--color-bg-one);
-        padding-left: 0.5rem;
+        /* padding-left: 0.5rem; */
     }
 
     .drop :global(input:disabled:hover),
     .drop :global(input:disabled) {
         background-color: var(--color-bg);
-        color: var(--color-five);
+        color: var(--color-three);
         cursor: not-allowed;
         border-bottom: none;
     }
-    .drop :global(input:hover) {
+    .drop :global(input:hover),
+    .drop :global(input:focus) {
         background-color: var(--color-bg-two);
     }
 
@@ -150,6 +149,10 @@
         }
         .drop-items {
             gap: 1rem;
+        }
+
+        .drop :global(input) {
+            font-size: 1.1rem;
         }
     }
 </style>
