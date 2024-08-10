@@ -44,6 +44,9 @@
                         : fileStore.files.length}
                 />
             </div>
+            <div class="back">
+                <BackButton />
+            </div>
         </div>
         <div class="crumb-wrapper">
             <BackButton />
@@ -114,6 +117,12 @@
         top: 7rem;
         z-index: 1;
     }
+    .back {
+        position: fixed;
+        top: 8rem;
+        left: 2rem;
+        z-index: 1;
+    }
 
     @media (max-width: 900px) {
         .title-wrapper {
@@ -127,9 +136,9 @@
             gap: 1rem;
         }
 
-        /* .one {
-            position: relative;
-        } */
+        .back {
+            display: none;
+        }
 
         .two {
             background-color: inherit;

@@ -229,10 +229,10 @@
 <style>
     .list {
         display: flex;
-        padding-top: var(--vertical-padding);
         flex-flow: row wrap;
         align-items: flex-start;
         justify-content: center;
+        padding-top: var(--vertical-padding);
         gap: var(--content-gap);
     }
 

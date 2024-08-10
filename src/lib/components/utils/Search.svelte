@@ -6,7 +6,9 @@
     import FolderSelect from "$lib/components/folders/FolderSelect.svelte";
     import ActionForm from "$lib/components/folders/ActionForm.svelte";
     import { folderStore, states, tempStore } from "$lib/scripts/stores.svelte";
+    import clearIcon from "$lib/assets/close.svg?raw";
     import { onMount } from "svelte";
+    import Select from "$lib/components/folders/Select.svelte";
 
     let global = false;
     let searchElement: HTMLInputElement;
@@ -43,6 +45,7 @@
     async function handleChange() {
         if (search.trim() === "") {
             searchFolders = [];
+            searchElement.focus();
             return;
         }
     }
@@ -73,13 +76,14 @@
             global = !global;
             searchElement.focus();
             handleSearch();
-        }}>/R</button
+        }}>G</button
     >
     <!-- svelte-ignore a11y-autofocus -->
     <input
-        type="search"
+        type="input"
         name="search"
         id="search"
+        title="search"
         autocomplete="off"
         placeholder="search folders"
         bind:this={searchElement}
@@ -91,6 +95,16 @@
         <div class="loading">
             <Spinner width={"1.5rem"} height={"1.5rem"} borderWidth={"2px"} />
         </div>
+    {:else if search.length > 0}
+        <button
+            class="clear btn s-second"
+            onclick={() => {
+                search = "";
+                handleChange();
+            }}
+        >
+            {@html clearIcon}
+        </button>
     {/if}
 </div>
 
@@ -110,7 +124,7 @@
 
 {#if tempStore.folderAction.type && states.mode === "SEARCH"}
     {#if tempStore.folderAction.type === "MOVE"}
-        <FolderSelect type="FOLDER" />
+        <Select />
     {:else}
         <ActionForm />
     {/if}
@@ -127,25 +141,27 @@
         margin: auto;
         color: var(--color-two);
         position: sticky;
+        background-color: var(--color-bg);
         /* top: 10rem; */
         /* z-index: 2; */
         /* box-shadow: 0 0 5px 1px var(--color-border); */
-        background-color: var(--color-bg);
     }
     .global {
-        padding: 1rem;
+        padding: 1.5rem;
         border: 1px solid var(--color-border);
-        border-top-left-radius: 0.5rem;
-        border-bottom-left-radius: 0.5rem;
+        border-radius: 2.5rem;
+        position: absolute;
+        left: 1rem;
+        width: 5rem;
     }
     .global.active {
-        color: #f00;
+        color: var(--color-bg);
+        background-color: var(--color-focus);
         /* background-color: var(--color-bg-one); */
     }
     #search {
         width: 100%;
-        max-width: 30rem;
-        padding: 1rem;
+        padding: 1.5rem 6rem;
         display: block;
         outline: none;
         border: none;
@@ -154,18 +170,17 @@
         border-bottom-right-radius: 0.5rem;
         border-bottom: 2px solid var(--color-border);
         background-color: var(--color-bg-one);
+        border-radius: 2.5rem;
     }
-    /* #search:focus {
-        background-color: var(--color-bg-one);
-    }  */
 
     .list {
         display: flex;
         flex-flow: row wrap;
         align-items: flex-start;
         justify-content: center;
+        padding: var(--content-padding);
+        padding-top: var(--vertical-padding);
         gap: var(--content-gap);
-        padding: 2rem 0rem;
     }
 
     .no-content {
@@ -178,27 +193,36 @@
         transform: translate(-50%, -50%);
         color: #555;
         text-align: center;
-        user-select: none;
+        /* user-select: none; */
     }
-    .loading {
+    .loading,
+    .clear {
         position: absolute;
         top: 50%;
         transform: translate(0, -50%);
-        right: 7rem;
+        right: 3rem;
+        background: none;
     }
     @media (max-width: 600px) {
         .search-wrapper {
             padding: 1rem;
             top: 3.5rem;
         }
-        #search,
+        #search {
+            padding: 1.3rem 5rem;
+        }
         .global {
-            padding: 0.7rem;
-            width: fit-content;
+            padding: 1.3rem;
+            width: 4.6rem;
         }
 
         .no-content {
             font-size: smaller;
+        }
+
+        .loading,
+        .clear {
+            right: 3rem;
         }
     }
 </style>

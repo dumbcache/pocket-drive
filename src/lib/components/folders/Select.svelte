@@ -180,14 +180,18 @@
                 disabled={selected.id === tempStore.activeFolder.id}
                 onclick={doneTap}>{@html doneIcon}</button
             >
-            {#if show}
-                <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
-                <ul class="list" onclick={itemTap}>
-                    {#each list as item}
-                        <li class="item" data-id={item.id}>{item.name}</li>
-                    {/each}
-                </ul>
-            {/if}
+            <!-- {#if show} -->
+            <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+            <ul
+                class="list"
+                onclick={itemTap}
+                style:display={show ? "initial" : "none"}
+            >
+                {#each list as item}
+                    <li class="item" data-id={item.id}>{item.name}</li>
+                {/each}
+            </ul>
+            <!-- {/if} -->
         </section>
     </div>
 </div>
