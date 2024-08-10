@@ -32,6 +32,7 @@
                 token
             );
             pageToken = res?.nextPageToken;
+            if (parent !== tempStore.activeFolder?.id) return;
             if (view === "FOLDER") {
                 folderStore.nextPageToken = pageToken;
                 folderStore.files.push(...(res.files as DriveFolder[]));
