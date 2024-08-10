@@ -94,8 +94,8 @@ declare global {
     interface DriveFolder {
         id: string;
         name: string;
-        parents: string[];
-        starred: Boolean;
+        parents?: string[];
+        starred?: Boolean;
     }
 
     type ActiveFolder = DriveFolder;
@@ -121,7 +121,7 @@ declare global {
     type FAction = "EDIT" | "DELETE" | "MOVE" | "CREATE";
 
     interface FolderAction {
-        type: "EDIT" | "DELETE" | "MOVE" | "CREATE";
+        type: "EDIT" | "DELETE" | "MOVE" | "COPY" | "CREATE";
         id: string;
         name: string;
     }

@@ -15,6 +15,7 @@
         states,
         tempStore,
     } from "$lib/scripts/stores.svelte";
+    import Select from "$lib/components/folders/Select.svelte";
 
     let {
         set,
@@ -206,11 +207,7 @@
 </div>
 
 {#if folderSelectVisible}
-    <FolderSelect
-        type="FILE"
-        onClose={folderSelectClose}
-        onOk={folderSelectOk}
-    />
+    <Select onClose={folderSelectClose} onDone={folderSelectOk} />
 {/if}
 {#if action === "EDIT"}
     <!-- svelte-ignore a11y_click_events_have_key_events -->

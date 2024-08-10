@@ -164,11 +164,11 @@
     class="wrapper"
     onkeydown={(e) => e.stopPropagation()}
     onclick={() => {
-        onClose();
+        // onClose();
     tempStore.folderAction = {} as FolderAction
     }}
 >
-    {#if states.progress}
+    <!-- {#if states.progress} -->
         <!-- svelte-ignore a11y-no-static-element-interactions -->
         <!-- svelte-ignore a11y_click_events_have_key_events -->
         <div class="folder-select" onclick={(e) => e.stopPropagation()}>
@@ -235,7 +235,7 @@
                 </div>
             </section>
         </div>
-    {/if}
+    <!-- {/if} -->
 </div>
 
 <style>
@@ -248,7 +248,7 @@
         display: grid;
         place-content: center;
         background-color: var(--color-backdrop);
-        z-index: 3;
+        z-index: 1;
         font-size: var(--size-smaller);
     }
 
