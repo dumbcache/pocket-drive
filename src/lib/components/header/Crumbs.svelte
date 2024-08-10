@@ -59,12 +59,19 @@
         overflow: hidden;
         text-overflow: ellipsis;
     }
+
+    @media (max-width: 900px) {
+        .active {
+            max-width: 20rem;
+        }
+    }
+
     @media (max-width: 600px) {
         .crumbs {
             font-size: 1.3rem;
         }
         .active {
-            max-width: 15rem;
+            max-width: 14rem;
         }
     }
 </style>

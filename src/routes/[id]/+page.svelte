@@ -2,7 +2,7 @@
     import { onMount } from "svelte";
     import { afterNavigate, beforeNavigate } from "$app/navigation";
     import Content from "$lib/components/Content.svelte";
-    import Tools from "$lib/components/Tools.svelte";
+    import Tools from "$lib/components/header/Tools.svelte";
     import Count from "$lib/components/utils/Count.svelte";
     import BackButton from "$lib/components/utils/BackButton.svelte";
     import Search from "$lib/components/utils/Search.svelte";
@@ -15,7 +15,7 @@
         tempStore,
         storeSnap,
     } from "$lib/scripts/stores.svelte";
-    import Head from "$lib/components/header/Head.svelte";
+    import Header from "$lib/components/header/Header.svelte";
     import Crumbs from "$lib/components/header/Crumbs.svelte";
 
     let { data }: { data: PageData } = $props();
@@ -58,32 +58,12 @@
     });
 </script>
 
-<section class="wrapper" style:display="">
+<div class="page" style:display="">
     {#if states.mode !== "EDIT"}
-        <Head />
+        <Header />
         {#if states.mode === "SEARCH"}
             <Search />
         {/if}
-
-        <section class="utils">
-            <div class="tools">
-                <Tools />
-            </div>
-            <div class="count">
-                <Count
-                    count={states.view === "FOLDER"
-                        ? folderStore.files.length
-                        : fileStore.files.length}
-                />
-            </div>
-        </section>
-
-        <div class="crumbs">
-            <BackButton />
-            <span>
-                <Crumbs />
-            </span>
-        </div>
     {/if}
     <main
         class="main"
@@ -96,10 +76,10 @@
     </main>
 
     <ScrollButton />
-</section>
+</div>
 
 <style>
-    .wrapper {
+    .page {
         background: inherit;
         width: 100%;
         padding: 0rem;
@@ -120,63 +100,9 @@
         backdrop-filter: blur(5rem);
     }
 
-    .utils {
-        z-index: 1;
-    }
-    .tools {
-        position: fixed;
-        top: 50%;
-        left: 0;
-        transform: translate(0%, -50%);
-        padding: 2rem;
-        z-index: 1;
-    }
-    .count {
-        position: fixed;
-        right: 0;
-        top: 7rem;
-        z-index: 1;
-    }
-    .crumbs {
-        display: none;
-    }
     @media (max-width: 600px) {
-        .wrapper {
+        .page {
             padding: 0rem 0.5rem;
-        }
-
-        .utils {
-            position: sticky;
-            top: 0;
-            background: inherit;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem;
-        }
-        .crumbs {
-            display: flex;
-            align-items: center;
-            padding: 1rem 0rem;
-            /* gap: 1rem; */
-            /* margin: auto; */
-            /* justify-content: start; */
-        }
-
-        .crumbs span {
-            margin: auto;
-            width: fit-content;
-            /* flex-grow: 1;
-            width: 100%;
-            text-align: center; */
-        }
-        .count,
-        .tools {
-            position: unset;
-        }
-        .tools {
-            padding: 0rem;
-            transform: unset;
         }
     }
 </style>

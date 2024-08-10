@@ -71,8 +71,8 @@
     @media (max-width: 600px) {
         .fetch-all {
             position: absolute;
-            top: -1rem;
-            right: 1rem;
+            top: 0rem;
+            right: 0rem;
             z-index: unset;
         }
     }
