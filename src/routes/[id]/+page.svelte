@@ -59,12 +59,12 @@
 </script>
 
 <div class="page" style:display="">
-    {#if states.mode !== "EDIT"}
-        <Header />
-        {#if states.mode === "SEARCH"}
-            <Search />
-        {/if}
+    <!-- {#if states.mode !== "EDIT"} -->
+    <Header />
+    {#if states.mode === "SEARCH"}
+        <Search />
     {/if}
+    <!-- {/if} -->
     <main
         class="main"
         style:display={states.mode === "SEARCH" ? "none" : "block"}

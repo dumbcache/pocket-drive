@@ -1,20 +1,9 @@
 <script lang="ts">
     import failIcon from "$lib/assets/failure.svg?raw";
     import successIcon from "$lib/assets/success.svg?raw";
+    import closeIcon from "$lib/assets/close.svg?raw";
     import Spinner from "$lib/components/utils/Spinner.svelte";
     import { progressStore } from "$lib/scripts/stores.svelte";
-
-    $effect(() => {
-        if (
-            progressStore.success + progressStore.fail ===
-                progressStore.total &&
-            progressStore.total !== 0
-        ) {
-            setTimeout(() => {
-                progressStore.set(0, 0, 0);
-            }, 5000);
-        }
-    });
 </script>
 
 <div class="progress-bar">
@@ -22,13 +11,15 @@
         <!-- <button class="close btn s-second">{@html closeButton}</button> -->
         {#if progressStore.success + progressStore.fail !== progressStore.total}
             <span class="loading item">
-                <Spinner
-                    width={"2.4rem"}
-                    height={"2.4rem"}
-                    borderWidth={"2px"}
-                />
+                <Spinner width={"2rem"} height={"2rem"} borderWidth={"2px"} />
                 {progressStore.total}
             </span>
+        {:else}
+            <button
+                class="btn s-second"
+                onclick={() => progressStore.set(0, 0, 0)}
+                >{@html closeIcon}</button
+            >
         {/if}
         {#if progressStore.success > 0}
             <div class="success item">
@@ -48,7 +39,7 @@
 <style>
     .progress-bar {
         position: fixed;
-        top: 12rem;
+        top: 20rem;
         right: 0rem;
         z-index: 10;
         padding: 0.5rem;
@@ -85,7 +76,7 @@
 
     @media (max-width: 600px) {
         .progress-bar {
-            top: 14rem;
+            top: 15rem;
         }
     }
 </style>

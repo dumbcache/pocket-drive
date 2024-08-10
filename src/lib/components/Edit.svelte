@@ -266,16 +266,20 @@
 <style>
     .edit-buttons {
         position: sticky;
-        top: 0rem;
+        top: 3rem;
         z-index: 1;
         background: var(--color-bg);
-        padding: 2rem 0rem;
+        padding: 0rem 1rem;
+        padding-bottom: 2rem;
         display: flex;
         flex-flow: row nowrap;
         align-items: center;
         gap: 2rem;
         justify-content: flex-end;
         font-size: var(--size-smaller);
+        width: fit-content;
+        margin-left: auto;
+        margin-right: 10rem;
     }
     button:disabled {
         cursor: not-allowed;
@@ -392,9 +396,12 @@
     }
     @media (max-width: 500px) {
         .edit-buttons {
+            width: 100%;
+            margin: 0;
             padding: 1.5rem 0rem;
             gap: 1rem;
             justify-content: space-evenly;
+            top: 0rem;
         }
 
         .memory {

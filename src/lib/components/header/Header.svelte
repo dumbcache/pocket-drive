@@ -32,29 +32,31 @@
             <Help />
         </div>
     </section>
-    <section class="two">
-        <div class="tool-wrapper">
-            <div class="tools">
-                <Tools />
+    {#if states.mode !== "EDIT"}
+        <section class="two">
+            <div class="tool-wrapper">
+                <div class="tools">
+                    <Tools />
+                </div>
+                <div class="count">
+                    <Count
+                        count={states.view === "FOLDER"
+                            ? folderStore.files.length
+                            : fileStore.files.length}
+                    />
+                </div>
+                <div class="back">
+                    <BackButton />
+                </div>
             </div>
-            <div class="count">
-                <Count
-                    count={states.view === "FOLDER"
-                        ? folderStore.files.length
-                        : fileStore.files.length}
-                />
-            </div>
-            <div class="back">
+            <div class="crumb-wrapper">
                 <BackButton />
+                <span>
+                    <Crumbs />
+                </span>
             </div>
-        </div>
-        <div class="crumb-wrapper">
-            <BackButton />
-            <span>
-                <Crumbs />
-            </span>
-        </div>
-    </section>
+        </section>
+    {/if}
 </header>
 
 <style>
@@ -63,7 +65,7 @@
         flex-flow: column;
         position: sticky;
         top: 0;
-        padding: 2rem;
+        padding: 3rem 2rem;
         /* border-bottom: 1px solid var(--color-border); */
         /* background-color: #000; */
         z-index: 1;
@@ -114,12 +116,12 @@
     .count {
         position: fixed;
         right: 0;
-        top: 7rem;
+        top: 10rem;
         z-index: 1;
     }
     .back {
         position: fixed;
-        top: 8rem;
+        top: 11rem;
         left: 2rem;
         z-index: 1;
     }

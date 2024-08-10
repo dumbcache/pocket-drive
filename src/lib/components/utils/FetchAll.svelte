@@ -46,11 +46,9 @@
 
 <div class="fetch-all">
     {#if loading}
-        <div class="loading">
-            <Spinner width={"2rem"} height={"2rem"} borderWidth={"2px"} />
-        </div>
+        <Spinner width={"1.6rem"} height={"1.6rem"} borderWidth={"2px"} />
     {:else}
-        <button class="btn s-second" onclick={clickHandler}>
+        <button class="btn" onclick={clickHandler}>
             {@html fetchAllIcon}
         </button>
     {/if}
@@ -59,21 +57,25 @@
 <style>
     .fetch-all {
         position: fixed;
-        top: 7rem;
+        top: 10.5rem;
         right: 7rem;
         z-index: 1;
+        display: flex;
+        align-items: center;
     }
 
+    .btn {
+        width: 2rem;
+        height: 2rem;
+    }
     .fetch-all :global(svg) {
         fill: var(--color-five);
     }
 
     @media (max-width: 600px) {
         .fetch-all {
-            position: absolute;
-            top: 0rem;
-            right: 0rem;
-            z-index: unset;
+            top: 9.5rem;
+            right: 0.5rem;
         }
     }
 </style>

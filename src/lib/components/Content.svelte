@@ -14,8 +14,6 @@
         fileStore,
         tempStore,
     } from "$lib/scripts/stores.svelte";
-    import FileLoading from "$lib/components/utils/FileLoading.svelte";
-    import Count from "$lib/components/utils/Count.svelte";
     import Spinner from "./utils/Spinner.svelte";
 
     let observer = $state<IntersectionObserver>();
@@ -89,30 +87,24 @@
     </section>
 </div>
 
-<!-- {#if fileStore.files.length > 0 || folderStore.files.length > 0} -->
-{#if status === ""}
-    <Spinner height="4rem" width="4rem" />
-    <!-- {:else if status === "completed"} -->
-    <!-- <div class="end">END</div> -->
+{#if folderStore.files.length > 0 || fileStore.files.length > 0}
+    {#if status === ""}
+        <div class="loading">
+            <Spinner height="4rem" width="4rem" />
+        </div>
+    {/if}
 {/if}
-
-<!-- {/if} -->
 
 <style>
     .content {
         padding: var(--content-padding);
         padding-top: 0rem;
     }
-    footer {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        padding-bottom: 2rem;
-    }
 
+    .loading {
+        width: fit-content;
+        margin: auto;
+    }
     @media (max-width: 600px) {
-        footer {
-            padding: 2rem 0rem;
-        }
     }
 </style>
