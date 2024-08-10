@@ -13,6 +13,7 @@
         FOLDER_MIME_TYPE,
         fetchMultiple,
         IMG_MIME_TYPE,
+        clearTempCache,
     } from "$lib/scripts/utils";
     import { getToken } from "$lib/scripts/login";
     import { navigating } from "$app/stores";
@@ -37,6 +38,7 @@
 
     async function refreshHandler() {
         refreshing = true;
+        clearTempCache();
         const token = getToken();
         const parent = tempStore.activeFolder!.id;
 

@@ -1,5 +1,6 @@
 export const HOME_PATH = "home";
-export const CACHE_DATA = "pd-data";
+export const DATA_CACHE = "pd-data";
+export const TEMP_CACHE = "pd-temp";
 export const imageFetchLog = new Set();
 
 export const pocketStore = new Map();

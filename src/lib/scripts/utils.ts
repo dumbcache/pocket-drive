@@ -12,8 +12,9 @@ import {
     tempStore,
     imageCache,
     imageFetchLog,
-    CACHE_DATA,
+    DATA_CACHE,
     progressStore,
+    TEMP_CACHE,
 } from "$lib/scripts/stores.svelte";
 
 export let childWorker: Worker;
@@ -93,8 +94,12 @@ export function checkNetworkError(error: Error) {
     }
 }
 
-export async function clearCache() {
-    await caches.delete(CACHE_DATA);
+export async function clearTempCache() {
+    await caches.delete(TEMP_CACHE);
+}
+
+export async function clearDataCache() {
+    await caches.delete(DATA_CACHE);
 }
 
 export function clearLocalImages() {
@@ -109,18 +114,19 @@ export function clearSessionStorage() {
     window.sessionStorage.clear();
 }
 
-export function signUserOutPartial() {
+export async function signUserOutPartial() {
     clearLocalImages();
     let preferences = window.localStorage.getItem("preferences");
     let recents = window.localStorage.getItem("recents");
     clearLocalStorage();
     window.localStorage.setItem("preferences", preferences);
     window.localStorage.setItem("recents", recents);
+    clearTempCache();
 }
 
 export async function signUserOut() {
     clearLocalImages();
-    clearCache();
+    clearDataCache();
     let preferences = window.localStorage.getItem("preferences");
     clearLocalStorage();
     window.localStorage.setItem("preferences", preferences);
@@ -381,7 +387,7 @@ export async function fetchMultiple(
     return new Promise(async (resolve, reject) => {
         const req = constructRequest(params, accessToken);
         try {
-            if (updateCache) await (await caches.open(CACHE_DATA)).delete(req);
+            if (updateCache) await (await caches.open(DATA_CACHE)).delete(req);
             if (stopNewReq) {
                 resolve();
                 return;
