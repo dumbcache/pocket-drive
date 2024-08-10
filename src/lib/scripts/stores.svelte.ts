@@ -37,6 +37,8 @@ class AppStore<T> {
 }
 export const fileStore = new AppStore<DriveFile>();
 export const folderStore = new AppStore<DriveFolder>();
+export const fileSearchStore = new AppStore<DriveFile>();
+export const folderSearchStore = new AppStore<DriveFolder>();
 
 class TempStore {
     activeFolder = $state<ActiveFolder>({});

@@ -2,12 +2,8 @@
     import { onMount } from "svelte";
     import { afterNavigate, beforeNavigate } from "$app/navigation";
     import Content from "$lib/components/Content.svelte";
-    import Tools from "$lib/components/header/Tools.svelte";
-    import Count from "$lib/components/utils/Count.svelte";
-    import BackButton from "$lib/components/utils/BackButton.svelte";
-    import Search from "$lib/components/utils/Search.svelte";
+    import Search from "$lib/components/search/Search.svelte";
     import ScrollButton from "$lib/components/utils/ScrollButton.svelte";
-    import FolderTitle from "$lib/components/utils/FolderTitle.svelte";
     import {
         states,
         folderStore,
@@ -16,7 +12,6 @@
         storeSnap,
     } from "$lib/scripts/stores.svelte";
     import Header from "$lib/components/header/Header.svelte";
-    import Crumbs from "$lib/components/header/Crumbs.svelte";
 
     let { data }: { data: PageData } = $props();
 

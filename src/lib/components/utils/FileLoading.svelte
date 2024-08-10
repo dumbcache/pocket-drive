@@ -1,12 +1,12 @@
 <script lang="ts">
     import Spinner from "$lib/components/utils/Spinner.svelte";
 
-    let { status } = $props();
+    let { pageToken } = $props();
 </script>
 
-{#if status === ""}
+{#if pageToken}
     <Spinner height="4rem" width="4rem" />
-{:else if status === "completed"}
+{:else}
     <div class="end">END</div>
 {/if}
 

@@ -7,7 +7,13 @@
     import { disableScrolling } from "$lib/scripts/utils";
     import imgCreate from "$lib/assets/imgCreate.svg?raw";
     import folderCreate from "$lib/assets/folderCreate.svg?raw";
-    import { fileStore, states, tempStore } from "$lib/scripts/stores.svelte";
+    import {
+        fileStore,
+        folderStore,
+        states,
+        tempStore,
+    } from "$lib/scripts/stores.svelte";
+    import FileLoading from "$lib/components/utils/FileLoading.svelte";
 
     let {
         files,
@@ -209,6 +215,15 @@
         {/each}
     </ol>
     <div id="{view === 'FILE' ? 'FILE' : 'FOLDER'}-FOOT" bind:this={foot}></div>
+    <!-- {#if view === "FOLDER" ? folderStore.nextPageToken : fileStore.nextPageToken}
+    {/if} -->
+    <div class="loading">
+        <FileLoading
+            pageToken={view === "FOLDER"
+                ? folderStore.nextPageToken
+                : fileStore.nextPageToken}
+        />
+    </div>
 {:else}
     <div class="no-content">
         {#if view === "FILE"}
@@ -274,6 +289,11 @@
     }
     .img :global(svg) {
         fill: var(--color-five);
+    }
+    .loading {
+        width: fit-content;
+        margin: auto;
+        padding-top: 2rem;
     }
 
     @media (max-width: 600px) {

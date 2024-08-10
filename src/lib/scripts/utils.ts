@@ -222,6 +222,30 @@ export function constructRequest(
     return req;
 }
 
+export function constructSearchRequest(
+    { mimeType, pageSize, pageToken, search }: SearchParamsObject,
+    accessToken: string
+) {
+    pageSize ??= PAGESIZE;
+    let q = `q=mimeType contains '${mimeType}' and name contains '${search}'`;
+    let p = `&pageSize=${pageSize}`;
+    let f = `&fields=nextPageToken,files(${
+        mimeType === IMG_MIME_TYPE ? FIELDS_IMG : FIELDS_FOLDER
+    })`;
+    let t = Boolean(pageToken) === true ? `&pageToken=${pageToken}` : "";
+
+    let o = `&orderBy=createdTime desc`;
+    let url = `${FILE_API}?${q}${f}${o}${t}${p}`;
+
+    const req = new Request(url, {
+        method: "GET",
+        headers: {
+            Authorization: `Bearer ${accessToken}`,
+        },
+    });
+    return req;
+}
+
 export const createFolder = async (
     name: string,
     parent: string,
@@ -336,20 +360,15 @@ export async function getRootFolder(accessToken: string): Promise<string> {
     }
 }
 
-export async function searchHandler(token: string, search: string) {
-    const req = new Request(
-        FILE_API +
-            `?q=mimeType contains '${DIR_MIME_TYPE}' and name contains '${search}'&pageSize=1000&fields=files(${FIELDS_SINGLE})&orderBy=createdTime desc`,
-        {
-            method: "GET",
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        }
-    );
-    const res = await makeFetch(req);
+export async function searchHandler(
+    searchParams: SearchParamsObject,
+    token: string,
+    signal?: AbortSignal
+) {
+    const req = constructSearchRequest(searchParams, token);
+    const res = await fetch(req, { signal });
     if (res?.status === 200) {
-        return (await res?.json()).files;
+        return await res?.json();
     }
 }
 

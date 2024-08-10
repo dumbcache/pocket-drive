@@ -8,10 +8,8 @@
         HOME_PATH,
         states,
     } from "$lib/scripts/stores.svelte";
-    import FolderTitle from "$lib/components/utils/FolderTitle.svelte";
     import Help from "$lib/components/header/Help.svelte";
     import Crumbs from "$lib/components/header/Crumbs.svelte";
-    import Search from "$lib/components/header/Search.svelte";
     import Tools from "$lib/components/header/Tools.svelte";
 </script>
 
@@ -38,6 +36,7 @@
                 <div class="tools">
                     <Tools />
                 </div>
+                <!-- {#if states.mode !== "SEARCH"} -->
                 <div class="count">
                     <Count
                         count={states.view === "FOLDER"
@@ -45,6 +44,8 @@
                             : fileStore.files.length}
                     />
                 </div>
+                <!-- {/if} -->
+
                 <div class="back">
                     <BackButton />
                 </div>

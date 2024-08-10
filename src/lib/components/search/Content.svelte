@@ -1,28 +1,27 @@
 <script lang="ts">
     import { onMount } from "svelte";
-    import FileContainer from "$lib/components/files/FileContainer.svelte";
-    import FolderContainer from "$lib/components/folders/FolderContainer.svelte";
     import {
         FOLDER_MIME_TYPE,
-        fetchMultiple,
         IMG_MIME_TYPE,
+        searchHandler,
     } from "$lib/scripts/utils";
     import { getToken } from "$lib/scripts/login";
     import {
         states,
-        folderStore,
-        fileStore,
-        tempStore,
+        folderSearchStore,
+        fileSearchStore,
     } from "$lib/scripts/stores.svelte";
-    import Spinner from "$lib/components/utils/Spinner.svelte";
+    import Container from "$lib/components/search/Container.svelte";
+
+    let { search } = $props();
 
     let observer = $state<IntersectionObserver>();
     let status = $derived(
         states.view === "FOLDER"
-            ? folderStore?.nextPageToken
+            ? folderSearchStore?.nextPageToken
                 ? ""
                 : "completed"
-            : fileStore?.nextPageToken
+            : fileSearchStore?.nextPageToken
               ? ""
               : "completed"
     );
@@ -39,29 +38,28 @@
                         let ele = entry.target.id;
                         let pageToken =
                             ele === "FOLDER-FOOT"
-                                ? folderStore.nextPageToken
-                                : fileStore.nextPageToken;
+                                ? folderSearchStore.nextPageToken
+                                : fileSearchStore.nextPageToken;
                         let mimeType =
                             ele === "FOLDER-FOOT"
                                 ? FOLDER_MIME_TYPE
                                 : IMG_MIME_TYPE;
-                        let res = await fetchMultiple(
-                            {
-                                parent: tempStore.activeFolder!.id,
-                                mimeType: mimeType,
-                                pageToken: pageToken,
-                            },
+
+                        let res = await searchHandler(
+                            { mimeType, search, pageToken },
                             getToken()
                         );
                         pageToken = res?.nextPageToken;
                         if (ele === "FOLDER-FOOT") {
-                            folderStore.nextPageToken = pageToken;
-                            folderStore.files.push(
+                            folderSearchStore.nextPageToken = pageToken;
+                            folderSearchStore.files.push(
                                 ...(res.files as DriveFolder[])
                             );
                         } else {
-                            fileStore.nextPageToken = pageToken;
-                            fileStore.files.push(...(res.files as DriveFile[]));
+                            fileSearchStore.nextPageToken = pageToken;
+                            fileSearchStore.files.push(
+                                ...(res.files as DriveFile[])
+                            );
                         }
                     }
                 });
@@ -72,23 +70,33 @@
     }
 </script>
 
-<div class="content" role="main" ondragstart={(e) => e.preventDefault()}>
+<div class="search-content" role="main" ondragstart={(e) => e.preventDefault()}>
     <section
         class="folder-container"
         style:display={states.view === "FOLDER" ? "initial" : "none"}
     >
-        <FolderContainer {observer} />
+        <!-- <FolderContainer {observer} /> -->
+        <Container
+            footObserver={observer}
+            files={folderSearchStore.files}
+            view="FOLDER"
+        />
     </section>
     <section
         class="file-container"
         style:display={states.view === "FILE" ? "initial" : "none"}
     >
-        <FileContainer {observer} />
+        <Container
+            footObserver={observer}
+            files={fileSearchStore.files}
+            view="FILE"
+        />
+        <!-- <FileContainer {observer} /> -->
     </section>
 </div>
 
 <style>
-    .content {
+    .search-content {
         padding: var(--content-padding);
         padding-top: 0rem;
     }

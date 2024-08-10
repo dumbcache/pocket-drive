@@ -25,6 +25,12 @@ declare global {
         pageSize?: number;
         pageToken?: string;
     }
+    interface SearchParamsObject {
+        search: string;
+        mimeType: string;
+        pageSize?: number;
+        pageToken?: string;
+    }
 
     interface ImgMeta {
         name?: string;

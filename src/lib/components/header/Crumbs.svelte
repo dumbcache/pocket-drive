@@ -13,18 +13,18 @@
             <span>Home</span>
         </a>
         {#if tempStore.activeFolder?.id !== getRoot()}
-            {#if tempStore.activeFolder.parents[0] !== getRoot()}
+            {#if tempStore.activeFolder?.parents[0] !== getRoot()}
                 <span>/</span>
-                <button
+                <!-- <button
                     class="title-sub path"
                     title="level up"
                     onclick={() => history.back()}>.....</button
-                >
-                <!-- <a
+                > -->
+                <a
                     class="title-sub path"
                     title="level up"
-                    href={tempStore.activeFolder.parents[0]}>...</a
-                > -->
+                    href={tempStore.activeFolder.parents[0]}>.....</a
+                >
             {/if}
 
             <span>/</span>

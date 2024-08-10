@@ -6,9 +6,8 @@
     import expandIcon from "$lib/assets/expand.svg?raw";
     import downloadIcon from "$lib/assets/download.svg?raw";
     import urlIcon from "$lib/assets/url.svg?raw";
-    import { fileStore, states, tempStore } from "$lib/scripts/stores.svelte";
+    import { states, tempStore } from "$lib/scripts/stores.svelte";
     import Favorite from "$lib/components/utils/Favorite.svelte";
-    import { tick } from "svelte";
 
     let {
         zoom,

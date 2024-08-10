@@ -1,41 +1,88 @@
 <script lang="ts">
-    import { searchHandler } from "$lib/scripts/utils";
+    import {
+        DIR_MIME_TYPE,
+        IMG_MIME_TYPE,
+        searchHandler,
+    } from "$lib/scripts/utils";
     import { getToken } from "$lib/scripts/login";
-    import Folder from "$lib/components/folders/Folder.svelte";
     import Spinner from "$lib/components/utils/Spinner.svelte";
-    import FolderSelect from "$lib/components/folders/FolderSelect.svelte";
     import ActionForm from "$lib/components/folders/ActionForm.svelte";
-    import { folderStore, states, tempStore } from "$lib/scripts/stores.svelte";
+    import {
+        fileSearchStore,
+        fileStore,
+        folderSearchStore,
+        folderStore,
+        states,
+        tempStore,
+    } from "$lib/scripts/stores.svelte";
     import clearIcon from "$lib/assets/close.svg?raw";
-    import { onMount } from "svelte";
+    import { onDestroy, onMount } from "svelte";
     import Select from "$lib/components/folders/Select.svelte";
+    import Content from "$lib/components/search/Content.svelte";
 
     let global = false;
     let searchElement: HTMLInputElement;
     let search = "";
-    let searchFolders: Folder[] = [];
-    let searchTimeout: number;
     let token = getToken();
     let loading = false;
+    let abortController: AbortController;
+    let searchTimeout: number;
 
     function handleSearch() {
         clearTimeout(searchTimeout);
         loading = true;
+        if (abortController) {
+            abortController.abort();
+        }
+
+        abortController = new AbortController();
+        const { signal } = abortController;
         searchTimeout = setTimeout(async () => {
             let val = search.trim();
+            folderSearchStore.set({});
+            fileSearchStore.set({});
             if (val === "") {
-                // folders = [...$folderStore?.files];
-                searchFolders = [];
                 loading = false;
                 return;
             }
             if (global) {
-                let f = await searchHandler(token, val);
-                if (val === search.trim()) searchFolders = f;
-                loading = false;
+                try {
+                    await Promise.all([
+                        new Promise((res) => {
+                            searchHandler(
+                                { mimeType: DIR_MIME_TYPE, search: val },
+                                token,
+                                signal
+                            ).then((folders) => {
+                                res();
+                                if (val === search.trim()) {
+                                    folderSearchStore.set(folders);
+                                }
+                            });
+                        }),
+                        new Promise((res) => {
+                            searchHandler(
+                                { mimeType: IMG_MIME_TYPE, search: val },
+                                token,
+                                signal
+                            ).then((files) => {
+                                res();
+                                if (val === search.trim()) {
+                                    fileSearchStore.set(files);
+                                }
+                            });
+                        }),
+                    ]);
+                } catch (error) {
+                } finally {
+                    loading = false;
+                }
                 return;
             }
-            searchFolders = folderStore.files.filter((folder) =>
+            folderSearchStore.files = folderStore.files.filter((folder) =>
+                folder.name.toLowerCase().includes(val.toLowerCase())
+            );
+            fileSearchStore.files = fileStore.files.filter((folder) =>
                 folder.name.toLowerCase().includes(val.toLowerCase())
             );
             loading = false;
@@ -44,23 +91,21 @@
 
     async function handleChange() {
         if (search.trim() === "") {
-            searchFolders = [];
             searchElement.focus();
+            folderSearchStore.set({});
+            fileSearchStore.set({});
             return;
         }
     }
 
-    // const unsubscribeMode = mode.subscribe((data) => {
-    //     if (data === "") {
-    //         search = "";
-    //         global = false;
-    //         searchFolders = [];
-    //     }
-    // });
     onMount(() => {
         setTimeout(() => {
             searchElement.focus();
         });
+    });
+    onDestroy(() => {
+        folderSearchStore.set({});
+        fileSearchStore.set({});
     });
 </script>
 
@@ -78,7 +123,6 @@
             handleSearch();
         }}>G</button
     >
-    <!-- svelte-ignore a11y-autofocus -->
     <input
         type="input"
         name="search"
@@ -109,17 +153,7 @@
 </div>
 
 <section class="search-results">
-    {#if searchFolders && searchFolders.length > 0}
-        <ol class="list">
-            {#each searchFolders as file (file.id)}
-                <li data-id={file.id}>
-                    <Folder {file} visible={true} />
-                </li>
-            {/each}
-        </ol>
-    {:else}
-        <p class="no-content">No Results</p>
-    {/if}
+    <Content {search} />
 </section>
 
 {#if tempStore.folderAction.type && states.mode === "SEARCH"}
@@ -141,7 +175,9 @@
         margin: auto;
         color: var(--color-two);
         position: sticky;
-        background-color: var(--color-bg);
+        top: 1rem;
+        z-index: 1;
+        /* background-color: var(--color-bg); */
         /* top: 10rem; */
         /* z-index: 2; */
         /* box-shadow: 0 0 5px 1px var(--color-border); */
@@ -173,28 +209,6 @@
         border-radius: 2.5rem;
     }
 
-    .list {
-        display: flex;
-        flex-flow: row wrap;
-        align-items: flex-start;
-        justify-content: center;
-        padding: var(--content-padding);
-        padding-top: var(--vertical-padding);
-        gap: var(--content-gap);
-    }
-
-    .no-content {
-        display: flex;
-        flex-flow: column nowrap;
-        gap: 0.5rem;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        color: #555;
-        text-align: center;
-        /* user-select: none; */
-    }
     .loading,
     .clear {
         position: absolute;
@@ -206,7 +220,7 @@
     @media (max-width: 600px) {
         .search-wrapper {
             padding: 1rem;
-            top: 3.5rem;
+            top: 8rem;
         }
         #search {
             padding: 1.3rem 5rem;
