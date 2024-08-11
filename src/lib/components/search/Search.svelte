@@ -1,6 +1,6 @@
 <script lang="ts">
     import {
-        DIR_MIME_TYPE,
+        FOLDER_MIME_TYPE,
         IMG_MIME_TYPE,
         searchHandler,
     } from "$lib/scripts/utils";
@@ -50,7 +50,7 @@
                     await Promise.all([
                         new Promise((res) => {
                             searchHandler(
-                                { mimeType: DIR_MIME_TYPE, search: val },
+                                { mimeType: FOLDER_MIME_TYPE, search: val },
                                 token,
                                 signal
                             ).then((folders) => {

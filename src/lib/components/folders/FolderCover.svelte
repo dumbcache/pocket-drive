@@ -134,11 +134,9 @@
     }
 
     .edit {
-        padding: 0.5rem 0.2rem;
         position: absolute;
         top: 0.5rem;
         right: 0.5rem;
-        height: 4rem;
     }
 
     .edit {

@@ -170,14 +170,14 @@ export function fetchImgPreview(id: string) {
 /******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 
 export const FOLDER_MIME_TYPE = "application/vnd.google-apps.folder";
-export const DIR_MIME_TYPE = "application/vnd.google-apps.folder";
 export const IMG_MIME_TYPE = "image/";
 export const FILE_API = "https://www.googleapis.com/drive/v3/files";
 export const FIELDS_IMG =
     "id,name,description,thumbnailLink,starred,mimeType,size";
 export const FIELDS_FOLDER = "id,name,starred,parents";
-export const FIELDS_SINGLE = "id,name,parents";
 export const FIELDS_COVER = "thumbnailLink";
+export const FIELDS_SINGLE =
+    "id,name,parents,description,starred,mimeType,thumbnailLink";
 export const PAGESIZE = 100;
 
 export const wait = (s: number) => new Promise((res) => setTimeout(res, s));
@@ -234,9 +234,7 @@ export function constructSearchRequest(
     pageSize ??= PAGESIZE;
     let q = `q=mimeType contains '${mimeType}' and name contains '${search}'`;
     let p = `&pageSize=${pageSize}`;
-    let f = `&fields=nextPageToken,files(${
-        mimeType === IMG_MIME_TYPE ? FIELDS_IMG : FIELDS_FOLDER
-    })`;
+    let f = `&fields=nextPageToken,files(${FIELDS_SINGLE})`;
     let t = Boolean(pageToken) === true ? `&pageToken=${pageToken}` : "";
 
     let o = `&orderBy=createdTime desc`;

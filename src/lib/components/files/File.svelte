@@ -1,4 +1,5 @@
 <script lang="ts">
+    import outIcon from "$lib/assets/outArrow.svg?raw";
     import urlIcon from "$lib/assets/url.svg?raw";
     import playIcon from "$lib/assets/play.svg?raw";
     import { isValidUrl } from "$lib/scripts/utils";
@@ -61,6 +62,13 @@
                     toggle={() => (file.starred = !file.starred)}
                 />
             </span>
+            {#if states.mode === "SEARCH" && file.parents && file.parents.length > 0}
+                <a
+                    href={file.parents[0]}
+                    class="btn s-second goto"
+                    title="goto containing folder">{@html outIcon}</a
+                >
+            {/if}
         {/if}
     {:else}
         <div class="placeholder"></div>
@@ -95,12 +103,14 @@
     }
 
     .card:hover .img-link,
+    .card:hover .goto,
     .card:hover .favorite {
         opacity: 1;
     }
 
     .favorite,
-    .img-link {
+    .img-link,
+    .goto {
         position: absolute;
         right: 0.5rem;
         opacity: 0;
@@ -109,18 +119,26 @@
     .favorite {
         bottom: 0.5rem;
     }
-    .img-link {
+    .img-link,
+    .goto {
         display: inline-block;
         top: 0.5rem;
-        background-color: #0003;
+        background-color: #0002;
         border-radius: 50%;
-        box-shadow: 0 0 10px 1px #0005;
+    }
+    .img-link :global(svg) {
+        fill: var(--color-white);
     }
     .img-link:hover :global(svg) {
         fill: red;
     }
-    .img-link :global(svg) {
-        fill: var(--color-white);
+
+    .goto {
+        top: unset;
+        bottom: 1rem;
+        right: 3.5rem;
+        background-color: var(--color-bg);
+        padding: 0.2rem;
     }
 
     .img {
@@ -140,9 +158,7 @@
         border: 1px solid var(--color-border);
         background-color: var(--color-file-background);
     }
-    .delete:hover {
-        cursor: pointer;
-    }
+
     .select .img,
     .select:hover .img {
         filter: brightness(0.2);
@@ -189,15 +205,19 @@
             white-space: wrap;
         }
     }
-
     @media (max-width: 600px) {
         .img-link,
-        .favorite {
+        .favorite,
+        .goto {
             opacity: unset;
         }
         .favorite {
             bottom: 0.2rem;
         }
+        .goto {
+            bottom: 0.7rem;
+        }
+
         .img-link {
             padding: 0rem;
         }

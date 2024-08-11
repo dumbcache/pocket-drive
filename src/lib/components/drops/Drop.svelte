@@ -150,9 +150,5 @@
         .drop-items {
             gap: 1rem;
         }
-
-        .drop :global(input) {
-            font-size: 1.1rem;
-        }
     }
 </style>

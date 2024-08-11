@@ -1,4 +1,5 @@
 <script lang="ts">
+    import outIcon from "$lib/assets/outArrow.svg?raw";
     import FolderCover from "$lib/components/folders/FolderCover.svelte";
     import { states } from "$lib/scripts/stores.svelte";
     import Favorite from "../utils/Favorite.svelte";
@@ -32,6 +33,13 @@
             />
         </div>
     </div>
+    {#if states.mode === "SEARCH" && file.parents && file.parents.length > 0}
+        <a
+            href={file.parents[0]}
+            class="btn s-second goto"
+            title="goto containing folder">{@html outIcon}</a
+        >
+    {/if}
     {#if states.mode === "EDIT"}
         <div class="mask"></div>
     {/if}
@@ -40,18 +48,15 @@
 <style>
     .card {
         position: relative;
-        /* border-radius: 1rem; */
-        /* border-top-left-radius: 1rem;
-        border-top-right-radius: 1rem; */
         overflow: hidden;
+        width: var(--folder-width);
     }
     .card:hover {
-        /* box-shadow: 0 0 2px 2px var(--color-focus); */
         transform: scale(1.01);
     }
 
-    .card {
-        width: var(--folder-width);
+    .card:hover .goto {
+        opacity: 1;
     }
     .edit-mode {
         cursor: pointer;
@@ -77,7 +82,7 @@
     }
 
     .favorite {
-        margin-right: 1rem;
+        margin-right: 0.5rem;
         height: var(--secondary-icon-size);
     }
 
@@ -90,12 +95,28 @@
         border-radius: 1rem;
     }
 
+    .goto {
+        display: inline-block;
+        position: absolute;
+        bottom: 5rem;
+        right: 1.5rem;
+        border-radius: 50%;
+        padding: 0.2rem;
+        opacity: 0;
+        background: var(--color-bg);
+    }
+
     @media (max-width: 900px) {
         .favorite {
             margin-right: 0.7rem;
         }
         .title-wrapper {
             padding: 0.5rem;
+        }
+        .goto {
+            bottom: 4rem;
+            right: 1rem;
+            opacity: unset;
         }
     }
 </style>
