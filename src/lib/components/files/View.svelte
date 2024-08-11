@@ -8,7 +8,9 @@
     let infoVisible = $state(false);
     let zoom = $state(false);
     let expand = $state(false);
-    let fileMap = new Map<string,DriveFile>()
+    let fileMap = new Map<string,DriveFile>();
+    let previewElements = new Map<string, HTMLElement>();
+    let navigationElements = new Map<string, HTMLElement>();
 
     const toggleInfo = () => (infoVisible = !infoVisible);
     const toggleZoom = () => (zoom = !zoom);
@@ -29,8 +31,8 @@
             zoom || e.preventDefault();
         }}
     >
-        <ViewNav {expand} {fileMap}/>
-        <ViewDisplay {zoom} {fileMap}/>
+        <ViewNav {expand} {fileMap} {previewElements} {navigationElements}/>
+        <ViewDisplay {zoom} {fileMap} {previewElements}/>
         {#if infoVisible}
             <ViewInfo {toggleInfo} />
         {/if}

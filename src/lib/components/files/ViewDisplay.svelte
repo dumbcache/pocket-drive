@@ -11,10 +11,17 @@
         enableScorlling,
         fetchImgPreview,
     } from "$lib/scripts/utils";
-    import { onDestroy, onMount } from "svelte";
+    import { onDestroy, onMount, tick } from "svelte";
 
-    let { zoom, fileMap }: { zoom: boolean; fileMap: Map<string, DriveFile> } =
-        $props();
+    let {
+        zoom,
+        fileMap,
+        previewElements,
+    }: {
+        zoom: boolean;
+        fileMap: Map<string, DriveFile>;
+        previewElements: Map<string, HTMLElement>;
+    } = $props();
     let preview: HTMLElement;
     let previewObserver: IntersectionObserver;
 
@@ -77,7 +84,7 @@
     function previewInspection() {
         previewObserver = new IntersectionObserver(
             (entries) => {
-                entries.forEach((entry) => {
+                entries.forEach(async (entry) => {
                     if (entry.isIntersecting) {
                         let target = entry.target as HTMLImageElement;
                         let { id, src } = target.dataset;
@@ -106,6 +113,7 @@
                                 tempStore.activeFile.loading = true;
                                 fetchImgPreview(id);
                                 imageFetchLog.add(id);
+                                await tick();
                                 return;
                             }
                         }
@@ -121,7 +129,10 @@
         fileStore.files?.forEach((item) => {
             let id = item.id;
             let li = preview?.querySelector(`[data-id="${id}"]`);
-            li && previewObserver.observe(li);
+            if (li) {
+                previewObserver.observe(li);
+                previewElements.set(id, li);
+            }
         });
     }
 
@@ -158,7 +169,7 @@
     onkeydown={handleKeyDown}
     bind:this={preview}
 >
-    {#each fileStore.files as file}
+    {#each fileStore.files as file (file.id)}
         <div class="file">
             {#if file.mimeType.match("image/")}
                 <img

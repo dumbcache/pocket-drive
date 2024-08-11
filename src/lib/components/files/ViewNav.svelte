@@ -6,21 +6,30 @@
     let {
         expand,
         fileMap,
-    }: { expand: boolean; fileMap: Map<string, DriveFile> } = $props();
+        previewElements,
+        navigationElements,
+    }: {
+        expand: boolean;
+        fileMap: Map<string, DriveFile>;
+        previewElements: Map<string, HTMLElement>;
+        navigationElements: Map<string, HTMLElement>;
+    } = $props();
     let navigation: HTMLElement;
     let observer: IntersectionObserver;
     let inspectionLog = new SvelteSet();
 
     function changeHandler(id: string) {
-        let preview = document.querySelector(".preview");
-        if (!preview) return;
-        const ele = preview.querySelector(`[data-id="${id}"]`);
+        // let preview = document.querySelector(".preview");
+        // if (!preview) return;
+        // const ele = preview.querySelector(`[data-id="${id}"]`);
+        const ele = previewElements.get(id);
         ele?.scrollIntoView({
             behavior: "instant",
             block: "center",
             inline: "center",
         });
-        const ele2 = navigation.querySelector(`[data-id="${id}"]`);
+        // const ele2 = navigation.querySelector(`[data-id="${id}"]`);
+        const ele2 = navigationElements.get(id);
         ele2?.scrollIntoView({
             behavior: "instant",
             block: "center",
@@ -56,9 +65,10 @@
         );
         fileStore.files.forEach((item) => {
             let id = item.id;
-            if (id) {
-                let li = navigation?.querySelector(`[data-id="${id}"]`);
+            let li = navigation?.querySelector(`[data-id="${id}"]`);
+            if (li) {
                 li && observer.observe(li);
+                navigationElements.set(id, li);
             }
         });
     }
@@ -92,10 +102,16 @@
     }
 
     $effect(() => {
-        const ele = navigation.querySelector(
+        // const previous = navigation.querySelector(".active");
+        // previous?.classList.contains("active") &&
+        //     previous?.classList.remove("active");
+
+        const current = navigation.querySelector(
             `[data-id="${tempStore.activeFile.id}"]`
         );
-        ele?.scrollIntoView({
+        // current?.classList.contains("active") ||
+        //     current?.classList.add("active");
+        current?.scrollIntoView({
             behavior: "instant",
             block: "center",
             inline: "center",
@@ -111,7 +127,7 @@
     <!-- svelte-ignore a11y_click_events_have_key_events -->
     <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
     <nav class="thumbs" onclick={thumbClick} bind:this={navigation}>
-        {#each fileStore.files as file}
+        {#each fileStore.files as file (file.id)}
             <button
                 class:active={file.id === tempStore.activeFile.id}
                 data-id={file.id}

@@ -127,6 +127,7 @@ export async function signUserOutPartial() {
 export async function signUserOut() {
     clearLocalImages();
     clearDataCache();
+    clearTempCache();
     let preferences = window.localStorage.getItem("preferences");
     clearLocalStorage();
     window.localStorage.setItem("preferences", preferences);

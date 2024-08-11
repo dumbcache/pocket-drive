@@ -24,7 +24,7 @@
     });
 
     function check() {
-        states.view = "FOLDER";
+        // states.view = "FOLDER";
         if (folderStore.files.length === 0 && fileStore.files.length !== 0) {
             states.view = "FILE";
         }
