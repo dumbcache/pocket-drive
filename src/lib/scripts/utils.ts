@@ -131,7 +131,6 @@ export async function signUserOut() {
     clearLocalStorage();
     window.localStorage.setItem("preferences", preferences);
     clearSessionStorage();
-    states.setPocketState();
     states.profile = false;
     goto("/");
     console.info("logging user out");

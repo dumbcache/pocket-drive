@@ -131,15 +131,10 @@ class AppStates {
 
     setPocketState(val?: string) {
         const state = val && typeof val === "string" ? val : HOME_PATH;
-        window.localStorage.setItem("pocketState", state);
         this.pocketState = state;
     }
     getPocketState(): string {
-        return (
-            this.pocketState ||
-            window.localStorage.getItem("pocketState") ||
-            HOME_PATH
-        );
+        return this.pocketState || HOME_PATH;
     }
 }
 export const states = new AppStates();
