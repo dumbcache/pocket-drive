@@ -3,7 +3,10 @@
     import { onMount } from "svelte";
     import { SvelteSet } from "svelte/reactivity";
 
-    let { expand }: { expand: boolean } = $props();
+    let {
+        expand,
+        fileMap,
+    }: { expand: boolean; fileMap: Map<string, DriveFile> } = $props();
     let navigation: HTMLElement;
     let observer: IntersectionObserver;
     let inspectionLog = new SvelteSet();
@@ -82,7 +85,8 @@
         const { id } = target.dataset;
         if (!id) return;
         if (id === tempStore.activeFile.id) return;
-        let file = fileStore.files.find((file) => file.id === id);
+        let file = fileMap.get(id);
+        // let file = fileStore.files.find((file) => file.id === id);
         file && (tempStore.activeFile = file);
         changeHandler(id);
     }

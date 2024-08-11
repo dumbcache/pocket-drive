@@ -3,14 +3,18 @@
     import ViewNav from "$lib/components/files/ViewNav.svelte";
     import ViewTools from "./ViewTools.svelte";
     import ViewDisplay from "./ViewDisplay.svelte";
+    import { fileStore } from "$lib/scripts/stores.svelte";
 
     let infoVisible = $state(false);
     let zoom = $state(false);
     let expand = $state(false);
+    let fileMap = new Map<string,DriveFile>()
 
     const toggleInfo = () => (infoVisible = !infoVisible);
     const toggleZoom = () => (zoom = !zoom);
     const toggleExpand = () => (expand = !expand);
+
+    fileStore.files.forEach((f) => fileMap.set(f.id, f));
 </script>
 
 <div class="view-container" onwheel={(e) => e.preventDefault()}>
@@ -25,8 +29,8 @@
             zoom || e.preventDefault();
         }}
     >
-        <ViewNav {expand} />
-        <ViewDisplay {zoom} />
+        <ViewNav {expand} {fileMap}/>
+        <ViewDisplay {zoom} {fileMap}/>
         {#if infoVisible}
             <ViewInfo {toggleInfo} />
         {/if}

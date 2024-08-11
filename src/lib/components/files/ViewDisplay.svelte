@@ -13,7 +13,8 @@
     } from "$lib/scripts/utils";
     import { onDestroy, onMount } from "svelte";
 
-    let { zoom }: { zoom: boolean } = $props();
+    let { zoom, fileMap }: { zoom: boolean; fileMap: Map<string, DriveFile> } =
+        $props();
     let preview: HTMLElement;
     let previewObserver: IntersectionObserver;
 
@@ -85,9 +86,10 @@
                         if (!target.src && src) target.src = src;
 
                         if (tempStore.activeFile.id !== id) {
-                            let active = fileStore.files.find(
-                                (f) => f.id === id
-                            );
+                            let active = fileMap.get(id);
+                            // let active = fileStore.files.find(
+                            //     (f) => f.id === id
+                            // );
                             if (active) tempStore.activeFile = active;
                         }
 
