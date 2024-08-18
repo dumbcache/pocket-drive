@@ -17,6 +17,7 @@
     }
     .spinner {
         border-style: solid;
+        border-color: var(--color-white-three);
         border-top-color: var(--color-blue);
         border-radius: 50%;
         animation: spin 1s linear infinite;

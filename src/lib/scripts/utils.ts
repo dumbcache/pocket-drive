@@ -511,11 +511,10 @@ if (browser) {
 
         switch (data.context) {
             case "IMG_PREVIEW":
-                let { id, blob } = data;
-                let url = URL.createObjectURL(blob);
-                setPreviewFile(id, url);
+                let { id, blobURL } = data;
+                setPreviewFile(id, blobURL);
                 if (!imageCache.has(id)) {
-                    imageCache.set(id, url);
+                    imageCache.set(id, blobURL);
                 }
                 imageFetchLog.delete(id);
                 return;

@@ -54,7 +54,8 @@ function checkForImgLocal(id: string, token: string) {
                         .transaction("images", "readwrite")
                         .objectStore("images");
                     objectStore.put({ id, blob });
-                    postMessage({ context: "IMG_PREVIEW", id, blob });
+                    let blobURL = URL.createObjectURL(blob);
+                    postMessage({ context: "IMG_PREVIEW", id, blobURL });
                 })
                 .catch((e) => {
                     postMessage({
@@ -65,7 +66,8 @@ function checkForImgLocal(id: string, token: string) {
                 });
             return;
         }
-        postMessage({ context: "IMG_PREVIEW", id, blob: result.blob });
+        let blobURL = URL.createObjectURL(result.blob);
+        postMessage({ context: "IMG_PREVIEW", id, blobURL });
     };
 }
 
@@ -260,7 +262,7 @@ async function performOperation(params: WorkerMessage) {
     let success = new Set<string>();
     let request: Function;
     let offset = 0;
-    let count = 10;
+    let count = 20;
     switch (context) {
         case "EDIT":
             request = editRequest;

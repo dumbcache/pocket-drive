@@ -49,7 +49,7 @@
     });
 </script>
 
-{#if $navigating || states.progress}
+{#if $navigating || states.progress }
     <div class="loading">
         <Spinner />
     </div>

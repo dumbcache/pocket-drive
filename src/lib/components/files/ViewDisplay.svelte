@@ -91,6 +91,7 @@
                         if (!id) return;
                         if (!target.src && src) target.src = src;
 
+                        tempStore.activeFile.loading = false;
                         if (target.src.startsWith("blob:")) {
                             tempStore.activeFile.download = target.src;
                         } else {
@@ -185,14 +186,15 @@
                     playsinline
                 ></video>
             {/if}
-            {#if tempStore.activeFile.loading}
-                <div class="spinner">
-                    <Spinner borderWidth="2px" width="1rem" height="1rem" />
-                </div>
-            {/if}
         </div>
     {/each}
 </section>
+
+{#if tempStore.activeFile.loading}
+    <div class="spinner">
+        <Spinner borderWidth="2px" width="1rem" height="1rem" />
+    </div>
+{/if}
 
 <style>
     .two::-webkit-scrollbar,

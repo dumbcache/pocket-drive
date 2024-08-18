@@ -170,6 +170,7 @@ declare global {
         progress?: number;
         id?: string;
         status?: 1 | 0 | "success" | "failure";
+        blobURL?: string;
     }
 }
 

@@ -28,7 +28,12 @@
         loading = true;
         while (pageToken) {
             let res = await fetchMultiple(
-                { parent, mimeType: mimeType, pageToken: pageToken },
+                {
+                    parent,
+                    mimeType: mimeType,
+                    pageToken: pageToken,
+                    pageSize: 1000,
+                },
                 token
             );
             pageToken = res?.nextPageToken;
