@@ -493,9 +493,9 @@ export function setPreviewFile(id: string, url: string) {
     if (ele.localName === "img") {
         ele.src = url;
     } else if (ele.localName === "video") {
-        setTimeout(() => {
-            ele.src = url;
-        }, 1000);
+        // setTimeout(() => {
+        ele.src = url;
+        // }, 1000);
     }
     tempStore.activeFile.download = url;
     tempStore.activeFile.loading = false;

@@ -11,14 +11,14 @@
     <FetchAll view="FILE" />
 {/if}
 
-<!-- {#key $refresh} -->
-<Container
-    files={fileStore.files}
-    view="FILE"
-    footObserver={observer}
-    showFileNames={preferences.showFileNames}
-/>
-<!-- {/key} -->
+{#key states.refresh}
+    <Container
+        files={fileStore.files}
+        view="FILE"
+        footObserver={observer}
+        showFileNames={preferences.showFileNames}
+    />
+{/key}
 
 {#if states.mode === "VIEW"}
     <View />

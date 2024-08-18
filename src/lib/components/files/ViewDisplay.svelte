@@ -89,33 +89,23 @@
                         let target = entry.target as HTMLImageElement;
                         let { id, src } = target.dataset;
                         if (!id) return;
-                        // if (tempStore.activeFile.id === id) return;
                         if (!target.src && src) target.src = src;
-
-                        if (tempStore.activeFile.id !== id) {
-                            let active = fileMap.get(id);
-                            // let active = fileStore.files.find(
-                            //     (f) => f.id === id
-                            // );
-                            if (active) tempStore.activeFile = active;
-                        }
 
                         if (target.src.startsWith("blob:")) {
                             tempStore.activeFile.download = target.src;
-                            return;
                         } else {
                             if (imageCache.has(id)) {
                                 target.src = imageCache.get(id);
                             } else {
                                 if (imageFetchLog.has(id)) return;
-                                // target.nextElementSibling.style.display =
-                                //     "initial";
                                 tempStore.activeFile.loading = true;
                                 fetchImgPreview(id);
                                 imageFetchLog.add(id);
-                                await tick();
-                                return;
                             }
+                        }
+                        if (tempStore.activeFile.id !== id) {
+                            let active = fileMap.get(id);
+                            if (active) tempStore.activeFile = active;
                         }
                     } else {
                         let target = entry.target as HTMLVideoElement;

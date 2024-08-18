@@ -20,9 +20,7 @@
     ondragstart={(e) => e.preventDefault()}
     data-id={file.id}
 >
-    {#key states.refresh}
-        <FolderCover id={file.id} name={file.name} {visible} />
-    {/key}
+    <FolderCover id={file.id} name={file.name} {visible} />
     <div class="title-wrapper">
         <h2 class="folder-title" title={file.name}>{file.name}</h2>
         <div class="favorite">

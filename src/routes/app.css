@@ -66,15 +66,14 @@
     --color-svg-one: var(--color-white-three);
     --color-backdrop: #1115;
 
-    --cover-height: 20rem;
-    --folder-width: 30rem;
-    --file-width: 20rem;
-    --file-height: 40rem;
+    --cover-height: 18rem;
+    --folder-width: 28rem;
+    --file-width: 18rem;
+    --file-height: 30rem;
     --line-size-default: 1.6rem;
     --title-size: var(--size-medium);
     --primary-icon-size: var(--size-large);
     --secondary-icon-size: var(--size-medium);
-    --cover-height: 20rem;
     --content-column-gap: 3rem;
     --content-row-gap: 3rem;
     --content-gap: var(--content-row-gap) var(--content-column-gap);

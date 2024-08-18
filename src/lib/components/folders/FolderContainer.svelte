@@ -13,9 +13,13 @@
     <FetchAll view="FOLDER" />
 {/if}
 
-<!-- {#key $refresh} -->
-<Container files={folderStore.files} view="FOLDER" footObserver={observer} />
-<!-- {/key} -->
+{#key states.refresh}
+    <Container
+        files={folderStore.files}
+        view="FOLDER"
+        footObserver={observer}
+    />
+{/key}
 
 {#if tempStore.folderAction.type && states.mode !== "SEARCH"}
     {#if tempStore.folderAction.type === "MOVE"}

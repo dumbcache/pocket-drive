@@ -287,7 +287,7 @@
     .loading {
         width: fit-content;
         margin: auto;
-        padding-top: 2rem;
+        padding-top: 5rem;
     }
 
     @media (max-width: 600px) {
