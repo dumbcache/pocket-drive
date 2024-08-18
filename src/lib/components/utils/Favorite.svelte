@@ -26,6 +26,9 @@
 </button>
 
 <style>
+    .btn {
+        background: none;
+    }
     .btn :global(svg) {
         fill: var(--color-svg-one);
     }

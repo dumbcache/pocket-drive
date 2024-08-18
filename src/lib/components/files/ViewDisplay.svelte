@@ -11,19 +11,24 @@
         enableScorlling,
         fetchImgPreview,
     } from "$lib/scripts/utils";
-    import { onDestroy, onMount, tick } from "svelte";
+    import { onDestroy, onMount } from "svelte";
 
     let {
         zoom,
         fileMap,
         previewElements,
+        toggleHidden,
+        toggleExpand,
     }: {
         zoom: boolean;
         fileMap: Map<string, DriveFile>;
         previewElements: Map<string, HTMLElement>;
+        toggleHidden: MouseEventHandler<HTMLButtonElement>;
+        toggleExpand: MouseEventHandler<HTMLButtonElement>;
     } = $props();
     let preview: HTMLElement;
     let previewObserver: IntersectionObserver;
+    let lastTap = 0;
 
     function handleKeyDown(e: KeyboardEvent) {
         e.preventDefault();
@@ -60,8 +65,23 @@
               });
     }
 
+    function isTouchDevice() {
+        return window.matchMedia("(pointer: coarse)").matches;
+    }
+
     function handleClick(e: MouseEvent) {
         e.stopPropagation();
+        if (isTouchDevice()) {
+            const currentTime = new Date().getTime();
+            const tapLength = currentTime - lastTap;
+            if (tapLength < 300 && tapLength > 0) {
+                toggleExpand();
+            } else {
+                toggleHidden();
+            }
+            lastTap = currentTime;
+            return;
+        }
         if (zoom) return;
         if (e.button != 0) return;
         const target = e.target as HTMLImageElement;

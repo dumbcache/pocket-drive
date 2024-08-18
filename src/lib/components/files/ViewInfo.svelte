@@ -147,6 +147,7 @@
         width: 100%;
         position: relative;
         border-radius: 1rem;
+        font-size: 1.3rem;
         /* border: 1px solid var(--color-border); */
     }
     input {

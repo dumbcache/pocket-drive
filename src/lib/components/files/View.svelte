@@ -8,6 +8,7 @@
     let infoVisible = $state(false);
     let zoom = $state(false);
     let expand = $state(false);
+    let hidden = $state(false)
     let fileMap = new Map<string,DriveFile>();
     let previewElements = new Map<string, HTMLElement>();
     let navigationElements = new Map<string, HTMLElement>();
@@ -15,6 +16,7 @@
     const toggleInfo = () => (infoVisible = !infoVisible);
     const toggleZoom = () => (zoom = !zoom);
     const toggleExpand = () => (expand = !expand);
+    const toggleHidden = () => (hidden = !hidden);
 
     fileStore.files.forEach((f) => fileMap.set(f.id, f));
 </script>
@@ -32,13 +34,13 @@
         }}
     >
         <ViewNav {expand} {fileMap} {previewElements} {navigationElements}/>
-        <ViewDisplay {zoom} {fileMap} {previewElements}/>
+        <ViewDisplay {toggleHidden} {toggleExpand} {zoom} {fileMap} {previewElements}/>
         {#if infoVisible}
             <ViewInfo {toggleInfo} />
         {/if}
     </artcle>
 
-    <ViewTools {toggleExpand} {toggleZoom} {toggleInfo} {zoom} {expand} />
+    <ViewTools {toggleExpand} {toggleZoom} {toggleInfo} {hidden} {zoom} {expand} />
 </div>
 
 <style>
@@ -89,7 +91,7 @@
 
     #view :global(.three) {
         position: absolute;
-        min-width: 30rem;
+        width: 35rem;
         right: 0;
         top: 0;
         z-index: 1;
@@ -113,7 +115,7 @@
 
         #view :global(.two) {
             /* min-height: 85%; */
-            max-height: 95%;
+            /* max-height: 85%; */
             min-width: 100%;
         }
 

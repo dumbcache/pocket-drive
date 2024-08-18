@@ -12,12 +12,14 @@
     let {
         zoom,
         expand,
+        hidden,
         toggleInfo,
         toggleZoom,
         toggleExpand,
     }: {
         zoom: boolean;
         expand: boolean;
+        hidden: boolean;
         toggleInfo: MouseEventHandler<HTMLButtonElement>;
         toggleZoom: MouseEventHandler<HTMLButtonElement>;
         toggleExpand: MouseEventHandler<HTMLButtonElement>;
@@ -28,12 +30,16 @@
     }
 </script>
 
-<div class="action" class:expanded={expand}>
+<div
+    class="action"
+    class:expanded={expand}
+    style:display={hidden ? "none" : "flex"}
+>
     {#if tempStore.activeFile?.download}
         <a
             href={tempStore.activeFile.download}
             download={tempStore.activeFile.name}
-            class="btn s-prime"
+            class="btn s-second"
             target="_blank"
             rel="noopener noreferrer"
             title="download">{@html downloadIcon}</a
@@ -52,7 +58,7 @@
         toggle={() => toggleFav(tempStore.activeFile.id)}
     />
     <button
-        class="btn s-prime"
+        class="btn s-second"
         title="zoom"
         onclick={(e) => {
             e.stopPropagation();
@@ -60,11 +66,11 @@
             toggleZoom();
         }}>{@html zoom ? zoomOutIcon : zoomInIcon}</button
     >
-    <button class="btn s-prime info" title="info" onclick={toggleInfo}
+    <button class="btn s-second info" title="info" onclick={toggleInfo}
         >{@html infoIcon}</button
     >
     <button
-        class="btn s-prime expand"
+        class="btn s-second expand"
         title="expand"
         onclick={(e) => {
             e.stopPropagation();
@@ -74,8 +80,10 @@
     >
 </div>
 
-<button class="btn s-prime close" onclick={() => (states.mode = "")}
-    >{@html closeIcon}</button
+<button
+    class="btn s-second close"
+    onclick={() => (states.mode = "")}
+    style:display={hidden ? "none" : "flex"}>{@html closeIcon}</button
 >
 
 <style>
@@ -94,22 +102,30 @@
         display: none;
     }
     .close {
-        position: absolute;
+        position: fixed;
         top: 2rem;
         left: 2rem;
         z-index: 10;
     }
+    .btn {
+        background: none;
+    }
 
     @media (max-width: 600px) and (orientation: portrait) {
+        .btn :global(svg) {
+            fill: var(--color-white-one);
+        }
         .action {
             bottom: 5.5rem;
             top: unset;
             right: 2rem;
             flex-flow: row nowrap;
+            background: var(--color-bg);
+            padding: 0.5rem;
         }
 
         .expanded {
-            bottom: 0rem;
+            bottom: 0.5rem;
         }
         .expand {
             display: initial;
@@ -118,10 +134,17 @@
             rotate: 90deg;
         }
         .close {
-            top: 0rem;
-            left: 0rem;
+            top: 0.5rem;
+            left: 0.5rem;
             box-sizing: content-box;
             padding: 0.5rem;
+        }
+
+        .action,
+        .close {
+            background: var(--color-backdrop);
+            backdrop-filter: blur(10px);
+            border-radius: 2.5rem;
         }
     }
 </style>
