@@ -85,6 +85,7 @@
         scroll-snap-type: x mandatory;
         scroll-behavior: smooth;
     }
+    
 
     #view :global(.three) {
         position: absolute;
@@ -98,7 +99,7 @@
         #view {
             flex-flow: column-reverse;
             padding: 0rem;
-            padding-bottom: 0.5rem;
+            /* padding-bottom: 0.5rem; */
             gap: 1rem;
         }
         #view :global(.one) {
@@ -111,8 +112,8 @@
         }
 
         #view :global(.two) {
-            min-height: 85%;
-            max-height: 85%;
+            /* min-height: 85%; */
+            max-height: 95%;
             min-width: 100%;
         }
 

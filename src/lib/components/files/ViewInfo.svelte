@@ -90,7 +90,7 @@
 
         <p class="id" title="id">{tempStore.activeFile.id}</p>
         <p class="size" title="size">
-            {tempStore.activeFile.size}
+            {(tempStore.activeFile.size / (1024 * 1024)).toFixed(2)} MB
         </p>
         <input
             type="text"

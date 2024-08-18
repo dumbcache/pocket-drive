@@ -102,14 +102,14 @@
 
     @media (max-width: 600px) and (orientation: portrait) {
         .action {
-            bottom: 6rem;
+            bottom: 5.5rem;
             top: unset;
             right: 2rem;
             flex-flow: row nowrap;
         }
 
         .expanded {
-            bottom: 1rem;
+            bottom: 0rem;
         }
         .expand {
             display: initial;
