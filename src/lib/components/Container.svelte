@@ -14,6 +14,7 @@
         tempStore,
     } from "$lib/scripts/stores.svelte";
     import FileLoading from "$lib/components/utils/FileLoading.svelte";
+    import { SvelteSet } from "svelte/reactivity";
 
     let {
         files,
@@ -35,7 +36,7 @@
 
     let lastSelected = -1;
     let allSelected = $state(false);
-    let set = new Set<string>();
+    let set = new SvelteSet<string>();
     let count = $state(0);
     let memory = $state(0);
 
@@ -55,10 +56,10 @@
     });
 
     function closeHandler(type: string) {
-        const eles: HTMLElement[] = document.querySelectorAll(".select");
+        const eles: HTMLElement[] = container?.querySelectorAll(".select");
         eles.forEach((ele) => {
             ele.classList.remove("select");
-            if (type === "DELETE" || type === "MOVE") {
+            if (type === "DELETE" || type === "MOVE" || type === "TOP") {
                 ele.style.display = "none";
             }
         });
@@ -87,23 +88,16 @@
         lastSelected = -1;
     }
 
-    function updateSelection(
-        index: string,
-        id: string,
-        size: string,
-        target: HTMLLIElement
-    ) {
+    function updateSelection(index: string, id: string, size: string) {
         if (set.has(id)) {
             set.delete(id);
             count--;
             size && (memory -= Number(size));
-            target.classList.toggle("select");
             return;
         }
         set.add(id);
         count++;
         size && (memory += Number(size));
-        target.classList.toggle("select");
         lastSelected = Number(index);
     }
 
@@ -123,7 +117,7 @@
                                 `[data-index="${i}"]`
                             );
                             let { id, index, size } = ele?.dataset;
-                            updateSelection(index, id, size, ele);
+                            updateSelection(index, id, size);
                         }
                         return;
                     } else {
@@ -132,12 +126,12 @@
                                 `[data-index="${i}"]`
                             );
                             let { id, index, size } = ele?.dataset;
-                            updateSelection(index, id, size, ele);
+                            updateSelection(index, id, size);
                         }
                         return;
                     }
                 }
-                updateSelection(index, id, size, target);
+                updateSelection(index, id, size);
                 return;
             default:
                 if (view === "FOLDER") return;
@@ -197,7 +191,7 @@
                 data-id={file.id}
                 data-size={file?.size}
                 data-starred={file.starred}
-                class:select={allSelected}
+                class:select={set.has(file.id)}
                 style:display={states.starred === true && file.starred === false
                     ? "none"
                     : "initial"}

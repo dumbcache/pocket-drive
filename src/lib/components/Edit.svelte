@@ -71,7 +71,7 @@
         };
         childWorker.postMessage(workerMessage);
         action = "";
-        closeHandler();
+        closeHandler("TOP");
     }
 
     function folderSelectOk(id) {

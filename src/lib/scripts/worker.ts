@@ -255,7 +255,7 @@ function editRequest({ id, token, imgMeta }: WorkerMessage) {
 }
 
 async function performOperation(params: WorkerMessage) {
-    let { context, parent, activeParent, view, ids } = params;
+    let { context, ids } = params;
     let tempIds: Array<string> = Array.from(ids);
     let success = new Set<string>();
     let request: Function;

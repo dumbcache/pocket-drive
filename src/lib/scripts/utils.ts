@@ -548,6 +548,10 @@ if (browser) {
                     true
                 ).then((files) => {
                     if (data?.context === "TOP") {
+                        success = new Set(success);
+                        fileStore.files = fileStore.files.filter(
+                            (file) => !success.has(file.id)
+                        );
                         fileStore.set(files as GoogleDriveResponse<DriveFile>);
                     }
 
@@ -671,7 +675,6 @@ if (browser) {
                 if (type === "DELETE" || type === "MOVE" || type === "TOP") {
                     let ele = document.querySelector(`[data-id="${data.id}"]`);
                     if (data.status === 1) {
-                        ele?.remove();
                         progressStore.update(0, 1, 0);
                         return;
                     }
@@ -727,6 +730,7 @@ if (browser) {
                 return;
 
             case "e":
+                if (states.mode === "EDIT") return;
                 states.view = states.view === "FOLDER" ? "FILE" : "FOLDER";
                 return;
 
