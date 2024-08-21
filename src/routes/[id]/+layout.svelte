@@ -73,7 +73,6 @@
 
     onMount(async () => {
         try {
-            await fetch("https://jsonplaceholder.typicode.com");
             setSessionTimeout();
         } catch (error) {
             console.warn(error);
@@ -132,6 +131,7 @@
     .layout {
         display: flex;
         background: inherit;
+        min-height: 100vh;
     }
 
     .dragover {

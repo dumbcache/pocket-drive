@@ -1,6 +1,5 @@
 <script lang="ts">
     import ActionForm from "$lib/components/folders/ActionForm.svelte";
-    import FolderSelect from "$lib/components/folders/FolderSelect.svelte";
     import Container from "$lib/components/Container.svelte";
     import { states, folderStore, tempStore } from "$lib/scripts/stores.svelte";
     import FetchAll from "$lib/components/utils/FetchAll.svelte";

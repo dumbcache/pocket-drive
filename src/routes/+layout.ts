@@ -1,5 +1,4 @@
 import { browser } from "$app/environment";
-import { preferences } from "$lib/scripts/stores.svelte.js";
 import { clearDataCache } from "$lib/scripts/utils";
 
 export const ssr = true;
@@ -13,11 +12,6 @@ export const load = async ({ params }) => {
             if (time < 0) {
                 clearDataCache();
                 window.localStorage.removeItem("refreshTime");
-            }
-            let pref = localStorage.getItem("preferences");
-            if (pref) {
-                const data = JSON.parse(pref);
-                preferences.set(data);
             }
         }
     } catch (error) {

@@ -70,7 +70,7 @@
         /* border-bottom: 1px solid var(--color-border); */
         /* background-color: #000; */
         z-index: 1;
-        background: inherit;
+        background: var(--color-bg);
     }
     .one {
         display: flex;

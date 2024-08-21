@@ -177,7 +177,8 @@
             <button
                 class="btn s-second done"
                 title="history"
-                disabled={selected.id === tempStore.activeFolder.id}
+                disabled={states.view === "FOLDER" &&
+                    selected.id === tempStore.activeFolder.id}
                 onclick={doneTap}>{@html doneIcon}</button
             >
             <!-- {#if show} -->

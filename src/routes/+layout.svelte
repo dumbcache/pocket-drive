@@ -7,7 +7,7 @@
     import type { Unsubscriber } from "svelte/store";
     import { loadGSIScript } from "$lib/scripts/login";
     import { disableScrolling, enableScorlling } from "$lib/scripts/utils";
-    import { preferences, states } from "$lib/scripts/stores.svelte";
+    import { states } from "$lib/scripts/stores.svelte";
     import HomeIcon from "$lib/components/HomeIcon.svelte";
 
     let { children } = $props();
@@ -28,7 +28,6 @@
 
     onMount(async () => {
         disableScrolling();
-        preferences.setTheme();
 
         setTimeout(() => {
             enableScorlling();

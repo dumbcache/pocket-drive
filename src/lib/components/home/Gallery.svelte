@@ -8,32 +8,40 @@
     import pic3dark from "$lib/assets/about/pic3dark.webp";
     import pic4dark from "$lib/assets/about/pic4dark.webp";
     import { preferences } from "$lib/scripts/stores.svelte";
+
+    let one = $state(pic1);
+    let two = $state(pic2);
+    let three = $state(pic3);
+    let four = $state(pic4);
+    $effect(() => {
+        if (preferences.theme === "") {
+            one = pic1;
+            two = pic2;
+            three = pic3;
+            four = pic4;
+        } else {
+            one = pic1dark;
+            two = pic2dark;
+            three = pic3dark;
+            four = pic4dark;
+        }
+    });
 </script>
 
 <article class="article two">
     <!-- <h2 class="gallery-title">Gallery</h2> -->
     <section class="gallery-section">
         <figure class="gallery-item">
-            <img
-                src={preferences.theme === "" ? pic1 : pic1dark}
-                class="pic pic11"
-                alt="UI desktop"
-                data-nosnippet
-            />
+            <img src={one} class="pic pic11" alt="UI desktop" data-nosnippet />
             <figcaption>UI Desktop</figcaption>
         </figure>
         <figure class="gallery-item">
-            <img
-                src={preferences.theme === "" ? pic2 : pic2dark}
-                class="pic pic12"
-                alt="UI mobile"
-                data-nosnippet
-            />
+            <img src={two} class="pic pic12" alt="UI mobile" data-nosnippet />
             <figcaption>UI Mobile</figcaption>
         </figure>
         <figure class="gallery-item">
             <img
-                src={preferences.theme === "" ? pic3 : pic3dark}
+                src={three}
                 class="pic pic13"
                 alt="View mode mobile"
                 data-nosnippet
@@ -42,7 +50,7 @@
         </figure>
         <figure class="gallery-item">
             <img
-                src={preferences.theme === "" ? pic4 : pic4dark}
+                src={four}
                 class="pic pic14"
                 alt="View mode dektop"
                 data-nosnippet

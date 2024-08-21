@@ -149,7 +149,7 @@
     }
 
     .dragover {
-        box-shadow: 0 0 5px 5px var(--color-focus);
+        box-shadow: 0 0 5px 1px var(--color-focus);
     }
     .dragover .pic {
         filter: brightness(0.2);

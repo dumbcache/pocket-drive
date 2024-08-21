@@ -111,6 +111,11 @@
                         if (!id) return;
                         if (!target.src && src) target.src = src;
 
+                        if (tempStore.activeFile.id !== id) {
+                            let active = fileMap.get(id);
+                            if (active) tempStore.activeFile = active;
+                        }
+
                         tempStore.activeFile.loading = false;
                         if (target.src.startsWith("blob:")) {
                             tempStore.activeFile.download = target.src;
@@ -123,10 +128,6 @@
                                 fetchImgPreview(id);
                                 imageFetchLog.add(id);
                             }
-                        }
-                        if (tempStore.activeFile.id !== id) {
-                            let active = fileMap.get(id);
-                            if (active) tempStore.activeFile = active;
                         }
                     } else {
                         let target = entry.target as HTMLVideoElement;

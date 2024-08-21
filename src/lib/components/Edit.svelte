@@ -7,7 +7,6 @@
     import startIcon from "$lib/assets/start.svg?raw";
     import selectallIcon from "$lib/assets/selectall.svg?raw";
     import Count from "$lib/components/utils/Count.svelte";
-    import FolderSelect from "$lib/components/folders/FolderSelect.svelte";
     import { childWorker, isValidUrl } from "$lib/scripts/utils";
     import { getToken } from "$lib/scripts/login";
     import {

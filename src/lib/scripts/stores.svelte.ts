@@ -1,3 +1,5 @@
+import { browser } from "$app/environment";
+
 export const HOME_PATH = "home";
 export const DATA_CACHE = "pd-data";
 export const TEMP_CACHE = "pd-temp";
@@ -73,17 +75,31 @@ class AppPreferences {
     disableWebp = $state(false);
     theme = $state<"DARK" | "">("");
 
+    constructor() {
+        if (browser) {
+            let pref = localStorage.getItem("preferences");
+            if (pref) {
+                const data = JSON.parse(pref);
+                data && this.set(data);
+            }
+            this.setTheme();
+        }
+    }
+
     toggleShowFileNames() {
         this.showFileNames = !this.showFileNames;
     }
+
     toggleWebp() {
         this.disableWebp = !this.disableWebp;
     }
+
     toggleTheme() {
         this.theme = this.theme === "DARK" ? "" : "DARK";
         this.setTheme();
         this.saveToLocal();
     }
+
     setTheme() {
         const root = document.documentElement;
         let dark = root.classList.contains("dark");
@@ -96,11 +112,13 @@ class AppPreferences {
                 break;
         }
     }
+
     set({ showFileNames, disableWebp, theme }: Preferences) {
         this.showFileNames = showFileNames;
         this.disableWebp = disableWebp;
         this.theme = theme;
     }
+
     get(): Preferences {
         return {
             showFileNames: this.showFileNames,
@@ -108,6 +126,7 @@ class AppPreferences {
             theme: this.theme,
         };
     }
+
     saveToLocal() {
         window.localStorage.setItem("preferences", JSON.stringify(this.get()));
     }
@@ -129,12 +148,17 @@ class AppStates {
     sessionTimeoutId = $state<number>();
     pocketState = $state<string | null>(null);
 
-    setPocketState(val?: string) {
+    setPocketState(val: string) {
         const state = val && typeof val === "string" ? val : HOME_PATH;
+        window.localStorage.setItem("pocketState", val);
         this.pocketState = state;
     }
     getPocketState(): string {
-        return this.pocketState || HOME_PATH;
+        return (
+            this.pocketState ||
+            window.localStorage.getItem("pocketState") ||
+            HOME_PATH
+        );
     }
 }
 export const states = new AppStates();

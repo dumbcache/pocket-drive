@@ -15,6 +15,7 @@ import {
     DATA_CACHE,
     progressStore,
     TEMP_CACHE,
+    HOME_PATH,
 } from "$lib/scripts/stores.svelte";
 
 export let childWorker: Worker;
@@ -116,6 +117,7 @@ export function clearSessionStorage() {
 
 export async function signUserOutPartial() {
     clearLocalImages();
+    states.setPocketState(HOME_PATH);
     let preferences = window.localStorage.getItem("preferences");
     let recents = window.localStorage.getItem("recents");
     clearLocalStorage();
@@ -133,6 +135,7 @@ export async function signUserOut() {
     window.localStorage.setItem("preferences", preferences);
     clearSessionStorage();
     states.profile = false;
+    states.setPocketState(HOME_PATH);
     goto("/");
     console.info("logging user out");
 }

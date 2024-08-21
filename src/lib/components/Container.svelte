@@ -287,7 +287,7 @@
     .loading {
         width: fit-content;
         margin: auto;
-        padding-top: 5rem;
+        padding: 5rem 0rem;
     }
 
     @media (max-width: 600px) {
@@ -300,6 +300,9 @@
         .img {
             min-width: 2rem;
             min-height: 2rem;
+        }
+        .loading {
+            padding: 2rem 0rem;
         }
     }
 </style>

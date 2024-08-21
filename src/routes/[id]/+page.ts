@@ -34,9 +34,9 @@ async function loadContent(parent: string) {
 
 export const load = (async ({ params }) => {
     if (browser) {
-        states.setPocketState(params?.id);
         if (!checkLoginStatus()) {
-            signUserOutPartial();
+            await signUserOutPartial();
+            states.setPocketState(params?.id);
             goto("/", { replaceState: true });
             return;
         }

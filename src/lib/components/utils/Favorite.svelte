@@ -21,7 +21,11 @@
     }
 </script>
 
-<button class="favorite btn s-second {starred && 'starred'}" onclick={update}>
+<button
+    aria-label="favorite"
+    class="favorite btn s-second {starred && 'starred'}"
+    onclick={update}
+>
     {@html favoriteIcon}
 </button>
 

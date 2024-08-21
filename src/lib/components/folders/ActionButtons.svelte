@@ -16,6 +16,7 @@
     <button
         class="btn s-second action"
         title="edit folder"
+        aria-label="edit"
         onclick={(e) => {
             e.stopPropagation();
             e.preventDefault();
@@ -27,6 +28,7 @@
     <button
         class="btn s-second action"
         title="move folder"
+        aria-label="move"
         onclick={(e) => {
             e.preventDefault();
             e.stopPropagation();
@@ -38,6 +40,7 @@
     <button
         class="btn s-second action"
         title="delete folder"
+        aria-label="delete"
         onclick={(e) => {
             e.stopPropagation();
             e.preventDefault();
@@ -48,6 +51,7 @@
     </button>
     <button
         class="btn s-second expand"
+        aria-label="expand"
         onclick={(e) => {
             e.stopPropagation();
             e.preventDefault();

@@ -91,6 +91,7 @@
     .content {
         padding: var(--content-padding);
         padding-top: 0rem;
+        padding-bottom: 0rem;
     }
 
     @media (max-width: 600px) {
