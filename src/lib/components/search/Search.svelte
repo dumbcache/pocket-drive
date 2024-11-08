@@ -20,11 +20,11 @@
     import Select from "$lib/components/folders/Select.svelte";
     import Content from "$lib/components/search/Content.svelte";
 
-    let global = false;
-    let searchElement: HTMLInputElement;
-    let search = "";
+    let global = $state(false);
+    let searchElement: HTMLInputElement = $state();
+    let search = $state("");
     let token = getToken();
-    let loading = false;
+    let loading = $state(false);
     let abortController: AbortController;
     let searchTimeout: number;
 
@@ -109,7 +109,7 @@
     });
 </script>
 
-<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
 <div class="search-wrapper" role="form" onkeydown={(e) => e.stopPropagation()}>
     <button
         title="global"

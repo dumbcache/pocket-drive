@@ -1,7 +1,7 @@
 <script lang="ts">
     import { onMount } from "svelte";
 
-    let timeRemaining = "00:00";
+    let timeRemaining = $state("00:00");
 
     function formatTime(ms) {
         let totalSeconds = Math.floor(ms / 1000);

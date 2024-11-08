@@ -14,7 +14,6 @@
         fileStore,
         tempStore,
     } from "$lib/scripts/stores.svelte";
-    import Spinner from "$lib/components/utils/Spinner.svelte";
 
     let observer = $state<IntersectionObserver>();
     let status = $derived(

@@ -73,7 +73,7 @@
 </script>
 
 <section class="three">
-    <!-- svelte-ignore a11y-no-static-element-interactions -->
+    <!-- svelte-ignore a11y_no_static_element_interactions -->
     <!-- svelte-ignore a11y_no_static_element_interactions -->
     <div
         class="info"

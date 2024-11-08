@@ -2,8 +2,8 @@
     import scrollDownIcon from "$lib/assets/arrowLeftDouble.svg?raw";
 
     let scrollPosition = window.scrollY;
-    let delta = 0;
-    let isScrolling = false;
+    let delta = $state(0);
+    let isScrolling = $state(false);
     let scrollTimeout: number;
 
     function handleScroll(e) {
@@ -18,7 +18,7 @@
     }
 </script>
 
-<svelte:window on:scroll={handleScroll} />
+<svelte:window onscroll={handleScroll} />
 
 <button
     class="scroll btn s-prime"

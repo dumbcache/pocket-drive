@@ -131,7 +131,7 @@
 </script>
 
 <svelte:window
-    on:keydown={(e) => {
+    onkeydown={(e) => {
         e.key === "Escape" && closeHandler();
     }}
 />
