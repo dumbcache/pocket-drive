@@ -712,6 +712,7 @@ if (browser) {
         switch (e.key) {
             case "Escape":
                 if (states.mode !== "EDIT") states.mode = "";
+                states.searchMode = false;
                 states.profile = false;
                 states.shortcuts = false;
                 return;
@@ -747,7 +748,7 @@ if (browser) {
 
             case "s":
             case "S":
-                states.mode = "SEARCH";
+                states.searchMode = true;
                 return;
         }
     });

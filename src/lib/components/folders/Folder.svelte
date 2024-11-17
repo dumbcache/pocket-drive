@@ -5,10 +5,8 @@
     import Favorite from "../utils/Favorite.svelte";
 
     let {
-        visible,
         file,
     }: {
-        visible: boolean;
         file: DriveFolder;
     } = $props();
 </script>
@@ -20,7 +18,7 @@
     ondragstart={(e) => e.preventDefault()}
     data-id={file.id}
 >
-    <FolderCover id={file.id} name={file.name} {visible} />
+    <FolderCover id={file.id} name={file.name} />
     <div class="title-wrapper">
         <h2 class="folder-title" title={file.name}>{file.name}</h2>
         <div class="favorite">
@@ -31,7 +29,7 @@
             />
         </div>
     </div>
-    {#if states.mode === "SEARCH" && file.parents && file.parents.length > 0}
+    {#if states.searchMode && file.parents && file.parents.length > 0}
         <a
             href={file.parents[0]}
             class="btn s-second goto"

@@ -18,11 +18,10 @@
     import clearIcon from "$lib/assets/close.svg?raw";
     import { onDestroy, onMount } from "svelte";
     import Select from "$lib/components/folders/Select.svelte";
-    import Content from "$lib/components/search/Content.svelte";
+    import Content from "$lib/components/Content.svelte";
 
     let global = $state(false);
     let searchElement: HTMLInputElement = $state();
-    let search = $state("");
     let token = getToken();
     let loading = $state(false);
     let abortController: AbortController;
@@ -38,7 +37,7 @@
         abortController = new AbortController();
         const { signal } = abortController;
         searchTimeout = setTimeout(async () => {
-            let val = search.trim();
+            let val = states.searchValue.trim();
             folderSearchStore.set({});
             fileSearchStore.set({});
             if (val === "") {
@@ -55,7 +54,7 @@
                                 signal
                             ).then((folders) => {
                                 res();
-                                if (val === search.trim()) {
+                                if (val === states.searchValue.trim()) {
                                     folderSearchStore.set(folders);
                                 }
                             });
@@ -67,7 +66,7 @@
                                 signal
                             ).then((files) => {
                                 res();
-                                if (val === search.trim()) {
+                                if (val === states.searchValue.trim()) {
                                     fileSearchStore.set(files);
                                 }
                             });
@@ -90,7 +89,7 @@
     }
 
     async function handleChange() {
-        if (search.trim() === "") {
+        if (states.searchValue.trim() === "") {
             searchElement.focus();
             folderSearchStore.set({});
             fileSearchStore.set({});
@@ -106,6 +105,7 @@
     onDestroy(() => {
         folderSearchStore.set({});
         fileSearchStore.set({});
+        states.searchValue = "";
     });
 </script>
 
@@ -129,9 +129,9 @@
         id="search"
         title="search"
         autocomplete="off"
-        placeholder="search folders"
+        placeholder="search"
         bind:this={searchElement}
-        bind:value={search}
+        bind:value={states.searchValue}
         oninput={handleSearch}
         onchange={handleChange}
     />
@@ -139,11 +139,11 @@
         <div class="loading">
             <Spinner width={"1.5rem"} height={"1.5rem"} borderWidth={"2px"} />
         </div>
-    {:else if search.length > 0}
+    {:else if states.searchValue.length > 0}
         <button
             class="clear btn s-second"
             onclick={() => {
-                search = "";
+                states.searchValue = "";
                 handleChange();
             }}
         >
@@ -153,10 +153,10 @@
 </div>
 
 <section class="search-results">
-    <Content {search} />
+    <Content />
 </section>
 
-{#if tempStore.folderAction.type && states.mode === "SEARCH"}
+{#if tempStore.folderAction.type && states.searchMode}
     {#if tempStore.folderAction.type === "MOVE"}
         <Select />
     {:else}

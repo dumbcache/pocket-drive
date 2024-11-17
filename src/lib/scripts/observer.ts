@@ -3,34 +3,50 @@ import {
     fileStore,
     tempStore,
     intersectionLog,
+    folderSearchStore,
+    fileSearchStore,
+    states,
 } from "$lib/scripts/stores.svelte";
 import {
     FOLDER_MIME_TYPE,
     fetchMultiple,
     IMG_MIME_TYPE,
+    searchHandler,
 } from "$lib/scripts/utils";
 import { getToken } from "$lib/scripts/login";
 
-const debounceDelay = 700;
-let debounceTimeout: number | null = null;
+const delay = 700;
+const timeouts = new WeakMap<Element, number>();
 
 export const observer = new IntersectionObserver(
     (entries, observer) => {
-        if (debounceTimeout) clearTimeout(debounceTimeout);
-
-        debounceTimeout = setTimeout(() => {
-            entries.forEach(async (entry) => {
-                if (entry.isIntersecting) {
+        entries.forEach(async (entry) => {
+            const element = entry.target;
+            if (entry.isIntersecting) {
+                if (timeouts.has(element)) {
+                    clearTimeout(timeouts.get(element));
+                }
+                const timeoutId = setTimeout(() => {
                     if (entry.target.id.includes("FOOT")) {
-                        footInspection(entry.target.id);
+                        if (states.searchMode) {
+                            footInspectionSearch(entry.target.id);
+                        } else {
+                            footInspection(entry.target.id);
+                        }
                         return;
                     } else {
                         childInspection(observer, entry);
                     }
-                } else {
+                    timeouts.delete(element);
+                }, delay);
+                timeouts.set(element, timeoutId);
+            } else {
+                if (timeouts.has(element)) {
+                    clearTimeout(timeouts.get(element));
+                    timeouts.delete(element);
                 }
-            });
-        }, debounceDelay);
+            }
+        });
     },
     {
         threshold: 0.1,
@@ -70,5 +86,27 @@ async function footInspection(id: string) {
     } else {
         fileStore.nextPageToken = pageToken;
         fileStore.files.push(...(res.files as DriveFile[]));
+    }
+}
+
+async function footInspectionSearch(id: string) {
+    let pageToken =
+        id === "FOLDER-FOOT"
+            ? folderSearchStore.nextPageToken
+            : fileSearchStore.nextPageToken;
+    if (!pageToken) return;
+    let mimeType = id === "FOLDER-FOOT" ? FOLDER_MIME_TYPE : IMG_MIME_TYPE;
+    let res = await searchHandler(
+        { mimeType, search: states.searchValue, pageToken },
+        getToken()
+    );
+    if (!res) return;
+    pageToken = res?.nextPageToken;
+    if (id === "FOLDER-FOOT") {
+        folderSearchStore.nextPageToken = pageToken;
+        folderSearchStore.files.push(...(res.files as DriveFolder[]));
+    } else {
+        fileSearchStore.nextPageToken = pageToken;
+        fileSearchStore.files.push(...(res.files as DriveFile[]));
     }
 }

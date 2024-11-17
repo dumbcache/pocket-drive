@@ -138,6 +138,7 @@ export const preferences = new AppPreferences();
 class AppStates {
     view = $state<"FILE" | "FOLDER">("FOLDER");
     mode = $state<Mode>("");
+    searchMode = $state(false);
     starred = $state(false);
     profile = $state(false);
     refresh = $state(false);
@@ -145,6 +146,7 @@ class AppStates {
     autosave = $state(false);
     progress = $state(false);
     shortcuts = $state(false);
+    searchValue = $state("");
     mask = $state(false);
     sessionTimeout = $state<Boolean>();
     sessionTimeoutId = $state<number>();

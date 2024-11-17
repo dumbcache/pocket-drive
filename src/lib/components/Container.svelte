@@ -1,5 +1,4 @@
 <script lang="ts">
-    import { onMount } from "svelte";
     import Edit from "$lib/components/Edit.svelte";
     import Folder from "$lib/components/folders/Folder.svelte";
     import File from "$lib/components/files/File.svelte";
@@ -15,20 +14,18 @@
     } from "$lib/scripts/stores.svelte";
     import FileLoading from "$lib/components/utils/FileLoading.svelte";
     import { SvelteSet } from "svelte/reactivity";
+    import { observer } from "$lib/scripts/observer";
 
     let {
         files,
         view,
-        footObserver,
         showFileNames,
     }: {
         files: FileResponse | undefined;
         view: View;
-        footObserver: IntersectionObserver | undefined;
         showFileNames?: boolean;
     } = $props();
 
-    let childObserver: IntersectionObserver;
     let entryLog = new Set<string>();
     let inspectionLog = $state<{ [key: string]: boolean }>({});
     let container = $state<HTMLElement>();
@@ -41,8 +38,8 @@
     let memory = $state(0);
 
     $effect(() => {
-        foot && footObserver?.observe(foot);
-        childInspection(files);
+        foot && observer?.observe(foot);
+        inspection(files);
     });
 
     beforeNavigate(({ from, to }) => {
@@ -143,30 +140,12 @@
         }
     }
 
-    function childInspection(items: FileResponse | undefined) {
-        childObserver = new IntersectionObserver(
-            (entries) => {
-                entries.forEach((entry) => {
-                    if (entry.isIntersecting) {
-                        entry.target.timeoutid = setTimeout(() => {
-                            let { id } = (entry.target as HTMLElement).dataset;
-                            if (id) {
-                                inspectionLog[id] = true;
-                                childObserver.unobserve(entry.target);
-                            }
-                        }, 700);
-                    } else {
-                        clearTimeout(entry.target.timeoutid);
-                    }
-                });
-            },
-            { threshold: 0 }
-        );
+    function inspection(items: FileResponse | undefined) {
         items?.forEach((item) => {
             let id = item.id;
             if (id && !entryLog.has(id)) {
                 let li = container?.querySelector(`[data-id="${id}"]`);
-                li && childObserver.observe(li);
+                li && observer.observe(li);
                 entryLog.add(id);
             }
         });
@@ -197,13 +176,9 @@
                     : "initial"}
             >
                 {#if view === "FOLDER"}
-                    <Folder {file} visible={inspectionLog[file.id]} />
+                    <Folder {file} />
                 {:else}
-                    <File
-                        {showFileNames}
-                        {file}
-                        visible={inspectionLog[file.id]}
-                    />
+                    <File {showFileNames} {file} />
                 {/if}
             </li>
         {/each}

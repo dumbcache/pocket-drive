@@ -2,7 +2,7 @@
     import { onMount } from "svelte";
     import { afterNavigate, beforeNavigate } from "$app/navigation";
     import Content from "$lib/components/Content.svelte";
-    import Search from "$lib/components/search/Search.svelte";
+    import Search from "$lib/components/Search.svelte";
     import ScrollButton from "$lib/components/utils/ScrollButton.svelte";
     import {
         states,
@@ -56,13 +56,13 @@
 <div class="page" style:display="">
     <!-- {#if states.mode !== "EDIT"} -->
     <Header />
-    {#if states.mode === "SEARCH"}
+    {#if states.searchMode}
         <Search />
     {/if}
     <!-- {/if} -->
     <main
         class="main"
-        style:display={states.mode === "SEARCH" ? "none" : "block"}
+        style:display={states.searchMode === true ? "none" : "block"}
     >
         <Content />
         {#if states.mask}

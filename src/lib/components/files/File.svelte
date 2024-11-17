@@ -4,14 +4,12 @@
     import playIcon from "$lib/assets/play.svg?raw";
     import { isValidUrl } from "$lib/scripts/utils";
     import Favorite from "$lib/components/utils/Favorite.svelte";
-    import { states } from "$lib/scripts/stores.svelte";
+    import { intersectionLog, states } from "$lib/scripts/stores.svelte";
 
     let {
-        visible,
         file,
         showFileNames = false,
     }: {
-        visible: boolean;
         file: DriveFile;
         showFileNames?: boolean;
     } = $props();
@@ -25,7 +23,7 @@
     class:select={selected}
     class:edit-mode={states.mode === "EDIT"}
 >
-    {#if visible}
+    {#if intersectionLog.has(file.id)}
         <img
             src={file.thumbnailLink}
             data-id={file.id}
@@ -62,7 +60,7 @@
                     toggle={() => (file.starred = !file.starred)}
                 />
             </span>
-            {#if states.mode === "SEARCH" && file.parents && file.parents.length > 0}
+            {#if states.searchMode && file.parents && file.parents.length > 0}
                 <a
                     href={file.parents[0]}
                     class="btn s-second goto"

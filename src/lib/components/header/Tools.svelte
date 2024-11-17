@@ -152,8 +152,8 @@
     </button>
     <button
         class="btn s-prime"
-        title="search folders"
-        onclick={() => (states.mode = states.mode === "" ? "SEARCH" : "")}
+        title="search"
+        onclick={() => (states.searchMode = !states.searchMode)}
     >
         {@html searchIcon}
     </button>

@@ -3,14 +3,12 @@
     import { IMG_MIME_TYPE, fetchMultiple } from "$lib/scripts/utils";
     import { getToken } from "$lib/scripts/login";
     import { previewAndSetDropItems } from "$lib/scripts/image";
-    import { states } from "$lib/scripts/stores.svelte";
+    import { intersectionLog, states } from "$lib/scripts/stores.svelte";
 
     let {
-        visible,
         id,
         name,
     }: {
-        visible: Boolean;
         id: string;
         name: string;
     } = $props();
@@ -19,7 +17,7 @@
     let pics: FileResponse = $state([]);
 
     $effect(() => {
-        visible &&
+        intersectionLog.has(id) &&
             fetchMultiple(
                 { parent: id, mimeType: IMG_MIME_TYPE, pageSize: 3 },
                 getToken()

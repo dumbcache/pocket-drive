@@ -122,7 +122,7 @@ declare global {
 
     type View = "FILE" | "FOLDER";
 
-    type Mode = "" | "VIEW" | "EDIT" | "SEARCH" | "DELETE";
+    type Mode = "" | "VIEW" | "EDIT" | "DELETE";
 
     type FAction = "EDIT" | "DELETE" | "MOVE" | "CREATE";
 
