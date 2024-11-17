@@ -75,7 +75,16 @@
     {/if}
 </div>
 {#if showFileNames}
-    <p class="name">{file.name}</p>
+    <!-- svelte-ignore a11y_click_events_have_key_events -->
+    <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+    <p
+        class="name"
+        onclick={(e) => {
+            e.stopPropagation();
+        }}
+    >
+        {file.name}
+    </p>
 {/if}
 
 <style>

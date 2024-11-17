@@ -35,7 +35,7 @@
         margin: auto;
         font-size: 8rem;
         /* font-weight: 900; */
-        font-family: var(--font-lato);
+        font-family: var(--font-comic);
         background: var(--title-background);
         background-clip: text;
         -webkit-text-fill-color: transparent;

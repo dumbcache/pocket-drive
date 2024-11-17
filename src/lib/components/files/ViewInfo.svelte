@@ -129,6 +129,7 @@
 <style>
     h5 {
         font-size: var(--size-small);
+        font-weight: 700;
     }
     header {
         display: flex;
