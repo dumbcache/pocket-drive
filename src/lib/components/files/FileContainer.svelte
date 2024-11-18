@@ -1,41 +1,35 @@
 <script lang="ts">
-    import { onDestroy } from "svelte";
-    import { fileStore, mode, preferences, refresh } from "$lib/scripts/stores";
-    import File from "$lib/components/files/File.svelte";
-    import ViewMode from "$lib/components/files/ViewMode.svelte";
+    import View from "$lib/components/files/View.svelte";
     import Container from "$lib/components/Container.svelte";
-
-    export let observer: IntersectionObserver;
-
-    let files: FileResponse | undefined;
-    let showFileNames = false;
-
-    let unsubscribeFileStore = fileStore.subscribe((data) => {
-        if (data) {
-            files = data?.files;
-        }
-    });
-
-    let preferencesUnsubscribe = preferences.subscribe((val) => {
-        showFileNames = val?.showFileNames;
-    });
-
-    onDestroy(() => {
-        unsubscribeFileStore();
-        preferencesUnsubscribe();
-    });
+    import {
+        preferences,
+        states,
+        fileStore,
+        fileSearchStore,
+    } from "$lib/scripts/stores.svelte";
+    import FetchAll from "$lib/components/utils/FetchAll.svelte";
 </script>
 
-<!-- {#key $refresh} -->
-<Container
-    {files}
-    view="FILE"
-    component={File}
-    footObserver={observer}
-    {showFileNames}
-/>
-<!-- {/key} -->
+{#if fileStore?.nextPageToken && states.mode !== "EDIT"}
+    <FetchAll view="FILE" />
+{/if}
 
-{#if $mode === "view"}
-    <ViewMode {files} />
+{#if states.searchMode}
+    <Container
+        files={fileSearchStore.files}
+        view="FILE"
+        showFileNames={preferences.showFileNames}
+    />
+{:else}
+    {#key states.refresh}
+        <Container
+            files={fileStore.files}
+            view="FILE"
+            showFileNames={preferences.showFileNames}
+        />
+    {/key}
+{/if}
+
+{#if states.mode === "VIEW"}
+    <View />
 {/if}

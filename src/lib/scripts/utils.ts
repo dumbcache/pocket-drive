@@ -1,33 +1,22 @@
 import { browser } from "$app/environment";
-import { get } from "svelte/store";
-import {
-    activeTimeout,
-    sessionTimeout,
-    mode,
-    activeView,
-    fileStore,
-    activeParent,
-    recentStore,
-    dropItems,
-    pocketStore,
-    imageCache,
-    imageFetchLog,
-    updateProgressStore,
-    starred,
-    mask,
-    fetchAll,
-    folderStore,
-    theme,
-    profile,
-    shortcuts,
-    setPocketState,
-    CACHE_DATA,
-    activeImage,
-} from "$lib/scripts/stores";
 import { clearToken, getToken } from "$lib/scripts/login";
 import ChildWorker from "$lib/scripts/worker.ts?worker";
 import { clearDropItems } from "$lib/scripts/image";
 import { goto } from "$app/navigation";
+import {
+    pocketStore,
+    folderStore,
+    fileStore,
+    preferences,
+    states,
+    tempStore,
+    imageCache,
+    imageFetchLog,
+    DATA_CACHE,
+    progressStore,
+    TEMP_CACHE,
+    HOME_PATH,
+} from "$lib/scripts/stores.svelte";
 
 export let childWorker: Worker;
 
@@ -106,29 +95,12 @@ export function checkNetworkError(error: Error) {
     }
 }
 
-export function setTheme(t?: string) {
-    let preferredtheme = t ?? window.localStorage.getItem("theme") ?? "";
-    theme.set(preferredtheme as "" | "dark");
-    const root = document.documentElement;
-    let dark = root.classList.contains("dark");
-    switch (preferredtheme) {
-        case "dark":
-            if (!dark) root.classList.add("dark");
-            return;
-        default:
-            if (dark) root.classList.remove("dark");
-            return;
-    }
+export async function clearTempCache() {
+    await caches.delete(TEMP_CACHE);
 }
 
-export function toggleTheme() {
-    let newTheme = get(theme) === "" ? "dark" : "";
-    window.localStorage.setItem("theme", newTheme);
-    setTheme(newTheme);
-}
-
-export async function clearCache() {
-    await caches.delete(CACHE_DATA);
+export async function clearDataCache() {
+    await caches.delete(DATA_CACHE);
 }
 
 export function clearLocalImages() {
@@ -143,28 +115,27 @@ export function clearSessionStorage() {
     window.sessionStorage.clear();
 }
 
-export function signUserOutPartial() {
+export async function signUserOutPartial() {
     clearLocalImages();
-    let theme = window.localStorage.getItem("theme");
+    states.setPocketState(HOME_PATH);
     let preferences = window.localStorage.getItem("preferences");
     let recents = window.localStorage.getItem("recents");
     clearLocalStorage();
     window.localStorage.setItem("preferences", preferences);
-    window.localStorage.setItem("theme", theme);
     window.localStorage.setItem("recents", recents);
+    clearTempCache();
 }
 
 export async function signUserOut() {
     clearLocalImages();
-    clearCache();
-    let theme = window.localStorage.getItem("theme");
+    clearDataCache();
+    clearTempCache();
     let preferences = window.localStorage.getItem("preferences");
     clearLocalStorage();
-    window.localStorage.setItem("theme", theme);
     window.localStorage.setItem("preferences", preferences);
     clearSessionStorage();
-    setPocketState();
-    profile.set(false);
+    states.profile = false;
+    states.setPocketState(HOME_PATH);
     goto("/");
     console.info("logging user out");
 }
@@ -178,39 +149,19 @@ export function setSessionTimeout(expires?: number) {
     }
 
     let time = expires - Date.now();
-    clearTimeout(get(activeTimeout));
+    clearTimeout(states.sessionTimeoutId);
     if (time > 0) {
-        sessionTimeout.set(false);
-        activeTimeout.set(
-            setTimeout(() => {
-                clearToken();
-                sessionTimeout.set(true);
-                console.log("session timed out");
-            }, time)
-        );
+        states.sessionTimeout = false;
+        states.sessionTimeoutId = setTimeout(() => {
+            clearToken();
+            states.sessionTimeout = true;
+            console.log("session timed out");
+        }, time);
     } else {
         clearToken();
-        sessionTimeout.set(true);
+        states.sessionTimeout = true;
     }
 }
-
-export const updateRecents = (data?: { name: string; id: string }) => {
-    let old =
-        (JSON.parse(window.localStorage.getItem("recents")!) as {
-            name: string;
-            id: string;
-        }[]) ?? [];
-    if (old.length === 0 && !data) return;
-    if (data) {
-        if (old?.length === 10) {
-            old.pop();
-        }
-        old = old.filter((item) => item.id !== data.id);
-        old.unshift(data);
-    }
-    recentStore.set(old);
-    window.localStorage.setItem("recents", JSON.stringify(old));
-};
 
 export function fetchImgPreview(id: string) {
     childWorker.postMessage({
@@ -223,14 +174,14 @@ export function fetchImgPreview(id: string) {
 /******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 
 export const FOLDER_MIME_TYPE = "application/vnd.google-apps.folder";
-export const DIR_MIME_TYPE = "application/vnd.google-apps.folder";
 export const IMG_MIME_TYPE = "image/";
 export const FILE_API = "https://www.googleapis.com/drive/v3/files";
 export const FIELDS_IMG =
     "id,name,description,thumbnailLink,starred,mimeType,size";
 export const FIELDS_FOLDER = "id,name,starred,parents";
-export const FIELDS_SINGLE = "id,name,parents";
-// export const DEFAULT_PAGESIZE = 1000;
+export const FIELDS_COVER = "thumbnailLink";
+export const FIELDS_SINGLE =
+    "id,name,parents,description,starred,mimeType,thumbnailLink";
 export const PAGESIZE = 100;
 
 export const wait = (s: number) => new Promise((res) => setTimeout(res, s));
@@ -249,22 +200,48 @@ export function constructRequest(
     { parent, mimeType, pageSize, pageToken }: ParamsObject,
     accessToken: string
 ) {
+    pageSize ??= PAGESIZE;
     let mime =
         mimeType === FOLDER_MIME_TYPE
             ? `mimeType contains '${mimeType}'`
             : `mimeType contains '${mimeType}' or mimeType contains 'video/'`;
     let q = `q='${parent}' in parents and (${mime})`;
-    let p = `&pageSize=${pageSize || PAGESIZE}`;
-    let f = `&fields=nextPageToken,files(${
-        mimeType === IMG_MIME_TYPE ? FIELDS_IMG : FIELDS_FOLDER
-    })`;
-    // let f = `&fields=files(${
-    //     mimeType === IMG_MIME_TYPE ? FIELDS_IMG : FIELDS_FOLDER
-    // })`;
+    let p = `&pageSize=${pageSize}`;
+    let f = "";
+    let t = "";
+    if (pageSize === 3) {
+        f = `&fields=files(${FIELDS_COVER})`;
+    } else {
+        f = `&fields=nextPageToken,files(${
+            mimeType === IMG_MIME_TYPE ? FIELDS_IMG : FIELDS_FOLDER
+        })`;
+        t = Boolean(pageToken) === true ? `&pageToken=${pageToken}` : "";
+    }
     let o =
         `&orderBy=` +
         (mimeType === FOLDER_MIME_TYPE ? "name" : "createdTime desc");
+    let url = `${FILE_API}?${q}${f}${o}${t}${p}`;
+
+    const req = new Request(url, {
+        method: "GET",
+        headers: {
+            Authorization: `Bearer ${accessToken}`,
+        },
+    });
+    return req;
+}
+
+export function constructSearchRequest(
+    { mimeType, pageSize, pageToken, search }: SearchParamsObject,
+    accessToken: string
+) {
+    pageSize ??= PAGESIZE;
+    let q = `q=mimeType contains '${mimeType}' and name contains '${search}'`;
+    let p = `&pageSize=${pageSize}`;
+    let f = `&fields=nextPageToken,files(${FIELDS_SINGLE})`;
     let t = Boolean(pageToken) === true ? `&pageToken=${pageToken}` : "";
+
+    let o = `&orderBy=createdTime desc`;
     let url = `${FILE_API}?${q}${f}${o}${t}${p}`;
 
     const req = new Request(url, {
@@ -302,7 +279,7 @@ export const createFolder = async (
             data
         );
         if (status === 401) {
-            get(sessionTimeout) === false && sessionTimeout.set(true);
+            states.sessionTimeout === false && (states.sessionTimeout = true);
             return;
         }
     }
@@ -341,7 +318,7 @@ export const deleteFolder = async (
             await req.text()
         );
         if (status === 401) {
-            get(sessionTimeout) === false && sessionTimeout.set(true);
+            states.sessionTimeout === false && (states.sessionTimeout = true);
             return;
         }
     }
@@ -390,20 +367,15 @@ export async function getRootFolder(accessToken: string): Promise<string> {
     }
 }
 
-export async function searchHandler(token: string, search: string) {
-    const req = new Request(
-        FILE_API +
-            `?q=mimeType contains '${DIR_MIME_TYPE}' and name contains '${search}'&pageSize=1000&fields=files(${FIELDS_SINGLE})&orderBy=createdTime desc`,
-        {
-            method: "GET",
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        }
-    );
-    const res = await makeFetch(req);
+export async function searchHandler(
+    searchParams: SearchParamsObject,
+    token: string,
+    signal?: AbortSignal
+) {
+    const req = constructSearchRequest(searchParams, token);
+    const res = await fetch(req, { signal });
     if (res?.status === 200) {
-        return (await res?.json()).files;
+        return await res?.json();
     }
 }
 
@@ -412,11 +384,11 @@ export async function fetchMultiple(
     accessToken: string,
     updateCache: Boolean = false,
     stopNewReq: Boolean = false
-): Promise<GoogleFileResponse> {
+): Promise<GoogleDriveResponse<DriveFolder | DriveFile>> {
     return new Promise(async (resolve, reject) => {
         const req = constructRequest(params, accessToken);
         try {
-            if (updateCache) await (await caches.open(CACHE_DATA)).delete(req);
+            if (updateCache) await (await caches.open(DATA_CACHE)).delete(req);
             if (stopNewReq) {
                 resolve();
                 return;
@@ -429,7 +401,7 @@ export async function fetchMultiple(
             reject(res);
             return;
         }
-        resolve(res?.json() as Promise<GoogleFileResponse>);
+        resolve(res?.json() as Promise<GoogleDriveResponse>);
         return;
     });
 }
@@ -438,7 +410,7 @@ export async function fetchSingle(
     id: string,
     mimeType: "FOLDER" | "IMG",
     accessToken: string
-): Promise<GoogleFile> {
+): Promise<DriveFile> {
     let req = new Request(
         `${FILE_API}/${id}?fields=${
             mimeType === "FOLDER" ? FIELDS_FOLDER : FIELDS_IMG
@@ -492,7 +464,7 @@ export const updateSingle = async (
 export const loadAll = (
     parent: string,
     accessToken: string
-): Promise<GoogleFileResponse[]> => {
+): Promise<GoogleDriveResponse[]> => {
     return new Promise(async (resolve, reject) => {
         const proms = [
             fetchMultiple({ parent, mimeType: FOLDER_MIME_TYPE }, accessToken),
@@ -524,12 +496,14 @@ export function setPreviewFile(id: string, url: string) {
     if (ele.localName === "img") {
         ele.src = url;
     } else if (ele.localName === "video") {
-        setTimeout(() => {
-            ele.src = url;
-        }, 1000);
+        // setTimeout(() => {
+        ele.src = url;
+        // }, 1000);
     }
-    activeImage.update((prev) => ({ ...prev, download: url }));
-    ele.nextElementSibling.style.display = "none";
+    tempStore.activeFile.download = url;
+    tempStore.activeFile.loading = false;
+    // activeImage.update((prev) => ({ ...prev, download: url }));
+    // ele.nextElementSibling.style.display = "none";
 }
 
 if (browser) {
@@ -540,29 +514,25 @@ if (browser) {
 
         switch (data.context) {
             case "IMG_PREVIEW":
-                let { id, blob } = data;
-                let url = URL.createObjectURL(blob);
-                setPreviewFile(id, url);
+                let { id, blobURL } = data;
+                setPreviewFile(id, blobURL);
                 if (!imageCache.has(id)) {
-                    imageCache.set(id, url);
+                    imageCache.set(id, blobURL);
                 }
                 imageFetchLog.delete(id);
                 return;
 
             case "EDIT":
                 let imgMeta = data.imgMeta;
-                if (aParent === get(activeParent).id) {
-                    fileStore.update((prev) => ({
-                        nextPageToken: prev?.nextPageToken,
-                        files: prev?.files.map((file) => {
-                            if (success.has(file.id)) {
-                                imgMeta?.name && (file.name = imgMeta.name);
-                                imgMeta?.description &&
-                                    (file.description = imgMeta.description);
-                            }
-                            return file;
-                        }),
-                    }));
+                if (aParent === tempStore.activeFolder!.id) {
+                    fileStore.files = fileStore.files.map((file) => {
+                        if (success.has(file.id)) {
+                            imgMeta?.name && (file.name = imgMeta.name);
+                            imgMeta?.description &&
+                                (file.description = imgMeta.description);
+                        }
+                        return file;
+                    });
                 }
                 fetchMultiple(
                     { parent: aParent, mimeType: IMG_MIME_TYPE },
@@ -580,8 +550,11 @@ if (browser) {
                     true
                 ).then((files) => {
                     if (data?.context === "TOP") {
-                        fileStore.set(files);
-                        files.nextPageToken && fetchAll.set(true);
+                        success = new Set(success);
+                        fileStore.files = fileStore.files.filter(
+                            (file) => !success.has(file.id)
+                        );
+                        fileStore.set(files as GoogleDriveResponse<DriveFile>);
                     }
 
                     if (pocketStore.has(parent)) {
@@ -600,25 +573,19 @@ if (browser) {
             case "MOVE":
             case "DELETE":
                 success = new Set(success);
-                let currentActiveParent = get(activeParent).id;
+                let currentActiveParent = tempStore.activeFolder!.id;
                 if (aParent === currentActiveParent) {
                     if (view === "FILE") {
-                        fileStore.update((prev) => ({
-                            nextPageToken: prev?.nextPageToken,
-                            files: prev?.files.filter(
-                                (file) => !success.has(file.id)
-                            ),
-                        }));
+                        fileStore.files = fileStore.files.filter(
+                            (file) => !success.has(file.id)
+                        );
                     } else {
-                        folderStore.update((prev) => ({
-                            nextPageToken: prev?.nextPageToken,
-                            files: prev?.files.filter(
-                                (file) => !success.has(file.id)
-                            ),
-                        }));
+                        folderStore.files = folderStore.files.filter(
+                            (file) => !success.has(file.id)
+                        );
                     }
                 } else {
-                    pocketStore.delete(activeParent);
+                    pocketStore.delete(tempStore.activeFolder?.id);
                 }
                 parent && pocketStore.delete(parent);
 
@@ -680,12 +647,8 @@ if (browser) {
 
             case "DROP":
                 clearDropItems();
-                dropItems.set(
-                    get(dropItems).map((item) => {
-                        if (item.id === data.id) item.progress = data.status;
-                        return item;
-                    })
-                );
+                let item = tempStore.dropItems.find((i) => i.id === data.id);
+                item && (item.progress = data.status as string);
                 setTimeout(async () => {
                     const res = await fetchMultiple(
                         { parent, mimeType: IMG_MIME_TYPE },
@@ -701,7 +664,7 @@ if (browser) {
                         getToken(),
                         true
                     );
-                    if (parent === get(activeParent).id) {
+                    if (parent === tempStore.activeFolder.id) {
                         fileStore.set(res);
                     } else {
                         pocketStore.delete(parent);
@@ -714,20 +677,19 @@ if (browser) {
                 if (type === "DELETE" || type === "MOVE" || type === "TOP") {
                     let ele = document.querySelector(`[data-id="${data.id}"]`);
                     if (data.status === 1) {
-                        ele?.remove();
-                        updateProgressStore(0, 1, 0);
+                        progressStore.update(0, 1, 0);
                         return;
                     }
-                    updateProgressStore(0, 0, 1);
+                    progressStore.update(0, 0, 1);
                     ele.style.display = "initial";
                     return;
                 }
                 if (type === "COPY" || type === "EDIT") {
                     if (data.status === 1) {
-                        updateProgressStore(0, 1, 0);
+                        progressStore.update(0, 1, 0);
                         return;
                     }
-                    updateProgressStore(0, 0, 1);
+                    progressStore.update(0, 0, 1);
                     return;
                 }
                 if (type === "DROP") {
@@ -749,44 +711,44 @@ if (browser) {
         if (e.ctrlKey) return;
         switch (e.key) {
             case "Escape":
-                if (get(mode) !== "edit") mode.set("");
-                profile.set(false);
-                shortcuts.set(false);
+                if (states.mode !== "EDIT") states.mode = "";
+                states.searchMode = false;
+                states.profile = false;
+                states.shortcuts = false;
                 return;
 
             case "a":
             case "A":
-                mask.set(!get(mask));
+                states.mask = !states.mask;
                 return;
 
             case "c":
             case "C":
-                toggleTheme();
+                preferences.toggleTheme();
                 return;
 
             case "d":
             case "D":
-                starred.set(!get(starred));
+                states.starred = !states.starred;
                 return;
 
             case "e":
-                activeView.update((prev) =>
-                    prev === "FOLDER" ? "FILE" : "FOLDER"
-                );
+                if (states.mode === "EDIT") return;
+                states.view = states.view === "FOLDER" ? "FILE" : "FOLDER";
                 return;
 
             case "E":
-                mode.set("edit");
+                states.mode = "EDIT";
                 return;
 
             case "h":
             case "H":
-                shortcuts.set(!get(shortcuts));
+                states.shortcuts = !states.shortcuts;
                 return;
 
             case "s":
             case "S":
-                mode.set("search");
+                states.searchMode = true;
                 return;
         }
     });

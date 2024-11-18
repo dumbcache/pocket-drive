@@ -8,8 +8,8 @@ import {
     fetchSingle,
 } from "$lib/scripts/utils";
 import { getToken } from "$lib/scripts/login";
-import { pocketStore, HOME_PATH, setPocketState } from "$lib/scripts/stores";
 import { goto } from "$app/navigation";
+import { pocketStore, HOME_PATH, states } from "$lib/scripts/stores.svelte";
 
 async function loadContent(parent: string) {
     try {
@@ -18,14 +18,14 @@ async function loadContent(parent: string) {
             return { ...data };
         }
         const [folders, files] = await loadAll(parent, getToken());
-        const info = await fetchSingle(parent, "FOLDER", getToken());
-        if (folders && files && info) {
+        const activeFolder = await fetchSingle(parent, "FOLDER", getToken());
+        if (folders && files && activeFolder) {
             pocketStore.set(parent, {
                 folders,
                 files,
-                info,
+                activeFolder,
             });
-            return { folders, files, info };
+            return { folders, files, activeFolder };
         }
     } catch (error) {
         console.log("erored,", error);
@@ -34,9 +34,9 @@ async function loadContent(parent: string) {
 
 export const load = (async ({ params }) => {
     if (browser) {
-        setPocketState(params?.id);
         if (!checkLoginStatus()) {
-            signUserOutPartial();
+            await signUserOutPartial();
+            states.setPocketState(params?.id);
             goto("/", { replaceState: true });
             return;
         }

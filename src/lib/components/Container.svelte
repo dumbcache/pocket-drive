@@ -1,40 +1,46 @@
 <script lang="ts">
-    import {
-        activeImage,
-        activeView,
-        fileStore,
-        mode,
-        starred,
-    } from "$lib/scripts/stores";
-    import { onMount } from "svelte";
     import Edit from "$lib/components/Edit.svelte";
     import Folder from "$lib/components/folders/Folder.svelte";
     import File from "$lib/components/files/File.svelte";
-    import { get } from "svelte/store";
     import { beforeNavigate } from "$app/navigation";
     import { disableScrolling } from "$lib/scripts/utils";
     import imgCreate from "$lib/assets/imgCreate.svg?raw";
     import folderCreate from "$lib/assets/folderCreate.svg?raw";
+    import {
+        fileStore,
+        folderStore,
+        states,
+        tempStore,
+    } from "$lib/scripts/stores.svelte";
+    import FileLoading from "$lib/components/utils/FileLoading.svelte";
+    import { SvelteSet } from "svelte/reactivity";
+    import { observer } from "$lib/scripts/observer";
 
-    export let files: FileResponse | undefined;
-    export let view: "FILE" | "FOLDER";
-    export let component: typeof Folder | typeof File;
-    export let footObserver: IntersectionObserver;
-    export let showFileNames = false;
+    let {
+        files,
+        view,
+        showFileNames,
+    }: {
+        files: FileResponse | undefined;
+        view: View;
+        showFileNames?: boolean;
+    } = $props();
 
-    let childObserver: IntersectionObserver;
     let entryLog = new Set<string>();
-    let inspectionLog: { [key: string]: boolean } = {};
-    let container: HTMLElement;
-    let foot: HTMLElement;
+    let inspectionLog = $state<{ [key: string]: boolean }>({});
+    let container = $state<HTMLElement>();
+    let foot = $state<HTMLElement>();
 
     let lastSelected = -1;
-    let allSelected = false;
-    let set = new Set<string>();
-    let count = 0;
-    let memory = 0;
+    let allSelected = $state(false);
+    let set = new SvelteSet<string>();
+    let count = $state(0);
+    let memory = $state(0);
 
-    $: foot && footObserver?.observe(foot);
+    $effect(() => {
+        foot && observer?.observe(foot);
+        inspection(files);
+    });
 
     beforeNavigate(({ from, to }) => {
         try {
@@ -46,12 +52,11 @@
         }
     });
 
-    function editCloseAction(e) {
-        const eles: HTMLElement[] = document.querySelectorAll(".select");
+    function closeHandler(type: string) {
+        const eles: HTMLElement[] = container?.querySelectorAll(".select");
         eles.forEach((ele) => {
             ele.classList.remove("select");
-            let detail = e.detail.type;
-            if (detail === "DELETE" || detail === "MOVE") {
+            if (type === "DELETE" || type === "MOVE" || type === "TOP") {
                 ele.style.display = "none";
             }
         });
@@ -60,9 +65,10 @@
         memory = 0;
         set.clear();
         lastSelected = -1;
+        states.mode = "";
     }
 
-    function selectAllAction() {
+    function selectAllHandler() {
         allSelected = !allSelected;
         memory = 0;
         if (allSelected) {
@@ -79,23 +85,16 @@
         lastSelected = -1;
     }
 
-    function updateSelection(
-        index: string,
-        id: string,
-        size: string,
-        target: HTMLLIElement
-    ) {
+    function updateSelection(index: string, id: string, size: string) {
         if (set.has(id)) {
             set.delete(id);
             count--;
             size && (memory -= Number(size));
-            target.classList.toggle("select");
             return;
         }
         set.add(id);
         count++;
         size && (memory += Number(size));
-        target.classList.toggle("select");
         lastSelected = Number(index);
     }
 
@@ -105,8 +104,8 @@
         if (!target) return;
         let { id, index, size } = target?.dataset;
         if (!id) return;
-        switch (get(mode)) {
-            case "edit":
+        switch (states.mode) {
+            case "EDIT":
                 if (e.shiftKey) {
                     index = Number(index);
                     if (lastSelected < index) {
@@ -115,7 +114,7 @@
                                 `[data-index="${i}"]`
                             );
                             let { id, index, size } = ele?.dataset;
-                            updateSelection(index, id, size, ele);
+                            updateSelection(index, id, size);
                         }
                         return;
                     } else {
@@ -124,81 +123,46 @@
                                 `[data-index="${i}"]`
                             );
                             let { id, index, size } = ele?.dataset;
-                            updateSelection(index, id, size, ele);
+                            updateSelection(index, id, size);
                         }
                         return;
                     }
                 }
-                updateSelection(index, id, size, target);
+                updateSelection(index, id, size);
                 return;
             default:
                 if (view === "FOLDER") return;
-                const [file] = get(fileStore)?.files.filter(
-                    (file) => file.id === id
-                );
-                activeImage.set(file);
-                mode.set("view");
+                const [file] = fileStore.files.filter((file) => file.id === id);
+                tempStore.activeFile = file;
+                states.mode = "VIEW";
                 disableScrolling();
                 return;
         }
     }
 
-    function childInspection(items: FileResponse | undefined) {
-        childObserver = new IntersectionObserver(
-            (entries) => {
-                entries.forEach((entry) => {
-                    if (entry.isIntersecting) {
-                        entry.target.timeoutid = setTimeout(() => {
-                            let { id } = (entry.target as HTMLElement).dataset;
-                            if (id) {
-                                inspectionLog[id] = true;
-                                childObserver.unobserve(entry.target);
-                            }
-                        }, 700);
-                    } else {
-                        clearTimeout(entry.target.timeoutid);
-                    }
-                });
-            },
-            { threshold: 0 }
-        );
+    function inspection(items: FileResponse | undefined) {
         items?.forEach((item) => {
             let id = item.id;
             if (id && !entryLog.has(id)) {
                 let li = container?.querySelector(`[data-id="${id}"]`);
-                li && childObserver.observe(li);
+                li && observer.observe(li);
                 entryLog.add(id);
             }
         });
     }
-
-    $: setTimeout(() => {
-        childInspection(files);
-    }, 1000);
-
-    onMount(() => {
-        childInspection(files);
-    });
 </script>
 
-{#if $mode === "edit" && $activeView === view}
-    <Edit
-        {view}
-        {set}
-        {count}
-        on:close={editCloseAction}
-        {memory}
-        on:selectAll={selectAllAction}
-    />
+{#if states.mode === "EDIT" && states.view === view}
+    <Edit {view} {set} {count} {closeHandler} {memory} {selectAllHandler} />
 {/if}
 {#if files && files.length > 0}
-    <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+    <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+    <!-- svelte-ignore a11y_click_events_have_key_events -->
     <ol
         class="list"
         bind:this={container}
-        class:edit-mode={$mode === "edit"}
-        on:click={handleImageClick}
-        on:keydown
+        class:edit-mode={states.mode === "EDIT"}
+        onclick={handleImageClick}
     >
         {#each files as file, index (file.id)}
             <li
@@ -206,21 +170,29 @@
                 data-id={file.id}
                 data-size={file?.size}
                 data-starred={file.starred}
-                class:select={allSelected}
-                style:display={$starred === true && file.starred === false
+                class:select={set.has(file.id)}
+                style:display={states.starred === true && file.starred === false
                     ? "none"
                     : "initial"}
             >
-                <svelte:component
-                    this={component}
-                    {file}
-                    visible={inspectionLog[file.id]}
-                    {showFileNames}
-                ></svelte:component>
+                {#if view === "FOLDER"}
+                    <Folder {file} />
+                {:else}
+                    <File {showFileNames} {file} />
+                {/if}
             </li>
         {/each}
     </ol>
-    <div id="{view === 'FILE' ? 'file' : 'folder'}-foot" bind:this={foot}></div>
+    <div id="{view === 'FILE' ? 'FILE' : 'FOLDER'}-FOOT" bind:this={foot}></div>
+    <!-- {#if view === "FOLDER" ? folderStore.nextPageToken : fileStore.nextPageToken}
+    {/if} -->
+    <div class="loading">
+        <FileLoading
+            pageToken={view === "FOLDER"
+                ? folderStore.nextPageToken
+                : fileStore.nextPageToken}
+        />
+    </div>
 {:else}
     <div class="no-content">
         {#if view === "FILE"}
@@ -241,10 +213,10 @@
 <style>
     .list {
         display: flex;
-        padding-top: var(--vertical-padding);
         flex-flow: row wrap;
         align-items: flex-start;
         justify-content: center;
+        padding-top: var(--vertical-padding);
         gap: var(--content-gap);
     }
 
@@ -261,9 +233,9 @@
         filter: none;
         filter: brightness(0.3);
     }
-    .edit-mode {
+    /* .edit-mode {
         padding: 0rem 5rem;
-    }
+    } */
     .no-content {
         display: flex;
         flex-flow: column nowrap;
@@ -287,6 +259,11 @@
     .img :global(svg) {
         fill: var(--color-five);
     }
+    .loading {
+        width: fit-content;
+        margin: auto;
+        padding: 5rem 0rem;
+    }
 
     @media (max-width: 600px) {
         .edit-mode {
@@ -298,6 +275,9 @@
         .img {
             min-width: 2rem;
             min-height: 2rem;
+        }
+        .loading {
+            padding: 2rem 0rem;
         }
     }
 </style>

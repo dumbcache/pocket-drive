@@ -1,53 +1,54 @@
 <script>
-    import { autosave, dropItems } from "$lib/scripts/stores";
     import DropItem from "$lib/components/drops/DropItem.svelte";
     import DropTools from "$lib/components/drops/DropTools.svelte";
     import doubleLeftIcon from "$lib/assets/arrowLeftDouble.svg?raw";
     import { fade } from "svelte/transition";
-    import { onDestroy } from "svelte";
+    import { onDestroy, onMount } from "svelte";
     import { navigating } from "$app/stores";
+    import { states, tempStore } from "$lib/scripts/stores.svelte";
 
-    let mini = false;
-    let expand = false;
+    let mini = $state(false);
+    let expand = $state(false);
     const unsubscribe = navigating.subscribe((data) => {
         data && (mini = true);
     });
+
+    function onMini() {
+        mini = true;
+    }
+
+    function onExpand() {
+        expand = !expand;
+    }
+
     onDestroy(() => {
-        $autosave = false;
+        states.autosave = false;
         unsubscribe();
     });
 </script>
 
-{#if $dropItems.length !== 0}
-    <!-- {#if mini} -->
-    <button
-        class="drop-mini btn s-prime"
-        style:display={mini === true ? "initial" : "none"}
-        on:click={() => {
-            mini = !mini;
-        }}>{@html doubleLeftIcon}</button
-    >
-    <!-- {:else} -->
-    <div
-        class="drop"
-        class:expand
-        style:display={mini === true ? "none" : "initial"}
-        transition:fade={{ duration: 200 }}
-    >
-        <DropTools
-            on:mini={() => (mini = true)}
-            on:expand={() => (expand = !expand)}
-        />
-        <div class="drop-items">
-            {#each $dropItems as item}
-                {#key item.id}
-                    <DropItem {item} />
-                {/key}
-            {/each}
-        </div>
+<button
+    class="drop-mini btn s-prime"
+    style:display={mini === true ? "initial" : "none"}
+    onclick={() => {
+        mini = !mini;
+    }}>{@html doubleLeftIcon}</button
+>
+<div
+    class="drop"
+    class:expand
+    style:display={mini === true ? "none" : "initial"}
+    transition:fade={{ duration: 200 }}
+>
+    <DropTools {onMini} {onExpand} />
+    <div class="drop-items">
+        {#each tempStore.dropItems as item}
+            {#key item.id}
+                <DropItem {item} />
+            {/key}
+        {/each}
     </div>
-    <!-- {/if} -->
-{/if}
+</div>
 
 <style>
     .drop-mini {
@@ -66,8 +67,9 @@
     .drop {
         position: sticky;
         top: 0;
-        background-color: var(--color-bg-one);
-        /* border-left: 1px solid var(--color); */
+        background: inherit;
+        /* background-color: var(--color-bg-one); */
+        border-left: 1px solid var(--color-border);
         overflow-y: scroll;
         padding: 1rem;
         padding-top: 0rem;
@@ -94,24 +96,23 @@
         width: 100%;
         border: none;
         outline: none;
-        border-top-left-radius: 0.5rem;
-        border-top-right-radius: 0.5rem;
-        padding: 0.5rem;
-        font-size: 1.6rem;
+        /* padding: 0.5rem; */
+        font-size: 1.3rem;
         color: var(--color);
-        background-color: var(--color-bg-two);
-        padding-left: 0.5rem;
+        background-color: var(--color-bg-one);
+        /* padding-left: 0.5rem; */
     }
 
     .drop :global(input:disabled:hover),
     .drop :global(input:disabled) {
-        background-color: var(--color-bg-one);
-        color: var(--color-five);
+        background-color: var(--color-bg);
+        color: var(--color-three);
         cursor: not-allowed;
         border-bottom: none;
     }
-    .drop :global(input:hover) {
-        background-color: var(--color-bg-three);
+    .drop :global(input:hover),
+    .drop :global(input:focus) {
+        background-color: var(--color-bg-two);
     }
 
     .expand {

@@ -1,6 +1,6 @@
 <script>
-    import ColorScheme from "$lib/components/utils/ColorScheme.svelte";
-    import LoginButton from "$lib/components/utils/LoginButton.svelte";
+    import ColorScheme from "$lib/components/profile/ColorScheme.svelte";
+    import LoginButton from "$lib/components/profile/LoginButton.svelte";
 </script>
 
 <article class="article one">
@@ -35,7 +35,7 @@
         margin: auto;
         font-size: 8rem;
         /* font-weight: 900; */
-        font-family: var(--font-lato);
+        font-family: var(--font-comic);
         background: var(--title-background);
         background-clip: text;
         -webkit-text-fill-color: transparent;

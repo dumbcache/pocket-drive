@@ -4,7 +4,7 @@
 </script>
 
 <button
-    on:click={requestToken}
+    onclick={requestToken}
     class="login"
     title="Sign in with Google"
     aria-label="Sign in with Google"

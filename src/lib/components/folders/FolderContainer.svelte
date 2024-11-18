@@ -1,38 +1,31 @@
 <script lang="ts">
-    import { onDestroy } from "svelte";
-    import {
-        folderStore,
-        folderAction,
-        refresh,
-        mode,
-    } from "$lib/scripts/stores";
-    import Folder from "$lib/components/folders/Folder.svelte";
     import ActionForm from "$lib/components/folders/ActionForm.svelte";
-    import FolderSelect from "$lib/components/folders/FolderSelect.svelte";
     import Container from "$lib/components/Container.svelte";
-
-    export let observer: IntersectionObserver;
-
-    let files: FileResponse | undefined;
-
-    let unsubscribeFolderStore = folderStore.subscribe((data) => {
-        if (data) {
-            files = data?.files;
-        }
-    });
-
-    onDestroy(() => {
-        unsubscribeFolderStore();
-    });
+    import {
+        states,
+        folderStore,
+        tempStore,
+        folderSearchStore,
+    } from "$lib/scripts/stores.svelte";
+    import FetchAll from "$lib/components/utils/FetchAll.svelte";
+    import Select from "$lib/components/folders/Select.svelte";
 </script>
 
-<!-- {#key $refresh} -->
-<Container {files} view="FOLDER" component={Folder} footObserver={observer} />
-<!-- {/key} -->
+{#if folderStore?.nextPageToken}
+    <FetchAll view="FOLDER" />
+{/if}
 
-{#if $folderAction && $mode !== "search"}
-    {#if $folderAction === "MOVE"}
-        <FolderSelect type="FOLDER" />
+{#if states.searchMode}
+    <Container files={folderSearchStore.files} view="FOLDER" />
+{:else}
+    {#key states.refresh}
+        <Container files={folderStore.files} view="FOLDER" />
+    {/key}
+{/if}
+
+{#if tempStore.folderAction.type && states.searchMode}
+    {#if tempStore.folderAction.type === "MOVE"}
+        <Select />
     {:else}
         <ActionForm />
     {/if}

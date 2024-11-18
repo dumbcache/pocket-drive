@@ -1,37 +1,42 @@
 <script lang="ts">
+    import outIcon from "$lib/assets/outArrow.svg?raw";
     import FolderCover from "$lib/components/folders/FolderCover.svelte";
-    import { mode, refresh } from "$lib/scripts/stores";
+    import { states } from "$lib/scripts/stores.svelte";
     import Favorite from "../utils/Favorite.svelte";
 
-    export let visible: Boolean;
-    export let toolsVisible: Boolean = true;
-    export let file: Folder;
-    export const showFileNames: Boolean = false;
+    let {
+        file,
+    }: {
+        file: DriveFolder;
+    } = $props();
 </script>
 
 <div
     class="card"
-    class:edit-mode={$mode === "edit"}
+    class:edit-mode={states.mode === "EDIT"}
     role="listitem"
-    on:dragstart|preventDefault
+    ondragstart={(e) => e.preventDefault()}
     data-id={file.id}
 >
-    <!-- on:mouseleave={closePeak}
-    on:mouseenter={displayPeak} -->
-    {#key $refresh}
-        <FolderCover id={file.id} name={file.name} {toolsVisible} {visible} />
-    {/key}
+    <FolderCover id={file.id} name={file.name} />
     <div class="title-wrapper">
         <h2 class="folder-title" title={file.name}>{file.name}</h2>
         <div class="favorite">
             <Favorite
                 id={file.id}
                 starred={file.starred}
-                on:fav={() => (file.starred = !file.starred)}
+                toggle={() => (file.starred = !file.starred)}
             />
         </div>
     </div>
-    {#if $mode === "edit"}
+    {#if states.searchMode && file.parents && file.parents.length > 0}
+        <a
+            href={file.parents[0]}
+            class="btn s-second goto"
+            title="goto containing folder">{@html outIcon}</a
+        >
+    {/if}
+    {#if states.mode === "EDIT"}
         <div class="mask"></div>
     {/if}
 </div>
@@ -39,18 +44,15 @@
 <style>
     .card {
         position: relative;
-        /* border-radius: 1rem; */
-        border-top-left-radius: 1rem;
-        border-top-right-radius: 1rem;
         overflow: hidden;
+        width: var(--folder-width);
     }
     .card:hover {
-        /* box-shadow: 0 0 2px 2px var(--color-focus); */
         transform: scale(1.01);
     }
 
-    .card {
-        width: var(--folder-width);
+    .card:hover .goto {
+        opacity: 1;
     }
     .edit-mode {
         cursor: pointer;
@@ -76,7 +78,7 @@
     }
 
     .favorite {
-        margin-right: 1rem;
+        margin-right: 0.5rem;
         height: var(--secondary-icon-size);
     }
 
@@ -89,12 +91,28 @@
         border-radius: 1rem;
     }
 
+    .goto {
+        display: inline-block;
+        position: absolute;
+        bottom: 5rem;
+        right: 1.5rem;
+        border-radius: 50%;
+        padding: 0.2rem;
+        opacity: 0;
+        background: var(--color-bg);
+    }
+
     @media (max-width: 900px) {
         .favorite {
             margin-right: 0.7rem;
         }
         .title-wrapper {
             padding: 0.5rem;
+        }
+        .goto {
+            bottom: 4rem;
+            right: 1rem;
+            opacity: unset;
         }
     }
 </style>

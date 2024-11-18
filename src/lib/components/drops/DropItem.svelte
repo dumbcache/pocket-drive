@@ -5,22 +5,23 @@
     import failureIcon from "$lib/assets/failure.svg?raw";
     import { dropOkHandlerSingle, removeDropEntry } from "$lib/scripts/image";
     import Spinner from "$lib/components/utils/Spinner.svelte";
-    export let item: DropItem;
+
+    let { item }: { item: DropItem } = $props();
 </script>
 
 <div class="drop-item" data-id={item.id}>
     <div class="img-wrapper">
-        {#if item.mimeType.match("image/")}
+        {#if item?.mimeType?.match("image/")}
             <img src={item.imgRef} class="drop-img" alt="" />
-        {:else if item.mimeType.match("video/")}
+        {:else if item?.mimeType?.match("video/")}
             <video src={item.imgRef} muted class="drop-img"></video>
         {/if}
         {#if item.progress}
             <div class="progress">
-                {#if item.progress === "uploading"}
+                {#if item?.progress === "uploading"}
                     <Spinner borderWidth="2px" width="3rem" height="3rem" />
                     <div class="progress-count">0%</div>
-                {:else if item.progress === "success"}
+                {:else if item?.progress === "success"}
                     <div class="status">{@html successIcon}</div>
                 {:else}
                     <div class="status">{@html failureIcon}</div>
@@ -28,16 +29,16 @@
             </div>
         {/if}
     </div>
-    {#if item.progress !== "uploading" && item.progress !== "success"}
+    {#if item?.progress !== "uploading" && item?.progress !== "success" && item?.loaded === true}
         <button
-            class="remove btn s-prime"
-            on:click={() => removeDropEntry(item.id)}
+            class="remove btn s-second"
+            onclick={() => removeDropEntry(item.id)}
         >
             {@html closeIcon}
         </button>
         <button
-            class="done btn s-prime"
-            on:click={() => {
+            class="done btn s-second"
+            onclick={() => {
                 dropOkHandlerSingle(item.id);
             }}
         >
@@ -47,25 +48,25 @@
             type="text"
             class="parent"
             disabled
-            on:keydown|stopPropagation
             value={item.parentName}
-            on:click={(e) => e.target.select()}
+            onkeydown={(e) => e.stopPropagation()}
+            onclick={(e) => e.target.select()}
         />
         <input
             type="text"
             class="name"
             placeholder="name"
-            value={item.name.trim() || ""}
-            on:keydown|stopPropagation
-            on:click={(e) => e.target.select()}
+            bind:value={item.name}
+            onkeydown={(e) => e.stopPropagation()}
+            onclick={(e) => e.target.select()}
         />
         <input
             type="text"
             class="url"
             placeholder="url"
-            value={decodeURI(item.url?.trim() || "")}
-            on:keydown|stopPropagation
-            on:click={(e) => e.target.select()}
+            bind:value={item.url}
+            onkeydown={(e) => e.stopPropagation()}
+            onclick={(e) => e.target.select()}
         />
     {/if}
 </div>
@@ -76,7 +77,7 @@
         flex-flow: column nowrap;
         position: relative;
         border-radius: 1rem;
-        max-width: 20rem;
+        max-width: 15rem;
         border-bottom: none;
         border: 1px solid var(--color-border);
         overflow: hidden;
@@ -93,6 +94,10 @@
         border-top-left-radius: 0.5rem;
         border-top-right-radius: 0.5rem;
         filter: brightness(0.8);
+    }
+
+    input {
+        padding: 0.5rem;
     }
     .drop-item:hover .drop-img {
         filter: brightness(0.5);

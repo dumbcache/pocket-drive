@@ -7,6 +7,19 @@
             href="%sveltekit.assets%/favicon.svg?v=0"
             type="image/svg+xml"
         />
+        <meta
+            http-equiv="Content-Security-Policy"
+            content="
+            default-src 'self';
+            script-src 'self' https://accounts.google.com 'unsafe-inline';
+            connect-src 'self' https://www.googleapis.com;
+            style-src 'self' https://fonts.googleapis.com 'unsafe-inline';
+            font-src 'self' https://fonts.gstatic.com;
+            img-src 'self' https://lh3.googleusercontent.com https://*.googleusercontent.com blob:;
+            media-src 'self' https://lh3.googleusercontent.com https://*.googleusercontent.com blob:;
+            "
+        />
+
         <meta name="viewport" content="width=device-width" />
         <meta name="color-scheme" content="light dark" />
         <meta name="theme-color" content="#646cff" />
@@ -42,13 +55,13 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link
             rel="preload"
-            href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Poppins:ital,wght@0,400;0,600;0,800;0,900;1,400;1,600;1,800;1,900&display=swap"
+            href="https://fonts.googleapis.com/css2?family=Comic+Neue:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
             as="style"
             onload="this.onload=null;this.rel='stylesheet'"
         />
         <noscript>
             <link
-                href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Poppins:ital,wght@0,400;0,600;0,800;0,900;1,400;1,600;1,800;1,900&display=swap"
+                href="https://fonts.googleapis.com/css2?family=Comic+Neue:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
                 rel="stylesheet"
             />
         </noscript>

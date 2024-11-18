@@ -1,7 +1,5 @@
 <script>
-    export let borderWidth = "5px";
-    export let width = "5rem";
-    export let height = "5rem";
+    let { borderWidth = "5px", width = "5rem", height = "5rem" } = $props();
 </script>
 
 <div
@@ -18,10 +16,9 @@
         }
     }
     .spinner {
-        width: 5rem;
-        height: 5rem;
-        border: 5px solid var(--color-white-two);
-        border-top: 5px solid var(--color-blue);
+        border-style: solid;
+        border-color: var(--color-white-three);
+        border-top-color: var(--color-blue);
         border-radius: 50%;
         animation: spin 1s linear infinite;
     }

@@ -7,14 +7,15 @@ import { build, files, version } from "$service-worker";
 
 const sw = self as unknown as ServiceWorkerGlobalScope;
 
-const CACHE_STATIC = `pd-static`;
-const CACHE_APP = `pd-app`;
-const CACHE_DATA = `pd-data`;
+const STATIC_CACHE = `pd-static`;
+const APP_CACHE = `pd-app`;
+const DATA_CACHE = `pd-data`;
+const TEMP_CACHE = "pd-temp";
 
 /***************** SW Event Listners****************/
 sw.addEventListener("install", (e) => {
     async function addFilesToCache() {
-        const cache1 = await caches.open(CACHE_STATIC);
+        const cache1 = await caches.open(STATIC_CACHE);
         await cache1.addAll(files);
         // const cache2 = await caches.open(CACHE_APP);
         // await cache2.addAll(build);
@@ -25,7 +26,7 @@ sw.addEventListener("install", (e) => {
 sw.addEventListener("activate", (e) => {
     async function deleteOldCaches() {
         for (const key of await caches.keys()) {
-            if (key !== CACHE_APP && key !== CACHE_DATA && key != CACHE_STATIC)
+            if (key !== APP_CACHE && key !== DATA_CACHE && key != STATIC_CACHE)
                 await caches.delete(key);
         }
     }
@@ -89,7 +90,7 @@ sw.addEventListener("fetch", (e) => {
             e.respondWith(
                 (async () => {
                     if (files.includes(url.pathname)) {
-                        const cache = await caches.open(CACHE_STATIC);
+                        const cache = await caches.open(STATIC_CACHE);
                         return cache.match(url.pathname) as Promise<Response>;
                         // } else if (build.includes(url.pathname)) {
                         //     const cache = await caches.open(CACHE_APP);
@@ -107,13 +108,30 @@ sw.addEventListener("fetch", (e) => {
             break;
 
         case "www.googleapis.com":
-            if (url.searchParams.has("pageToken")) return;
-            if (url.searchParams.get("q")?.includes("name contains")) return;
             if (url.search === "?alt=media") return;
+            if (url.searchParams.has("pageToken")) return;
+
+            if (url.searchParams.get("q")?.includes("name contains")) {
+                e.respondWith(
+                    (async () => {
+                        const cache = await caches.open(TEMP_CACHE);
+                        const cacheData = await cache.match(e.request);
+                        if (cacheData) {
+                            return cacheData;
+                        } else {
+                            const response = await fetch(e.request);
+                            if (response.status === 200) {
+                                cache.put(e.request, response.clone());
+                            }
+                            return response;
+                        }
+                    })()
+                );
+            }
 
             e.respondWith(
                 (async () => {
-                    const cache = await caches.open(CACHE_DATA);
+                    const cache = await caches.open(DATA_CACHE);
                     const cacheData = await cache.match(e.request);
                     if (cacheData) {
                         return cacheData;

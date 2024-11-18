@@ -1,13 +1,19 @@
 <script lang="ts">
+    import outIcon from "$lib/assets/outArrow.svg?raw";
     import urlIcon from "$lib/assets/url.svg?raw";
     import playIcon from "$lib/assets/play.svg?raw";
     import { isValidUrl } from "$lib/scripts/utils";
-    import { mode } from "$lib/scripts/stores";
     import Favorite from "$lib/components/utils/Favorite.svelte";
+    import { intersectionLog, states } from "$lib/scripts/stores.svelte";
 
-    export let visible: Boolean;
-    export let file: File;
-    export let showFileNames = false;
+    let {
+        file,
+        showFileNames = false,
+    }: {
+        file: DriveFile;
+        showFileNames?: boolean;
+    } = $props();
+
     let selected = "";
 </script>
 
@@ -15,25 +21,25 @@
     class="card"
     title={file.name}
     class:select={selected}
-    class:edit-mode={$mode === "edit"}
+    class:edit-mode={states.mode === "EDIT"}
 >
-    {#if visible}
+    {#if intersectionLog.has(file.id)}
         <img
             src={file.thumbnailLink}
             data-id={file.id}
             alt=""
-            class="img {$mode === 'delete' ? 'delete' : ''}"
+            class="img {states.mode === 'DELETE' ? 'DELETE' : ''}"
             loading="lazy"
             height="200"
             width="200"
             referrerpolicy="no-referrer"
-            on:error={() => (visible = false)}
+            onerror={() => (visible = false)}
         />
         <button class="anchor">.</button>
         {#if file.mimeType.match("video/")}
             <div class="play">{@html playIcon}</div>
         {/if}
-        {#if $mode !== "edit"}
+        {#if states.mode !== "EDIT"}
             {#if file.description}
                 <a
                     href={isValidUrl(file.description)}
@@ -41,7 +47,7 @@
                     referrerpolicy="no-referrer"
                     rel="external noopener noreferrer nofollow"
                     title={file.description}
-                    on:click|stopPropagation
+                    onclick={(e) => e.stopPropagation()}
                 >
                     {@html urlIcon}
                 </a>
@@ -51,16 +57,32 @@
                 <Favorite
                     id={file.id}
                     starred={file.starred}
-                    on:fav={() => (file.starred = !file.starred)}
+                    toggle={() => (file.starred = !file.starred)}
                 />
             </span>
+            {#if states.searchMode && file.parents && file.parents.length > 0}
+                <a
+                    href={file.parents[0]}
+                    class="btn s-second goto"
+                    title="goto containing folder">{@html outIcon}</a
+                >
+            {/if}
         {/if}
     {:else}
         <div class="placeholder"></div>
     {/if}
 </div>
 {#if showFileNames}
-    <p class="name">{file.name}</p>
+    <!-- svelte-ignore a11y_click_events_have_key_events -->
+    <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+    <p
+        class="name"
+        onclick={(e) => {
+            e.stopPropagation();
+        }}
+    >
+        {file.name}
+    </p>
 {/if}
 
 <style>
@@ -88,12 +110,14 @@
     }
 
     .card:hover .img-link,
+    .card:hover .goto,
     .card:hover .favorite {
         opacity: 1;
     }
 
     .favorite,
-    .img-link {
+    .img-link,
+    .goto {
         position: absolute;
         right: 0.5rem;
         opacity: 0;
@@ -102,18 +126,26 @@
     .favorite {
         bottom: 0.5rem;
     }
-    .img-link {
+    .img-link,
+    .goto {
         display: inline-block;
         top: 0.5rem;
-        background-color: #0003;
+        background-color: #0002;
         border-radius: 50%;
-        box-shadow: 0 0 10px 1px #0005;
+    }
+    .img-link :global(svg) {
+        fill: var(--color-white);
     }
     .img-link:hover :global(svg) {
         fill: red;
     }
-    .img-link :global(svg) {
-        fill: var(--color-white);
+
+    .goto {
+        top: unset;
+        bottom: 1rem;
+        right: 3.5rem;
+        background-color: var(--color-bg);
+        padding: 0.2rem;
     }
 
     .img {
@@ -133,9 +165,7 @@
         border: 1px solid var(--color-border);
         background-color: var(--color-file-background);
     }
-    .delete:hover {
-        cursor: pointer;
-    }
+
     .select .img,
     .select:hover .img {
         filter: brightness(0.2);
@@ -182,15 +212,19 @@
             white-space: wrap;
         }
     }
-
     @media (max-width: 600px) {
         .img-link,
-        .favorite {
+        .favorite,
+        .goto {
             opacity: unset;
         }
         .favorite {
             bottom: 0.2rem;
         }
+        .goto {
+            bottom: 0.7rem;
+        }
+
         .img-link {
             padding: 0rem;
         }

@@ -1,15 +1,22 @@
 <script>
-    import { shortcuts } from "$lib/scripts/stores";
+    import { states } from "$lib/scripts/stores.svelte";
+    import { onMount } from "svelte";
+    import { disableScrolling, enableScorlling } from "$lib/scripts/utils";
+
+    onMount(() => {
+        disableScrolling();
+        return () => enableScorlling();
+    });
 </script>
 
-<!-- svelte-ignore a11y-no-static-element-interactions -->
-<div class="shortcuts" on:click={() => ($shortcuts = false)} on:keydown>
-    <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
-    <ul on:keydown on:click|stopPropagation>
+<!-- svelte-ignore a11y_click_events_have_key_events -->
+<!-- svelte-ignore a11y_no_static_element_interactions -->
+<div class="shortcuts" onclick={() => (states.shortcuts = false)}>
+    <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+    <ul onclick={(e) => e.stopPropagation()}>
         <li>
             <span class="l">Escape</span>:<span class="r">Close popups</span>
         </li>
-
         <li>
             <span class="l">A, Shift + A</span>:<span class="r"
                 >Mask content</span
@@ -20,7 +27,6 @@
                 >Change theme</span
             >
         </li>
-
         <li>
             <span class="l">D, ShDft + d</span>:<span class="r"
                 >filter to Favourites</span

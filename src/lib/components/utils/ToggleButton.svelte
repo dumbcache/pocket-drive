@@ -1,5 +1,5 @@
 <script lang="ts">
-    export let bool = false;
+    let { bool } = $props();
 </script>
 
 <div class="toggle" class:on={bool}>

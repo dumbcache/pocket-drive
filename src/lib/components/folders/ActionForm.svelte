@@ -1,12 +1,6 @@
 <script lang="ts">
     import { onDestroy, onMount } from "svelte";
     import doneIcon from "$lib/assets/done.svg?raw";
-    import {
-        activeParent,
-        folderAction,
-        folderActionDetail,
-        folderStore,
-    } from "$lib/scripts/stores";
     import { getToken } from "$lib/scripts/login";
     import {
         toTitleCase,
@@ -18,15 +12,14 @@
         FOLDER_MIME_TYPE,
     } from "$lib/scripts/utils";
     import Spinner from "$lib/components/utils/Spinner.svelte";
+    import { folderStore, tempStore } from "$lib/scripts/stores.svelte";
 
     const confirmText = "confirm";
-    let type: FolderAction, id: string, name: string, placeholder: string;
+    let placeholder = $state<string>();
+    let { id, name, type } = tempStore.folderAction;
 
     onMount(() => {
         try {
-            type = $folderAction;
-            id = $folderActionDetail?.id;
-            name = $folderActionDetail?.name;
             placeholder = name || "";
             type === "DELETE" && (placeholder = "");
         } catch (error) {
@@ -35,35 +28,27 @@
     });
 
     let dirField: HTMLInputElement;
-    let submitDisabled = true;
-    let progress = false;
+    let submitDisabled = $state(true);
+    let progress = $state(false);
 
     function close() {
-        $folderAction = undefined;
-        $folderActionDetail = undefined;
+        tempStore.folderAction = {} as FolderAction;
     }
 
-    async function applyAction() {
+    async function applyAction(e) {
+        e.preventDefault();
         progress = true;
         const token = getToken();
         let folderName = toTitleCase(placeholder);
         type !== "DELETE" && (placeholder = folderName);
-        let parent = $activeParent.id;
+        let parent = tempStore.activeFolder!.id;
         if (type === "CREATE") {
             const data = await createFolder(folderName, parent, token);
-            folderStore.update((prev) => {
-                return {
-                    files: [
-                        {
-                            id: data.id,
-                            name: data.name,
-                            parents: [parent],
-                            starred: false,
-                        },
-                        ...prev?.files,
-                    ],
-                    nextPageToken: prev?.nextPageToken,
-                };
+            folderStore.files.unshift({
+                id: data.id,
+                name: data.name,
+                parents: [parent],
+                starred: false,
             });
             fetchMultiple(
                 { parent, mimeType: FOLDER_MIME_TYPE, pageSize: 500 },
@@ -75,28 +60,15 @@
         }
         if (type === "EDIT") {
             await updateFolder(folderName, id, parent, token);
-            folderStore.update((prev) => {
-                return {
-                    files: prev?.files.map((file) => {
-                        if (file.id === id) {
-                            return { ...file, name: folderName };
-                        }
-                        return file;
-                    }),
-                    nextPageToken: prev?.nextPageToken,
-                };
-            });
+            let index = folderStore.files.findIndex((i) => i.id === id);
+            folderStore.files[index].name = folderName;
             afterFolderAction(parent, token);
             close();
         }
         if (type === "DELETE") {
             await deleteFolder(id, parent, token);
-            folderStore.update((prev) => {
-                return {
-                    files: prev?.files.filter((file) => file.id !== id),
-                    nextPageToken: prev?.nextPageToken,
-                };
-            });
+            let index = folderStore.files.findIndex((i) => i.id === id);
+            folderStore.files.splice(index, 1);
             afterFolderAction(parent, token);
             close();
         }
@@ -123,20 +95,18 @@
     });
 </script>
 
-<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
 <form
     class="create"
-    on:click={() => progress || close()}
-    on:keypress|stopPropagation
-    on:submit|preventDefault={applyAction}
-    on:wheel|preventDefault
+    onclick={() => progress || close()}
+    onkeypress={(e) => e.stopPropagation()}
+    onsubmit={applyAction}
 >
-    <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
     <label
         class="wrapper"
         for="dir-name"
-        on:click|stopPropagation
-        on:keypress|stopPropagation
+        onclick={(e) => e.stopPropagation()}
+        onkeypress={(e) => e.stopPropagation()}
     >
         {#if type === "DELETE"}
             <p>
@@ -154,9 +124,9 @@
             placeholder={type === "DELETE" ? confirmText : "Directory Name"}
             bind:value={placeholder}
             bind:this={dirField}
-            on:click|stopPropagation
-            on:keydown|stopPropagation
-            on:input={checkDisabled}
+            onclick={(e) => e.stopPropagation()}
+            onkeydown={(e) => e.stopPropagation()}
+            oninput={checkDisabled}
             autocomplete="off"
         />
         {#if progress}
@@ -166,7 +136,7 @@
                 type="submit"
                 class="btn s-prime"
                 disabled={submitDisabled}
-                on:click={applyAction}>{@html doneIcon}</button
+                onclick={applyAction}>{@html doneIcon}</button
             >
         {/if}
     </label>

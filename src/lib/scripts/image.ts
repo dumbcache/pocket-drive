@@ -1,12 +1,6 @@
-import {
-    activeParent,
-    autosave,
-    dropItems,
-    preferences,
-} from "$lib/scripts/stores";
-import { childWorker, getRoot } from "$lib/scripts/utils";
+import { childWorker } from "$lib/scripts/utils";
 import { getToken } from "$lib/scripts/login";
-import { get } from "svelte/store";
+import { preferences, states, tempStore } from "$lib/scripts/stores.svelte";
 
 export function previewAndSetDropItems(
     files: FileList,
@@ -16,25 +10,33 @@ export function previewAndSetDropItems(
     for (let file of files!) {
         const id = Math.round(Math.random() * Date.now()).toString();
         const imgRef = URL.createObjectURL(file);
+        let item: DropItem = {
+            id,
+            imgRef,
+            parent: parent || tempStore.activeFolder!.id,
+            parentName: parentName || tempStore.activeFolder!.name,
+            file: "",
+            name: "",
+            mimeType: file.type,
+            loaded: false,
+        };
+        tempStore.dropItems.push(item);
         if (file.type.match("image/")) {
             if (
-                get(preferences).disableWebp ||
+                preferences.disableWebp ||
                 file.type === "image/gif" ||
                 file.type === "image/avif" ||
                 file.type === "image/webp"
             ) {
-                let item = {
-                    id,
-                    name: file.name,
-                    mimeType: file.type,
-                    file,
-                    imgRef,
-                    parent: parent || get(activeParent).id,
-                    parentName: parentName || get(activeParent).name,
-                };
-                dropItems.set([...get(dropItems), item]);
-                if (get(autosave)) {
-                    setTimeout(() => autosaveItem(item), 500);
+                let t = tempStore.dropItems.find((i) => i.id === item.id);
+                if (!t) continue;
+                t.file = file;
+                t.name = file.name;
+                t.mimeType = file.type;
+                t.loaded = true;
+
+                if (states.autosave) {
+                    setTimeout(() => save(t), 500);
                 }
             } else {
                 const image = new Image();
@@ -42,154 +44,79 @@ export function previewAndSetDropItems(
                 const ctx = canvas.getContext("2d");
 
                 image.onload = function () {
-                    canvas.width = this.naturalWidth; // update canvas size to match image
+                    canvas.width = this.naturalWidth;
                     canvas.height = this.naturalHeight;
                     ctx.drawImage(this, 0, 0);
                     canvas.toBlob(async function (blob) {
-                        // const result =
-                        //     (await blob?.arrayBuffer()) as ArrayBuffer;
-                        // const bytes = new Uint8Array(result);
-                        // const imgRef = URL.createObjectURL(blob);
-                        let item = {
-                            id,
-                            name: file.name.replace(/\..*$/, ".webp"),
-                            mimeType: file.type,
-                            file: blob,
-                            imgRef,
-                            parent: parent || get(activeParent).id,
-                            parentName: parentName || get(activeParent).name,
-                        };
-                        dropItems.set([...get(dropItems), item]);
-                        if (get(autosave)) {
-                            setTimeout(() => autosaveItem(item), 500);
+                        let t = tempStore.dropItems.find(
+                            (i) => i.id === item.id
+                        );
+                        if (!t) return;
+                        t.file = blob!;
+                        t.mimeType = blob!?.type;
+                        t.name = file.name.replace(/\..*$/, ".webp");
+                        t.loaded = true;
+
+                        if (states.autosave) {
+                            setTimeout(() => save(t), 500);
                         }
                     }, "image/webp");
                 };
                 image.onerror = function () {
                     alert("Error in loading");
                 };
-                image.crossOrigin = ""; // if from different origin
+                image.crossOrigin = "";
                 image.src = imgRef;
             }
         }
         if (file.type.match("video/")) {
-            let item = {
-                id,
-                name: file.name,
-                mimeType: file.type,
-                file,
-                imgRef,
-                parent: parent || get(activeParent).id,
-                parentName: parentName || get(activeParent).name,
-            };
-            dropItems.set([...get(dropItems), item]);
-            // if (get(autosave)) {
-            //     setTimeout(() => autosaveItem(item), 500);
-            // }
+            let t = tempStore.dropItems.find((i) => i.id === item.id);
+            if (!t) continue;
+            t.file = file;
+            t.name = file.name;
+            t.mimeType = file.type;
+            t.loaded = true;
         }
     }
-}
-
-function autosaveItem(item: DropItem) {
-    const tempItems = setExtraInfo([item]);
-    let single = tempItems[1][0];
-    let items = get(dropItems).map((i) => {
-        if (i.id === item.id) {
-            return single;
-        } else {
-            return i;
-        }
-    });
-    dropItems.set(items);
-    const { pathname } = window.location;
-    const parent = pathname === "/" ? getRoot() : pathname.substring(1);
-    const token = getToken();
-    let WorkerMessage = {
-        context: "DROP",
-        dropItem: single,
-        parent,
-        token,
-    };
-    childWorker.postMessage(WorkerMessage);
-}
-
-export function setExtraInfo(items: DropItem[]) {
-    const droppeditems = document.querySelector(
-        ".drop-items"
-    ) as HTMLDivElement;
-    const commonUrl = (
-        document.querySelector(".common-url") as HTMLInputElement
-    ).value;
-    const tempItems = [];
-    for (let item of items) {
-        if (item.progress === "success" || item.progress === "uploading")
-            continue;
-        const id = item.id;
-        const dropItem = droppeditems.querySelector(
-            `[data-id='${id}']`
-        ) as HTMLDivElement;
-        let dropImg = dropItem.querySelector(".drop-img") as HTMLImageElement;
-        dropImg.classList.toggle("drop-item-uploading");
-        let name = dropItem.querySelector(".name") as HTMLInputElement;
-        item.name = name.value.trim();
-        let url = dropItem.querySelector(".url") as HTMLInputElement;
-        if (url.value.trim() !== "") {
-            item.url = decodeURI(url.value.trim());
-        } else {
-            item.url = decodeURI(commonUrl.trim());
-        }
-        item.progress = "uploading";
-        tempItems.push(item);
-    }
-    return [items, tempItems];
 }
 
 export function removeDropEntry(id: string) {
-    dropItems.set(get(dropItems).filter((item) => item.id !== id));
+    let index = tempStore.dropItems.findIndex((i) => i.id === id);
+    tempStore.dropItems.splice(index, 1);
 }
 
 export function clearDropItems() {
-    const a = get(dropItems).filter((item) => item.progress !== "success");
-    dropItems.set(a);
+    tempStore.dropItems = tempStore.dropItems.filter(
+        (item) => item.progress !== "success"
+    );
 }
 
-export function dropOkHandlerSingle(id: string) {
-    let items = get(dropItems).filter((item) => item.id === id);
-    const tempItems = setExtraInfo(items);
-    let single = tempItems[1][0];
-    items = get(dropItems).map((item) => {
-        if (item.id === id) {
-            return single;
-        } else {
-            return item;
-        }
-    });
-    dropItems.set(items);
-    const { pathname } = window.location;
-    const parent = pathname === "/" ? getRoot() : pathname.substring(1);
-    const token = getToken();
+function save(item: DropItem, token?: string) {
+    if (
+        item.progress === "success" ||
+        item.progress === "uploading" ||
+        item.loaded === false
+    )
+        return;
+    item.progress = "uploading";
+    item.url = item.url || tempStore.dropURL;
+    token ??= getToken();
     let WorkerMessage = {
         context: "DROP",
-        dropItem: single,
-        parent,
+        dropItem: { ...item },
         token,
     };
     childWorker.postMessage(WorkerMessage);
 }
 
+export function dropOkHandlerSingle(id: string) {
+    let item = tempStore.dropItems.find((i) => i.id === id)!;
+    save(item);
+}
+
 export function dropOkHandler() {
-    let [items, tempItems] = setExtraInfo(get(dropItems));
-    dropItems.set(items);
-    const { pathname } = window.location;
-    const parent = pathname === "/" ? getRoot() : pathname.substring(1);
     const token = getToken();
-    tempItems.forEach((item) => {
-        let WorkerMessage = {
-            context: "DROP",
-            dropItem: item,
-            parent,
-            token,
-        };
-        childWorker.postMessage(WorkerMessage);
+    tempStore.dropItems.forEach((item) => {
+        save(item, token);
     });
 }

@@ -2,19 +2,7 @@
     import imgCreate from "$lib/assets/imgCreate.svg?raw";
     import folderCreate from "$lib/assets/folderCreate.svg?raw";
     import { previewAndSetDropItems } from "$lib/scripts/image";
-    import {
-        activeParent,
-        activeView,
-        fetchAll,
-        fileStore,
-        folderAction,
-        folderStore,
-        pocketStore,
-        refresh,
-        starred,
-    } from "$lib/scripts/stores";
     import editIcon from "$lib/assets/editMode.svg?raw";
-    import { mode } from "$lib/scripts/stores";
     import folderIcon from "$lib/assets/folder.svg?raw";
     import fileIcon from "$lib/assets/file.svg?raw";
     import searchIcon from "$lib/assets/search.svg?raw";
@@ -25,14 +13,20 @@
         FOLDER_MIME_TYPE,
         fetchMultiple,
         IMG_MIME_TYPE,
+        clearTempCache,
     } from "$lib/scripts/utils";
     import { getToken } from "$lib/scripts/login";
     import { navigating } from "$app/stores";
     import { onDestroy } from "svelte";
-    import { get } from "svelte/store";
+    import {
+        folderStore,
+        fileStore,
+        states,
+        tempStore,
+        pocketStore,
+    } from "$lib/scripts/stores.svelte";
 
-    let view: "FILE" | "FOLDER";
-    let refreshing = false;
+    let refreshing = $state(false);
 
     function imgPickerHandler(e: InputEvent) {
         e.preventDefault();
@@ -44,8 +38,9 @@
 
     async function refreshHandler() {
         refreshing = true;
+        clearTempCache();
         const token = getToken();
-        const parent = $activeParent.id;
+        const parent = tempStore.activeFolder!.id;
 
         fetchMultiple(
             { parent, mimeType: IMG_MIME_TYPE, pageSize: 3 },
@@ -59,7 +54,7 @@
             true
         );
 
-        $folderStore?.files.forEach((file) => {
+        folderStore.files.forEach((file) => {
             fetchMultiple(
                 { parent: file.id, mimeType: IMG_MIME_TYPE, pageSize: 3 },
                 token,
@@ -68,40 +63,32 @@
             );
         });
 
-        let fs = await fetchMultiple(
+        let fs = (await fetchMultiple(
             { parent, mimeType: IMG_MIME_TYPE },
             token,
             true
-        );
-        let fd = await fetchMultiple(
+        )) as GoogleDriveResponse<DriveFile>;
+        let fd = (await fetchMultiple(
             { parent, mimeType: FOLDER_MIME_TYPE },
             token,
             true
-        );
-        if (parent === get(activeParent).id) {
+        )) as GoogleDriveResponse<DriveFolder>;
+        if (parent === tempStore.activeFolder!.id) {
             folderStore.set(fd);
             fileStore.set(fs);
-            if ($fileStore?.nextPageToken || $folderStore?.nextPageToken) {
-                fetchAll.set(true);
-            }
         }
-        $refresh = !$refresh;
+        states.refresh = !states.refresh;
         pocketStore.delete(parent);
         refreshing = false;
     }
 
     const unsubscribeNavigation = navigating.subscribe((val) => {
         if (!val) {
-            $starred = false;
+            states.starred = false;
         }
     });
 
-    const unsubscribeView = activeView.subscribe(
-        (data) => data && (view = data)
-    );
-
     onDestroy(() => {
-        unsubscribeView();
         unsubscribeNavigation();
     });
 </script>
@@ -110,22 +97,22 @@
     <button
         class="view btn s-prime"
         title="folders"
-        on:click={() => activeView.set("FOLDER")}
-        class:active={view === "FOLDER"}
+        onclick={() => (states.view = "FOLDER")}
+        class:active={states.view === "FOLDER"}
     >
         {@html folderIcon}
     </button>
     <button
         class="view btn s-prime"
         title="files"
-        on:click={() => activeView.set("FILE")}
-        class:active={view === "FILE"}
+        onclick={() => (states.view = "FILE")}
+        class:active={states.view === "FILE"}
     >
         {@html fileIcon}
     </button>
     <hr class="hr" />
 
-    {#if $activeView === "FILE"}
+    {#if states.view === "FILE"}
         <button class="img-picker btn s-prime">
             <label
                 for="img-picker"
@@ -140,14 +127,16 @@
                 id="img-picker"
                 accept="image/*,video/*"
                 multiple
-                on:change={imgPickerHandler}
+                onchange={imgPickerHandler}
             />
         </button>
     {:else}
         <button
             class="btn s-prime"
             title="create folder"
-            on:click={() => folderAction.set("CREATE")}
+            onclick={() => {
+                tempStore.folderAction.type = "CREATE";
+            }}
         >
             {@html folderCreate}
         </button>
@@ -155,24 +144,24 @@
     <button
         class="btn s-prime"
         title="edit"
-        on:click={() => {
-            mode.set("edit");
+        onclick={() => {
+            states.mode = "EDIT";
         }}
     >
         {@html editIcon}
     </button>
     <button
         class="btn s-prime"
-        title="search folders"
-        on:click={() => mode.set($mode === "" ? "search" : "")}
+        title="search"
+        onclick={() => (states.searchMode = !states.searchMode)}
     >
         {@html searchIcon}
     </button>
     <button
         class="btn s-prime"
         title="favorites"
-        class:favorites={$starred}
-        on:click={() => starred.set(!$starred)}
+        class:favorites={states.starred}
+        onclick={() => (states.starred = !states.starred)}
     >
         {@html favoriteIcon}
     </button>
@@ -180,7 +169,7 @@
         class="btn s-prime"
         class:refreshing
         title="refresh"
-        on:click={refreshHandler}
+        onclick={refreshHandler}
     >
         {@html refreshIcon}
     </button>
@@ -204,7 +193,7 @@
         margin: 1rem 0rem;
         width: 100%;
         border: none;
-        height: 1px;
+        height: 3px;
         background-color: var(--color-border);
     }
 

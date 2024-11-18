@@ -2,43 +2,32 @@
     import { navigating } from "$app/stores";
     import { browser } from "$app/environment";
     import Spinner from "$lib/components/utils/Spinner.svelte";
-    import { progress } from "$lib/scripts/stores";
     import { onDestroy, onMount } from "svelte";
     import "./app.css";
     import type { Unsubscriber } from "svelte/store";
     import { loadGSIScript } from "$lib/scripts/login";
-    import {
-        disableScrolling,
-        enableScorlling,
-        setTheme,
-    } from "$lib/scripts/utils";
+    import { disableScrolling, enableScorlling } from "$lib/scripts/utils";
+    import { states } from "$lib/scripts/stores.svelte";
+    import HomeIcon from "$lib/components/HomeIcon.svelte";
 
-    let homeIcon = "";
+    let { children } = $props();
+
     let startup: HTMLDivElement;
 
     let pocketStateUnsubscribe: Unsubscriber;
     let navigatingUnsubscribe: Unsubscriber;
-    let progressUnsubscribe: Unsubscriber;
 
     if (browser) {
         navigatingUnsubscribe = navigating.subscribe((val) => {
             val ? disableScrolling() : enableScorlling();
         });
-        progressUnsubscribe = progress.subscribe((val) => {
-            val ? disableScrolling() : enableScorlling();
-        });
+        // progressUnsubscribe = progress.subscribe((val) => {
+        //     val ? disableScrolling() : enableScorlling();
+        // });
     }
 
     onMount(async () => {
         disableScrolling();
-        setTheme();
-
-        try {
-            const response = await fetch("/favicon.svg");
-            homeIcon = await response.text();
-        } catch (error) {
-            console.error("Failed to fetch favicon:", error);
-        }
 
         setTimeout(() => {
             enableScorlling();
@@ -55,11 +44,11 @@
     onDestroy(() => {
         pocketStateUnsubscribe && pocketStateUnsubscribe();
         navigatingUnsubscribe && navigatingUnsubscribe();
-        progressUnsubscribe && progressUnsubscribe();
+        // progressUnsubscribe && progressUnsubscribe();
     });
 </script>
 
-{#if $navigating || $progress}
+{#if $navigating || states.progress }
     <div class="loading">
         <Spinner />
     </div>
@@ -67,11 +56,11 @@
 
 <div class="startup" bind:this={startup}>
     <span class="icon">
-        {@html homeIcon}
+        <HomeIcon/>
     </span>
 </div>
 
-<slot />
+{@render children()}
 
 <style>
     .loading,

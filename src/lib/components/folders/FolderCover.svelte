@@ -3,28 +3,34 @@
     import { IMG_MIME_TYPE, fetchMultiple } from "$lib/scripts/utils";
     import { getToken } from "$lib/scripts/login";
     import { previewAndSetDropItems } from "$lib/scripts/image";
-    import { mode } from "$lib/scripts/stores";
+    import { intersectionLog, states } from "$lib/scripts/stores.svelte";
 
-    export let visible: Boolean;
-    export let toolsVisible: Boolean;
-    export let id: string;
-    export let name: string;
-    let draggedOver = false;
-    let pics: FileResponse = [];
-    let hover = false;
+    let {
+        id,
+        name,
+    }: {
+        id: string;
+        name: string;
+    } = $props();
 
-    $: visible &&
-        fetchMultiple(
-            { parent: id, mimeType: IMG_MIME_TYPE, pageSize: 3 },
-            getToken()
-        )
-            .then((data) => {
-                pics = data?.files;
-            })
-            .catch(console.warn);
+    let draggedOver = $state(false);
+    let pics: FileResponse = $state([]);
+
+    $effect(() => {
+        intersectionLog.has(id) &&
+            fetchMultiple(
+                { parent: id, mimeType: IMG_MIME_TYPE, pageSize: 3 },
+                getToken()
+            )
+                .then((data) => {
+                    pics = data?.files;
+                })
+                .catch(console.warn);
+    });
 
     export function imgDropHandler(e: DragEvent) {
         e.preventDefault();
+        e.stopPropagation();
         draggedOver = false;
         let files = e.dataTransfer?.files;
         if (files) {
@@ -36,11 +42,17 @@
 <a
     href={id}
     class="cover {draggedOver === true ? 'dragover' : ''}"
-    class:hover
-    on:dragover|preventDefault|stopPropagation={() => (draggedOver = true)}
-    on:dragenter|stopPropagation={() => (draggedOver = true)}
-    on:dragleave={() => (draggedOver = false)}
-    on:drop|stopPropagation={imgDropHandler}
+    ondragover={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        draggedOver = true;
+    }}
+    ondragenter={(e) => {
+        e.stopPropagation();
+        draggedOver = true;
+    }}
+    ondragleave={() => (draggedOver = false)}
+    ondrop={imgDropHandler}
 >
     {#if pics?.length != 0}
         {#each pics as pic}
@@ -49,17 +61,17 @@
                     src={pic.thumbnailLink}
                     alt="cover pic"
                     referrerpolicy="no-referrer"
-                    on:load={(e) => (e.target.style.display = "initial")}
-                    on:error={(e) => (e.target.style.display = "none")}
+                    onload={(e) => (e.target.style.display = "initial")}
+                    onerror={(e) => (e.target.style.display = "none")}
                 />
             </div>
         {/each}
     {:else}
-        <div class="pic-wrapper placeholder" />
-        <div class="pic-wrapper placeholder" />
-        <div class="pic-wrapper placeholder" />
+        <div class="pic-wrapper placeholder"></div>
+        <div class="pic-wrapper placeholder"></div>
+        <div class="pic-wrapper placeholder"></div>
     {/if}
-    {#if $mode !== "edit"}
+    {#if states.mode !== "EDIT"}
         <div class="edit">
             <ActionButtons {id} {name} />
         </div>
@@ -79,8 +91,8 @@
         grid-template-areas:
             "one two"
             "one three";
-        /* border-top-left-radius: 1rem;
-        border-top-right-radius: 1rem; */
+        border-top-left-radius: 1rem;
+        border-top-right-radius: 1rem;
         overflow: hidden;
         cursor: pointer;
         transition: transform 0.1s ease-in-out;
@@ -118,16 +130,11 @@
         border: none;
         display: block;
     }
-    .hover {
-        filter: brightness(0.5);
-    }
 
     .edit {
-        padding: 0.5rem 0.2rem;
         position: absolute;
         top: 0.5rem;
         right: 0.5rem;
-        height: 4rem;
     }
 
     .edit {
@@ -140,7 +147,7 @@
     }
 
     .dragover {
-        box-shadow: 0 0 5px 5px var(--color-focus);
+        box-shadow: 0 0 5px 1px var(--color-focus);
     }
     .dragover .pic {
         filter: brightness(0.2);

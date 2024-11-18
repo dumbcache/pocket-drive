@@ -3,14 +3,12 @@
     import editIcon from "$lib/assets/edit.svg?raw";
     import deleteIcon from "$lib/assets/delete.svg?raw";
     import moveIcon from "$lib/assets/move.svg?raw";
-    import { folderAction, folderActionDetail } from "$lib/scripts/stores";
+    import { tempStore } from "$lib/scripts/stores.svelte";
 
-    export let id: string;
-    export let name: string;
+    let { id, name }: { id: string; name: string } = $props();
 
-    function handler(type: FolderAction) {
-        $folderAction = type;
-        $folderActionDetail = { id, name };
+    function handler(type: FAction) {
+        tempStore.folderAction = { type, id, name };
     }
 </script>
 
@@ -18,25 +16,47 @@
     <button
         class="btn s-second action"
         title="edit folder"
-        on:click|stopPropagation|preventDefault={() => handler("EDIT")}
+        aria-label="edit"
+        onclick={(e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            handler("EDIT");
+        }}
     >
         {@html editIcon}
     </button>
     <button
         class="btn s-second action"
         title="move folder"
-        on:click|stopPropagation|preventDefault={() => handler("MOVE")}
+        aria-label="move"
+        onclick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            handler("MOVE");
+        }}
     >
         {@html moveIcon}
     </button>
     <button
         class="btn s-second action"
         title="delete folder"
-        on:click|stopPropagation|preventDefault={() => handler("DELETE")}
+        aria-label="delete"
+        onclick={(e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            handler("DELETE");
+        }}
     >
         {@html deleteIcon}
     </button>
-    <button class="btn s-second expand" on:click|stopPropagation|preventDefault>
+    <button
+        class="btn s-second expand"
+        aria-label="expand"
+        onclick={(e) => {
+            e.stopPropagation();
+            e.preventDefault();
+        }}
+    >
         {@html expandIcon}
     </button>
 </div>

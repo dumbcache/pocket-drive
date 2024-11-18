@@ -6,50 +6,48 @@
     import doubleRightIcon from "$lib/assets/arrowRightDouble.svg?raw";
     import expandIcon from "$lib/assets/expand.svg?raw";
     import { dropOkHandler } from "$lib/scripts/image";
-    import { autosave, dropItems } from "$lib/scripts/stores";
+    import { states, tempStore } from "$lib/scripts/stores.svelte";
+    import type { MouseEventHandler } from "svelte/elements";
 
-    const dispatch = createEventDispatcher();
-    function triggerDispatch(type: string) {
-        dispatch(type);
-    }
+    let {
+        onMini,
+        onExpand,
+    }: {
+        onMini: MouseEventHandler<HTMLButtonElement>;
+        onExpand: MouseEventHandler<HTMLButtonElement>;
+    } = $props();
+
     export function clearDropItems() {
-        const a = $dropItems.filter((item) => item.progress !== "success");
-        dropItems.set(a);
+        tempStore.dropItems = tempStore.dropItems.filter(
+            (item) => item.progress !== "success"
+        );
     }
 
     export function dropCloseHandler() {
-        const running = $dropItems.filter(
+        const running = tempStore.dropItems.filter(
             (item) => item.progress === "uploading"
         );
         if (running.length === 0) {
-            $dropItems = [];
-            $autosave = false;
+            tempStore.dropItems = [];
+            states.autosave = false;
         } else {
-            triggerDispatch("mini");
+            onMini();
         }
     }
 </script>
 
 <div class="drop-tools">
     <span>
-        <button class="btn s-prime" title="close" on:click={dropCloseHandler}>
+        <button class="btn s-prime" title="close" onclick={dropCloseHandler}>
             {@html closeIcon}
         </button><button
             class="btn s-prime expand"
             title="minimize"
-            on:click={() => {
-                triggerDispatch("expand");
-            }}
+            onclick={onExpand}
         >
             {@html expandIcon}
         </button>
-        <button
-            class="btn s-prime"
-            title="minimize"
-            on:click={() => {
-                triggerDispatch("mini");
-            }}
-        >
+        <button class="btn s-prime" title="minimize" onclick={onMini}>
             {@html doubleRightIcon}
         </button>
     </span>
@@ -57,20 +55,20 @@
         type="text"
         class="common-url"
         placeholder="common-url"
-        value=""
-        on:keydown|stopPropagation
-        on:click={(e) => e.target.select()}
+        bind:value={tempStore.dropURL}
+        onkeydown={(e) => e.stopPropagation()}
+        onclick={(e) => e.target.select()}
     />
     <span>
         <button
-            class="btn s-prime {$autosave === true ? 'autosave' : ''}"
+            class="btn s-prime {states.autosave === true ? 'autosave' : ''}"
             title="toggle autosave"
-            on:click={() => {
-                $autosave = !$autosave;
+            onclick={() => {
+                states.autosave = !states.autosave;
             }}
         >
             {@html toggleIcon}
-        </button><button class="btn s-prime" on:click={dropOkHandler}>
+        </button><button class="btn s-prime" onclick={dropOkHandler}>
             {@html doneIcon}
         </button>
     </span>
@@ -89,13 +87,18 @@
         z-index: 2;
         backdrop-filter: blur(1rem);
         -webkit-backdrop-filter: blur(1rem);
+        gap: 2rem;
+    }
+    input {
+        border-radius: 2.5rem;
+        padding: 1rem 1.5rem;
     }
     .autosave :global(svg) {
         fill: red;
     }
 
     .common-url {
-        max-width: 20rem;
+        max-width: 30rem;
     }
     button {
         display: inline-flex;

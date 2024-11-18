@@ -1,18 +1,18 @@
 <script lang="ts">
     import { signUserOut } from "$lib/scripts/utils";
-    import { profile } from "$lib/scripts/stores";
     import { requestToken } from "$lib/scripts/login";
+    import { states } from "$lib/scripts/stores.svelte";
 
     async function tokenHandler() {
         requestToken();
-        profile.set(false);
+        states.profile = false;
     }
 </script>
 
-<button class="token" title="new session" on:click={tokenHandler}>
+<button class="token" title="new session" onclick={tokenHandler}>
     <span>New Session</span>
 </button>
-<button class="logout" title="logout" on:click={signUserOut}>
+<button class="logout" title="logout" onclick={signUserOut}>
     <span>Logout</span>
 </button>
 

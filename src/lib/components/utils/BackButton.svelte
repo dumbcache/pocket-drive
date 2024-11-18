@@ -1,17 +1,23 @@
-<script>
+<script lang="ts">
     import beforeNavigate from "$lib/assets/beforeNavigate.svg?raw";
-    import { activeParent } from "$lib/scripts/stores";
+    import { tempStore } from "$lib/scripts/stores.svelte";
     import { getRoot } from "$lib/scripts/utils";
 </script>
 
-{#if window.history.length > 1 && $activeParent?.id !== getRoot()}
+{#if window.history.length > 1 && tempStore.activeFolder?.id !== getRoot()}
     <button
         class="back-button btn s-prime"
         title="go back"
-        on:click={() => {
+        onclick={() => {
             history.back();
         }}
     >
         {@html beforeNavigate}
     </button>
 {/if}
+
+<style>
+    button {
+        flex-shrink: 0;
+    }
+</style>

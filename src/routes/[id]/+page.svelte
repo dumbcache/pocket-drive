@@ -1,219 +1,80 @@
 <script lang="ts">
-    import { onDestroy, onMount } from "svelte";
-    import { navigating } from "$app/stores";
-    import { beforeNavigate } from "$app/navigation";
-    import {
-        activeParent,
-        activeView,
-        fileStore,
-        folderStore,
-        mode,
-        mask,
-        fetchAll,
-        setViewContext,
-        storeSnap,
-    } from "$lib/scripts/stores";
+    import { onMount } from "svelte";
+    import { afterNavigate, beforeNavigate } from "$app/navigation";
     import Content from "$lib/components/Content.svelte";
-    import Tools from "$lib/components/Tools.svelte";
-    import Count from "$lib/components/utils/Count.svelte";
-    import {
-        fetchMultiple,
-        FOLDER_MIME_TYPE,
-        IMG_MIME_TYPE,
-    } from "$lib/scripts/utils";
-    import { getToken } from "$lib/scripts/login";
-    import Spinner from "$lib/components/utils/Spinner.svelte";
-    import BackButton from "$lib/components/utils/BackButton.svelte";
-
-    import fetchAllIcon from "$lib/assets/fetchAll.svg?raw";
-    import Search from "$lib/components/utils/Search.svelte";
+    import Search from "$lib/components/Search.svelte";
     import ScrollButton from "$lib/components/utils/ScrollButton.svelte";
-    import FolderTitle from "$lib/components/utils/FolderTitle.svelte";
-    import { get } from "svelte/store";
+    import {
+        states,
+        folderStore,
+        fileStore,
+        tempStore,
+        storeSnap,
+    } from "$lib/scripts/stores.svelte";
+    import Header from "$lib/components/header/Header.svelte";
 
-    export let data: {
-        folders: GoogleFileResponse;
-        files: GoogleFileResponse;
-        info: Folder;
-    };
-    $: folderStore.set(data.folders);
-    $: fileStore.set(data.files);
-    $: activeParent.set(data.info);
+    let { data }: { data: PageData } = $props();
 
-    setViewContext();
-
-    let renderAll = false;
-    let foldersFetching = false;
-    let filesFetching = false;
-
-    function checks() {
-        activeView.set("FOLDER");
-        if (
-            $folderStore?.files.length === 0 &&
-            $fileStore?.files.length !== 0
-        ) {
-            activeView.set("FILE");
+    $effect(() => {
+        if (data) {
+            fileStore.set(data.files);
+            folderStore.set(data.folders);
+            tempStore.activeFolder = data.activeFolder;
         }
-        if ($folderStore?.nextPageToken || $fileStore?.nextPageToken) {
-            renderAll = true;
-        }
-    }
-    const unsubscribeFetchAll = fetchAll.subscribe((data) => {
-        renderAll = data;
     });
 
-    const unsubscribeNavigation = navigating.subscribe((val) => {
-        $mode = "";
-        if (!val) checks();
+    function check() {
+        states.view = "FOLDER";
+        if (folderStore.files.length === 0 && fileStore.files.length !== 0) {
+            states.view = "FILE";
+        }
+    }
+
+    afterNavigate(() => {
+        states.mode = "";
+        check();
     });
-
-    // function handlePointerDown(e: PointerEvent) {
-    //     if (e.pointerType === "touch") pageX = e.pageX;
-    // }
-
-    // function handlePointerUp(e: PointerEvent) {
-    //     if (e.pointerType === "touch") {
-    //         let diff = pageX - e.pageX;
-    //         if (diff > 50) {
-    //             $activeView !== "FILE" && ($activeView = "FILE");
-    //             return;
-    //         }
-    //         if (diff < -50) {
-    //             $activeView !== "FOLDER" && ($activeView = "FOLDER");
-    //         }
-    //     }
-    // }
-
-    async function fetchFolders(accessToken: string, parent: string) {
-        let pToken = $folderStore?.nextPageToken;
-        if (!pToken) {
-            foldersFetching = false;
-            return;
-        }
-        foldersFetching = true;
-        let temp = await fetchMultiple(
-            {
-                parent: parent,
-                mimeType: FOLDER_MIME_TYPE,
-                pageToken: pToken,
-            },
-            accessToken
-        );
-        if (parent !== data.info.id) {
-            foldersFetching = false;
-            return;
-        }
-        folderStore.update((prev) => {
-            return {
-                nextPageToken: temp.nextPageToken,
-                files: [...prev?.files, ...temp.files],
-            };
-        });
-        return fetchFolders(accessToken, parent);
-    }
-    async function fetchFiles(accessToken: string, parent: string) {
-        let pToken = $fileStore?.nextPageToken;
-        if (!pToken) {
-            filesFetching = false;
-            return;
-        }
-        filesFetching = true;
-        let temp = await fetchMultiple(
-            { parent: parent, mimeType: IMG_MIME_TYPE, pageToken: pToken },
-            accessToken
-        );
-        if (parent !== data.info.id) {
-            filesFetching = false;
-            return;
-        }
-        fileStore.update((prev) => {
-            return {
-                nextPageToken: temp.nextPageToken,
-                files: [...prev?.files, ...temp.files],
-            };
-        });
-        return fetchFiles(accessToken, parent);
-    }
-
-    async function fetchAllAtOnce() {
-        let parent = data.info.id;
-        let accessToken = getToken();
-        fetchFolders(accessToken, parent);
-        fetchFiles(accessToken, parent);
-        renderAll = false;
-        fetchAll.set(false);
-    }
 
     beforeNavigate(({ from, to }) => {
         try {
             if (from?.url?.href === to?.url?.href) return;
-            renderAll = false;
-            storeSnap(get(fileStore), get(folderStore), get(activeParent));
+            storeSnap(
+                fileStore.get(),
+                folderStore.get(),
+                tempStore.activeFolder
+            );
         } catch (error) {
             console.warn(error);
         }
     });
 
     onMount(() => {
-        checks();
-    });
-    onDestroy(() => {
-        unsubscribeNavigation();
-        unsubscribeFetchAll();
+        check();
     });
 </script>
 
-<section class="wrapper" style:display="">
-    {#if $mode !== "edit"}
-        <nav class="nav">
-            <BackButton />
-            <div class="tool-wrapper">
-                <Tools />
-            </div>
-
-            <h2 class="folder-name one">
-                <FolderTitle />
-            </h2>
-
-            {#if foldersFetching || filesFetching}
-                <div class="loading" on:wheel|preventDefault>
-                    <Spinner
-                        width={"2rem"}
-                        height={"2rem"}
-                        borderWidth={"2px"}
-                    />
-                </div>
-            {/if}
-            {#if renderAll}
-                <button
-                    class="btn s-second fetch-all"
-                    title="load all"
-                    on:click={fetchAllAtOnce}>{@html fetchAllIcon}</button
-                >
-            {/if}
-            <Count />
-        </nav>
-
-        <h2 class="folder-name two">
-            <FolderTitle />
-        </h2>
-
-        {#if $mode === "search"}
-            <Search />
-        {/if}
+<div class="page" style:display="">
+    <!-- {#if states.mode !== "EDIT"} -->
+    <Header />
+    {#if states.searchMode}
+        <Search />
     {/if}
-    <main class="main" style:display={$mode === "search" ? "none" : "block"}>
+    <!-- {/if} -->
+    <main
+        class="main"
+        style:display={states.searchMode === true ? "none" : "block"}
+    >
         <Content />
-        {#if $mask}
+        {#if states.mask}
             <div class="mask"></div>
         {/if}
     </main>
 
     <ScrollButton />
-</section>
+</div>
 
 <style>
-    .wrapper {
+    .page {
         background: inherit;
         width: 100%;
         padding: 0rem;
@@ -233,98 +94,10 @@
         background-color: #5555;
         backdrop-filter: blur(5rem);
     }
-    .tool-wrapper {
-        display: none;
-    }
-    .nav {
-        width: 100%;
-        display: flex;
-        flex-flow: row nowrap;
-        align-items: center;
-        justify-content: flex-end;
-        padding: 2rem 0rem;
-        position: sticky;
-        top: 0;
-        background-color: var(--color-bg);
-        z-index: 1;
-        gap: 5rem;
-    }
-    .nav :global(.back-button) {
-        position: absolute;
-        top: 50%;
-        left: 0%;
-        transform: translate(0%, -50%);
-        margin-left: 2rem;
-    }
-
-    .folder-name {
-        font-size: 2rem;
-        max-width: 40rem;
-        width: fit-content;
-        word-wrap: unset;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        margin: auto;
-        padding: 1rem;
-    }
-
-    .two {
-        display: none;
-    }
-    .fetch-all {
-        background: none;
-        padding: 0.5rem;
-        box-sizing: content-box;
-    }
-    .fetch-all :global(svg) {
-        fill: var(--color-svg-one);
-    }
-    .loading,
-    .fetch-all {
-        position: absolute;
-        right: 10rem;
-    }
 
     @media (max-width: 600px) {
-        .wrapper {
+        .page {
             padding: 0rem 0.5rem;
-        }
-
-        .tool-wrapper {
-            display: initial;
-        }
-        .nav :global(.back-button) {
-            display: none;
-        }
-        .nav {
-            padding: 1.5rem 0.5rem;
-            gap: 2rem;
-            margin-bottom: 0rem;
-        }
-        .one {
-            display: none;
-        }
-        .two {
-            display: block;
-            font-size: initial;
-            max-width: 80%;
-        }
-
-        .folder-name {
-            flex-shrink: 0;
-            padding: 0.5rem;
-        }
-
-        .fetch-all {
-            position: absolute;
-            top: 5.5rem;
-            right: 1rem;
-        }
-        .loading {
-            position: absolute;
-            top: 6rem;
-            right: 1.5rem;
         }
     }
 </style>

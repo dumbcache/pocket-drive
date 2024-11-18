@@ -1,45 +1,24 @@
 <script>
-    import { preferences, updatePreferences } from "$lib/scripts/stores";
     import ToggleButton from "$lib/components/utils/ToggleButton.svelte";
     import { onDestroy } from "svelte";
-    let showFileNames = false;
-    let disableWebp = false;
-
-    const unsubscribePreferences = preferences.subscribe((val) => {
-        showFileNames = val?.showFileNames;
-        disableWebp = val?.disableWebp;
-    });
+    import { preferences } from "$lib/scripts/stores.svelte";
 
     onDestroy(() => {
-        window.localStorage.setItem(
-            "preferences",
-            JSON.stringify($preferences)
-        );
-        unsubscribePreferences();
+        preferences.saveToLocal();
     });
 </script>
 
 <ul class="options">
     <li>
         <div>Display filenames</div>
-        <button
-            on:click={() =>
-                updatePreferences({
-                    showFileNames: !showFileNames,
-                })}
-        >
-            <ToggleButton bool={showFileNames} />
+        <button onclick={() => preferences.toggleShowFileNames()}>
+            <ToggleButton bool={preferences.showFileNames} />
         </button>
     </li>
     <li>
         <div>Disable WebP conversion</div>
-        <button
-            on:click={() =>
-                updatePreferences({
-                    disableWebp: !disableWebp,
-                })}
-        >
-            <ToggleButton bool={disableWebp} />
+        <button onclick={() => preferences.toggleWebp()}>
+            <ToggleButton bool={preferences.disableWebp} />
         </button>
     </li>
 </ul>

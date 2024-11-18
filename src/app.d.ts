@@ -25,23 +25,11 @@ declare global {
         pageSize?: number;
         pageToken?: string;
     }
-    interface GoogleFile {
-        id: string;
-        name: string;
-        description?: string;
-        starred?: Boolean;
-        parents?: string[];
-        thumbnailLink?: string;
-        appProperties?: {
-            origin: string;
-            src: string;
-        };
-        url?: string;
-    }
-
-    interface GoogleFileRes {
-        files: GoogleFile[];
-        nextPageToken?: string;
+    interface SearchParamsObject {
+        search: string;
+        mimeType: string;
+        pageSize?: number;
+        pageToken?: string;
     }
 
     interface ImgMeta {
@@ -91,14 +79,15 @@ declare global {
         progress?: string;
         parent: string;
         parentName: string;
-        file: File;
+        file: File | Blob;
+        loaded: boolean;
     }
 
     interface DropItems {
         [id: number]: DropItem;
     }
 
-    interface File {
+    interface DriveFile {
         id: string;
         name: string;
         description: string;
@@ -106,31 +95,51 @@ declare global {
         thumbnailLink: string;
         parents?: string[];
         mimeType: string;
-        size: string;
+        size: number;
     }
-    interface Folder {
+    interface DriveFolder {
         id: string;
         name: string;
-        parents: string[];
-        starred: Boolean;
+        parents?: string[];
+        starred?: Boolean;
     }
 
-    type FileResponse = File[] | Folder[];
+    type ActiveFolder = DriveFolder;
+    type ActiveFile = DriveFile & { download?: string; loading?: boolean };
 
-    interface GoogleFileResponse {
-        files: FileResponse;
+    type FileResponse = DriveFile[] | DriveFolder[];
+
+    interface GoogleDriveResponse<T> {
+        files: T[];
         nextPageToken?: string;
     }
 
-    type FolderAction = "EDIT" | "DELETE" | "MOVE" | "CREATE";
+    interface PageData {
+        folders: GoogleDriveResponse<DriveFolder>;
+        files: GoogleDriveResponse<DriveFile>;
+        activeFolder: DriveFolder;
+    }
+
+    type View = "FILE" | "FOLDER";
+
+    type Mode = "" | "VIEW" | "EDIT" | "DELETE";
+
+    type FAction = "EDIT" | "DELETE" | "MOVE" | "CREATE";
+
+    interface FolderAction {
+        type: "EDIT" | "DELETE" | "MOVE" | "COPY" | "CREATE";
+        id: string;
+        name: string;
+    }
     interface FolderActionDetail {
         id: string;
         name: string;
     }
 
     interface Preferences {
-        showFileNames?: Boolean;
-        disableWebp?: Boolean;
+        showFileNames: boolean;
+        disableWebp: boolean;
+        theme: "DARK" | "";
     }
 
     type Action =
@@ -160,7 +169,8 @@ declare global {
         progressType?: Action;
         progress?: number;
         id?: string;
-        status?: 1 | 0;
+        status?: 1 | 0 | "success" | "failure";
+        blobURL?: string;
     }
 }
 
