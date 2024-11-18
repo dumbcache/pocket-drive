@@ -7,11 +7,11 @@
 {#if pageToken}
     <Spinner height="4rem" width="4rem" />
 {:else}
-    <div class="end">END</div>
+    <!-- <div class="end">END</div> -->
 {/if}
 
 <style>
-    .end {
+    /* .end {
         font-size: 1rem;
         user-select: none;
         position: relative;
@@ -38,5 +38,5 @@
         .end {
             padding: 1rem 5rem;
         }
-    }
+    } */
 </style>

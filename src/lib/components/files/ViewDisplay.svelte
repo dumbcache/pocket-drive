@@ -185,6 +185,7 @@
         <div class="file">
             {#if file.mimeType.match("image/")}
                 <img
+                    onwheel={(e) => e.stopPropagation()}
                     class:zoom
                     class="img"
                     src=""

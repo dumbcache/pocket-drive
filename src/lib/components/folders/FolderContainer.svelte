@@ -23,7 +23,7 @@
     {/key}
 {/if}
 
-{#if tempStore.folderAction.type && states.searchMode}
+{#if tempStore.folderAction.type && !states.searchMode}
     {#if tempStore.folderAction.type === "MOVE"}
         <Select />
     {:else}

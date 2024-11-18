@@ -5,16 +5,24 @@
     let delta = $state(0);
     let isScrolling = $state(false);
     let scrollTimeout: number;
+    let lastScollTime = 0;
+    let throttle = 1500;
 
     function handleScroll(e) {
+        let currentTime = Date.now();
+        if (currentTime - lastScollTime < throttle) return;
+        lastScollTime = currentTime;
+
+        isScrolling = true;
         let currentScrollPosition = window.scrollY;
         delta = currentScrollPosition - scrollPosition;
         scrollPosition = currentScrollPosition;
-        isScrolling = true;
+
         clearTimeout(scrollTimeout);
         scrollTimeout = setTimeout(() => {
             isScrolling = false;
-        }, 1500);
+            scrollPosition = window.scrollY;
+        }, throttle);
     }
 </script>
 

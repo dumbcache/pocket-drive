@@ -54,7 +54,7 @@
     {#if loading}
         <Spinner width={"1.6rem"} height={"1.6rem"} borderWidth={"2px"} />
     {:else}
-        <button class="btn" onclick={clickHandler}>
+        <button class="btn" title="fetch all" onclick={clickHandler}>
             {@html fetchAllIcon}
         </button>
     {/if}

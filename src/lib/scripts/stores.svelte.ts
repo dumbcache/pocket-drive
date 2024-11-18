@@ -5,7 +5,7 @@ export const HOME_PATH = "home";
 export const DATA_CACHE = "pd-data";
 export const TEMP_CACHE = "pd-temp";
 export const imageFetchLog = new Set();
-export const intersectionLog = new SvelteSet<string>();
+export let intersectionLog = new SvelteSet<string>();
 
 export const pocketStore = new Map();
 export function storeSnap(

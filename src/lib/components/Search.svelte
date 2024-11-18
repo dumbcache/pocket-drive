@@ -12,6 +12,7 @@
         fileStore,
         folderSearchStore,
         folderStore,
+        intersectionLog,
         states,
         tempStore,
     } from "$lib/scripts/stores.svelte";
@@ -98,11 +99,13 @@
     }
 
     onMount(() => {
+        intersectionLog.clear();
         setTimeout(() => {
             searchElement.focus();
         });
     });
     onDestroy(() => {
+        intersectionLog.clear();
         folderSearchStore.set({});
         fileSearchStore.set({});
         states.searchValue = "";

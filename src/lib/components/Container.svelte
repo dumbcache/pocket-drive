@@ -54,7 +54,7 @@
 
     function closeHandler(type: string) {
         const eles: HTMLElement[] = container?.querySelectorAll(".select");
-        eles.forEach((ele) => {
+        eles?.forEach((ele) => {
             ele.classList.remove("select");
             if (type === "DELETE" || type === "MOVE" || type === "TOP") {
                 ele.style.display = "none";
@@ -195,17 +195,18 @@
     </div>
 {:else}
     <div class="no-content">
-        {#if view === "FILE"}
-            <p>No Data</p>
-            <p>
-                Click <span class="img">{@html imgCreate}</span> or Drag and Drop
-                to upload
-            </p>
-        {:else}
-            <p>No Data</p>
-            <p>
-                Click <span class="img">{@html folderCreate}</span> to create
-            </p>
+        <p>No Data</p>
+        {#if !states.searchMode}
+            {#if view === "FILE"}
+                <p>
+                    Click <span class="img">{@html imgCreate}</span> or Drag and
+                    Drop to upload
+                </p>
+            {:else}
+                <p>
+                    Click <span class="img">{@html folderCreate}</span> to create
+                </p>
+            {/if}
         {/if}
     </div>
 {/if}
@@ -218,11 +219,16 @@
         justify-content: center;
         padding-top: var(--vertical-padding);
         gap: var(--content-gap);
+        contain: layout;
+    }
+
+    li {
+        overflow: hidden;
     }
 
     .select :global(.card) {
         box-shadow: 0 0 5px 1px #fff5;
-        filter: brightness(0.3);
+        filter: brightness(0.5);
     }
 
     .select {
@@ -231,7 +237,7 @@
     }
     .select:hover :global(.card) {
         filter: none;
-        filter: brightness(0.3);
+        filter: brightness(0.5);
     }
     /* .edit-mode {
         padding: 0rem 5rem;

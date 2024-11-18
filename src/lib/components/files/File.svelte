@@ -33,7 +33,7 @@
             height="200"
             width="200"
             referrerpolicy="no-referrer"
-            onerror={() => (visible = false)}
+            onerror={() => intersectionLog.delete(file.id)}
         />
         <button class="anchor">.</button>
         {#if file.mimeType.match("video/")}
@@ -64,7 +64,8 @@
                 <a
                     href={file.parents[0]}
                     class="btn s-second goto"
-                    title="goto containing folder">{@html outIcon}</a
+                    title="goto containing folder"
+                    target="_blank">{@html outIcon}</a
                 >
             {/if}
         {/if}

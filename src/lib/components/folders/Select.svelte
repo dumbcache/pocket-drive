@@ -209,6 +209,7 @@
         background-color: var(--color-backdrop);
         z-index: 1;
         font-size: var(--size-smaller);
+        contain: content;
     }
 
     .wrapper {
@@ -224,7 +225,7 @@
     nav {
         display: flex;
         flex-flow: column nowrap;
-        gap: 1rem;
+        gap: 1.5rem;
         justify-content: center;
         align-items: center;
     }
@@ -233,7 +234,7 @@
         position: relative;
         display: flex;
         flex-flow: column nowrap;
-        gap: 1.5rem;
+        gap: 2rem;
         width: 25rem;
     }
 
@@ -250,7 +251,7 @@
         max-height: 21rem;
         width: 100%;
         position: absolute;
-        top: 7.2rem;
+        top: 7.7rem;
         left: 0rem;
         overflow-x: hidden;
         overflow-y: scroll;
@@ -278,13 +279,14 @@
     }
 
     .done {
-        top: 55%;
+        top: 60%;
     }
     .history {
         top: 0%;
+        padding: 0.2rem;
     }
     .done :global(svg) {
-        fill: var(--color-green);
+        fill: var(--color);
     }
 
     @media (max-width: 600px) {
@@ -293,6 +295,9 @@
         }
         .done {
             top: 60%;
+        }
+        .history {
+            padding: 0rem;
         }
     }
 </style>

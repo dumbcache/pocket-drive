@@ -33,7 +33,8 @@
         <a
             href={file.parents[0]}
             class="btn s-second goto"
-            title="goto containing folder">{@html outIcon}</a
+            title="goto containing folder"
+            target="_blank">{@html outIcon}</a
         >
     {/if}
     {#if states.mode === "EDIT"}
