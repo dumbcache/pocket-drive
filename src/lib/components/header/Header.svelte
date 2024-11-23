@@ -67,7 +67,7 @@
         position: sticky;
         top: 0;
         padding: 3rem 2rem;
-        /* border-bottom: 1px solid var(--color-border); */
+        /* border-bottom: 1px solid var(--color-lite); */
         /* background-color: #000; */
         z-index: 1;
         background: var(--color-bg);

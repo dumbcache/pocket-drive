@@ -75,7 +75,7 @@
         height: 2rem;
     }
     .fetch-all :global(svg) {
-        fill: var(--color-five);
+        fill: var(--color-focus);
     }
 
     @media (max-width: 600px) {

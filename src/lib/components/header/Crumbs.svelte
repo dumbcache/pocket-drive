@@ -59,7 +59,6 @@
         overflow: hidden;
         text-overflow: ellipsis;
     }
-
     @media (max-width: 900px) {
         .active {
             max-width: 20rem;

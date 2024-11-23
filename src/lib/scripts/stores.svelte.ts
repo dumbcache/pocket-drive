@@ -104,6 +104,17 @@ class AppPreferences {
 
     setTheme() {
         const root = document.documentElement;
+        if (window.CSS.supports("color", "light-dark(#000,#fff)")) {
+            switch (this.theme) {
+                case "DARK":
+                    root.style.setProperty("color-scheme", "light");
+                    break;
+                default:
+                    root.style.setProperty("color-scheme", "dark");
+                    break;
+            }
+            return;
+        }
         let dark = root.classList.contains("dark");
         switch (this.theme) {
             case "DARK":

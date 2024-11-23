@@ -79,7 +79,7 @@
         border-radius: 1rem;
         max-width: 15rem;
         border-bottom: none;
-        border: 1px solid var(--color-border);
+        border: 1px solid var(--color-lite);
         overflow: hidden;
     }
     .img-wrapper {
@@ -125,7 +125,7 @@
         background-color: var(--color-bg-two);
     }
     .name {
-        border-bottom: 1px solid var(--color-border);
+        border-bottom: 1px solid var(--color-lite);
     }
     .progress {
         border-radius: 1rem;
@@ -136,7 +136,7 @@
         left: 0;
         right: 0;
         bottom: 0;
-        background-color: var(--color-black-light);
+        background-color: var(--color-black-lite);
     }
     .progress-count {
         color: white;

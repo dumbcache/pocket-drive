@@ -1,6 +1,6 @@
 <script>
     import ColorScheme from "$lib/components/profile/ColorScheme.svelte";
-    import LoginButton from "$lib/components/profile/LoginButton.svelte";
+    import LoginButton from "$lib/components/home/LoginButton.svelte";
 </script>
 
 <article class="article one">

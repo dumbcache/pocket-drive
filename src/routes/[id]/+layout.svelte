@@ -14,7 +14,7 @@
     } from "$lib/scripts/stores.svelte";
     import SessionNotify from "$lib/components/profile/SessionNotify.svelte";
 
-    let {  children } = $props();
+    let { children } = $props();
 
     let draggedOver = $state(false);
 
@@ -102,7 +102,6 @@
     }}
     ondrop={imgDropHandler}
 >
-
     {#if states.profile}
         <Profile />
     {/if}
@@ -137,7 +136,7 @@
         background-color: #55f5;
     }
 
-       @media (max-width: 600px) {
+    @media (max-width: 600px) {
         .layout {
             height: initial;
             display: initial;

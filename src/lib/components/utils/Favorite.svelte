@@ -34,18 +34,15 @@
         background: none;
     }
     .btn :global(svg) {
-        fill: var(--color-svg-one);
-    }
-
-    .btn:active :global(svg) {
-        fill: var(--color-red);
+        fill: var(--color-shade-one);
     }
     .starred :global(svg) {
-        fill: var(--color-red);
+        fill: var(--color-pink);
     }
-    .starred:hover :global(svg) {
-        fill: var(--color-red);
+    .btn:active :global(svg) {
+        fill: var(--color-focus);
     }
+
     @media (max-width: 600px) {
     }
 </style>

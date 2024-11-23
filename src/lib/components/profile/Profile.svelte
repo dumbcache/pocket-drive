@@ -2,7 +2,7 @@
     import closeIcon from "$lib/assets/close.svg?raw";
     import ColorScheme from "$lib/components/profile/ColorScheme.svelte";
     import Options from "$lib/components/profile/Options.svelte";
-    import Logout from "$lib/components/profile/Logout.svelte";
+    import Logout from "$lib/components/profile/SessionActions.svelte";
     import SessionInfo from "$lib/components/profile/SessionInfo.svelte";
     import { states } from "$lib/scripts/stores.svelte";
     import { onMount } from "svelte";
@@ -59,8 +59,8 @@
         width: 40rem;
         height: 50%;
         border-radius: 1rem;
-        box-shadow: 0 0 50px -10px var(--color-black);
-        background-color: var(--color-bg-one);
+        box-shadow: 0 0 15px 0px var(--color-shadow);
+        background-color: var(--color-popup);
     }
 
     .one {
@@ -79,7 +79,7 @@
         display: flex;
         justify-content: space-evenly;
         align-items: center;
-        /* border-top: 1px solid var(--color-border); */
+        /* border-top: 1px solid var(--color-lite); */
     }
 
     .scheme {
@@ -88,7 +88,7 @@
         align-items: center;
         justify-content: center;
         height: 100%;
-        /* border-right: 1px solid var(--color-border); */
+        /* border-right: 1px solid var(--color-lite); */
     }
 
     h2 {

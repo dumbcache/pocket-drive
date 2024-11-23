@@ -82,8 +82,8 @@
     .cover {
         display: grid;
         position: relative;
-        border: 1px solid var(--color-border);
-        background-color: var(--color-file-background);
+        border: 1px solid var(--color-lite);
+        background-color: var(--color-bg-one);
         width: var(--folder-width);
         height: var(--cover-height);
         grid-template-rows: 60% 40%;
@@ -100,21 +100,20 @@
 
     .cover:hover .pic {
         filter: brightness(0.6);
-        background-color: var(--color-file-hover);
     }
     .cover:hover .placeholder {
-        filter: brightness(1);
-        background-color: var(--color-file-hover);
+        filter: brightness(0.6);
+        background-color: var(--color-lite);
     }
 
     .cover .pic-wrapper:nth-child(1) {
         grid-area: one;
-        border-right: 1px solid var(--color-border);
+        border-right: 1px solid var(--color-lite);
         height: 100%;
     }
     .cover .pic-wrapper:nth-child(2) {
         grid-area: two;
-        border-bottom: 1px solid var(--color-border);
+        border-bottom: 1px solid var(--color-lite);
         height: 100%;
     }
     .cover .pic-wrapper:nth-child(3) {

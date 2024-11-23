@@ -149,7 +149,7 @@
         position: relative;
         border-radius: 1rem;
         font-size: 1.3rem;
-        /* border: 1px solid var(--color-border); */
+        /* border: 1px solid var(--color-lite); */
     }
     input {
         background: unset;
@@ -191,7 +191,7 @@
     .action {
         width: 10rem;
         padding: 0.5rem;
-        /* border: 1px solid var(--color-border); */
+        /* border: 1px solid var(--color-lite); */
         background-color: var(--color-bg-two);
         border-radius: 0.5rem;
     }

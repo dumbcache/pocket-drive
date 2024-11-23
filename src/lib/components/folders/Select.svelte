@@ -46,11 +46,13 @@
         selected = { name: "Pocket_#Drive", id: home };
         list = [];
         await setList(selected.id, getToken());
+        show = true;
     }
 
     async function historyTap() {
         selected = recents[0];
         list = recents.slice(1);
+        show = true;
     }
 
     async function backTap() {
@@ -60,6 +62,7 @@
         selected = f;
         list = [];
         await setList(selected.id, token);
+        show = true;
     }
 
     async function itemTap(e) {
@@ -70,6 +73,7 @@
         selected = found;
         list = [];
         await setList(selected.id, getToken());
+        show = true;
     }
 
     async function doneTap() {
@@ -213,13 +217,14 @@
     }
 
     .wrapper {
+        max-width: 30rem;
         padding: 4rem 2rem;
         border-radius: 1rem;
         display: flex;
-        /* align-items: center; */
-        box-shadow: 0 0 50px -10px var(--color-black);
-        background-color: var(--color-bg-one);
         gap: 2rem;
+        /* align-items: center; */
+        box-shadow: 0 0 15px 0px var(--color-shadow);
+        background-color: var(--color-popup);
     }
 
     nav {
@@ -255,6 +260,8 @@
         left: 0rem;
         overflow-x: hidden;
         overflow-y: scroll;
+        border-bottom-left-radius: 0.5rem;
+        border-bottom-right-radius: 0.5rem;
     }
 
     li {
@@ -269,7 +276,7 @@
         text-align: start;
     }
     .item:hover {
-        background-color: var(--color-bg-three);
+        background-color: var(--color-lite);
     }
 
     .done,
@@ -286,6 +293,9 @@
         padding: 0.2rem;
     }
     .done :global(svg) {
+        fill: var(--color-focus);
+    }
+    .done:disabled :global(svg) {
         fill: var(--color);
     }
 

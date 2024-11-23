@@ -39,7 +39,7 @@
         e.preventDefault();
         progress = true;
         const token = getToken();
-        let folderName = toTitleCase(placeholder);
+        let folderName = toTitleCase(placeholder ?? "");
         type !== "DELETE" && (placeholder = folderName);
         let parent = tempStore.activeFolder!.id;
         if (type === "CREATE") {
@@ -75,11 +75,11 @@
     }
     function checkDisabled() {
         if (type === "DELETE") {
-            placeholder.trim().toLowerCase() !== "confirm"
+            placeholder?.trim().toLowerCase() !== "confirm"
                 ? (submitDisabled = true)
                 : (submitDisabled = false);
         } else {
-            placeholder.trim() === ""
+            placeholder?.trim() === ""
                 ? (submitDisabled = true)
                 : (submitDisabled = false);
         }
@@ -111,7 +111,7 @@
         {#if type === "DELETE"}
             <p>
                 All files and subfolders will be deleted and cannot be restored,
-                Type ' <span class="h">confirm</span> ' if you want to continue.
+                Type '<span class="h">confirm</span>' if you want to continue.
             </p>
         {:else if type === "CREATE"}
             <p class="label">Create folder</p>
@@ -154,33 +154,37 @@
         background-color: var(--color-backdrop);
         z-index: 2;
     }
-    .btn:disabled {
-        cursor: not-allowed;
+
+    .btn :global(svg) {
+        fill: var(--color-focus);
+        min-width: var(--primary-icon-size);
     }
+
+    .btn:disabled,
     .btn:disabled :global(svg) {
-        fill: var(--color-two);
+        fill: var(--color);
         cursor: not-allowed;
     }
     .wrapper {
-        max-width: 35rem;
-        padding: 5rem 4rem;
+        max-width: 30rem;
+        padding: 4rem 2rem;
         border-radius: 1rem;
         display: flex;
         flex-flow: row wrap;
-        gap: 1.5rem 1rem;
+        gap: 2rem 1rem;
         justify-content: space-evenly;
         align-items: center;
         text-align: center;
-        box-shadow: 0 0 50px -10px var(--color-black);
-        background-color: var(--color-bg-one);
+        box-shadow: 0 0 10px 0px var(--color-shadow);
+        background-color: var(--color-popup);
     }
     .h {
-        color: var(--color-green);
+        color: var(--color-focus);
     }
     .label {
         margin-right: auto;
         margin-left: 0.5rem;
-        color: var(--color-one);
+        /* color: var(--color-one); */
     }
     input {
         padding: 1rem;
@@ -189,16 +193,13 @@
         border: none;
         outline: none;
         background-color: var(--color-bg-two);
-    }
-    input:active,
-    input:focus {
-        background-color: var(--color-bg-three);
-        outline: none;
+        contain: layout;
     }
 
-    .btn :global(svg) {
-        fill: var(--color-green);
-        min-width: var(--primary-icon-size);
+    input:focus {
+        /* background-color: var(--color-bg-three); */
+        outline: none;
+        border-bottom: 2px solid var(--color-focus);
     }
 
     @media (max-width: 600px) {

@@ -140,7 +140,7 @@
     />
     {#if loading}
         <div class="loading">
-            <Spinner width={"1.5rem"} height={"1.5rem"} borderWidth={"2px"} />
+            <Spinner width={"2rem"} height={"2rem"} borderWidth={"2px"} />
         </div>
     {:else if states.searchValue.length > 0}
         <button
@@ -176,18 +176,13 @@
         padding: 1rem;
         max-width: 40rem;
         margin: auto;
-        color: var(--color-two);
         position: sticky;
         top: 1rem;
         z-index: 1;
-        /* background-color: var(--color-bg); */
-        /* top: 10rem; */
-        /* z-index: 2; */
-        /* box-shadow: 0 0 5px 1px var(--color-border); */
     }
     .global {
         padding: 1.5rem;
-        border: 1px solid var(--color-border);
+        border: 1px solid var(--color-lite);
         border-radius: 2.5rem;
         position: absolute;
         left: 1rem;
@@ -196,20 +191,23 @@
     .global.active {
         color: var(--color-bg);
         background-color: var(--color-focus);
-        /* background-color: var(--color-bg-one); */
     }
     #search {
         width: 100%;
-        padding: 1.5rem 6rem;
+        height: 5rem;
+        padding: 1.5rem 6rem 1.5rem 6.5rem;
         display: block;
         outline: none;
         border: none;
         border-radius: none;
         border-top-right-radius: 0.5rem;
         border-bottom-right-radius: 0.5rem;
-        border-bottom: 2px solid var(--color-border);
         background-color: var(--color-bg-one);
         border-radius: 2.5rem;
+    }
+
+    #search:focus {
+        border-bottom: 2px solid var(--color-focus);
     }
 
     .loading,
@@ -226,15 +224,12 @@
             top: 8rem;
         }
         #search {
-            padding: 1.3rem 5rem;
+            padding: 1.3rem 5rem 1.3rem 5.5rem;
+            height: 4.5rem;
         }
         .global {
             padding: 1.3rem;
             width: 4.6rem;
-        }
-
-        .no-content {
-            font-size: smaller;
         }
 
         .loading,

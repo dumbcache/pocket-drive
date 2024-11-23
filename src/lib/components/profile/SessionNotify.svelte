@@ -40,8 +40,8 @@
         gap: 2rem;
         padding: 5rem;
         border-radius: 1rem;
-        box-shadow: 0 0 50px -10px var(--color-black);
-        background-color: var(--color-bg-one);
+        box-shadow: 0 0 15px 0px var(--color-shadow);
+        background-color: var(--color-popup);
     }
 
     p {
@@ -57,7 +57,6 @@
         padding: 0.5rem;
         width: 8rem;
         border-radius: 0.5rem;
-        background-color: var(--color-bg-four);
         color: var(--color-white-one);
     }
 
@@ -66,17 +65,22 @@
     }
 
     .login {
-        background-color: #151;
+        /* background-color: hwb(180 0 35); */
+        background-color: rgb(0, 166, 166);
     }
     .login:hover {
-        background-color: #141;
+        /* background-color: hwb(180 0 28); */
+        background-color: rgb(0, 184, 184);
     }
     .cancel {
-        background-color: #711;
+        /* background-color: hwb(340 0 7); */
+        background-color: rgb(237, 0, 79);
     }
     .cancel:hover {
-        background-color: #611;
+        /* background-color: hwb(340 0 0); */
+        background-color: rgb(255, 0, 85);
     }
+
     @media (max-width: 600px) {
         button {
             width: 6rem;
