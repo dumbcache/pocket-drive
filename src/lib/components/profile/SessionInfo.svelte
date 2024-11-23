@@ -48,6 +48,6 @@
     div {
         padding: 1rem;
         text-align: center;
-        color: var(--color-two);
+        /* color: var(--color); */
     }
 </style>

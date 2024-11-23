@@ -76,7 +76,7 @@
         max-width: 100%;
         max-height: 40rem;
         object-fit: contain;
-        border: 1px solid var(--color-border);
+        border: 1px solid var(--color-lite);
     }
 
     figcaption {

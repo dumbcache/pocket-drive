@@ -10,7 +10,7 @@
 <style>
     .toggle {
         width: fit-content;
-        background-color: var(--color-bg-six);
+        background-color: var(--color-lite);
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -22,7 +22,7 @@
     span {
         display: inline-block;
         border-radius: 50%;
-        background-color: var(--color-white);
+        background-color: var(--color);
     }
     .on {
         background-color: var(--color-focus);

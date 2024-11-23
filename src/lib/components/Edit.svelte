@@ -321,7 +321,7 @@
         padding: 1rem;
         border-top-left-radius: 0.5rem;
         border-top-right-radius: 0.5rem;
-        border-bottom: 2px solid var(--color-border);
+        border-bottom: 2px solid var(--color-lite);
     }
     input:active,
     input:focus {
@@ -375,7 +375,7 @@
         border-radius: unset;
     }
     .save {
-        border-left: 1px solid var(--color-border);
+        border-left: 1px solid var(--color-lite);
     }
 
     .action:hover {

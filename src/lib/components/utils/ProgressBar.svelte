@@ -45,11 +45,11 @@
         padding: 0.5rem;
         border-top-left-radius: 0.5rem;
         border-bottom-left-radius: 0.5rem;
-        border: 1px solid var(--color-border);
+        border: 1px solid var(--color-lite);
         border-right: none;
         background-color: var(--color-bg);
         font-size: smaller;
-        box-shadow: 0 0 1px 1px var(--color-white-light);
+        box-shadow: 0 0 1px 1px var(--color-white-lite);
         background-color: var(--color-bg-one);
     }
 

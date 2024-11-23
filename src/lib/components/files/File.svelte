@@ -95,7 +95,7 @@
         max-height: var(--file-height);
         overflow: hidden;
         cursor: zoom-in;
-        background-color: var(--color-file-background);
+        background-color: var(--color-bg-one);
         transition: transform 0.1s ease-in-out;
     }
     .card:hover {
@@ -156,15 +156,15 @@
         max-width: var(--file-width);
         max-height: var(--file-height);
         /* border: none; */
-        border: 1px solid var(--color-border);
+        border: 1px solid var(--color-lite);
         object-fit: cover;
         object-position: top;
     }
     .placeholder {
         width: var(--file-width);
         height: var(--file-width);
-        border: 1px solid var(--color-border);
-        background-color: var(--color-file-background);
+        border: 1px solid var(--color-lite);
+        background-color: var(--color-bg-one);
     }
 
     .select .img,

@@ -59,7 +59,7 @@
         z-index: 1;
         border-top-left-radius: 1rem;
         border-bottom-left-radius: 1rem;
-        outline: 1px solid var(--color-border);
+        outline: 1px solid var(--color-lite);
     }
     .drop-mini :global(svg) {
         fill: var(--color-white);
@@ -69,7 +69,7 @@
         top: 0;
         background: inherit;
         /* background-color: var(--color-bg-one); */
-        border-left: 1px solid var(--color-border);
+        border-left: 1px solid var(--color-lite);
         overflow-y: scroll;
         padding: 1rem;
         padding-top: 0rem;

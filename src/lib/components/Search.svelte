@@ -183,11 +183,11 @@
         /* background-color: var(--color-bg); */
         /* top: 10rem; */
         /* z-index: 2; */
-        /* box-shadow: 0 0 5px 1px var(--color-border); */
+        /* box-shadow: 0 0 5px 1px var(--color-lite); */
     }
     .global {
         padding: 1.5rem;
-        border: 1px solid var(--color-border);
+        border: 1px solid var(--color-lite);
         border-radius: 2.5rem;
         position: absolute;
         left: 1rem;
@@ -207,7 +207,7 @@
         border-radius: none;
         border-top-right-radius: 0.5rem;
         border-bottom-right-radius: 0.5rem;
-        border-bottom: 2px solid var(--color-border);
+        border-bottom: 2px solid var(--color-lite);
         background-color: var(--color-bg-one);
         border-radius: 2.5rem;
     }

@@ -20,12 +20,11 @@
     button {
         width: 100%;
         padding: 1rem;
-        background-color: var(--color-bg-two);
+        background-color: var(--color-bg-one);
+        border-top: 1px solid var(--color-lite);
+        border-left: 1px solid var(--color-lite);
     }
     button:hover {
-        background-color: var(--color-bg-three);
-    }
-    .token {
-        border-right: 1px solid var(--color-border);
+        background-color: var(--color-lite);
     }
 </style>

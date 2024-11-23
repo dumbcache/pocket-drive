@@ -174,7 +174,7 @@
     }
     .active {
         border: 2px solid var(--color-focus);
-        box-shadow: 0 0 5px 1px var(--color-white-light);
+        box-shadow: 0 0 5px 1px var(--color-white-lite);
     }
     .active img,
     .active:hover img {
@@ -183,7 +183,7 @@
 
     .no {
         height: 10rem;
-        background-color: var(--color-file-background);
+        background-color: var(--color-bg-one);
     }
 
     @media (max-width: 600px) and (orientation: portrait) {

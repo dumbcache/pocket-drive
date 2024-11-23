@@ -40,7 +40,7 @@
         justify-content: center;
         padding: 3rem 0rem;
         gap: 1rem;
-        border-top: 1px solid var(--color-border);
+        border-top: 1px solid var(--color-lite);
         text-align: center;
         font-size: var(--size-smaller);
     }

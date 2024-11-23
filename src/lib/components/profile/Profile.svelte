@@ -79,7 +79,7 @@
         display: flex;
         justify-content: space-evenly;
         align-items: center;
-        /* border-top: 1px solid var(--color-border); */
+        /* border-top: 1px solid var(--color-lite); */
     }
 
     .scheme {
@@ -88,7 +88,7 @@
         align-items: center;
         justify-content: center;
         height: 100%;
-        /* border-right: 1px solid var(--color-border); */
+        /* border-right: 1px solid var(--color-lite); */
     }
 
     h2 {

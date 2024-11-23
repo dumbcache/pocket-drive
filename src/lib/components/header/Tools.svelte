@@ -194,7 +194,7 @@
         width: 100%;
         border: none;
         height: 3px;
-        background-color: var(--color-border);
+        background-color: var(--color-lite);
     }
 
     .active :global(svg) {

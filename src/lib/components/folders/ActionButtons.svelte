@@ -76,10 +76,8 @@
         overflow: hidden;
     }
     .edit-tools:hover {
-        /* background-color: var(--color-black-light); */
-        /* outline: 1px solid var(--color-focus); */
         background-color: var(--color-bg-one);
-        outline: 1px solid var(--color-border);
+        outline: 1px solid var(--color-lite);
         border-radius: 5rem;
         backdrop-filter: blur(2px);
         -webkit-backdrop-filter: blur(2px);

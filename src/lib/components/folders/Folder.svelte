@@ -74,7 +74,7 @@
         background-color: var(--color-bg-one);
         /* border-bottom-left-radius: 1rem;
         border-bottom-right-radius: 1rem; */
-        /* border: 1px solid var(--color-border); */
+        /* border: 1px solid var(--color-lite); */
         border-top: none;
     }
 
