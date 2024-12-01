@@ -37,7 +37,7 @@
         fill: var(--color-shade-one);
     }
     .starred :global(svg) {
-        fill: var(--color-pink);
+        fill: var(--color-red);
     }
     .btn:active :global(svg) {
         fill: var(--color-focus);

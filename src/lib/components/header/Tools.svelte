@@ -127,6 +127,7 @@
                 id="img-picker"
                 accept="image/*,video/*"
                 multiple
+                onclick={() => (states.drop = true)}
                 onchange={imgPickerHandler}
             />
         </button>
@@ -214,7 +215,7 @@
     }
 
     .favorites :global(svg) {
-        fill: var(--color-pink);
+        fill: var(--color-red);
     }
 
     @keyframes spin {

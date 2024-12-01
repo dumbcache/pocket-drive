@@ -3,7 +3,9 @@
     import HomeIcon from "$lib/components/HomeIcon.svelte";
     import Count from "$lib/components/utils/Count.svelte";
     import {
+        fileSearchStore,
         fileStore,
+        folderSearchStore,
         folderStore,
         HOME_PATH,
         states,
@@ -36,15 +38,23 @@
                 <div class="tools">
                     <Tools />
                 </div>
-                <!-- {#if states.mode !== "SEARCH"} -->
-                <div class="count">
-                    <Count
-                        count={states.view === "FOLDER"
-                            ? folderStore.files.length
-                            : fileStore.files.length}
-                    />
-                </div>
-                <!-- {/if} -->
+                {#if states.searchMode}
+                    <div class="count">
+                        <Count
+                            count={states.view === "FOLDER"
+                                ? folderSearchStore?.files?.length
+                                : fileSearchStore?.files?.length}
+                        />
+                    </div>
+                {:else}
+                    <div class="count">
+                        <Count
+                            count={states.view === "FOLDER"
+                                ? folderStore?.files?.length
+                                : fileStore?.files?.length}
+                        />
+                    </div>
+                {/if}
 
                 <div class="back">
                     <BackButton />

@@ -1,5 +1,5 @@
 <script lang="ts">
-    let { count }: { count: number } = $props();
+    let { count = 0 }: { count: number } = $props();
 </script>
 
 {#if count >= 0}
@@ -12,7 +12,7 @@
     .count {
         font-size: 1.3rem;
         min-width: 5rem;
-        border: 1px solid var(--color-lite);
+        border: 1px solid var(--color-focus);
         border-left: 5px solid var(--color-focus);
         background-color: var(--color-bg-one);
         padding: 0.5rem 0.5rem;
@@ -21,7 +21,7 @@
     @media (max-width: 600px) {
         .count {
             min-width: 4rem;
-            border-left-width: 2px;
+            border-left-width: 5px;
             padding: 0.2rem 0.5rem;
         }
     }

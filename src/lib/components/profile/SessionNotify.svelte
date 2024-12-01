@@ -66,19 +66,21 @@
 
     .login {
         /* background-color: hwb(180 0 35); */
-        background-color: rgb(0, 166, 166);
+        background-color: var(--color-green);
     }
     .login:hover {
         /* background-color: hwb(180 0 28); */
-        background-color: rgb(0, 184, 184);
+        background-color: var(--color-green);
+        filter: brightness(0.9);
     }
     .cancel {
         /* background-color: hwb(340 0 7); */
-        background-color: rgb(237, 0, 79);
+        background-color: var(--color-red);
     }
     .cancel:hover {
         /* background-color: hwb(340 0 0); */
-        background-color: rgb(255, 0, 85);
+        background-color: var(--color-red);
+        filter: brightness(0.9);
     }
 
     @media (max-width: 600px) {

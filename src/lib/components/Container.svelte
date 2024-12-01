@@ -7,10 +7,13 @@
     import imgCreate from "$lib/assets/imgCreate.svg?raw";
     import folderCreate from "$lib/assets/folderCreate.svg?raw";
     import {
+        fileSearchStore,
         fileStore,
         folderStore,
+        setViewStore,
         states,
         tempStore,
+        viewStore,
     } from "$lib/scripts/stores.svelte";
     import FileLoading from "$lib/components/utils/FileLoading.svelte";
     import { SvelteSet } from "svelte/reactivity";
@@ -98,7 +101,7 @@
         lastSelected = Number(index);
     }
 
-    export function handleImageClick(e) {
+    export function handleClick(e) {
         let eles = e.composedPath();
         let [target] = eles.filter((ele) => ele.localName === "li");
         if (!target) return;
@@ -131,10 +134,25 @@
                 updateSelection(index, id, size);
                 return;
             default:
-                if (view === "FOLDER") return;
+                if (view === "FOLDER") {
+                    if (states.searchMode) {
+                        states.searchMode = false;
+                    }
+                    return;
+                }
+                if (states.searchMode) {
+                    const [file] = fileSearchStore.files.filter(
+                        (file) => file.id === id
+                    );
+                    tempStore.activeFile = file;
+                    setViewStore("SEARCH");
+                    states.mode = "VIEW";
+                    return;
+                }
                 const [file] = fileStore.files.filter((file) => file.id === id);
                 tempStore.activeFile = file;
                 states.mode = "VIEW";
+                setViewStore();
                 disableScrolling();
                 return;
         }
@@ -162,7 +180,7 @@
         class="list"
         bind:this={container}
         class:edit-mode={states.mode === "EDIT"}
-        onclick={handleImageClick}
+        onclick={handleClick}
     >
         {#each files as file, index (file.id)}
             <li

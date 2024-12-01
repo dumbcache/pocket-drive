@@ -29,6 +29,7 @@
 
 <button
     class="drop-mini btn s-prime"
+    title="expand drop"
     style:display={mini === true ? "initial" : "none"}
     onclick={() => {
         mini = !mini;
@@ -53,16 +54,16 @@
 <style>
     .drop-mini {
         position: fixed;
-        top: 7rem;
+        top: 15rem;
         right: 0;
-        background-color: #043;
+        background-color: var(--color-focus);
         z-index: 1;
         border-top-left-radius: 1rem;
         border-bottom-left-radius: 1rem;
         outline: 1px solid var(--color-lite);
     }
     .drop-mini :global(svg) {
-        fill: var(--color-white);
+        fill: var(--color-bg);
     }
     .drop {
         position: sticky;
@@ -144,8 +145,8 @@
             border-left: none;
         }
         .drop-mini {
-            top: unset;
-            bottom: 2rem;
+            /* top: 15rem; */
+            /* bottom: 2rem; */
         }
         .drop-items {
             gap: 1rem;

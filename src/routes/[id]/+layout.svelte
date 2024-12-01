@@ -21,6 +21,8 @@
     export function imgDropHandler(e: DragEvent) {
         e.preventDefault();
         draggedOver = false;
+        states.drop = true;
+        console.log(states.drop);
         let files = e.dataTransfer?.files;
         if (files) {
             previewAndSetDropItems(files);
@@ -120,7 +122,8 @@
 
     {@render children()}
 
-    {#if tempStore.dropItems.length > 0}
+    <!-- {#if tempStore.dropItems.length > 0} -->
+    {#if states.drop}
         <Drop />
     {/if}
 </div>

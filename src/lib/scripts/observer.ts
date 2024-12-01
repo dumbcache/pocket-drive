@@ -15,7 +15,7 @@ import {
 } from "$lib/scripts/utils";
 import { getToken } from "$lib/scripts/login";
 
-const delay = 1000;
+const delay = 500;
 const timeouts = new WeakMap<Element, number>();
 
 export const observer = new IntersectionObserver(

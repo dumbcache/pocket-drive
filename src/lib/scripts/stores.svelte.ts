@@ -44,6 +44,10 @@ export const fileStore = new AppStore<DriveFile>();
 export const folderStore = new AppStore<DriveFolder>();
 export const fileSearchStore = new AppStore<DriveFile>();
 export const folderSearchStore = new AppStore<DriveFolder>();
+export let viewStore = new AppStore<DriveFile>();
+export function setViewStore(to?: "SEARCH") {
+    viewStore = to === "SEARCH" ? fileSearchStore : fileStore;
+}
 
 class TempStore {
     activeFolder = $state<ActiveFolder>({});
@@ -107,10 +111,10 @@ class AppPreferences {
         if (window.CSS.supports("color", "light-dark(#000,#fff)")) {
             switch (this.theme) {
                 case "DARK":
-                    root.style.setProperty("color-scheme", "light");
+                    root.style.setProperty("color-scheme", "dark");
                     break;
                 default:
-                    root.style.setProperty("color-scheme", "dark");
+                    root.style.setProperty("color-scheme", "light");
                     break;
             }
             return;
@@ -155,6 +159,7 @@ class AppStates {
     refresh = $state(false);
     fetchall = $state(false);
     autosave = $state(false);
+    drop = $state(false);
     progress = $state(false);
     shortcuts = $state(false);
     searchValue = $state("");

@@ -107,20 +107,19 @@
         left: 2rem;
         z-index: 10;
     }
-    .btn {
-        background: none;
-    }
 
     @media (max-width: 600px) and (orientation: portrait) {
         .btn :global(svg) {
-            fill: var(--color-white-one);
+            fill: var(--color-white);
+        }
+        .btn:hover :global(svg) {
+            fill: var(--color-focus);
         }
         .action {
             bottom: 5.5rem;
             top: unset;
             right: 2rem;
             flex-flow: row nowrap;
-            background: var(--color-bg);
             padding: 0.5rem;
         }
 
@@ -142,7 +141,7 @@
 
         .action,
         .close {
-            background: var(--color-backdrop);
+            background: var(--color-black-one);
             backdrop-filter: blur(10px);
             border-radius: 2.5rem;
         }

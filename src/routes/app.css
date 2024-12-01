@@ -2,11 +2,11 @@
     --font-poppins: "Poppins", sans-serif;
     --font-lato: "Lato", sans-serif;
     --font-comic: "Comic neue", sans-serif;
-    --font-system: system-ui, Avenir, Helvetica, Arial, sans-serif;
-    /* --font-system: ui-sans-serif, -apple-system, system-ui, Segoe UI, Roboto,
+    /* --font-system: system-ui, Avenir, Helvetica, Arial, sans-serif; */
+    --font-system: ui-sans-serif, -apple-system, system-ui, Segoe UI, Roboto,
         Ubuntu, Cantarell, Noto Sans, sans-serif, Helvetica, Apple Color Emoji,
-        Arial, Segoe UI Emoji, Segoe UI Symbol; */
-    --font-default: var(--font-comic);
+        Arial, Segoe UI Emoji, Segoe UI Symbol;
+    --font-default: var(--font-comic), var(--font-system);
     --size-system: 62.5%;
     --size-default: 1.6rem;
     --size-smallest: 1.3rem;
@@ -37,8 +37,9 @@
 
     /* --color-green: hwb(180 0 35); */
     --color-green: rgb(0, 166, 166);
-    /* --color-pink: hwb(340 21 0); */
-    --color-pink: rgb(255, 54, 121);
+    /* --color-red: hwb(340 21 0); */
+    /* --color-red: rgb(255, 54, 121); */
+    --color-red: rgb(255, 0, 80);
     --color-shadow: #0005;
     --color-backdrop: #fff2;
     --color-popup: var(--color-white-one);
@@ -56,7 +57,7 @@
     --color-bg-three: var(--color-white-three);
     --color-bg-five: var(--color-white-five);
 
-    --color-focus: var(--color-pink);
+    --color-focus: var(--color-red);
     --color-svg: var(--color-black-two);
     --color-lite: var(--color-black-lite);
     --color-shade-one: rgb(199, 199, 199);
@@ -273,7 +274,7 @@
     :root {
         --color: light-dark(var(--color-black-one), var(--color-white-one));
         --color-bg: light-dark(var(--color-white), var(--color-black-one));
-        --color-focus: light-dark(var(--color-pink), var(--color-green));
+        --color-focus: light-dark(var(--color-red), var(--color-green));
         --color-svg: light-dark(var(--color-black-two), var(--color-white-two));
         --color-bg-one: light-dark(
             var(--color-white-one),

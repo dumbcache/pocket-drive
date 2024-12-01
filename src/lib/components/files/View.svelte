@@ -3,13 +3,13 @@
     import ViewNav from "$lib/components/files/ViewNav.svelte";
     import ViewTools from "./ViewTools.svelte";
     import ViewDisplay from "./ViewDisplay.svelte";
-    import { fileStore } from "$lib/scripts/stores.svelte";
+    import { viewStore } from "$lib/scripts/stores.svelte";
 
     let infoVisible = $state(false);
     let zoom = $state(false);
     let expand = $state(false);
-    let hidden = $state(false)
-    let fileMap = new Map<string,DriveFile>();
+    let hidden = $state(false);
+    let fileMap = new Map<string, DriveFile>();
     let previewElements = new Map<string, HTMLElement>();
     let navigationElements = new Map<string, HTMLElement>();
 
@@ -18,7 +18,7 @@
     const toggleExpand = () => (expand = !expand);
     const toggleHidden = () => (hidden = !hidden);
 
-    fileStore.files.forEach((f) => fileMap.set(f.id, f));
+    viewStore.files.forEach((f) => fileMap.set(f.id, f));
 </script>
 
 <div class="view-container" onwheel={(e) => e.preventDefault()}>
@@ -28,19 +28,32 @@
         tabindex="0"
         id="view"
         role="dialog"
-        ondragstart={(e:DragEvent) => e.preventDefault()}
-        onwheel={(e:WheelEvent) => {
+        ondragstart={(e: DragEvent) => e.preventDefault()}
+        onwheel={(e: WheelEvent) => {
             zoom || e.preventDefault();
         }}
     >
-        <ViewNav {expand} {fileMap} {previewElements} {navigationElements}/>
-        <ViewDisplay {toggleHidden} {toggleExpand} {zoom} {fileMap} {previewElements}/>
+        <ViewNav {expand} {fileMap} {previewElements} {navigationElements} />
+        <ViewDisplay
+            {toggleHidden}
+            {toggleExpand}
+            {zoom}
+            {fileMap}
+            {previewElements}
+        />
         {#if infoVisible}
             <ViewInfo {toggleInfo} />
         {/if}
     </artcle>
 
-    <ViewTools {toggleExpand} {toggleZoom} {toggleInfo} {hidden} {zoom} {expand} />
+    <ViewTools
+        {toggleExpand}
+        {toggleZoom}
+        {toggleInfo}
+        {hidden}
+        {zoom}
+        {expand}
+    />
 </div>
 
 <style>
@@ -87,7 +100,6 @@
         scroll-snap-type: x mandatory;
         scroll-behavior: smooth;
     }
-    
 
     #view :global(.three) {
         position: absolute;

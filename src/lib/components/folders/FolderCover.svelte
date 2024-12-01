@@ -31,6 +31,7 @@
     export function imgDropHandler(e: DragEvent) {
         e.preventDefault();
         e.stopPropagation();
+        states.drop = true;
         draggedOver = false;
         let files = e.dataTransfer?.files;
         if (files) {

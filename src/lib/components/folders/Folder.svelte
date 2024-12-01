@@ -34,6 +34,7 @@
             href={file.parents[0]}
             class="btn s-second goto"
             title="goto containing folder"
+            onclick={(e) => e.stopPropagation()}
             target="_blank">{@html outIcon}</a
         >
     {/if}

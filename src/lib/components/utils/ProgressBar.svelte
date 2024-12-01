@@ -16,7 +16,7 @@
             </span>
         {:else}
             <button
-                class="btn s-second"
+                class="btn s-second close"
                 onclick={() => progressStore.set(0, 0, 0)}
                 >{@html closeIcon}</button
             >
@@ -47,10 +47,10 @@
         border-bottom-left-radius: 0.5rem;
         border: 1px solid var(--color-lite);
         border-right: none;
-        background-color: var(--color-bg);
         font-size: smaller;
         box-shadow: 0 0 1px 1px var(--color-white-lite);
-        background-color: var(--color-bg-one);
+        background-color: var(--color-focus);
+        color: var(--color-bg);
     }
 
     .items {
@@ -74,9 +74,13 @@
         filter: none;
     }
 
+    .close :global(svg) {
+        fill: var(--color-bg);
+    }
+
     @media (max-width: 600px) {
         .progress-bar {
-            top: 15rem;
+            top: 20rem;
         }
     }
 </style>

@@ -64,12 +64,14 @@
     }
     .scroll :global(svg) {
         border-radius: 50%;
-        background-color: var(--color-bg-one);
+        fill: var(--color-bg);
+        background-color: var(--color-focus);
     }
     @media (max-width: 600px) {
         .scroll {
-            right: 2rem;
-            bottom: 2rem;
+            right: 1rem;
+            bottom: 1rem;
+            padding: 2rem;
         }
     }
 </style>

@@ -30,6 +30,7 @@
         if (running.length === 0) {
             tempStore.dropItems = [];
             states.autosave = false;
+            states.drop = false;
         } else {
             onMini();
         }
@@ -81,7 +82,7 @@
         right: 0;
         display: flex;
         align-items: center;
-        padding: 2rem 0rem;
+        padding: 3rem 0rem;
         justify-content: space-between;
         justify-self: start;
         z-index: 2;

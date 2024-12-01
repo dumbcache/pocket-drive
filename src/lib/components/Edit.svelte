@@ -330,10 +330,10 @@
         outline: none;
     }
     .invalid {
-        border-bottom: 2px solid var(--color-pink);
+        border-bottom: 2px solid var(--color-red);
     }
     .invalid:hover {
-        border-bottom: 2px solid var(--color-pink);
+        border-bottom: 2px solid var(--color-red);
     }
 
     .input-wrapper {

@@ -1,6 +1,6 @@
 <script lang="ts">
     import {
-        fileStore,
+        viewStore,
         tempStore,
         imageCache,
         imageFetchLog,
@@ -138,7 +138,7 @@
             },
             { root: preview, threshold: 0.1 }
         );
-        fileStore.files?.forEach((item) => {
+        viewStore.files?.forEach((item) => {
             let id = item.id;
             let li = preview?.querySelector(`[data-id="${id}"]`);
             if (li) {
@@ -181,7 +181,7 @@
     onkeydown={handleKeyDown}
     bind:this={preview}
 >
-    {#each fileStore.files as file (file.id)}
+    {#each viewStore.files as file (file.id)}
         <div class="file">
             {#if file.mimeType.match("image/")}
                 <img

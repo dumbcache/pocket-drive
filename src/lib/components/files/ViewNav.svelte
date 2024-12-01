@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { fileStore, tempStore } from "$lib/scripts/stores.svelte";
+    import { viewStore, tempStore } from "$lib/scripts/stores.svelte";
     import { onMount } from "svelte";
     import { SvelteSet } from "svelte/reactivity";
 
@@ -63,7 +63,7 @@
             },
             { threshold: 0 }
         );
-        fileStore.files.forEach((item) => {
+        viewStore.files.forEach((item) => {
             let id = item.id;
             let li = navigation?.querySelector(`[data-id="${id}"]`);
             if (li) {
@@ -127,7 +127,7 @@
     <!-- svelte-ignore a11y_click_events_have_key_events -->
     <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
     <nav class="thumbs" onclick={thumbClick} bind:this={navigation}>
-        {#each fileStore.files as file (file.id)}
+        {#each viewStore.files as file (file.id)}
             <button
                 class:active={file.id === tempStore.activeFile.id}
                 data-id={file.id}
