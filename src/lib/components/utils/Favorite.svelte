@@ -34,7 +34,7 @@
         background: none;
     }
     .btn :global(svg) {
-        fill: var(--color-shade-one);
+        fill: var(--color-lite);
     }
     .starred :global(svg) {
         fill: var(--color-red);

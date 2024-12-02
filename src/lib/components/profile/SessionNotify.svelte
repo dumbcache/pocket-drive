@@ -60,10 +60,6 @@
         color: var(--color-white-one);
     }
 
-    button:hover {
-        background-color: var(--color-bg-five);
-    }
-
     .login {
         /* background-color: hwb(180 0 35); */
         background-color: var(--color-green);

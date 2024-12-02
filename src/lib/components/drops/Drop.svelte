@@ -107,13 +107,12 @@
     .drop :global(input:disabled:hover),
     .drop :global(input:disabled) {
         background-color: var(--color-bg);
-        color: var(--color-three);
         cursor: not-allowed;
         border-bottom: none;
     }
     .drop :global(input:hover),
     .drop :global(input:focus) {
-        background-color: var(--color-bg-two);
+        filter: invert(0.1);
     }
 
     .expand {

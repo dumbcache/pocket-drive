@@ -49,6 +49,8 @@
         try {
             if (from?.url?.href === to?.url?.href) return;
             entryLog.clear();
+            set.clear();
+            count = 0;
             inspectionLog = {};
         } catch (error) {
             console.warn(error);
@@ -268,7 +270,7 @@
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        color: var(--color-five);
+        filter: invert(0.5);
         text-align: center;
         user-select: none;
         font-size: var(--size-smaller);
@@ -281,7 +283,7 @@
         height: var(--secondary-icon-size);
     }
     .img :global(svg) {
-        fill: var(--color-five);
+        filter: invert(0.5);
     }
     .loading {
         width: fit-content;
