@@ -14,8 +14,8 @@
     <div class="session-wrapper">
         <p>Your session has been expired. Click login to continue</p>
         <div class="button-wrapper">
-            <button class="cancel" onclick={signUserOut}>cancel</button>
-            <button class="login" onclick={requestToken}>login</button>
+            <button class="logout" onclick={signUserOut}>Logout</button>
+            <button class="token" onclick={requestToken}>New Session</button>
         </div>
     </div>
 </div>
@@ -55,38 +55,31 @@
     }
     button {
         padding: 0.5rem;
-        width: 8rem;
+        width: 10rem;
         border-radius: 0.5rem;
         color: var(--color-white-one);
     }
 
-    button:hover {
-        background-color: var(--color-bg-five);
-    }
-
-    .login {
+    .token {
         /* background-color: hwb(180 0 35); */
         background-color: var(--color-green);
     }
-    .login:hover {
+    .token:hover {
         /* background-color: hwb(180 0 28); */
         background-color: var(--color-green);
         filter: brightness(0.9);
     }
-    .cancel {
+    .logout {
         /* background-color: hwb(340 0 7); */
         background-color: var(--color-red);
     }
-    .cancel:hover {
+    .logout:hover {
         /* background-color: hwb(340 0 0); */
         background-color: var(--color-red);
         filter: brightness(0.9);
     }
 
     @media (max-width: 600px) {
-        button {
-            width: 6rem;
-        }
         .session-wrapper {
             padding: 3rem;
             width: 90%;

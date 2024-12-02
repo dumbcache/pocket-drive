@@ -24,7 +24,6 @@
     --color-black-five: #555;
     --color-black-six: #666;
     --color-black-seven: #777;
-    --color-black-eight: #888;
 
     --color-white: #fff;
     --color-white-lite: #fff2;
@@ -43,24 +42,18 @@
     --color-shadow: #0005;
     --color-backdrop: #fff2;
     --color-popup: var(--color-white-one);
-    --title-background: linear-gradient(120deg, #0ac0ee, #d00bc3, #473aff);
+    --title-light: linear-gradient(120deg, #0ac0ee, #d00bc3, #473aff);
+    --title-dark: linear-gradient(120deg, #bd34fe, #41d1ff, #473aff);
 
     --color: var(--color-black-one);
     --color-one: var(--color-black-three);
-    --color-two: var(--color-black-four);
-    --color-three: var(--color-black-five);
-    --color-five: var(--color-black-seven);
 
     --color-bg: var(--color-white);
     --color-bg-one: var(--color-white-one);
-    --color-bg-two: var(--color-white-two);
-    --color-bg-three: var(--color-white-three);
-    --color-bg-five: var(--color-white-five);
 
     --color-focus: var(--color-red);
     --color-svg: var(--color-black-two);
     --color-lite: var(--color-black-lite);
-    --color-shade-one: rgb(199, 199, 199);
 
     --cover-height: 18rem;
     --folder-width: 28rem;
@@ -78,24 +71,15 @@
     --content-padding: var(--vertical-padding) var(--horizontal-padding);
 }
 .dark {
-    --title-background: linear-gradient(120deg, #bd34fe, #41d1ff, #473aff);
-
     --color: var(--color-white-one);
     --color-one: var(--color-white-two);
-    --color-two: var(--color-white-three);
-    --color-three: var(--color-white-four);
-    --color-five: var(--color-white-six);
 
     --color-bg: var(--color-black-one);
     --color-bg-one: var(--color-black-two);
-    --color-bg-two: var(--color-black-three);
-    --color-bg-three: var(--color-black-five);
-    --color-bg-five: var(--color-black-seven);
 
     --color-focus: var(--color-green);
     --color-svg: var(--color-white-two);
     --color-lite: var(--color-white-lite);
-    --color-shade-one: rgb(107, 107, 107);
     --color-backdrop: #0002;
     --color-popup: var(--color-black-two);
 }
@@ -280,24 +264,15 @@
             var(--color-white-one),
             var(--color-black-two)
         );
-        /* --color-bg-one: light-dark(#f8fafc, #16171a); */
-        --color-bg-two: light-dark(
-            var(--color-white-two),
-            var(--color-black-three)
-        );
         --color-lite: light-dark(
             var(--color-black-lite),
             var(--color-white-lite)
         );
-        --color-shade-one: light-dark(rgb(199, 199, 199), rgb(107, 107, 107));
-        /* --color: CanvasText;
-        --color-bg: Canvas; */
-
         --color-popup: light-dark(
             var(--color-white-one),
             var(--color-black-two)
         );
-        --color-backdrop: light-dark(#fff2, #0002);
+        --color-backdrop: light-dark(#fff1, #0001);
 
         color-scheme: light dark;
         color: var(--color);

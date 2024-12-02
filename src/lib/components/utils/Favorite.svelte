@@ -7,7 +7,17 @@
         id,
         starred,
         toggle,
-    }: { id: string; starred: Boolean; toggle: Function } = $props();
+        fill = "var(--color-lite)",
+        stroke = "none",
+        strokeWidth = 50,
+    }: {
+        id: string;
+        starred: Boolean;
+        toggle: Function;
+        fill?: string;
+        stroke?: string;
+        strokeWidth?: number;
+    } = $props();
 
     function update(e: MouseEvent) {
         e.stopPropagation();
@@ -24,6 +34,7 @@
 <button
     aria-label="favorite"
     class="favorite btn s-second {starred && 'starred'}"
+    style="--color-fill:{fill};--color-stroke:{stroke};--stroke-width:{strokeWidth}"
     onclick={update}
 >
     {@html favoriteIcon}
@@ -34,10 +45,13 @@
         background: none;
     }
     .btn :global(svg) {
-        fill: var(--color-shade-one);
+        fill: var(--color-fill);
+        stroke-width: var(--stroke-width);
+        stroke: var(--color-stroke);
     }
     .starred :global(svg) {
         fill: var(--color-red);
+        stroke: none;
     }
     .btn:active :global(svg) {
         fill: var(--color-focus);

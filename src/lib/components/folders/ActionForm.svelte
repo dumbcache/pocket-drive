@@ -192,12 +192,12 @@
         border-radius: 0.5rem;
         border: none;
         outline: none;
-        background-color: var(--color-bg-two);
+        background-color: inherit;
+        filter: invert(0.1);
         contain: layout;
     }
 
     input:focus {
-        /* background-color: var(--color-bg-three); */
         outline: none;
         border-bottom: 2px solid var(--color-focus);
     }

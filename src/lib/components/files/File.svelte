@@ -58,6 +58,7 @@
                     id={file.id}
                     starred={file.starred}
                     toggle={() => (file.starred = !file.starred)}
+                    fill="var(--color-white-one)"
                 />
             </span>
             {#if states.searchMode && file.parents && file.parents.length > 0}
@@ -132,7 +133,7 @@
     .goto {
         display: inline-block;
         top: 0.5rem;
-        background-color: #0002;
+        background-color: unset;
         border-radius: 50%;
     }
     .img-link :global(svg) {

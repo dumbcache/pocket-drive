@@ -247,12 +247,14 @@
         padding: 1rem;
         padding-right: 3rem;
         width: 100%;
-        background-color: var(--color-bg-two);
+        background-color: var(--color-bg-one);
+        filter: invert(0.1);
         border-radius: 0.5rem;
     }
 
     .list {
-        background-color: var(--color-bg-two);
+        background-color: var(--color-bg-one);
+        filter: invert(0.1);
         max-height: 21rem;
         width: 100%;
         position: absolute;

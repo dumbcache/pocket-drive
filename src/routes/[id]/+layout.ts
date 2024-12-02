@@ -1,6 +1,6 @@
 import { browser } from "$app/environment";
 // import { pocketStore } from "$lib/scripts/stores.svelte";
-import { checkLoginStatus } from "$lib/scripts/utils";
+import { userLoggedIn } from "$lib/scripts/utils";
 
 export const ssr = false;
 export const prerender = false;
@@ -8,7 +8,7 @@ export const prerender = false;
 export const load = ({ params }) => {
     try {
         if (browser) {
-            if (checkLoginStatus()) {
+            if (userLoggedIn()) {
                 window.localStorage.getItem("refreshTime") ??
                     window.localStorage.setItem(
                         "refreshTime",

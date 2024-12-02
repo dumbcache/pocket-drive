@@ -1,7 +1,7 @@
 import { browser } from "$app/environment";
 import type { PageLoad } from "./$types";
 import {
-    checkLoginStatus,
+    userLoggedIn,
     signUserOutPartial,
     loadAll,
     getRootFolder,
@@ -34,7 +34,8 @@ async function loadContent(parent: string) {
 
 export const load = (async ({ params }) => {
     if (browser) {
-        if (!checkLoginStatus()) {
+        if (!userLoggedIn()) {
+            console.log("not looged");
             await signUserOutPartial();
             states.setPocketState(params?.id);
             goto("/", { replaceState: true });

@@ -25,6 +25,6 @@
         border-left: 1px solid var(--color-lite);
     }
     button:hover {
-        background-color: var(--color-lite);
+        filter: invert(0.1);
     }
 </style>

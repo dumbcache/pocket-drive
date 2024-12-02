@@ -61,17 +61,16 @@
         box-sizing: content-box;
         background: none;
         padding: 1rem;
+        background-color: var(--color-focus);
     }
     .scroll :global(svg) {
         border-radius: 50%;
         fill: var(--color-bg);
-        background-color: var(--color-focus);
     }
     @media (max-width: 600px) {
         .scroll {
             right: 1rem;
             bottom: 1rem;
-            padding: 2rem;
         }
     }
 </style>

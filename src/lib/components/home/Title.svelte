@@ -1,6 +1,7 @@
 <script>
     import ColorScheme from "$lib/components/profile/ColorScheme.svelte";
     import LoginButton from "$lib/components/home/LoginButton.svelte";
+    import { preferences } from "$lib/scripts/stores.svelte";
 </script>
 
 <article class="article one">
@@ -8,7 +9,12 @@
         <ColorScheme />
         <LoginButton />
     </header>
-    <section class="section">
+    <section
+        class="section"
+        style="--title-background:{preferences.theme === ''
+            ? 'var(--title-light)'
+            : 'var(--title-dark)'}"
+    >
         <h1 class="title">Pocket Drive</h1>
         <p class="sub">A google drive based image & bookmark application</p>
     </section>

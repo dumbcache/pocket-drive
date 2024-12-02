@@ -137,42 +137,44 @@
         justify-content: space-between;
     }
     .info {
-        padding: 1rem 2rem;
+        padding: 2rem 2rem 0rem;
         display: flex;
         flex-flow: column;
         justify-content: start;
         gap: 2rem;
-        color: var(--color-two);
-        background-color: var(--color-bg-one);
-        height: 100%;
+        background-color: var(--color-popup);
+        box-shadow: -10px 5px 15px 0px var(--color-shadow);
+        height: 95%;
         width: 100%;
         position: relative;
+        top: 50%;
+        transform: translateY(-50%);
         border-radius: 1rem;
         font-size: 1.3rem;
+        overflow: hidden;
         /* border: 1px solid var(--color-lite); */
     }
     input {
         background: unset;
         border: none;
         /* border-bottom: 1px solid var(--color-focus); */
-        background-color: var(--color-bg-two);
+        background-color: inherit;
+        filter: invert(0.1);
         padding: 1rem;
         border-top-left-radius: 0.5rem;
         border-top-right-radius: 0.5rem;
     }
     input:active,
     input:focus {
-        /* background-color: var(--color-bg-three); */
         border-bottom: 2px solid var(--color-focus);
         outline: none;
     }
     .invalid,
     .invalid:focus {
-        border-bottom: 2px solid #f00;
+        border-bottom: 2px solid var(--color-red);
     }
     .id,
     .size {
-        color: var(--color-bg-five);
         word-wrap: nowrap;
         white-space: nowrap;
         overflow: hidden;
@@ -181,25 +183,30 @@
     }
     footer {
         position: absolute;
-        bottom: 0;
-        padding: 2rem;
+        bottom: 0rem;
+        left: 0rem;
         display: flex;
         justify-content: space-evenly;
-        width: 90%;
+        width: 100%;
     }
 
     .action {
-        width: 10rem;
-        padding: 0.5rem;
-        /* border: 1px solid var(--color-lite); */
-        background-color: var(--color-bg-two);
-        border-radius: 0.5rem;
+        width: 100%;
+        padding: 1rem 0rem;
+        border-top: 1px solid var(--color-lite);
+        background-color: var(--color-bg-one);
+        /* border-radius: 0.5rem; */
     }
     .action:hover {
-        background-color: var(--color-bg-three);
+        /* background-color: inherit; */
+        filter: invert(0.1);
+    }
+
+    .save {
+        border-left: 1px solid var(--color-lite);
     }
     .alert {
-        color: #aaa;
+        color: var(--color-red);
         font-size: 1.3rem;
         user-select: none;
     }
@@ -208,9 +215,14 @@
         .info {
             border-radius: 0rem;
             border: none;
+            padding: 2rem 3rem;
+            height: 100%;
         }
         .id {
             max-width: 25rem;
+        }
+        footer {
+            bottom: 0;
         }
     }
 </style>

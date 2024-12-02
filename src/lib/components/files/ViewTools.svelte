@@ -56,6 +56,9 @@
         id={tempStore.activeFile.id}
         starred={tempStore.activeFile.starred}
         toggle={() => toggleFav(tempStore.activeFile.id)}
+        stroke="var(--color-svg)"
+        strokeWidth={50}
+        fill={"none"}
     />
     <button
         class="btn s-second"
@@ -109,20 +112,6 @@
     }
 
     @media (max-width: 600px) and (orientation: portrait) {
-        .btn :global(svg) {
-            fill: var(--color-white);
-        }
-        .btn:hover :global(svg) {
-            fill: var(--color-focus);
-        }
-        .action {
-            bottom: 5.5rem;
-            top: unset;
-            right: 2rem;
-            flex-flow: row nowrap;
-            padding: 0.5rem;
-        }
-
         .expanded {
             bottom: 0.5rem;
         }
@@ -131,6 +120,13 @@
         }
         .info {
             rotate: 90deg;
+        }
+        .action {
+            bottom: 5.5rem;
+            top: unset;
+            right: 2rem;
+            flex-flow: row nowrap;
+            padding: 0.5rem;
         }
         .close {
             top: 0.5rem;
@@ -141,7 +137,7 @@
 
         .action,
         .close {
-            background: var(--color-black-one);
+            background: var(--color-bg);
             backdrop-filter: blur(10px);
             border-radius: 2.5rem;
         }

@@ -4,30 +4,24 @@
     import pic1dark from "$lib/assets/about/pic1dark.webp";
     import pic2dark from "$lib/assets/about/pic2dark.webp";
     import { preferences } from "$lib/scripts/stores.svelte";
-
-    let one = $state(pic1);
-    let two = $state(pic2);
-    $effect(() => {
-        if (preferences.theme === "") {
-            one = pic1;
-            two = pic2;
-        } else {
-            one = pic1dark;
-            two = pic2dark;
-        }
-    });
 </script>
+
+{#snippet figure(src: string)}
+    <figure class="gallery-item">
+        <img {src} class="pic pic11" alt="UI desktop" data-nosnippet />
+        <figcaption>UI Desktop</figcaption>
+    </figure>
+{/snippet}
 
 <article class="article two">
     <section class="gallery-section">
-        <figure class="gallery-item">
-            <img src={one} class="pic pic11" alt="UI desktop" data-nosnippet />
-            <figcaption>UI Desktop</figcaption>
-        </figure>
-        <figure class="gallery-item">
-            <img src={two} class="pic pic12" alt="UI mobile" data-nosnippet />
-            <figcaption>UI Mobile</figcaption>
-        </figure>
+        {#if preferences.theme === ""}
+            {@render figure(pic1)}
+            {@render figure(pic2)}
+        {:else}
+            {@render figure(pic1dark)}
+            {@render figure(pic2dark)}
+        {/if}
     </section>
 </article>
 

@@ -121,9 +121,6 @@
         fill: var(--color-focus);
     }
 
-    .parent {
-        background-color: var(--color-bg-two);
-    }
     .name {
         border-bottom: 1px solid var(--color-lite);
     }

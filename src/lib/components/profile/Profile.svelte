@@ -108,7 +108,7 @@
             border-bottom-left-radius: unset;
             border-bottom-right-radius: unset;
             transform: perspective(50px);
-            box-shadow: 0 -50px 30px 0px var(--color-shadow);
+            box-shadow: 0 -20px 30px 0px var(--color-shadow);
         }
         .scheme {
             padding: 0rem 1.5rem;

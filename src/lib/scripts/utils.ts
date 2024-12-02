@@ -85,7 +85,7 @@ export function isTokenExpired() {
     );
 }
 
-export function checkLoginStatus() {
+export function userLoggedIn() {
     return Boolean(window.localStorage.getItem("token")) && !isTokenExpired();
 }
 

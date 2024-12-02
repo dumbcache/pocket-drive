@@ -300,8 +300,8 @@
     }
 
     .edit-form {
-        background-color: var(--color-bg-one);
-        box-shadow: 0 0 50px -10px var(--color-black);
+        background-color: var(--color-popup);
+        box-shadow: 0 0 15px 0px var(--color-shadow);
         display: flex;
         flex-flow: column nowrap;
         gap: 1rem;
@@ -325,7 +325,8 @@
     }
     input:active,
     input:focus {
-        background-color: var(--color-bg-two);
+        /* background-color: var(--color-lite); */
+        filter: invert(0.1);
         border-bottom: 2px solid var(--color-focus);
         outline: none;
     }
@@ -347,26 +348,21 @@
     ::placeholder {
         font-size: smaller;
     }
-    .cancel,
-    .confirm {
-        background-color: var(--color-bg-one);
-    }
 
     .alert {
-        color: #aaa;
+        color: var(--color-red);
         font-size: 1.2rem;
     }
     .action {
         padding: 0.5rem;
         width: 8rem;
         border-radius: 0.5rem;
-        background-color: var(--color-bg-two);
     }
 
     .button-wrapper {
         display: flex;
         justify-content: center;
-        background-color: var(--color-bg-two);
+        border-top: 1px solid var(--color-lite);
     }
     .button-wrapper .action {
         width: 50%;
@@ -380,10 +376,9 @@
 
     .action:hover {
         background-color: var(--color-lite);
+        filter: invert(0.1);
     }
-    .action:disabled {
-        background-color: var(--color-bg-two);
-    }
+
     @media (max-width: 900px) {
         input {
             font-size: var(--size-smaller);

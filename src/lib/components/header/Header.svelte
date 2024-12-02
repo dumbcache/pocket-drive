@@ -8,6 +8,7 @@
         folderSearchStore,
         folderStore,
         HOME_PATH,
+        preferences,
         states,
     } from "$lib/scripts/stores.svelte";
     import Help from "$lib/components/header/Help.svelte";
@@ -17,7 +18,12 @@
 
 <header>
     <section class="one">
-        <div class="title-wrapper">
+        <div
+            class="title-wrapper"
+            style="--title-background:{preferences.theme === ''
+                ? 'var(--title-light)'
+                : 'var(--title-dark)'}"
+        >
             <a class="title" href={HOME_PATH}>
                 <span class="icon">
                     <HomeIcon />
@@ -132,7 +138,7 @@
     }
     .back {
         position: fixed;
-        top: 11rem;
+        top: 10rem;
         left: 2rem;
         z-index: 1;
     }
