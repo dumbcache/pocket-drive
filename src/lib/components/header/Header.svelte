@@ -74,6 +74,9 @@
             </div>
         </section>
     {/if}
+    {#if states.offline}
+        <div class="offline"><p>No Internet</p></div>
+    {/if}
 </header>
 
 <style>
@@ -142,6 +145,33 @@
         left: 2rem;
         z-index: 1;
     }
+    .offline {
+        font-size: 1.3rem;
+        font-weight: 900;
+        color: var(--color-white-one);
+        background-color: var(--color-red);
+        width: 100%;
+        height: 0.5rem;
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        /* text-align: center;
+        align-content: center; */
+    }
+
+    .offline p {
+        position: absolute;
+        padding: 0.5rem 5rem;
+        background: var(--color-red);
+        left: 50%;
+        width: fit-content;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        border-radius: 50%;
+        border-bottom-left-radius: 50%;
+        border-bottom-right-radius: 50%;
+    }
 
     @media (max-width: 900px) {
         .title-wrapper {
@@ -193,6 +223,15 @@
 
         .crumb-wrapper span {
             margin: auto;
+        }
+
+        .offline {
+            bottom: -1rem;
+            font-size: 1rem;
+        }
+
+        .offline p {
+            padding: 0.5rem 2rem;
         }
     }
 </style>

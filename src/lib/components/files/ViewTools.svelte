@@ -6,8 +6,10 @@
     import expandIcon from "$lib/assets/expand.svg?raw";
     import downloadIcon from "$lib/assets/download.svg?raw";
     import urlIcon from "$lib/assets/url.svg?raw";
-    import { states, tempStore } from "$lib/scripts/stores.svelte";
+    import { imageCache, states, tempStore } from "$lib/scripts/stores.svelte";
     import Favorite from "$lib/components/utils/Favorite.svelte";
+    import refreshIcon from "$lib/assets/refresh.svg?raw";
+    import { fetchImgPreview } from "$lib/scripts/utils";
 
     let {
         zoom,
@@ -25,6 +27,15 @@
         toggleExpand: MouseEventHandler<HTMLButtonElement>;
     } = $props();
 
+    async function refreshHandler() {
+        let id = tempStore.activeFile.id;
+        if (imageCache.has(id)) {
+            imageCache.delete(id);
+        }
+        tempStore.activeFile.loading = true;
+        fetchImgPreview(id);
+    }
+
     async function toggleFav(id: string) {
         tempStore.activeFile.starred = !tempStore.activeFile.starred;
     }
@@ -35,6 +46,9 @@
     class:expanded={expand}
     style:display={hidden ? "none" : "flex"}
 >
+    <button class="btn s-second" title="refresh" onclick={refreshHandler}>
+        {@html refreshIcon}
+    </button>
     {#if tempStore.activeFile?.download}
         <a
             href={tempStore.activeFile.download}
@@ -57,7 +71,7 @@
         starred={tempStore.activeFile.starred}
         toggle={() => toggleFav(tempStore.activeFile.id)}
         stroke="var(--color-svg)"
-        strokeWidth={50}
+        strokeWidth={60}
         fill={"none"}
     />
     <button
@@ -112,9 +126,6 @@
     }
 
     @media (max-width: 600px) and (orientation: portrait) {
-        .expanded {
-            bottom: 0.5rem;
-        }
         .expand {
             display: initial;
         }
@@ -135,6 +146,9 @@
             padding: 0.5rem;
         }
 
+        .expanded {
+            bottom: 0.5rem;
+        }
         .action,
         .close {
             background: var(--color-bg);

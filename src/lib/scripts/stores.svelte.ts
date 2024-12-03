@@ -167,6 +167,7 @@ class AppStates {
     sessionTimeout = $state<Boolean>();
     sessionTimeoutId = $state<number>();
     pocketState = $state<string | null>(null);
+    offline = $state(false);
 
     setPocketState(val: string) {
         const state = val && typeof val === "string" ? val : HOME_PATH;
