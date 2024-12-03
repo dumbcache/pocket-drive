@@ -19,10 +19,13 @@
         $props();
 
     let show = $state(false);
+    let search = $state<HTMLInputElement>();
+    let searchValue = $state("");
     let selected = $state<DriveFolder>({ id: "", name: "", parents: [] });
-    let list = $state<DriveFolder[]>([]);
     let recents = $state<DriveFolder[]>([]);
     let home = getRoot();
+    let list = $state<DriveFolder[]>([]);
+    let tempList = $state<DriveFolder[]>([]);
 
     async function setList(parent: string, accessToken: string) {
         let pageToken = undefined;
@@ -40,6 +43,7 @@
             list.push(...res.files);
             pageToken = res.nextPageToken;
         } while (pageToken);
+        tempList = [...list];
     }
 
     async function homeTap() {
@@ -47,12 +51,15 @@
         list = [];
         await setList(selected.id, getToken());
         show = true;
+        search?.focus();
     }
 
     async function historyTap() {
         selected = recents[0];
         list = recents.slice(1);
         show = true;
+        searchValue = "";
+        search?.focus();
     }
 
     async function backTap() {
@@ -63,6 +70,8 @@
         list = [];
         await setList(selected.id, token);
         show = true;
+        searchValue = "";
+        search?.focus();
     }
 
     async function itemTap(e) {
@@ -74,6 +83,8 @@
         list = [];
         await setList(selected.id, getToken());
         show = true;
+        searchValue = "";
+        search?.focus();
     }
 
     async function doneTap() {
@@ -87,6 +98,18 @@
     function closeTap() {
         if (onClose) onClose();
         else tempStore.folderAction = {};
+    }
+
+    function selectedTap() {
+        show = !show;
+        search?.focus();
+    }
+
+    function handle() {
+        if (searchValue.length === 0) list = tempList || [];
+        list = tempList?.filter((i) =>
+            i.name.toLowerCase().includes(searchValue.toLowerCase())
+        );
     }
 
     async function move() {
@@ -135,6 +158,7 @@
         if (!tempStore.activeFolder.id) return;
         selected = tempStore.activeFolder;
         list = folderStore.files;
+        tempList = folderStore.files;
 
         setTimeout(() => {
             let items = window.localStorage.getItem("recents");
@@ -166,10 +190,8 @@
         </nav>
         <section>
             <span class="label">Select destination folder</span>
-            <button
-                class="selected item"
-                title="selected"
-                onclick={() => (show = !show)}>{selected.name}</button
+            <button class="selected item" title="selected" onclick={selectedTap}
+                >{selected.name}</button
             >
             {#if recents.length > 0}
                 <button
@@ -192,6 +214,17 @@
                 onclick={itemTap}
                 style:display={show ? "initial" : "none"}
             >
+                {#if list?.length > 0 || searchValue.length > 0}
+                    <input
+                        class="search"
+                        type="search"
+                        bind:this={search}
+                        bind:value={searchValue}
+                        onchange={handle}
+                        oninput={handle}
+                        onkeydown={(e) => e.stopPropagation()}
+                    />
+                {/if}
                 {#each list as item}
                     <li class="item" data-id={item.id}>{item.name}</li>
                 {/each}
@@ -301,6 +334,18 @@
         fill: var(--color);
     }
 
+    .search {
+        width: 100%;
+        padding: 1rem 0rem 1rem 1rem;
+        outline: none;
+        border: none;
+        border-bottom: 1px solid var(--color-focus);
+    }
+    .search:focus {
+        border-bottom: 2px solid var(--color-focus);
+        border-bottom-left-radius: 0.5rem;
+        border-bottom-right-radius: 0.5rem;
+    }
     @media (max-width: 600px) {
         section {
             width: 20rem;
