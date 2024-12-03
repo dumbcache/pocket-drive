@@ -717,10 +717,10 @@ if (browser) {
                 states.shortcuts = false;
                 return;
 
-            case "a":
-            case "A":
-                states.mask = !states.mask;
-                return;
+            // case "a":
+            // case "A":
+            //     states.mask = !states.mask;
+            //     return;
 
             case "c":
             case "C":
@@ -753,13 +753,7 @@ if (browser) {
         }
     });
 
-    globalThis.addEventListener("offline", () => {
-        window.alert("No Internet connection");
-    });
+    globalThis.addEventListener("offline", () => (states.offline = true));
 
-    // navigator.serviceWorker.addEventListener("message", (event) => {
-    //     if (event.data && event.data.type === "SHARED_FILES") {
-    //         window.alert("message received");
-    //     }
-    // });
+    globalThis.addEventListener("online", () => (states.offline = false));
 }
