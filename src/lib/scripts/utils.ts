@@ -289,8 +289,8 @@ export const createFolder = async (
 export const updateFolder = async (
     name: string,
     id: string,
-    parent: string,
-    token: string
+    token: string,
+    parent?: string
 ): Promise<any> => {
     const { status, data } = await updateSingle(id, { name }, token);
     if (status !== 200) {
@@ -717,10 +717,10 @@ if (browser) {
                 states.shortcuts = false;
                 return;
 
-            case "a":
-            case "A":
-                states.mask = !states.mask;
-                return;
+            // case "a":
+            // case "A":
+            //     states.mask = !states.mask;
+            //     return;
 
             case "c":
             case "C":
@@ -753,13 +753,7 @@ if (browser) {
         }
     });
 
-    globalThis.addEventListener("offline", () => {
-        window.alert("No Internet connection");
-    });
+    globalThis.addEventListener("offline", () => (states.offline = true));
 
-    // navigator.serviceWorker.addEventListener("message", (event) => {
-    //     if (event.data && event.data.type === "SHARED_FILES") {
-    //         window.alert("message received");
-    //     }
-    // });
+    globalThis.addEventListener("online", () => (states.offline = false));
 }

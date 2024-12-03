@@ -1,7 +1,42 @@
-<script>
-    import { HOME_PATH, tempStore } from "$lib/scripts/stores.svelte";
-    import { getRoot } from "$lib/scripts/utils";
+<script lang="ts">
+    import {
+        HOME_PATH,
+        pocketStore,
+        tempStore,
+    } from "$lib/scripts/stores.svelte";
+    import {
+        fetchMultiple,
+        FOLDER_MIME_TYPE,
+        getRoot,
+        toTitleCase,
+        updateFolder,
+    } from "$lib/scripts/utils";
     import homeIcon from "$lib/assets/home.svg?raw";
+    import { getToken } from "$lib/scripts/login";
+
+    let inputElement: HTMLInputElement;
+
+    async function change() {
+        let token = getToken();
+        const data = await updateFolder(
+            toTitleCase(inputElement.value),
+            tempStore.activeFolder.id,
+            token
+        );
+        inputElement.blur();
+        if (data?.name) {
+            tempStore.activeFolder.name = data.name;
+            pocketStore.delete(tempStore.activeFolder.parents[0]);
+            fetchMultiple(
+                {
+                    parent: tempStore?.activeFolder?.parents[0],
+                    mimeType: FOLDER_MIME_TYPE,
+                },
+                token,
+                true
+            );
+        }
+    }
 </script>
 
 {#if tempStore.activeFolder?.name}
@@ -29,7 +64,15 @@
 
             <span>/</span>
             <span class="active">
-                {tempStore.activeFolder.name}
+                <input
+                    type="text"
+                    onkeydown={(e) => {
+                        e.stopPropagation();
+                    }}
+                    value={tempStore.activeFolder.name}
+                    onchange={change}
+                    bind:this={inputElement}
+                />
             </span>
         {/if}
     </div>
@@ -55,9 +98,19 @@
     }
     .active {
         white-space: nowrap;
+    }
+
+    input {
+        background: none;
+        border: none;
+        width: 100%;
         max-width: 30rem;
         overflow: hidden;
         text-overflow: ellipsis;
+    }
+    input:focus {
+        background-color: var(--color-bg-one);
+        border-bottom: 1px solid var(--color-focus);
     }
     @media (max-width: 900px) {
         .active {

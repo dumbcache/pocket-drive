@@ -44,7 +44,8 @@
         font-family: var(--font-comic);
         background: var(--title-background);
         background-clip: text;
-        -webkit-text-fill-color: transparent;
+        /* -webkit-text-fill-color: transparent; */
+        color: transparent;
     }
 
     .sub {
@@ -55,7 +56,14 @@
         padding-top: 1rem;
         background: var(--title-background);
         background-clip: text;
-        -webkit-text-fill-color: transparent;
+        /* -webkit-text-fill-color: transparent; */
+        color: transparent;
+    }
+
+    .title::selection,
+    .sub::selection {
+        color: var(--color-black);
+        background-color: var(--color-focus);
     }
 
     @media (max-width: 600px) {

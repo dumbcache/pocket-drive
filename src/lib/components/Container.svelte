@@ -9,11 +9,11 @@
     import {
         fileSearchStore,
         fileStore,
+        folderSearchStore,
         folderStore,
         setViewStore,
         states,
         tempStore,
-        viewStore,
     } from "$lib/scripts/stores.svelte";
     import FileLoading from "$lib/components/utils/FileLoading.svelte";
     import { SvelteSet } from "svelte/reactivity";
@@ -207,11 +207,19 @@
     <!-- {#if view === "FOLDER" ? folderStore.nextPageToken : fileStore.nextPageToken}
     {/if} -->
     <div class="loading">
-        <FileLoading
-            pageToken={view === "FOLDER"
-                ? folderStore.nextPageToken
-                : fileStore.nextPageToken}
-        />
+        {#if states.searchMode}
+            <FileLoading
+                pageToken={view === "FOLDER"
+                    ? folderSearchStore.nextPageToken
+                    : fileSearchStore.nextPageToken}
+            />
+        {:else}
+            <FileLoading
+                pageToken={view === "FOLDER"
+                    ? folderStore.nextPageToken
+                    : fileStore.nextPageToken}
+            />
+        {/if}
     </div>
 {:else}
     <div class="no-content">

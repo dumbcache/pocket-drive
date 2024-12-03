@@ -4,7 +4,7 @@
     import { getRoot } from "$lib/scripts/utils";
 </script>
 
-{#if window.history.length > 1 && tempStore.activeFolder?.id !== getRoot()}
+{#if window?.history?.length !== 0 && tempStore.activeFolder?.id !== getRoot()}
     <button
         class="back-button btn s-prime"
         title="go back"

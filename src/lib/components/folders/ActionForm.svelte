@@ -59,7 +59,7 @@
             close();
         }
         if (type === "EDIT") {
-            await updateFolder(folderName, id, parent, token);
+            await updateFolder(folderName, id, token);
             let index = folderStore.files.findIndex((i) => i.id === id);
             folderStore.files[index].name = folderName;
             afterFolderAction(parent, token);

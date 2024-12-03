@@ -6,7 +6,7 @@ import { browser } from "$app/environment";
 import { page } from "$app/stores";
 import { states } from "./stores.svelte";
 
-let client = null;
+let client: { requestAccessToken: () => void } | null = null;
 let token: string = "";
 if (browser) {
     token = window.localStorage.getItem("token") || "";
@@ -58,7 +58,7 @@ export function loadGSIScript() {
 }
 
 export function requestToken() {
-    client.requestAccessToken();
+    client?.requestAccessToken();
 }
 
 export function getToken() {
@@ -66,6 +66,6 @@ export function getToken() {
 }
 
 export function clearToken() {
-    token = null;
+    token = "";
     window.localStorage.removeItem("token");
 }
