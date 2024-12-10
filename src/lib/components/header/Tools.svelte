@@ -69,7 +69,7 @@
             true
         )) as GoogleDriveResponse<DriveFile>;
         let fd = (await fetchMultiple(
-            { parent, mimeType: FOLDER_MIME_TYPE },
+            { parent, mimeType: FOLDER_MIME_TYPE, hidden: true },
             token,
             true
         )) as GoogleDriveResponse<DriveFolder>;
