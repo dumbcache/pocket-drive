@@ -197,7 +197,7 @@ export async function makeFetch(request: Request) {
 }
 
 export function constructRequest(
-    { parent, mimeType, pageSize, pageToken }: ParamsObject,
+    { parent, mimeType, pageSize, pageToken, hidden }: ParamsObject,
     accessToken: string
 ) {
     pageSize ??= PAGESIZE;
@@ -205,7 +205,10 @@ export function constructRequest(
         mimeType === FOLDER_MIME_TYPE
             ? `mimeType contains '${mimeType}'`
             : `mimeType contains '${mimeType}' or mimeType contains 'video/'`;
-    let q = `q='${parent}' in parents and (${mime})`;
+    let hide = hidden
+        ? "and not properties has { key='hidden' and value='true' }"
+        : "";
+    let q = `q='${parent}' in parents and (${mime}) ${hide}`;
     let p = `&pageSize=${pageSize}`;
     let f = "";
     let t = "";
@@ -467,7 +470,10 @@ export const loadAll = (
 ): Promise<GoogleDriveResponse[]> => {
     return new Promise(async (resolve, reject) => {
         const proms = [
-            fetchMultiple({ parent, mimeType: FOLDER_MIME_TYPE }, accessToken),
+            fetchMultiple(
+                { parent, mimeType: FOLDER_MIME_TYPE, hidden: true },
+                accessToken
+            ),
             fetchMultiple({ parent, mimeType: IMG_MIME_TYPE }, accessToken),
         ];
         Promise.all(proms)
