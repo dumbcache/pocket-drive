@@ -63,7 +63,7 @@
             {/if}
 
             <span>/</span>
-            <span class="active">
+            <span class="active" title={tempStore.activeFolder.name}>
                 <input
                     type="text"
                     onkeydown={(e) => {

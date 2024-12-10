@@ -24,6 +24,7 @@ declare global {
         mimeType: string;
         pageSize?: number;
         pageToken?: string;
+        hidden?: Boolean;
     }
     interface SearchParamsObject {
         search: string;
@@ -38,9 +39,8 @@ declare global {
         description?: string;
         starred?: Boolean;
         parents?: [string];
-        appProperties?: {
-            origin?: string;
-            src?: string;
+        properties?: {
+            hidden?: Boolean;
         };
     }
 

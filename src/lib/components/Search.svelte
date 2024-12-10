@@ -112,48 +112,54 @@
     });
 </script>
 
-<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
-<div class="search-wrapper" role="form" onkeydown={(e) => e.stopPropagation()}>
-    <button
-        title="global"
-        role="switch"
-        aria-checked="false"
-        class="global"
-        class:active={global}
-        onclick={() => {
-            global = !global;
-            searchElement.focus();
-            handleSearch();
-        }}>G</button
+{#if states.mode !== "EDIT"}
+    <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+    <div
+        class="search-wrapper"
+        role="form"
+        onkeydown={(e) => e.stopPropagation()}
     >
-    <input
-        type="input"
-        name="search"
-        id="search"
-        title="search"
-        autocomplete="off"
-        placeholder="search"
-        bind:this={searchElement}
-        bind:value={states.searchValue}
-        oninput={handleSearch}
-        onchange={handleChange}
-    />
-    {#if loading}
-        <div class="loading">
-            <Spinner width={"2rem"} height={"2rem"} borderWidth={"2px"} />
-        </div>
-    {:else if states.searchValue.length > 0}
         <button
-            class="clear btn s-second"
+            title="global"
+            role="switch"
+            aria-checked="false"
+            class="global"
+            class:active={global}
             onclick={() => {
-                states.searchValue = "";
-                handleChange();
-            }}
+                global = !global;
+                searchElement.focus();
+                handleSearch();
+            }}>G</button
         >
-            {@html clearIcon}
-        </button>
-    {/if}
-</div>
+        <input
+            type="input"
+            name="search"
+            id="search"
+            title="search"
+            autocomplete="off"
+            placeholder="search"
+            bind:this={searchElement}
+            bind:value={states.searchValue}
+            oninput={handleSearch}
+            onchange={handleChange}
+        />
+        {#if loading}
+            <div class="loading">
+                <Spinner width={"2rem"} height={"2rem"} borderWidth={"2px"} />
+            </div>
+        {:else if states.searchValue.length > 0}
+            <button
+                class="clear btn s-second"
+                onclick={() => {
+                    states.searchValue = "";
+                    handleChange();
+                }}
+            >
+                {@html clearIcon}
+            </button>
+        {/if}
+    </div>
+{/if}
 
 <section class="search-results">
     <Content />

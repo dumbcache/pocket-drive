@@ -69,7 +69,10 @@ export function previewAndSetDropItems(
                 image.src = imgRef;
             }
         }
-        if (file.type.match("video/")) {
+        if (
+            file.type.match("video/") ||
+            file.name.toLowerCase().endsWith(".mov")
+        ) {
             let t = tempStore.dropItems.find((i) => i.id === item.id);
             if (!t) continue;
             t.file = file;

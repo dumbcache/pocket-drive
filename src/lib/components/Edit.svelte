@@ -4,12 +4,21 @@
     import moveIcon from "$lib/assets/move.svg?raw";
     import copyIcon from "$lib/assets/copy.svg?raw";
     import editIcon from "$lib/assets/edit.svg?raw";
+    import visibleIcon from "$lib/assets/visible.svg?raw";
+    import hiddenIcon from "$lib/assets/hidden.svg?raw";
     import startIcon from "$lib/assets/start.svg?raw";
     import selectallIcon from "$lib/assets/selectall.svg?raw";
     import Count from "$lib/components/utils/Count.svelte";
-    import { childWorker, isValidUrl } from "$lib/scripts/utils";
+    import {
+        childWorker,
+        fetchMultiple,
+        FOLDER_MIME_TYPE,
+        isValidUrl,
+    } from "$lib/scripts/utils";
     import { getToken } from "$lib/scripts/login";
     import {
+        folderStore,
+        pocketStore,
         progressStore,
         states,
         tempStore,
@@ -111,6 +120,19 @@
         childWorker.postMessage(workerMessage);
         closeHandler();
     }
+    function handleHidden(hidden: Boolean) {
+        let parent = tempStore.activeFolder!.id;
+        let token = getToken();
+        workerMessage = {
+            activeParent: parent,
+            context: "EDIT",
+            ids: set,
+            imgMeta: { properties: { hidden } },
+            token,
+        };
+        childWorker.postMessage(workerMessage);
+        closeHandler();
+    }
 
     function handleChange(e) {
         e.target.name = "url" && checkValid();
@@ -188,6 +210,22 @@
                     action = "TOP";
                     confirm = true;
                 }}>{@html startIcon}</button
+            >
+        {:else}
+            {#if states.searchMode}
+                <button
+                    class="btn s-prime"
+                    title="unhide"
+                    disabled={count === 0}
+                    onclick={() => handleHidden(false)}
+                    >{@html visibleIcon}</button
+                >
+            {/if}
+            <button
+                class="btn s-prime"
+                title="hide"
+                disabled={count === 0}
+                onclick={() => handleHidden(true)}>{@html hiddenIcon}</button
             >
         {/if}
         <button

@@ -33,6 +33,7 @@
                     mimeType: mimeType,
                     pageToken: pageToken,
                     pageSize: 1000,
+                    hidden: view === "FOLDER" ? true : false,
                 },
                 token
             );

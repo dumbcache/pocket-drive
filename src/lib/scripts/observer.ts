@@ -76,6 +76,7 @@ async function footInspection(id: string) {
             parent: tempStore.activeFolder!.id,
             mimeType: mimeType,
             pageToken: pageToken,
+            hidden: id === "FOLDER-FOOR" ? true : false,
         },
         getToken()
     );
