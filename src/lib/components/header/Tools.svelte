@@ -24,6 +24,7 @@
         states,
         tempStore,
         pocketStore,
+        preferences,
     } from "$lib/scripts/stores.svelte";
 
     let refreshing = $state(false);
@@ -69,7 +70,11 @@
             true
         )) as GoogleDriveResponse<DriveFile>;
         let fd = (await fetchMultiple(
-            { parent, mimeType: FOLDER_MIME_TYPE, hidden: true },
+            {
+                parent,
+                mimeType: FOLDER_MIME_TYPE,
+                hidden: preferences.showHidden,
+            },
             token,
             true
         )) as GoogleDriveResponse<DriveFolder>;

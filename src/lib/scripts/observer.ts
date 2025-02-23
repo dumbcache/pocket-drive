@@ -6,6 +6,7 @@ import {
     folderSearchStore,
     fileSearchStore,
     states,
+    preferences,
 } from "$lib/scripts/stores.svelte";
 import {
     FOLDER_MIME_TYPE,
@@ -76,7 +77,7 @@ async function footInspection(id: string) {
             parent: tempStore.activeFolder!.id,
             mimeType: mimeType,
             pageToken: pageToken,
-            hidden: id === "FOLDER-FOOR" ? true : false,
+            hidden: id === "FOLDER-FOOT" ? preferences.showHidden : false,
         },
         getToken()
     );

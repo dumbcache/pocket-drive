@@ -21,6 +21,12 @@
             <ToggleButton bool={preferences.disableWebp} />
         </button>
     </li>
+    <li>
+        <div>Show hidden folders</div>
+        <button onclick={() => preferences.toggleHidden()}>
+            <ToggleButton bool={preferences.showHidden} />
+        </button>
+    </li>
 </ul>
 
 <style>

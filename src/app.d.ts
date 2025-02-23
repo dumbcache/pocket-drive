@@ -139,6 +139,7 @@ declare global {
     interface Preferences {
         showFileNames: boolean;
         disableWebp: boolean;
+        showHidden: boolean;
         theme: "DARK" | "";
     }
 
