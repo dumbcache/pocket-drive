@@ -79,6 +79,7 @@ export let progressStore = new ProgressStore();
 class AppPreferences {
     showFileNames = $state(false);
     disableWebp = $state(false);
+    showHidden = $state(false);
     theme = $state<"DARK" | "">("");
 
     constructor() {
@@ -106,6 +107,12 @@ class AppPreferences {
         this.saveToLocal();
     }
 
+    toggleHidden() {
+        this.showHidden = !this.showHidden;
+        this.saveToLocal();
+        window.location.reload();
+    }
+
     setTheme() {
         const root = document.documentElement;
         if (window.CSS.supports("color", "light-dark(#000,#fff)")) {
@@ -130,9 +137,10 @@ class AppPreferences {
         }
     }
 
-    set({ showFileNames, disableWebp, theme }: Preferences) {
+    set({ showFileNames, disableWebp, theme, showHidden }: Preferences) {
         this.showFileNames = showFileNames;
         this.disableWebp = disableWebp;
+        this.showHidden = showHidden;
         this.theme = theme;
     }
 
@@ -140,6 +148,7 @@ class AppPreferences {
         return {
             showFileNames: this.showFileNames,
             disableWebp: this.disableWebp,
+            showHidden: this.showHidden,
             theme: this.theme,
         };
     }

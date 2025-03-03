@@ -5,6 +5,7 @@
         folderStore,
         fileStore,
         tempStore,
+        preferences,
     } from "$lib/scripts/stores.svelte";
     import {
         fetchMultiple,
@@ -33,7 +34,7 @@
                     mimeType: mimeType,
                     pageToken: pageToken,
                     pageSize: 1000,
-                    hidden: view === "FOLDER" ? true : false,
+                    hidden: view === "FOLDER" ? preferences.showHidden : false,
                 },
                 token
             );

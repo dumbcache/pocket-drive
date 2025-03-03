@@ -9,16 +9,9 @@
     import startIcon from "$lib/assets/start.svg?raw";
     import selectallIcon from "$lib/assets/selectall.svg?raw";
     import Count from "$lib/components/utils/Count.svelte";
-    import {
-        childWorker,
-        fetchMultiple,
-        FOLDER_MIME_TYPE,
-        isValidUrl,
-    } from "$lib/scripts/utils";
+    import { childWorker, isValidUrl } from "$lib/scripts/utils";
     import { getToken } from "$lib/scripts/login";
     import {
-        folderStore,
-        pocketStore,
         progressStore,
         states,
         tempStore,
@@ -212,15 +205,14 @@
                 }}>{@html startIcon}</button
             >
         {:else}
-            {#if states.searchMode}
-                <button
-                    class="btn s-prime"
-                    title="unhide"
-                    disabled={count === 0}
-                    onclick={() => handleHidden(false)}
-                    >{@html visibleIcon}</button
-                >
-            {/if}
+            <!-- {#if states.searchMode} -->
+            <button
+                class="btn s-prime"
+                title="unhide"
+                disabled={count === 0}
+                onclick={() => handleHidden(false)}>{@html visibleIcon}</button
+            >
+            <!-- {/if} -->
             <button
                 class="btn s-prime"
                 title="hide"

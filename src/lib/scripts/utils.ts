@@ -206,8 +206,8 @@ export function constructRequest(
             ? `mimeType contains '${mimeType}'`
             : `mimeType contains '${mimeType}' or mimeType contains 'video/'`;
     let hide = hidden
-        ? "and not properties has { key='hidden' and value='true' }"
-        : "";
+        ? ""
+        : "and not properties has { key='hidden' and value='true' }";
     let q = `q='${parent}' in parents and (${mime}) ${hide}`;
     let p = `&pageSize=${pageSize}`;
     let f = "";
@@ -471,7 +471,11 @@ export const loadAll = (
     return new Promise(async (resolve, reject) => {
         const proms = [
             fetchMultiple(
-                { parent, mimeType: FOLDER_MIME_TYPE, hidden: true },
+                {
+                    parent,
+                    mimeType: FOLDER_MIME_TYPE,
+                    hidden: preferences.showHidden,
+                },
                 accessToken
             ),
             fetchMultiple({ parent, mimeType: IMG_MIME_TYPE }, accessToken),
