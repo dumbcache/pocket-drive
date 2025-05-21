@@ -97,6 +97,11 @@
 
     @media (max-width: 600px) {
         .page {
+            padding: 0rem 1rem;
+        }
+    }
+    @media (max-width: 330px) {
+        .page {
             padding: 0rem 0.5rem;
         }
     }

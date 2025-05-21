@@ -133,7 +133,7 @@
             rotate: 90deg;
         }
         .action {
-            bottom: 5.5rem;
+            bottom: 8rem;
             top: unset;
             right: 2rem;
             flex-flow: row nowrap;
@@ -154,6 +154,11 @@
             background: var(--color-bg);
             backdrop-filter: blur(10px);
             border-radius: 2.5rem;
+        }
+    }
+    @media (max-width: 330px) and (orientation: portrait) {
+        .action {
+            bottom: 5.5rem;
         }
     }
 </style>

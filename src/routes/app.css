@@ -224,7 +224,7 @@
 
 @media (max-width: 900px) {
     :root {
-        --title-size: var(--size-small);
+        /* --title-size: var(--size-small); */
         --content-column-gap: 2rem;
         --content-row-gap: 2rem;
         --horizontal-padding: 7rem;
@@ -236,6 +236,21 @@
 
 @media (max-width: 600px) {
     :root {
+        --vertical-padding: 3rem;
+        /* --primary-icon-size: var(--size-medium);
+        --secondary-icon-size: var(--size-small); */
+        --content-padding: 2rem 0rem;
+        --content-column-gap: 2rem;
+        --content-row-gap: 2rem;
+        --cover-height: 11rem;
+        --folder-width: 15rem;
+        --file-width: 15rem;
+    }
+}
+
+@media (max-width: 330px) {
+    :root {
+        --title-size: var(--size-small);
         --vertical-padding: 3rem;
         --primary-icon-size: var(--size-medium);
         --secondary-icon-size: var(--size-small);
