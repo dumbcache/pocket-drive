@@ -9,7 +9,12 @@ import {
 } from "$lib/scripts/utils";
 import { getToken } from "$lib/scripts/login";
 import { goto } from "$app/navigation";
-import { pocketStore, HOME_PATH, states } from "$lib/scripts/stores.svelte";
+import {
+    pocketStore,
+    HOME_PATH,
+    states,
+    PRIVATE_PATH,
+} from "$lib/scripts/stores.svelte";
 
 async function loadContent(parent: string) {
     try {
@@ -17,8 +22,8 @@ async function loadContent(parent: string) {
             const data = pocketStore.get(parent);
             return { ...data };
         }
-        const [folders, files] = await loadAll(parent, getToken());
         const activeFolder = await fetchSingle(parent, "FOLDER", getToken());
+        const [folders, files] = await loadAll(parent, getToken());
         if (folders && files && activeFolder) {
             pocketStore.set(parent, {
                 folders,
@@ -45,6 +50,9 @@ export const load = (async ({ params }) => {
         if (id === HOME_PATH) {
             id = window.localStorage.getItem("root");
             if (!id) id = await getRootFolder(getToken());
+        }
+        if (id === PRIVATE_PATH) {
+            id = "appDataFolder";
         }
 
         return loadContent(id);

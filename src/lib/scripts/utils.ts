@@ -212,6 +212,7 @@ export function constructRequest(
     let p = `&pageSize=${pageSize}`;
     let f = "";
     let t = "";
+    let s = parent === "appDataFolder" ? "&spaces=appDataFolder" : "";
     if (pageSize === 3) {
         f = `&fields=files(${FIELDS_COVER})`;
     } else {
@@ -223,7 +224,7 @@ export function constructRequest(
     let o =
         `&orderBy=` +
         (mimeType === FOLDER_MIME_TYPE ? "name" : "createdTime desc");
-    let url = `${FILE_API}?${q}${f}${o}${t}${p}`;
+    let url = `${FILE_API}?${q}${f}${o}${t}${p}${s}`;
 
     const req = new Request(url, {
         method: "GET",

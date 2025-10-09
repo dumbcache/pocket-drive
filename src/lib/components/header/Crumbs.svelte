@@ -47,7 +47,7 @@
             </span>
             <span>Home</span>
         </a>
-        {#if tempStore.activeFolder?.id !== getRoot()}
+        {#if tempStore.activeFolder?.id !== getRoot() && tempStore.activeFolder.name !== "App Data"}
             {#if tempStore.activeFolder?.parents[0] !== getRoot()}
                 <span>/</span>
                 <!-- <button

@@ -2,6 +2,7 @@ import { browser } from "$app/environment";
 import { SvelteSet } from "svelte/reactivity";
 
 export const HOME_PATH = "home";
+export const PRIVATE_PATH = "private";
 export const DATA_CACHE = "pd-data";
 export const TEMP_CACHE = "pd-temp";
 export const imageFetchLog = new Set();
