@@ -34,7 +34,6 @@
                     mimeType: mimeType,
                     pageToken: pageToken,
                     pageSize: 1000,
-                    hidden: view === "FOLDER" ? preferences.showHidden : false,
                 },
                 token
             );

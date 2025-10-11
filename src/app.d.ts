@@ -24,7 +24,6 @@ declare global {
         mimeType: string;
         pageSize?: number;
         pageToken?: string;
-        hidden?: Boolean;
     }
     interface SearchParamsObject {
         search: string;
@@ -139,7 +138,6 @@ declare global {
     interface Preferences {
         showFileNames: boolean;
         disableWebp: boolean;
-        showHidden: boolean;
         theme: "DARK" | "";
     }
 

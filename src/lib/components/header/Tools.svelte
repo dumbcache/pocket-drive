@@ -73,7 +73,6 @@
             {
                 parent,
                 mimeType: FOLDER_MIME_TYPE,
-                hidden: preferences.showHidden,
             },
             token,
             true

@@ -113,19 +113,6 @@
         childWorker.postMessage(workerMessage);
         closeHandler();
     }
-    function handleHidden(hidden: Boolean) {
-        let parent = tempStore.activeFolder!.id;
-        let token = getToken();
-        workerMessage = {
-            activeParent: parent,
-            context: "EDIT",
-            ids: set,
-            imgMeta: { properties: { hidden } },
-            token,
-        };
-        childWorker.postMessage(workerMessage);
-        closeHandler();
-    }
 
     function handleChange(e) {
         e.target.name = "url" && checkValid();
@@ -203,21 +190,6 @@
                     action = "TOP";
                     confirm = true;
                 }}>{@html startIcon}</button
-            >
-        {:else}
-            <!-- {#if states.searchMode} -->
-            <button
-                class="btn s-prime"
-                title="unhide"
-                disabled={count === 0}
-                onclick={() => handleHidden(false)}>{@html visibleIcon}</button
-            >
-            <!-- {/if} -->
-            <button
-                class="btn s-prime"
-                title="hide"
-                disabled={count === 0}
-                onclick={() => handleHidden(true)}>{@html hiddenIcon}</button
             >
         {/if}
         <button

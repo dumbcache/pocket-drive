@@ -2,7 +2,6 @@ import { browser } from "$app/environment";
 import { SvelteSet } from "svelte/reactivity";
 
 export const HOME_PATH = "home";
-export const PRIVATE_PATH = "private";
 export const DATA_CACHE = "pd-data";
 export const TEMP_CACHE = "pd-temp";
 export const imageFetchLog = new Set();
@@ -80,7 +79,6 @@ export let progressStore = new ProgressStore();
 class AppPreferences {
     showFileNames = $state(false);
     disableWebp = $state(false);
-    showHidden = $state(false);
     theme = $state<"DARK" | "">("");
 
     constructor() {
@@ -108,12 +106,6 @@ class AppPreferences {
         this.saveToLocal();
     }
 
-    toggleHidden() {
-        this.showHidden = !this.showHidden;
-        this.saveToLocal();
-        window.location.reload();
-    }
-
     setTheme() {
         const root = document.documentElement;
         if (window.CSS.supports("color", "light-dark(#000,#fff)")) {
@@ -138,10 +130,9 @@ class AppPreferences {
         }
     }
 
-    set({ showFileNames, disableWebp, theme, showHidden }: Preferences) {
+    set({ showFileNames, disableWebp, theme }: Preferences) {
         this.showFileNames = showFileNames;
         this.disableWebp = disableWebp;
-        this.showHidden = showHidden;
         this.theme = theme;
     }
 
@@ -149,7 +140,6 @@ class AppPreferences {
         return {
             showFileNames: this.showFileNames,
             disableWebp: this.disableWebp,
-            showHidden: this.showHidden,
             theme: this.theme,
         };
     }

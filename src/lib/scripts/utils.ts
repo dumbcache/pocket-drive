@@ -197,7 +197,7 @@ export async function makeFetch(request: Request) {
 }
 
 export function constructRequest(
-    { parent, mimeType, pageSize, pageToken, hidden }: ParamsObject,
+    { parent, mimeType, pageSize, pageToken }: ParamsObject,
     accessToken: string
 ) {
     pageSize ??= PAGESIZE;
@@ -205,14 +205,11 @@ export function constructRequest(
         mimeType === FOLDER_MIME_TYPE
             ? `mimeType contains '${mimeType}'`
             : `mimeType contains '${mimeType}' or mimeType contains 'video/'`;
-    let hide = hidden
-        ? ""
-        : "and not properties has { key='hidden' and value='true' }";
-    let q = `q='${parent}' in parents and (${mime}) ${hide}`;
+    let q = `q='${parent}' in parents and (${mime})`;
     let p = `&pageSize=${pageSize}`;
     let f = "";
     let t = "";
-    let s = parent === "appDataFolder" ? "&spaces=appDataFolder" : "";
+    let s = "&spaces=appDataFolder";
     if (pageSize === 3) {
         f = `&fields=files(${FIELDS_COVER})`;
     } else {
@@ -475,7 +472,6 @@ export const loadAll = (
                 {
                     parent,
                     mimeType: FOLDER_MIME_TYPE,
-                    hidden: preferences.showHidden,
                 },
                 accessToken
             ),
