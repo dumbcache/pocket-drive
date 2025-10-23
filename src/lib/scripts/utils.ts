@@ -760,6 +760,10 @@ if (browser) {
         }
     });
 
+    globalThis.addEventListener("popstate", () => {
+        if (states.mode === "VIEW") states.mode = "";
+    });
+
     globalThis.addEventListener("offline", () => (states.offline = true));
 
     globalThis.addEventListener("online", () => (states.offline = false));

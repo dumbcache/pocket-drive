@@ -48,7 +48,7 @@
     });
 </script>
 
-{#if $navigating || states.progress }
+{#if $navigating || states.progress}
     <div class="loading">
         <Spinner />
     </div>
@@ -56,7 +56,7 @@
 
 <div class="startup" bind:this={startup}>
     <span class="icon">
-        <HomeIcon/>
+        <HomeIcon />
     </span>
 </div>
 

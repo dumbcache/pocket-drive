@@ -99,7 +99,10 @@
 
 <button
     class="btn s-second close"
-    onclick={() => (states.mode = "")}
+    onclick={() => {
+        states.mode = "";
+        history.back();
+    }}
     style:display={hidden ? "none" : "flex"}>{@html closeIcon}</button
 >
 
