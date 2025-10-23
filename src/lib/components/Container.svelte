@@ -2,7 +2,7 @@
     import Edit from "$lib/components/Edit.svelte";
     import Folder from "$lib/components/folders/Folder.svelte";
     import File from "$lib/components/files/File.svelte";
-    import { beforeNavigate } from "$app/navigation";
+    import { beforeNavigate, pushState } from "$app/navigation";
     import { disableScrolling } from "$lib/scripts/utils";
     import imgCreate from "$lib/assets/imgCreate.svg?raw";
     import folderCreate from "$lib/assets/folderCreate.svg?raw";
@@ -154,6 +154,7 @@
                 const [file] = fileStore.files.filter((file) => file.id === id);
                 tempStore.activeFile = file;
                 states.mode = "VIEW";
+                pushState("", "");
                 setViewStore();
                 disableScrolling();
                 return;

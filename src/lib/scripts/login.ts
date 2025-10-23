@@ -1,5 +1,5 @@
 import { get } from "svelte/store";
-import { PUBLIC_KRAB_CLIENT_ID } from "$env/static/public";
+import { PUBLIC_POCKET_CLIENT_ID } from "$env/static/public";
 import { setSessionTimeout, createRootFolder } from "$lib/scripts/utils";
 import { goto } from "$app/navigation";
 import { browser } from "$app/environment";
@@ -39,7 +39,7 @@ async function handleGoogleSignIn(tokenResponse: TokenResponse) {
 function initClient() {
     if (!browser) return;
     client = window.google.accounts.oauth2.initTokenClient({
-        client_id: PUBLIC_KRAB_CLIENT_ID,
+        client_id: PUBLIC_POCKET_CLIENT_ID,
         scope: "https://www.googleapis.com/auth/drive.file",
         callback: handleGoogleSignIn,
     });
