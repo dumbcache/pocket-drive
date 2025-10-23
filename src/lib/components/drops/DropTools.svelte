@@ -1,11 +1,11 @@
 <script lang="ts">
-    import { createEventDispatcher } from "svelte";
     import closeIcon from "$lib/assets/close.svg?raw";
     import doneIcon from "$lib/assets/done.svg?raw";
     import toggleIcon from "$lib/assets/toggle.svg?raw";
+    import pasteIcon from "$lib/assets/paste.svg?raw";
     import doubleRightIcon from "$lib/assets/arrowRightDouble.svg?raw";
     import expandIcon from "$lib/assets/expand.svg?raw";
-    import { dropOkHandler } from "$lib/scripts/image";
+    import { dropOkHandler, previewAndSetDropItems } from "$lib/scripts/image";
     import { states, tempStore } from "$lib/scripts/stores.svelte";
     import type { MouseEventHandler } from "svelte/elements";
 
@@ -35,6 +35,28 @@
             onMini();
         }
     }
+
+    async function readImage() {
+        const clipboardItems = await navigator.clipboard.read();
+        console.log(clipboardItems);
+        if (!clipboardItems) return;
+        for (const item of clipboardItems) {
+            if (item.types.some((type) => type.startsWith("image/"))) {
+                const blob = await item.getType(
+                    item.types.find((type) => type.startsWith("image/"))
+                );
+                let file = new File([blob], "image" + blob.type.split("/")[1], {
+                    type: blob.type,
+                });
+                if (file) {
+                    const dataTransfer = new DataTransfer();
+                    dataTransfer.items.add(file);
+                    previewAndSetDropItems(dataTransfer.files);
+                }
+                break;
+            }
+        }
+    }
 </script>
 
 <div class="drop-tools">
@@ -50,6 +72,9 @@
         </button>
         <button class="btn s-prime" title="minimize" onclick={onMini}>
             {@html doubleRightIcon}
+        </button>
+        <button class="btn s-prime" title="pasteimage" onclick={readImage}>
+            {@html pasteIcon}
         </button>
     </span>
     <input
@@ -89,6 +114,7 @@
         backdrop-filter: blur(1rem);
         -webkit-backdrop-filter: blur(1rem);
         gap: 2rem;
+        width: 100%;
     }
     input {
         border-radius: 2.5rem;
